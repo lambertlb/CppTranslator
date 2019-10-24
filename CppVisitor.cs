@@ -1,31 +1,37 @@
-﻿using ICSharpCode.Decompiler.CSharp.Syntax;
+﻿using ICSharpCode.Decompiler.CSharp;
+using ICSharpCode.Decompiler.CSharp.Syntax;
 using ICSharpCode.Decompiler.CSharp.Syntax.PatternMatching;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace CppTranslator
 {
-	class CppVisitor : IAstVisitor
+	class CppVisitor : Formatter, IAstVisitor
 	{
+		Boolean doingPrototyping;
+		public bool DoingPrototyping { get => doingPrototyping; set => doingPrototyping = value; }
+		public bool DoingDelcaration { get; set; }
+
 		public void VisitAccessor(Accessor accessor)
 		{
 		}
 
 		public void VisitAnonymousMethodExpression(AnonymousMethodExpression anonymousMethodExpression)
 		{
-			Console.WriteLine("AnonymousMethodExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitAnonymousTypeCreateExpression(AnonymousTypeCreateExpression anonymousTypeCreateExpression)
 		{
-			Console.WriteLine("AnonymousTypeCreateExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitArrayCreateExpression(ArrayCreateExpression arrayCreateExpression)
 		{
-			Console.Write("new ");
+			Append("new ");
 			arrayCreateExpression.Type.AcceptVisitor(this);
 			if (arrayCreateExpression.Arguments.Count > 0)
 			{
@@ -40,9 +46,9 @@ namespace CppTranslator
 
 		private void WriteCommaSeparatedListInBrackets(AstNodeCollection<Expression> arguments)
 		{
-			Console.Write("[");
+			Append("[");
 			WriteCommaSeparatedList(arguments);
-			Console.Write("]");
+			Append("]");
 		}
 
 		public void VisitArrayInitializerExpression(ArrayInitializerExpression arrayInitializerExpression)
@@ -61,7 +67,7 @@ namespace CppTranslator
 		}
 		protected virtual void PrintInitializerElements(AstNodeCollection<Expression> elements)
 		{
-			Console.Write("[");
+			Append("[");
 			bool isFirst = true;
 			AstNode last = null;
 			foreach (AstNode node in elements)
@@ -72,12 +78,12 @@ namespace CppTranslator
 				}
 				else
 				{
-					Console.Write(",");
+					Append(",");
 				}
 				last = node;
 				node.AcceptVisitor(this);
 			}
-			Console.Write("]");
+			Append("]");
 		}
 		protected bool CanBeConfusedWithObjectInitializer(Expression expr)
 		{
@@ -106,94 +112,115 @@ namespace CppTranslator
 
 		public void VisitArraySpecifier(ArraySpecifier arraySpecifier)
 		{
-			Console.Write("[");
+			Append("[");
 			foreach (var comma in arraySpecifier.GetChildrenByRole(Roles.Comma))
 			{
-				Console.Write(",");
+				Append(",");
 			}
-			Console.Write("]");
+			Append("]");
 		}
 
 		public void VisitAsExpression(AsExpression asExpression)
 		{
-			Console.WriteLine("AsExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitAssignmentExpression(AssignmentExpression assignmentExpression)
 		{
 			assignmentExpression.Left.AcceptVisitor(this);
-			Console.Write(" ");
-			Console.Write(AssignmentExpression.GetOperatorRole(assignmentExpression.Operator));
-			Console.Write(" ");
+			Append(" ");
+			Append(AssignmentExpression.GetOperatorRole(assignmentExpression.Operator).ToString());
+			Append(" ");
 			assignmentExpression.Right.AcceptVisitor(this);
 		}
 
 		public void VisitAttribute(ICSharpCode.Decompiler.CSharp.Syntax.Attribute attribute)
 		{
-			Console.WriteLine("Attribute");
+			throw new NotImplementedException();
 		}
 
 		public void VisitAttributeSection(AttributeSection attributeSection)
 		{
-			Console.WriteLine("AttributeSection");
+			throw new NotImplementedException();
 		}
 
 		public void VisitBaseReferenceExpression(BaseReferenceExpression baseReferenceExpression)
 		{
-			Console.WriteLine("BaseReferenceExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression)
 		{
 			binaryOperatorExpression.Left.AcceptVisitor(this);
-			Console.Write(" ");
-			Console.Write(BinaryOperatorExpression.GetOperatorRole(binaryOperatorExpression.Operator));
-			Console.Write(" ");
+			Append(" ");
+			Append(BinaryOperatorExpression.GetOperatorRole(binaryOperatorExpression.Operator).ToString());
+			Append(" ");
 			binaryOperatorExpression.Right.AcceptVisitor(this);
 		}
 
 		public void VisitBlockStatement(BlockStatement blockStatement)
 		{
-			Console.WriteLine("BlockStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitBreakStatement(BreakStatement breakStatement)
 		{
-			Console.WriteLine("BreakStatement");
+			Append("break;");
 		}
 
 		public void VisitCaseLabel(CaseLabel caseLabel)
 		{
-			Console.WriteLine("CaseLabel");
+			if (caseLabel.Expression.IsNull)
+			{
+				Append("default");
+			}
+			else
+			{
+				Append("case ");
+				caseLabel.Expression.AcceptVisitor(this);
+			}
+			Append(":");
 		}
 
 		public void VisitCastExpression(CastExpression castExpression)
 		{
-			Console.WriteLine("CastExpression");
+			Append("( ");
+			castExpression.Type.AcceptVisitor(this);
+			Append(" ) ");
+			castExpression.Expression.AcceptVisitor(this);
 		}
 
 		public void VisitCatchClause(CatchClause catchClause)
 		{
-			Console.WriteLine("CatchClause");
+			throw new NotImplementedException();
 		}
 
 		public void VisitCheckedExpression(CheckedExpression checkedExpression)
 		{
-			Console.WriteLine("CheckedExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitCheckedStatement(CheckedStatement checkedStatement)
 		{
-			Console.WriteLine("CheckedStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitComment(Comment comment)
 		{
-			Console.WriteLine("comment");
+			throw new NotImplementedException();
 		}
 
 		public void VisitComposedType(ComposedType composedType)
 		{
+			if (composedType.ArraySpecifiers.Count > 0)
+			{
+				Append("Array");
+				if (DoingDelcaration)
+				{
+					Append("*");
+				}
+				return;
+			}
 			composedType.BaseType.AcceptVisitor(this);
 			foreach (var node in composedType.ArraySpecifiers)
 			{
@@ -203,29 +230,38 @@ namespace CppTranslator
 
 		public void VisitConditionalExpression(ConditionalExpression conditionalExpression)
 		{
-			Console.WriteLine("ConditionalExpression");
+			conditionalExpression.Condition.AcceptVisitor(this);
+			Append(" ? ");
+			conditionalExpression.TrueExpression.AcceptVisitor(this);
+			Append(" : ");
+			conditionalExpression.FalseExpression.AcceptVisitor(this);
 		}
 
 		public void VisitConstraint(Constraint constraint)
 		{
-			Console.WriteLine("Constraint");
+			throw new NotImplementedException();
 		}
 
+		protected virtual void WriteMethodHeader(String medodName, AstNodeCollection<ParameterDeclaration> parameters)
+		{
+			AppendName(medodName);
+			WriteCommaSeparatedListInParenthesis(parameters);
+		}
 		protected virtual void WriteMethod(String medodName, AstNodeCollection<ParameterDeclaration> parameters, BlockStatement body)
 		{
-			Console.Write(medodName);
-			WriteCommaSeparatedListInParenthesis(parameters);
+			WriteMethodHeader(medodName, parameters);
 			WriteBlock(body);
 		}
 
 		private void WriteBlock(BlockStatement body)
 		{
-			Console.WriteLine("{");
+			AppendLine("{");
 			foreach (var node in body.Statements)
 			{
 				node.AcceptVisitor(this);
+				AppendLine("");
 			}
-			Console.WriteLine("}");
+			AppendLine("}");
 		}
 
 		public void VisitConstructorDeclaration(ConstructorDeclaration constructorDeclaration)
@@ -236,202 +272,301 @@ namespace CppTranslator
 				name = type.NameToken.Name;
 			else
 				name = constructorDeclaration.NameToken.Name;
+			AppendIndented("");
+			if (DoHeaderFile)
+			{
+				WriteMethodHeader(name, constructorDeclaration.Parameters);
+				AppendLine(";");
+				return;
+			}
 			WriteMethod(name, constructorDeclaration.Parameters, constructorDeclaration.Body);
 		}
 
 		public void VisitConstructorInitializer(ConstructorInitializer constructorInitializer)
 		{
-			Console.WriteLine("ConstructorInitializer");
+			throw new NotImplementedException();
 		}
 
 		public void VisitContinueStatement(ContinueStatement continueStatement)
 		{
-			Console.WriteLine("ContinueStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitCSharpTokenNode(CSharpTokenNode cSharpTokenNode)
 		{
-			Console.WriteLine("CSharpTokenNode");
+			throw new NotImplementedException();
 		}
 
 		public void VisitCustomEventDeclaration(CustomEventDeclaration customEventDeclaration)
 		{
-			Console.WriteLine("CustomEventDeclaration");
+			throw new NotImplementedException();
 		}
 
 		public void VisitDefaultValueExpression(DefaultValueExpression defaultValueExpression)
 		{
-			Console.WriteLine("DefaultValueExpression");
+			Append("default ");
+			Append("(");
+			Append(" ");
+			defaultValueExpression.Type.AcceptVisitor(this);
+			Append(" ");
+			Append(")");
 		}
 
 		public void VisitDelegateDeclaration(DelegateDeclaration delegateDeclaration)
 		{
-			Console.WriteLine("DelegateDeclaration");
+			throw new NotImplementedException();
 		}
 
 		public void VisitDestructorDeclaration(DestructorDeclaration destructorDeclaration)
 		{
-			Console.WriteLine("DestructorDeclaration");
+			throw new NotImplementedException();
 		}
 
 		public void VisitDirectionExpression(DirectionExpression directionExpression)
 		{
-			Console.WriteLine("DirectionExpression");
+			switch (directionExpression.FieldDirection)
+			{
+				case FieldDirection.Out:
+					Append("out");
+					break;
+				case FieldDirection.Ref:
+					Append("ref");
+					break;
+				case FieldDirection.In:
+					Append("in");
+					break;
+				default:
+					throw new NotSupportedException("Invalid value for FieldDirection");
+			}
+			Append(" ");
+			directionExpression.Expression.AcceptVisitor(this);
 		}
 
 		public void VisitDocumentationReference(DocumentationReference documentationReference)
 		{
-			Console.WriteLine("DocumentationReference");
+			throw new NotImplementedException();
 		}
 
 		public void VisitDoWhileStatement(DoWhileStatement doWhileStatement)
 		{
-			Console.WriteLine("DoWhileStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitEmptyStatement(EmptyStatement emptyStatement)
 		{
-			Console.WriteLine("EmptyStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitEnumMemberDeclaration(EnumMemberDeclaration enumMemberDeclaration)
 		{
-			Console.WriteLine("EnumMemberDeclaration");
+			AppendIndentedName(enumMemberDeclaration.NameToken.Name);
+			Append("_");
+			Append(EnumName);
+			if (!enumMemberDeclaration.Initializer.IsNull)
+			{
+				Append(" = ");
+				enumMemberDeclaration.Initializer.AcceptVisitor(this);
+			}
 		}
 
 		public void VisitErrorNode(AstNode errorNode)
 		{
-			Console.WriteLine("errorNode");
+			throw new NotImplementedException();
 		}
 
 		public void VisitEventDeclaration(EventDeclaration eventDeclaration)
 		{
-			Console.WriteLine("EventDeclaration");
+			throw new NotImplementedException();
 		}
 
 		public void VisitExpressionStatement(ExpressionStatement expressionStatement)
 		{
 			expressionStatement.Expression.AcceptVisitor(this);
-			Console.WriteLine(";");
+			Append(";");
 		}
 
 		public void VisitExternAliasDeclaration(ExternAliasDeclaration externAliasDeclaration)
 		{
-			Console.WriteLine("ExternAliasDeclaration");
+			throw new NotImplementedException();
 		}
 
 		public void VisitFieldDeclaration(FieldDeclaration fieldDeclaration)
 		{
-			Console.Write("Field: ");
-			fieldDeclaration.ReturnType.AcceptVisitor(this);
-			foreach (AstNode node in fieldDeclaration.Variables)
+			if (!DoHeaderFile)
 			{
-				Console.Write(" ");
-				node.AcceptVisitor(this);
+				return;
 			}
+			AppendIndented("");
+			DoingDelcaration = true;
+			fieldDeclaration.ReturnType.AcceptVisitor(this);
+			DoingDelcaration = false;
+			Append(" ");
+			WriteCommaSeparatedList(fieldDeclaration.Variables);
+			AppendLine(";");
 		}
 
 		public void VisitFixedFieldDeclaration(FixedFieldDeclaration fixedFieldDeclaration)
 		{
-			Console.WriteLine("FixedFieldDeclaration");
+			throw new NotImplementedException();
 		}
 
 		public void VisitFixedStatement(FixedStatement fixedStatement)
 		{
-			Console.WriteLine("FixedStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitFixedVariableInitializer(FixedVariableInitializer fixedVariableInitializer)
 		{
-			Console.WriteLine("FixedVariableInitializer");
+			throw new NotImplementedException();
 		}
 
 		public void VisitForeachStatement(ForeachStatement foreachStatement)
 		{
-			Console.WriteLine("ForeachStatement");
+			Append("foreach ");
+			Append("(");
+			foreachStatement.VariableType.AcceptVisitor(this);
+			Append(" ");
+			WriteVariableName(foreachStatement.VariableNameToken);
+			Append(" in ");
+			foreachStatement.InExpression.AcceptVisitor(this);
+			Append(" ");
+			Append(")");
+			WriteEmbeddedStatement(foreachStatement.EmbeddedStatement);
 		}
 
+		private void WriteVariableName(Identifier nameIdentifier)
+		{
+			Append(nameIdentifier.Name);
+		}
+
+		protected virtual void WriteEmbeddedStatement(Statement embeddedStatement)
+		{
+			AppendLine("");
+			BlockStatement block = embeddedStatement as BlockStatement;
+			if (block != null)
+			{
+				WriteBlock(block);
+				AppendLine("");
+			}
+			else
+			{
+				AppendLine("");
+				embeddedStatement.AcceptVisitor(this);
+			}
+		}
 		public void VisitForStatement(ForStatement forStatement)
 		{
-			Console.WriteLine("ForStatement");
+			Append("for ( ");
+			WriteCommaSeparatedList(forStatement.Initializers);
+			Append(" ;  ");
+			forStatement.Condition.AcceptVisitor(this);
+			Append(" ;  ");
+			if (forStatement.Iterators.Any())
+			{
+				Append(" ");
+				WriteCommaSeparatedList(forStatement.Iterators);
+			}
+
+			Append(" )");
+			WriteEmbeddedStatement(forStatement.EmbeddedStatement);
 		}
 
 		public void VisitGotoCaseStatement(GotoCaseStatement gotoCaseStatement)
 		{
-			Console.WriteLine("GotoCaseStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitGotoDefaultStatement(GotoDefaultStatement gotoDefaultStatement)
 		{
-			Console.WriteLine("GotoDefaultStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitGotoStatement(GotoStatement gotoStatement)
 		{
-			Console.WriteLine("GotoStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitIdentifier(Identifier identifier)
 		{
-			Console.WriteLine("Identifier");
+			throw new NotImplementedException();
 		}
 
 		public void VisitIdentifierExpression(IdentifierExpression identifierExpression)
 		{
-			Console.Write(identifierExpression.IdentifierToken.Name);
+			Append(identifierExpression.IdentifierToken.Name);
 		}
 
 		public void VisitIfElseStatement(IfElseStatement ifElseStatement)
 		{
-			Console.WriteLine("IfElseStatement");
+			Append("if ( ");
+			ifElseStatement.Condition.AcceptVisitor(this);
+			Append(" )");
+			if (ifElseStatement.FalseStatement.IsNull)
+			{
+				WriteEmbeddedStatement(ifElseStatement.TrueStatement);
+			}
+			else
+			{
+				WriteEmbeddedStatement(ifElseStatement.TrueStatement);
+				Append("else");
+				if (ifElseStatement.FalseStatement is IfElseStatement)
+				{
+					// don't put newline between 'else' and 'if'
+					ifElseStatement.FalseStatement.AcceptVisitor(this);
+				}
+				else
+				{
+					WriteEmbeddedStatement(ifElseStatement.FalseStatement);
+				}
+			}
 		}
 
 		public void VisitIndexerDeclaration(IndexerDeclaration indexerDeclaration)
 		{
-			Console.WriteLine("IndexerDeclaration");
+			throw new NotImplementedException();
 		}
 
 		public void VisitIndexerExpression(IndexerExpression indexerExpression)
 		{
 			indexerExpression.Target.AcceptVisitor(this);
-			Console.Write(" ");
+			Append(" ");
 			NewMethod(indexerExpression.Arguments);
 		}
 
 		private void NewMethod(IEnumerable<AstNode> nodes)
 		{
-			Console.Write("[ ");
+			Append("[ ");
 			WriteCommaSeparatedList(nodes);
-			Console.Write(" ]");
+			Append(" ]");
 		}
 
 		public void VisitInterpolatedStringExpression(InterpolatedStringExpression interpolatedStringExpression)
 		{
-			Console.WriteLine("InterpolatedStringExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitInterpolatedStringText(InterpolatedStringText interpolatedStringText)
 		{
-			Console.WriteLine("InterpolatedStringText");
+			throw new NotImplementedException();
 		}
 
 		public void VisitInterpolation(Interpolation interpolation)
 		{
-			Console.WriteLine("Interpolation");
+			throw new NotImplementedException();
 		}
 
 		public void VisitInvocationExpression(InvocationExpression invocationExpression)
 		{
 			invocationExpression.Target.AcceptVisitor(this);
-			Console.Write(" ");
+			Append(" ");
 			WriteCommaSeparatedListInParenthesis(invocationExpression.Arguments);
 		}
 
 		private void WriteCommaSeparatedListInParenthesis(IEnumerable<AstNode> nodes)
 		{
-			Console.Write("(");
+			Append("(");
 			WriteCommaSeparatedList(nodes);
-			Console.Write(")");
+			Append(")");
 		}
 
 		private void WriteCommaSeparatedList(IEnumerable<AstNode> nodes)
@@ -441,7 +576,7 @@ namespace CppTranslator
 			{
 				if (!isFirst)
 				{
-					Console.Write(",");
+					Append(",");
 				}
 				node.AcceptVisitor(this);
 				isFirst = false;
@@ -450,34 +585,35 @@ namespace CppTranslator
 
 		public void VisitIsExpression(IsExpression isExpression)
 		{
-			Console.WriteLine("IsExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitLabelStatement(LabelStatement labelStatement)
 		{
-			Console.WriteLine("LabelStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitLambdaExpression(LambdaExpression lambdaExpression)
 		{
-			Console.WriteLine("LambdaExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitLocalFunctionDeclarationStatement(LocalFunctionDeclarationStatement localFunctionDeclarationStatement)
 		{
-			Console.WriteLine("LocalFunctionDeclarationStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitLockStatement(LockStatement lockStatement)
 		{
-			Console.WriteLine("LockStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitMemberReferenceExpression(MemberReferenceExpression memberReferenceExpression)
 		{
 			memberReferenceExpression.Target.AcceptVisitor(this);
-			Console.Write(".");
-			Console.Write(memberReferenceExpression.MemberNameToken.Name);
+			Append("::");
+			Append(memberReferenceExpression.MemberNameToken.Name);
+			Append("()");
 		}
 
 		public void VisitMemberType(MemberType memberType)
@@ -487,29 +623,36 @@ namespace CppTranslator
 
 		public void VisitMethodDeclaration(MethodDeclaration methodDeclaration)
 		{
+			AppendIndented("");
 			methodDeclaration.ReturnType.AcceptVisitor(this);
-			Console.Write(" ");
+			Append(" ");
+			if (DoHeaderFile)
+			{
+				WriteMethodHeader(methodDeclaration.NameToken.Name, methodDeclaration.Parameters);
+				AppendLine(";");
+				return;
+			}
 			WriteMethod(methodDeclaration.NameToken.Name, methodDeclaration.Parameters, methodDeclaration.Body);
 		}
 
 		public void VisitNamedArgumentExpression(NamedArgumentExpression namedArgumentExpression)
 		{
-			Console.WriteLine("NamedArgumentExpression");
+			namedArgumentExpression.Expression.AcceptVisitor(this);
 		}
 
 		public void VisitNamedExpression(NamedExpression namedExpression)
 		{
-			Console.WriteLine("NamedExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitNamespaceDeclaration(NamespaceDeclaration namespaceDeclaration)
 		{
-			Console.WriteLine("NamespaceDeclaration");
+			throw new NotImplementedException();
 		}
 
 		public void VisitNewLine(NewLineNode newLineNode)
 		{
-			Console.WriteLine("NewLineNode");
+			throw new NotImplementedException();
 		}
 
 		public void VisitNullNode(AstNode nullNode)
@@ -518,150 +661,272 @@ namespace CppTranslator
 
 		public void VisitNullReferenceExpression(NullReferenceExpression nullReferenceExpression)
 		{
-			Console.WriteLine("NullReferenceExpression");
+			Append("null");
 		}
 
 		public void VisitObjectCreateExpression(ObjectCreateExpression objectCreateExpression)
 		{
-			Console.WriteLine("ObjectCreateExpression");
+			Append("new ");
+			objectCreateExpression.Type.AcceptVisitor(this);
+			bool useParenthesis = objectCreateExpression.Arguments.Any() || objectCreateExpression.Initializer.IsNull;
+			// also use parenthesis if there is an '(' token
+			if (!objectCreateExpression.LParToken.IsNull)
+			{
+				useParenthesis = true;
+			}
+			if (useParenthesis)
+			{
+				WriteCommaSeparatedListInParenthesis(objectCreateExpression.Arguments);
+			}
+			objectCreateExpression.Initializer.AcceptVisitor(this);
 		}
 
 		public void VisitOperatorDeclaration(OperatorDeclaration operatorDeclaration)
 		{
-			Console.WriteLine("OperatorDeclaration");
+			//			throw new NotImplementedException();
 		}
 
 		public void VisitOutVarDeclarationExpression(OutVarDeclarationExpression outVarDeclarationExpression)
 		{
-			Console.WriteLine("OutVarDeclarationExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitParameterDeclaration(ParameterDeclaration parameterDeclaration)
 		{
 			parameterDeclaration.Type.AcceptVisitor(this);
-			Console.Write(" ");
-			Console.Write(parameterDeclaration.NameToken.Name);
+			Append(" ");
+			Append(parameterDeclaration.NameToken.Name);
 		}
 
 		public void VisitParenthesizedExpression(ParenthesizedExpression parenthesizedExpression)
 		{
-			Console.WriteLine("ParenthesizedExpression");
+			Append("( ");
+			parenthesizedExpression.Expression.AcceptVisitor(this);
+			Append(" )");
 		}
 
 		public void VisitPatternPlaceholder(AstNode placeholder, Pattern pattern)
 		{
-			Console.WriteLine("placeholder");
+			throw new NotImplementedException();
 		}
 
+		protected virtual void WriteTypeArguments(IEnumerable<AstType> typeArguments)
+		{
+			if (typeArguments.Any())
+			{
+				Append("<");
+				WriteCommaSeparatedList(typeArguments);
+				Append(">");
+			}
+		}
 		public void VisitPointerReferenceExpression(PointerReferenceExpression pointerReferenceExpression)
 		{
-			Console.WriteLine("PointerReferenceExpression");
+			pointerReferenceExpression.Target.AcceptVisitor(this);
+			Append("->");
+			Append(pointerReferenceExpression.MemberNameToken.Name);
+			WriteTypeArguments(pointerReferenceExpression.TypeArguments);
 		}
 
 		public void VisitPreProcessorDirective(PreProcessorDirective preProcessorDirective)
 		{
-			Console.WriteLine("PreProcessorDirective");
+			throw new NotImplementedException();
 		}
 
 		public void VisitPrimitiveExpression(PrimitiveExpression primitiveExpression)
 		{
-			Console.Write(primitiveExpression.Value.ToString());
+			if (primitiveExpression.Value is Boolean)
+			{
+				if ((Boolean)(primitiveExpression.Value))
+				{
+					Append("true");
+				}
+				else
+				{
+					Append("false");
+				}
+				return;
+			}
+			if (primitiveExpression.Value is Char)
+			{
+				Append("'");
+				Append(primitiveExpression.Value.ToString());
+				Append("'");
+				return;
+			}
+			bool isString = primitiveExpression.Value is String;
+			if (isString)
+			{
+				Append("\"");
+			}
+			Append(primitiveExpression.Value.ToString());
+			if (isString)
+			{
+				Append("\"");
+			}
 		}
 
 		public void VisitPrimitiveType(PrimitiveType primitiveType)
 		{
-			Console.Write(primitiveType.Keyword);
+			Append(primitiveType.Keyword);
 		}
 
+		protected virtual void WritePrivateImplementationType(AstType privateImplementationType)
+		{
+			if (!privateImplementationType.IsNull)
+			{
+				privateImplementationType.AcceptVisitor(this);
+				Append(".");
+			}
+		}
 		public void VisitPropertyDeclaration(PropertyDeclaration propertyDeclaration)
 		{
-			Console.WriteLine("PropertyDeclaration");
+			return;
+			propertyDeclaration.ReturnType.AcceptVisitor(this);
+			Append(" ");
+			WritePrivateImplementationType(propertyDeclaration.PrivateImplementationType);
+			Append(propertyDeclaration.NameToken.Name);
+			if (propertyDeclaration.ExpressionBody.IsNull)
+			{
+				Append("{");
+				// output get/set in their original order
+				foreach (AstNode node in propertyDeclaration.Children)
+				{
+					if (node.Role == IndexerDeclaration.GetterRole || node.Role == IndexerDeclaration.SetterRole)
+					{
+						node.AcceptVisitor(this);
+					}
+				}
+				Append("}");
+				if (!propertyDeclaration.Initializer.IsNull)
+				{
+					Append(" = ");
+					propertyDeclaration.Initializer.AcceptVisitor(this);
+					Append(";");
+				}
+				AppendLine("");
+			}
+			else
+			{
+				Append(" > ");
+				propertyDeclaration.ExpressionBody.AcceptVisitor(this);
+				Append(";");
+			}
 		}
 
 		public void VisitQueryContinuationClause(QueryContinuationClause queryContinuationClause)
 		{
-			Console.WriteLine("QueryContinuationClause");
+			throw new NotImplementedException();
 		}
 
 		public void VisitQueryExpression(QueryExpression queryExpression)
 		{
-			Console.WriteLine("QueryExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitQueryFromClause(QueryFromClause queryFromClause)
 		{
-			Console.WriteLine("QueryFromClause");
+			throw new NotImplementedException();
 		}
 
 		public void VisitQueryGroupClause(QueryGroupClause queryGroupClause)
 		{
-			Console.WriteLine("QueryGroupClause");
+			throw new NotImplementedException();
 		}
 
 		public void VisitQueryJoinClause(QueryJoinClause queryJoinClause)
 		{
-			Console.WriteLine("QueryJoinClause");
+			throw new NotImplementedException();
 		}
 
 		public void VisitQueryLetClause(QueryLetClause queryLetClause)
 		{
-			Console.WriteLine("QueryLetClause");
+			throw new NotImplementedException();
 		}
 
 		public void VisitQueryOrderClause(QueryOrderClause queryOrderClause)
 		{
-			Console.WriteLine("QueryOrderClause");
+			throw new NotImplementedException();
 		}
 
 		public void VisitQueryOrdering(QueryOrdering queryOrdering)
 		{
-			Console.WriteLine("QueryOrdering");
+			throw new NotImplementedException();
 		}
 
 		public void VisitQuerySelectClause(QuerySelectClause querySelectClause)
 		{
-			Console.WriteLine("QuerySelectClause");
+			throw new NotImplementedException();
 		}
 
 		public void VisitQueryWhereClause(QueryWhereClause queryWhereClause)
 		{
-			Console.WriteLine("QueryWhereClause");
+			throw new NotImplementedException();
 		}
 
 		public void VisitReturnStatement(ReturnStatement returnStatement)
 		{
-			Console.Write("return");
+			Append("return");
 			if (!returnStatement.Expression.IsNull)
 			{
-				Console.Write(" ");
+				Append(" ");
 				returnStatement.Expression.AcceptVisitor(this);
 			}
-			Console.WriteLine(";");
+			Append(";");
 		}
 
 		public void VisitSimpleType(SimpleType simpleType)
 		{
-			Console.Write(simpleType.IdentifierToken.Name);
+			AppendName(simpleType.IdentifierToken.Name);
+			if (DoingDelcaration)
+			{
+				Append("*");
+			}
 		}
 
 		public void VisitSizeOfExpression(SizeOfExpression sizeOfExpression)
 		{
-			Console.WriteLine("SizeOfExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitStackAllocExpression(StackAllocExpression stackAllocExpression)
 		{
-			Console.WriteLine("StackAllocExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitSwitchSection(SwitchSection switchSection)
 		{
-			Console.WriteLine("SwitchSection");
+			bool first = true;
+			foreach (var label in switchSection.CaseLabels)
+			{
+				if (!first)
+				{
+					AppendLine("");
+				}
+				label.AcceptVisitor(this);
+				first = false;
+			}
+			bool isBlock = switchSection.Statements.Count == 1 && switchSection.Statements.Single() is BlockStatement;
+
+			if (!isBlock)
+				AppendLine("");
+
+			foreach (var statement in switchSection.Statements)
+			{
+				statement.AcceptVisitor(this);
+			}
 		}
 
 		public void VisitSwitchStatement(SwitchStatement switchStatement)
 		{
-			Console.WriteLine("SwitchStatement");
+			Append("switch ( ");
+			switchStatement.Expression.AcceptVisitor(this);
+			AppendLine(" )");
+			AppendLine("{");
+			foreach (var section in switchStatement.SwitchSections)
+			{
+				section.AcceptVisitor(this);
+			}
+			AppendLine("}");
 		}
 
 		public void VisitSyntaxTree(SyntaxTree syntaxTree)
@@ -674,79 +939,138 @@ namespace CppTranslator
 
 		public void VisitText(TextNode textNode)
 		{
-			Console.WriteLine("TextNode");
+			throw new NotImplementedException();
 		}
 
 		public void VisitThisReferenceExpression(ThisReferenceExpression thisReferenceExpression)
 		{
-			Console.WriteLine("ThisReferenceExpression");
+			Append("this");
 		}
 
 		public void VisitThrowExpression(ThrowExpression throwExpression)
 		{
-			Console.WriteLine("ThrowExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitThrowStatement(ThrowStatement throwStatement)
 		{
-			Console.WriteLine("ThrowStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitTryCatchStatement(TryCatchStatement tryCatchStatement)
 		{
-			Console.WriteLine("TryCatchStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitTupleExpression(TupleExpression tupleExpression)
 		{
-			Console.WriteLine("TupleExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitTupleType(TupleAstType tupleType)
 		{
-			Console.WriteLine("TupleAstType");
+			throw new NotImplementedException();
 		}
 
 		public void VisitTupleTypeElement(TupleTypeElement tupleTypeElement)
 		{
-			Console.WriteLine("TupleTypeElement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
+			if (DoProtyping)
+			{
+				PrototypeTypeDeclaration(typeDeclaration);
+				return;
+			}
+			if (typeDeclaration.ClassType != ClassType.Enum)
+			{
+				HeaderTypeDeclaration(typeDeclaration);
+				return;
+			}
+		}
+
+		private void HeaderTypeDeclaration(TypeDeclaration typeDeclaration)
+		{
+			switch (typeDeclaration.ClassType)
+			{
+				case ClassType.Interface:
+					AppendIndented("class ");
+					break;
+				case ClassType.Struct:
+					AppendIndented("struct ");
+					break;
+				default:
+					AppendIndented("class ");
+					break;
+			}
+			AppendName(typeDeclaration.Name);
+			AddOpenBrace();
+			if (typeDeclaration.ClassType != ClassType.Struct)
+			{
+				AppendIndentedLine("public:");
+			}
+			foreach (var member in typeDeclaration.Members)
+			{
+				member.AcceptVisitor(this);
+			}
+			AddCloseBrace(true);
+		}
+
+		private void PrototypeTypeDeclaration(TypeDeclaration typeDeclaration)
+		{
 			switch (typeDeclaration.ClassType)
 			{
 				case ClassType.Enum:
-					Console.Write("enum ");
+					AppendIndented("enum ");
 					break;
 				case ClassType.Interface:
-					Console.Write("interface ");
+					AppendIndented("class ");
 					break;
 				case ClassType.Struct:
-					Console.Write("struct ");
+					AppendIndented("struct ");
 					break;
 				default:
-					Console.Write("class ");
+					AppendIndented("class ");
 					break;
 			}
-			Console.WriteLine(typeDeclaration.Name);
-			if (typeDeclaration.ClassType != ClassType.Enum)
+			AppendName(typeDeclaration.Name);
+			if (typeDeclaration.ClassType == ClassType.Enum)
 			{
-				foreach (var member in typeDeclaration.Members)
-				{
-					member.AcceptVisitor(this);
-				}
+				OutputEnumValues(typeDeclaration);
 			}
+			else
+			{
+				Append(";");
+			}
+		}
+
+		private void OutputEnumValues(TypeDeclaration typeDeclaration)
+		{
+			EnumName = typeDeclaration.Name;
+			AddOpenBrace();
+			bool first = true;
+			foreach (var member in typeDeclaration.Members)
+			{
+				if (!first)
+				{
+					AppendLine(",");
+				}
+				member.AcceptVisitor(this);
+				first = false;
+			}
+			AddCloseBrace(true);
 		}
 
 		public void VisitTypeOfExpression(TypeOfExpression typeOfExpression)
 		{
-			Console.WriteLine("TypeOfExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitTypeParameterDeclaration(TypeParameterDeclaration typeParameterDeclaration)
 		{
-			Console.WriteLine("TypeParameterDeclaration");
+			throw new NotImplementedException();
 		}
 
 		public void VisitTypeReferenceExpression(TypeReferenceExpression typeReferenceExpression)
@@ -754,77 +1078,105 @@ namespace CppTranslator
 			typeReferenceExpression.Type.AcceptVisitor(this);
 		}
 
+		static bool IsPostfixOperator(UnaryOperatorType op)
+		{
+			return op == UnaryOperatorType.PostIncrement
+				|| op == UnaryOperatorType.PostDecrement
+				|| op == UnaryOperatorType.NullConditional;
+			//|| op == UnaryOperatorType.SuppressNullableWarning;
+		}
 		public void VisitUnaryOperatorExpression(UnaryOperatorExpression unaryOperatorExpression)
 		{
-			Console.WriteLine("UnaryOperatorExpression");
+			UnaryOperatorType opType = unaryOperatorExpression.Operator;
+			var opSymbol = UnaryOperatorExpression.GetOperatorRole(opType);
+			if (opType == UnaryOperatorType.Await)
+			{
+				Append(opSymbol.ToString());
+			}
+			else if (!IsPostfixOperator(opType) && opSymbol != null)
+			{
+				Append(opSymbol.ToString());
+			}
+			unaryOperatorExpression.Expression.AcceptVisitor(this);
+			if (IsPostfixOperator(opType))
+			{
+				Append(opSymbol.ToString());
+			}
 		}
 
 		public void VisitUncheckedExpression(UncheckedExpression uncheckedExpression)
 		{
-			Console.WriteLine("UncheckedExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitUncheckedStatement(UncheckedStatement uncheckedStatement)
 		{
-			Console.WriteLine("UncheckedStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitUndocumentedExpression(UndocumentedExpression undocumentedExpression)
 		{
-			Console.WriteLine("UndocumentedExpression");
+			throw new NotImplementedException();
 		}
 
 		public void VisitUnsafeStatement(UnsafeStatement unsafeStatement)
 		{
-			Console.WriteLine("UnsafeStatement");
+			throw new NotImplementedException();
 		}
 
 		public void VisitUsingAliasDeclaration(UsingAliasDeclaration usingAliasDeclaration)
 		{
-			Console.WriteLine("UsingAliasDeclaration");
+			throw new NotImplementedException();
 		}
 
 		public void VisitUsingDeclaration(UsingDeclaration usingDeclaration)
 		{
-			Console.WriteLine("UsingDeclaration");
 		}
 
 		public void VisitUsingStatement(UsingStatement usingStatement)
 		{
-			Console.WriteLine("UsingStatement");
+			//			AppendLine("UsingStatement");
 		}
 
 		public void VisitVariableDeclarationStatement(VariableDeclarationStatement variableDeclarationStatement)
 		{
 			variableDeclarationStatement.Type.AcceptVisitor(this);
-			Console.Write(" ");
+			Append(" ");
 			WriteCommaSeparatedList(variableDeclarationStatement.Variables);
-			Console.WriteLine(";");
+			Append(";");
 		}
 
 		public void VisitVariableInitializer(VariableInitializer variableInitializer)
 		{
-			Console.Write(variableInitializer.Name);
+			AppendName(variableInitializer.Name);
+			if (!variableInitializer.Initializer.IsNull)
+			{
+				Append(" = ");
+				variableInitializer.Initializer.AcceptVisitor(this);
+			}
 		}
 
 		public void VisitWhileStatement(WhileStatement whileStatement)
 		{
-			Console.WriteLine("whileStatement");
+			Append("while (");
+			whileStatement.Condition.AcceptVisitor(this);
+			Append(" )");
+			WriteEmbeddedStatement(whileStatement.EmbeddedStatement);
 		}
 
 		public void VisitWhitespace(WhitespaceNode whitespaceNode)
 		{
-			Console.WriteLine("whitespaceNode");
+			throw new NotImplementedException();
 		}
 
 		public void VisitYieldBreakStatement(YieldBreakStatement yieldBreakStatement)
 		{
-			Console.WriteLine("YieldBreakStatement");
+			Append("break");
 		}
 
 		public void VisitYieldReturnStatement(YieldReturnStatement yieldReturnStatement)
 		{
-			Console.WriteLine("YieldReturnStatement");
+			throw new NotImplementedException();
 		}
 	}
 }
