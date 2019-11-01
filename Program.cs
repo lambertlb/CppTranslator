@@ -32,8 +32,16 @@ namespace CppTranslator
 
 		private static void GetPathToAssembly(string[] args)
 		{
-			int index = args[0].LastIndexOf('/');
+			int index;
+			if (args[0].Contains("/"))
+			{
+				index = args[0].LastIndexOf('/');
+			} else
+			{
+				index = args[0].LastIndexOf('\\');
+			}
 			String path = args[0].Substring(0, index + 1);
+			Directory.CreateDirectory(path + "Tests/generated/");
 			pathToAssemble = path + "Tests/generated/CaBlock";
 		}
 

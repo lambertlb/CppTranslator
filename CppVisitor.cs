@@ -1,8 +1,10 @@
 ﻿using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.CSharp.Syntax;
 using ICSharpCode.Decompiler.CSharp.Syntax.PatternMatching;
+using ICSharpCode.Decompiler.TypeSystem;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,10 +13,14 @@ namespace CppTranslator
 {
 	class CppVisitor : Formatter, IAstVisitor
 	{
+		private CppTypeVisitor typeVisitor;
 		Boolean doingPrototyping;
 		public bool DoingPrototyping { get => doingPrototyping; set => doingPrototyping = value; }
 		public bool DoingDelcaration { get; set; }
-
+		public CppVisitor()
+		{
+			typeVisitor = new CppTypeVisitor(this);
+		}
 		public void VisitAccessor(Accessor accessor)
 		{
 		}
@@ -396,15 +402,55 @@ namespace CppTranslator
 			{
 				return;
 			}
-			AppendIndented("");
-			DoingDelcaration = true;
-			fieldDeclaration.ReturnType.AcceptVisitor(this);
-			DoingDelcaration = false;
-			Append(" ");
-			WriteCommaSeparatedList(fieldDeclaration.Variables);
+			VariableInitializer variable = fieldDeclaration.Variables.First<VariableInitializer>();
+			fieldDeclaration.ReturnType.GetResolveResult().Type.AcceptVisitor(typeVisitor);
+			//IType typ = fieldDeclaration.ReturnType.GetResolveResult().Type;
+			//var sym = fieldDeclaration.ReturnType.GetSymbol();
+			//String typeName = fieldDeclaration.ReturnType.ToString();
+			//if (sym == null)
+			//{
+			//	Append("*** ");
+			//	Append(typeName);
+			//	AppendLine(" NOT FOUND");
+			//}
+			//AppendIndented("");
+			//FormatTypeDelaration(sym as IType, typeName);
+			//Append(" ");
+			//Append(variable.Name);
 			AppendLine(";");
 		}
 
+		private void AssignVariableName(IType type, String name)
+		{
+			if (type != null && IsPointerType(type))
+			{
+				Append(".Assign(");
+				Append(name);
+				Append(")");
+			}
+			else
+			{
+				Append(" ");
+				Append(name);
+			}
+		}
+
+		public void FormatTypeDelaration(IType type, String typeName)
+		{
+			if (type != null && IsPointerType(type))
+			{
+				Append("Pointer<");
+				Append(typeName);
+				Append(">");
+				return;
+			}
+			Append(typeName);
+		}
+
+		private bool IsPointerType(IType type)
+		{
+			return (type.Kind == TypeKind.Class || type.Kind == TypeKind.Array || type.IsByRefLike);
+		}
 		public void VisitFixedFieldDeclaration(FixedFieldDeclaration fixedFieldDeclaration)
 		{
 			throw new NotImplementedException();
@@ -488,7 +534,9 @@ namespace CppTranslator
 
 		public void VisitIdentifier(Identifier identifier)
 		{
-			throw new NotImplementedException();
+			var res = identifier.GetResolveResult();
+			var sym = identifier.GetSymbol();
+			Append(identifier.Name);
 		}
 
 		public void VisitIdentifierExpression(IdentifierExpression identifierExpression)
@@ -610,8 +658,16 @@ namespace CppTranslator
 
 		public void VisitMemberReferenceExpression(MemberReferenceExpression memberReferenceExpression)
 		{
+			var sym = memberReferenceExpression.GetSymbol() as IEntity;
 			memberReferenceExpression.Target.AcceptVisitor(this);
-			Append("::");
+			if (sym.IsStatic)
+			{
+				Append("::");
+			}
+			else
+			{
+				Append(".");
+			}
 			Append(memberReferenceExpression.MemberNameToken.Name);
 			Append("()");
 		}
@@ -876,11 +932,8 @@ namespace CppTranslator
 
 		public void VisitSimpleType(SimpleType simpleType)
 		{
-			AppendName(simpleType.IdentifierToken.Name);
-			if (DoingDelcaration)
-			{
-				Append("*");
-			}
+			var sym = simpleType.GetSymbol();
+			simpleType.IdentifierToken.AcceptVisitor(this);
 		}
 
 		public void VisitSizeOfExpression(SizeOfExpression sizeOfExpression)
@@ -993,6 +1046,7 @@ namespace CppTranslator
 
 		private void HeaderTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
+			var sym = typeDeclaration.GetSymbol();
 			switch (typeDeclaration.ClassType)
 			{
 				case ClassType.Interface:
