@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DotNetLibrary\**" />
+    <EmbeddedResource Remove="DotNetLibrary\**" />
+    <None Remove="DotNetLibrary\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ILSpy\ICSharpCode.Decompiler\ICSharpCode.Decompiler.csproj" />
   </ItemGroup>
 
