@@ -24,10 +24,13 @@
     <ClInclude Include="include\PointerType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\arithmetic_traits.h">
+    <ClInclude Include="include\ValueType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ValueType.h">
+    <ClInclude Include="include\RawObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RawArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,18 +1,10 @@
 #pragma once
-#include "DotnetTypes.h"
-#include <cstddef>
-#include <cstring>
-#include <typeindex>
-#include <typeinfo>
 
 namespace DotnetLibrary
 {
-	template <typename T, std::size_t traits = 0>
+	template <typename T>
 	struct ValueType {
-		using wrapped_type = T;
-
-		ValueType(T val = T{})
-			: value(val) {
+		ValueType(T val = T{}) : value(val) {
 		}
 		operator T& () {
 			return value;
@@ -29,18 +21,10 @@ namespace DotnetLibrary
 		const T* operator ->() const {
 			return &value;
 		}
-		static std::type_index wrapped_type_index() {
-			return typeid(wrapped_type);
-		}
-		static constexpr std::size_t wrapped_type_traits() {
-			return traits;
-		}
-		T	getValue() {
-			return(value);
-		}
 		T value;
 	};
-	// .Net types to C++ types
+
+	// .Net types to C++ value type
 	typedef	ValueType<bool>			Boolean;
 	typedef	ValueType <int8_t>		Char;
 	typedef	ValueType <uint8_t>		Byte;

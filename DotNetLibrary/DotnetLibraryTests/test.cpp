@@ -73,7 +73,39 @@ TEST(DotnetTypeTests, Int32ValueTypeTest) {
 	ASSERT_TRUE(value == 3);
 	value += 5;
 	ASSERT_TRUE(value == 8);
-	ASSERT_TRUE(value.getValue()== 8);
 	value = 1;
 	ASSERT_TRUE(value == 1);
+}
+Int32	Int32PassByValue(Int32 value) {
+	return(value + 3);
+}
+TEST(DotnetTypeTests, Int32PassValueTypeTest) {
+	Int32 value = 3;
+	ASSERT_TRUE(value == 3);
+	Int32 value2 = Int32PassByValue(value);
+	ASSERT_TRUE(value == 3);
+	ASSERT_TRUE(value2 == 6);
+}
+Int32	Int32PassByRef(Int32& value) {
+	return(value += 3);
+}
+TEST(DotnetTypeTests, Int32PassRefTypeTest) {
+	Int32 value = 3;
+	ASSERT_TRUE(value == 3);
+	Int32 value2 = Int32PassByRef(value);
+	ASSERT_TRUE(value == 6);
+	ASSERT_TRUE(value2 == 6);
+}
+TEST(DotnetTypeTests, CreateInt32ArratTest) {
+	PointerType<RawArray<Int32>> array = RawArray<Int32>::CreateArray(5);
+	array->SetValue(22, 0);
+	array->SetValue(33, 1);
+	array->SetValue(44, 2);
+	array->SetValue(55, 3);
+	array->SetValue(66, 4);
+	ASSERT_TRUE(array->GetValue(0) == 22);
+	ASSERT_TRUE(array->GetValue(1) == 33);
+	ASSERT_TRUE(array->GetValue(2) == 44);
+	ASSERT_TRUE(array->GetValue(3) == 55);
+	ASSERT_TRUE(array->GetValue(4) == 66);
 }

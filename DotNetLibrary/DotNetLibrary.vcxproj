@@ -157,9 +157,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\arithmetic_traits.h" />
     <ClInclude Include="include\DotnetTypes.h" />
     <ClInclude Include="include\PointerType.h" />
+    <ClInclude Include="include\RawArray.h" />
+    <ClInclude Include="include\RawObject.h" />
     <ClInclude Include="include\ValueType.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>

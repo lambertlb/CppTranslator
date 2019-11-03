@@ -12,3 +12,5 @@
 
 #include "ValueType.h"
 #include "PointerType.h"
+#include "RawObject.h"
+#include "RawArray.h"

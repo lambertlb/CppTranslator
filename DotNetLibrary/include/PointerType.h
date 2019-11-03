@@ -1,9 +1,8 @@
 #pragma once
-#include "DotnetTypes.h"
 
 namespace DotnetLibrary
 {
-	template< class T >
+	template< typename T >
 	struct PointerType
 	{
 	public:
@@ -47,8 +46,9 @@ namespace DotnetLibrary
 		{
 			value = v;
 		}
-
 	private:
 		T* value;
 	};
+	class RawString;
+	typedef PointerType<RawString> String;
 }
