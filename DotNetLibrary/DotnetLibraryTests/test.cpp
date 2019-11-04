@@ -109,3 +109,13 @@ TEST(DotnetTypeTests, CreateInt32ArratTest) {
 	ASSERT_TRUE(array->GetValue(3) == 55);
 	ASSERT_TRUE(array->GetValue(4) == 66);
 }
+TEST(DotnetTypeTests, DateTimeTest) {
+	DateTime	time = DateTime::Now();
+	ASSERT_TRUE(time == 0);
+	DateTime	time1 = 1;
+	ASSERT_TRUE(time1 == 1);
+}
+TEST(DotnetTypeTests, TimeSpanTest) {
+	TimeSpan	time1 = 1;
+	ASSERT_TRUE(time1 == 1);
+}

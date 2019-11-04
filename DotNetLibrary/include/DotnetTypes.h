@@ -14,3 +14,5 @@
 #include "PointerType.h"
 #include "RawObject.h"
 #include "RawArray.h"
+#include "DateTime.h"
+#include "TimeSpan.h"
