@@ -220,11 +220,7 @@ namespace CppTranslator
 		{
 			if (composedType.ArraySpecifiers.Count > 0)
 			{
-				Append("Array");
-				if (DoingDelcaration)
-				{
-					Append("*");
-				}
+				composedType.GetResolveResult().Type.AcceptVisitor(typeVisitor);
 				return;
 			}
 			composedType.BaseType.AcceptVisitor(this);
@@ -281,7 +277,7 @@ namespace CppTranslator
 			AppendIndented("");
 			if (DoHeaderFile)
 			{
-				WriteMethodHeader(name, constructorDeclaration.Parameters);
+				WriteMethodHeader(name + "Raw", constructorDeclaration.Parameters);
 				AppendLine(";");
 				return;
 			}
@@ -403,20 +399,10 @@ namespace CppTranslator
 				return;
 			}
 			VariableInitializer variable = fieldDeclaration.Variables.First<VariableInitializer>();
+			AppendIndented("");
 			fieldDeclaration.ReturnType.GetResolveResult().Type.AcceptVisitor(typeVisitor);
-			//IType typ = fieldDeclaration.ReturnType.GetResolveResult().Type;
-			//var sym = fieldDeclaration.ReturnType.GetSymbol();
-			//String typeName = fieldDeclaration.ReturnType.ToString();
-			//if (sym == null)
-			//{
-			//	Append("*** ");
-			//	Append(typeName);
-			//	AppendLine(" NOT FOUND");
-			//}
-			//AppendIndented("");
-			//FormatTypeDelaration(sym as IType, typeName);
-			//Append(" ");
-			//Append(variable.Name);
+			Append(" ");
+			AppendName(variable.Name);
 			AppendLine(";");
 		}
 
@@ -751,7 +737,7 @@ namespace CppTranslator
 		{
 			parameterDeclaration.Type.AcceptVisitor(this);
 			Append(" ");
-			Append(parameterDeclaration.NameToken.Name);
+			AppendName(parameterDeclaration.NameToken.Name);
 		}
 
 		public void VisitParenthesizedExpression(ParenthesizedExpression parenthesizedExpression)
@@ -823,7 +809,7 @@ namespace CppTranslator
 
 		public void VisitPrimitiveType(PrimitiveType primitiveType)
 		{
-			Append(primitiveType.Keyword);
+			AppendType(primitiveType.Keyword);
 		}
 
 		protected virtual void WritePrivateImplementationType(AstType privateImplementationType)
@@ -1046,20 +1032,28 @@ namespace CppTranslator
 
 		private void HeaderTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
+			bool isClass = false;
 			var sym = typeDeclaration.GetSymbol();
 			switch (typeDeclaration.ClassType)
 			{
 				case ClassType.Interface:
 					AppendIndented("class ");
+					isClass = true;
 					break;
 				case ClassType.Struct:
 					AppendIndented("struct ");
+					isClass = true;
 					break;
 				default:
 					AppendIndented("class ");
+					isClass = true;
 					break;
 			}
 			AppendName(typeDeclaration.Name);
+			if (isClass)
+			{
+				Append("Raw");
+			}
 			AddOpenBrace();
 			if (typeDeclaration.ClassType != ClassType.Struct)
 			{
@@ -1074,6 +1068,7 @@ namespace CppTranslator
 
 		private void PrototypeTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
+			bool isClass = false;
 			switch (typeDeclaration.ClassType)
 			{
 				case ClassType.Enum:
@@ -1081,21 +1076,37 @@ namespace CppTranslator
 					break;
 				case ClassType.Interface:
 					AppendIndented("class ");
+					isClass = true;
 					break;
 				case ClassType.Struct:
 					AppendIndented("struct ");
+					isClass = true;
 					break;
 				default:
 					AppendIndented("class ");
+					isClass = true;
 					break;
 			}
 			AppendName(typeDeclaration.Name);
+			if (isClass)
+			{
+				Append("Raw");
+			}
 			if (typeDeclaration.ClassType == ClassType.Enum)
 			{
 				OutputEnumValues(typeDeclaration);
 			}
 			else
 			{
+				Append(";");
+			}
+			if (isClass)
+			{
+				AppendLine("");
+				AppendIndented("typedef PointerType<");
+				AppendName(typeDeclaration.Name);
+				Append("Raw>\t");
+				AppendName(typeDeclaration.Name);
 				Append(";");
 			}
 		}

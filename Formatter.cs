@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -6,6 +7,7 @@ namespace CppTranslator
 {
 	public class Formatter
 	{
+		private Dictionary<String, String> types = new Dictionary<String, String>();
 		private StringBuilder stringBuilder = new StringBuilder(2048);
 		int indentLevel;
 		String nl = Environment.NewLine;
@@ -52,6 +54,23 @@ namespace CppTranslator
 		{
 			get { return name_space; }
 			set { SetNamespace(value); }
+		}
+		public Formatter()
+		{
+			types.Add("bool", "Boolean");
+			types.Add("byte", "Byte");
+			types.Add("sbyte", "SByte");
+			types.Add("char", "Char");
+			types.Add("double", "Double");
+			types.Add("float", "Float");
+			types.Add("int", "Int32");
+			types.Add("uint", "UInt32");
+			types.Add("long", "Int64");
+			types.Add("ulong", "UInt64");
+			types.Add("object", "Object");
+			types.Add("short", "Int16");
+			types.Add("ushort", "UInt16");
+			types.Add("string", "String");
 		}
 
 		private void SetNamespace(string value)
@@ -332,6 +351,16 @@ namespace CppTranslator
 		public override String ToString()
 		{
 			return (stringBuilder.ToString());
+		}
+
+		public void AppendType(String type)
+		{
+			if (types.ContainsKey(type))
+			{
+				Append(types[type]);
+				return;
+			}
+			Append(type);
 		}
 	}
 }

@@ -81,11 +81,12 @@ namespace CppTranslator
 		private static void AppendProtoPreamble()
 		{
 			visitor.AppendLine("#pragma once");
-			visitor.AppendLine("#include \"FrameworkHeader.h\"");
+			visitor.AppendLine("#include \"DotnetTypes.h\"");
+			visitor.AppendLine("using namespace DotnetLibrary;");
+			visitor.AppendLine("");
 		}
 		private static void AppendHeaderPreamble()
 		{
-			AppendProtoPreamble();
 			visitor.AppendLine("#include \"CaBlockProtos.h\"");
 		}
 

@@ -14,5 +14,7 @@
 #include "PointerType.h"
 #include "RawObject.h"
 #include "RawArray.h"
+#include "RawString.h"
+#include "RawStringBuilder.h"
 #include "DateTime.h"
 #include "TimeSpan.h"

@@ -14,12 +14,15 @@ namespace CppTranslator
 
 		public override IType VisitArrayType(ArrayType type)
 		{
-			formatter.Append("Array");
-			return base.VisitArrayType(type);
+			formatter.Append("PointerType<RawArray<");
+			IType rtn =  base.VisitArrayType(type);
+			formatter.Append(">>");
+			return (rtn);
 		}
 		public override IType VisitTypeDefinition(ITypeDefinition type)
 		{
-			formatter.Append(type.Kind.ToString());
+			formatter.AppendType(type.Name);
+//			formatter.Append(type.Kind.ToString());
 			return base.VisitTypeDefinition(type);
 		}
 
