@@ -13,7 +13,10 @@ namespace CppTranslator
 	{
 		static String pathToAssemble;
 		static CSharpDecompiler compiler;
-		static CppVisitor visitor = new CppVisitor();
+		static Formatter formatter = new Formatter();
+		static CppVisitorBase visitor = new CppVisitorBase(formatter);
+		static ProtoTypeVisitor prototypeVisitor = new ProtoTypeVisitor(formatter);
+		static HeaderTypeVisitor headerVisitor = new HeaderTypeVisitor(formatter);
 		static Boolean setOutput;
 
 		static void Main(string[] args)
@@ -25,9 +28,10 @@ namespace CppTranslator
 			}
 			GetPathToAssembly(args);
 			compiler = new CSharpDecompiler(args[0], new ICSharpCode.Decompiler.DecompilerSettings());
-			visitor.EmitToConsole = true;
-			CreatePrototypes();
-			CreateHeaderFile();
+			formatter.EmitToConsole = true;
+			ProcessModules(prototypeVisitor, pathToAssemble + "Protos.h");
+			ProcessModules(headerVisitor, pathToAssemble + "Header.h");
+			ProcessModules(visitor, pathToAssemble + ".cpp");
 		}
 
 		private static void GetPathToAssembly(string[] args)
@@ -45,10 +49,9 @@ namespace CppTranslator
 			pathToAssemble = path + "Tests/generated/CaBlock";
 		}
 
-		private static void CreatePrototypes()
+		private static void ProcessModules(CppVisitorBase visitorToUse, String filePath)
 		{
 			setOutput = false;
-			visitor.DoProtyping = true;
 			foreach (IModule module in compiler.TypeSystem.Modules)
 			{
 				if (module.IsMainModule)
@@ -61,70 +64,21 @@ namespace CppTranslator
 							{
 								if (!setOutput)
 								{
-									visitor.OutputName = pathToAssemble + "Protos.h";
+									formatter.OutputName = filePath;
 									setOutput = true;
-									AppendProtoPreamble();
+									visitorToUse.AddHeaders();
 								}
-								visitor.Name_space = typeDefinition.Namespace;
+								formatter.Name_space = typeDefinition.Namespace;
 								List<EntityHandle> entities = new List<EntityHandle>() { typeDefinition.MetadataToken };
 								SyntaxTree syntaxTree = compiler.Decompile(entities);
-								syntaxTree.AcceptVisitor(visitor);
-								visitor.AppendLine("");
+								syntaxTree.AcceptVisitor(visitorToUse);
+								formatter.AppendLine("");
 							}
 						}
 					}
 				}
 			}
-			visitor.Close();
-		}
-
-		private static void AppendProtoPreamble()
-		{
-			visitor.AppendLine("#pragma once");
-			visitor.AppendLine("#include \"DotnetTypes.h\"");
-			visitor.AppendLine("using namespace DotnetLibrary;");
-			visitor.AppendLine("");
-		}
-		private static void AppendHeaderPreamble()
-		{
-			visitor.AppendLine("#include \"CaBlockProtos.h\"");
-		}
-
-		private static void CreateHeaderFile()
-		{
-			setOutput = false;
-			visitor.DoHeaderFile = true;
-			foreach (IModule module in compiler.TypeSystem.Modules)
-			{
-				if (module.IsMainModule)
-				{
-					foreach (ITypeDefinition typeDefinition in module.TopLevelTypeDefinitions)
-					{
-						if (typeDefinition.Kind == TypeKind.Class || typeDefinition.Kind == TypeKind.Struct)
-						{
-							if (!typeDefinition.Name.StartsWith("<") && !typeDefinition.Namespace.Contains("BlockBase") && !typeDefinition.Namespace.Contains("SysCommon"))
-							{
-								if (!setOutput)
-								{
-									visitor.OutputName = pathToAssemble + "Header.h";
-									setOutput = true;
-									AppendHeaderPreamble();
-								}
-								if (typeDefinition.Name.Contains("TimeTest"))
-								{
-									visitor.Name_space = typeDefinition.Namespace;
-								}
-								visitor.Name_space = typeDefinition.Namespace;
-								List<EntityHandle> entities = new List<EntityHandle>() { typeDefinition.MetadataToken };
-								SyntaxTree syntaxTree = compiler.Decompile(entities);
-								syntaxTree.AcceptVisitor(visitor);
-								visitor.AppendLine("");
-							}
-						}
-					}
-				}
-			}
-			visitor.Close();
+			formatter.Close();
 		}
 
 		private static void Usage()

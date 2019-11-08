@@ -15,29 +15,6 @@ namespace CppTranslator
 		bool openBraceOnNewline = true;
 		private bool onNewline;
 		private bool emitToConsole;
-		private String enumName;
-		public string EnumName { get => enumName; set => enumName = value; }
-
-		private bool doProtyping;
-		public bool DoProtyping
-		{
-			get => doProtyping;
-			set {
-				doProtyping = value;
-				doHeaderFile = false;
-			}
-		}
-		private bool doHeaderFile;
-		public bool DoHeaderFile
-		{
-			get => doHeaderFile;
-			set
-			{
-				doProtyping = false;
-				doHeaderFile = true;
-			}
-		}
-
 		private StreamWriter outputFiler;
 		private String outputName;
 		public String OutputName
