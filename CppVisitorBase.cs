@@ -18,6 +18,9 @@ namespace CppTranslator
 		private String enumName;
 		public String EnumName { get => enumName; set => enumName = value; }
 		public String CurrentClass { get; set; }
+		public bool HadConstructor { get; set; }
+		public bool DoingConstructor { get; set; }
+		public AstNodeCollection<EntityDeclaration> Fields { get; set; }
 
 		public CppTypeVisitor TypeVisitor { get => typeVisitor; }
 		public Formatter Formatter { get => formatter; }
@@ -204,11 +207,11 @@ namespace CppTranslator
 		{
 			if (caseLabel.Expression.IsNull)
 			{
-				Formatter.Append("default");
+				Formatter.AppendIndented("default");
 			}
 			else
 			{
-				Formatter.Append("case ");
+				Formatter.AppendIndented("case ");
 				caseLabel.Expression.AcceptVisitor(this);
 			}
 			Formatter.Append(":");
@@ -290,25 +293,17 @@ namespace CppTranslator
 		private void WriteBlock(BlockStatement body)
 		{
 			Formatter.AddOpenBrace();
+			InitializeFields();
 			foreach (var node in body.Statements)
 			{
 				Formatter.AppendIndented("");
 				node.AcceptVisitor(this);
-				Formatter.AppendLine("");
+				if (!Formatter.IsOnNewline)
+				{
+					Formatter.AppendLine("");
+				}
 			}
 			Formatter.AddCloseBrace();
-		}
-
-		public virtual void VisitConstructorDeclaration(ConstructorDeclaration constructorDeclaration)
-		{
-			TypeDeclaration type = constructorDeclaration.Parent as TypeDeclaration;
-			String name = null;
-			if (type != null && type.Name != constructorDeclaration.Name)
-				name = type.NameToken.Name;
-			else
-				name = constructorDeclaration.NameToken.Name;
-			Formatter.AppendIndented("");
-			WriteMethod(name, constructorDeclaration.Parameters, constructorDeclaration.Body);
 		}
 
 		public void VisitConstructorInitializer(ConstructorInitializer constructorInitializer)
@@ -438,22 +433,6 @@ namespace CppTranslator
 			}
 		}
 
-		public void FormatTypeDelaration(IType type, String typeName)
-		{
-			if (type != null && IsPointerType(type))
-			{
-				Formatter.Append("Pointer<");
-				Formatter.Append(typeName);
-				Formatter.Append(">");
-				return;
-			}
-			Formatter.Append(typeName);
-		}
-
-		private bool IsPointerType(IType type)
-		{
-			return (type.Kind == TypeKind.Class || type.Kind == TypeKind.Array || type.IsByRefLike);
-		}
 		public void VisitFixedFieldDeclaration(FixedFieldDeclaration fixedFieldDeclaration)
 		{
 			throw new NotImplementedException();
@@ -495,7 +474,6 @@ namespace CppTranslator
 			if (block != null)
 			{
 				WriteBlock(block);
-				Formatter.AppendLine("");
 			}
 			else
 			{
@@ -537,8 +515,6 @@ namespace CppTranslator
 
 		public void VisitIdentifier(Identifier identifier)
 		{
-			var res = identifier.GetResolveResult();
-			var sym = identifier.GetSymbol();
 			Formatter.Append(identifier.Name);
 		}
 
@@ -559,7 +535,7 @@ namespace CppTranslator
 			else
 			{
 				WriteEmbeddedStatement(ifElseStatement.TrueStatement);
-				Formatter.Append("else");
+				Formatter.AppendIndented("else");
 				if (ifElseStatement.FalseStatement is IfElseStatement)
 				{
 					// don't put newline between 'else' and 'if'
@@ -619,7 +595,7 @@ namespace CppTranslator
 			Formatter.Append(")");
 		}
 
-		private void WriteCommaSeparatedList(IEnumerable<AstNode> nodes)
+		protected void WriteCommaSeparatedList(IEnumerable<AstNode> nodes)
 		{
 			bool isFirst = true;
 			foreach (AstNode node in nodes)
@@ -761,7 +737,6 @@ namespace CppTranslator
 		{
 			Formatter.Append("new ");
 			objectCreateExpression.Type.AcceptVisitor(this);
-			Formatter.Append("Raw");
 			bool useParenthesis = objectCreateExpression.Arguments.Any() || objectCreateExpression.Initializer.IsNull;
 			// also use parenthesis if there is an '(' token
 			if (!objectCreateExpression.LParToken.IsNull)
@@ -850,12 +825,11 @@ namespace CppTranslator
 			bool isString = primitiveExpression.Value is String;
 			if (isString)
 			{
-				Formatter.Append("\"");
+				Formatter.AppendStringsWithControl(primitiveExpression.Value.ToString());
 			}
-			Formatter.Append(primitiveExpression.Value.ToString());
-			if (isString)
+			else
 			{
-				Formatter.Append("\"");
+				Formatter.Append(primitiveExpression.Value.ToString());
 			}
 		}
 
@@ -1005,7 +979,9 @@ namespace CppTranslator
 
 			foreach (var statement in switchSection.Statements)
 			{
+				Formatter.AppendIndented("");
 				statement.AcceptVisitor(this);
+				Formatter.AppendLine("");
 			}
 		}
 
@@ -1014,12 +990,12 @@ namespace CppTranslator
 			Formatter.Append("switch ( ");
 			switchStatement.Expression.AcceptVisitor(this);
 			Formatter.AppendLine(" )");
-			Formatter.AppendLine("{");
+			Formatter.AddOpenBrace();
 			foreach (var section in switchStatement.SwitchSections)
 			{
 				section.AcceptVisitor(this);
 			}
-			Formatter.AppendLine("}");
+			Formatter.AddCloseBrace();
 		}
 
 		public void VisitSyntaxTree(SyntaxTree syntaxTree)
@@ -1080,39 +1056,114 @@ namespace CppTranslator
 
 		protected virtual void HeaderTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
-			//bool isClass = false;
-			//var sym = typeDeclaration.GetSymbol();
-			//switch (typeDeclaration.ClassType)
-			//{
-			//	case ClassType.Interface:
-			//		Formatter.AppendIndented("class ");
-			//		isClass = true;
-			//		break;
-			//	case ClassType.Struct:
-			//		Formatter.AppendIndented("struct ");
-			//		isClass = true;
-			//		break;
-			//	default:
-			//		Formatter.AppendIndented("class ");
-			//		isClass = true;
-			//		break;
-			//}
-			//Formatter.AppendName(typeDeclaration.Name);
-			//if (isClass)
-			//{
-			//	Formatter.Append("Raw");
-			//}
-			//Formatter.AddOpenBrace();
-			//if (typeDeclaration.ClassType != ClassType.Struct)
-			//{
-			//	Formatter.AppendIndentedLine("public:");
-			//}
+			HadConstructor = false;
 			CurrentClass = typeDeclaration.Name;
+			Fields = typeDeclaration.Members;
+			CreateStaticVariables();
 			foreach (var member in typeDeclaration.Members)
 			{
 				member.AcceptVisitor(this);
 			}
-			//Formatter.AddCloseBrace(true);
+			if (!HadConstructor)
+			{
+				CreateDefaultConstructor(typeDeclaration);
+			}
+			Fields = null;
+		}
+
+		private void CreateStaticVariables()
+		{
+			if (Fields == null)
+			{
+				return;
+			}
+			foreach (var member in Fields)
+			{
+				if (member is FieldDeclaration)
+				{
+					FormatStaticFieldDeclaration((FieldDeclaration)member);
+				}
+			}
+		}
+
+		public virtual void VisitConstructorDeclaration(ConstructorDeclaration constructorDeclaration)
+		{
+			HadConstructor = true;
+			DoingConstructor = true;
+			TypeDeclaration type = constructorDeclaration.Parent as TypeDeclaration;
+			String name = null;
+			if (type != null && type.Name != constructorDeclaration.Name)
+				name = type.NameToken.Name;
+			else
+				name = constructorDeclaration.NameToken.Name;
+			Formatter.AppendIndented("");
+			WriteMethod(name, constructorDeclaration.Parameters, constructorDeclaration.Body);
+			DoingConstructor = false;
+		}
+		public virtual void CreateDefaultConstructor(TypeDeclaration typeDeclaration)
+		{
+			Formatter.AppendIndented("");
+			Formatter.AppendName(typeDeclaration.Name);
+			Formatter.Append("Raw");
+			Formatter.Append("::");
+			Formatter.AppendName(typeDeclaration.Name);
+			Formatter.Append("Raw()");
+			Formatter.AddOpenBrace();
+			InitializeFields();
+			Formatter.AddCloseBrace();
+		}
+
+		private void InitializeFields()
+		{
+			if (!DoingConstructor || Fields == null)
+			{
+				return;
+			}
+			foreach (var member in Fields)
+			{
+				if (member is FieldDeclaration)
+				{
+					FormatFieldDeclaration((FieldDeclaration)member);
+				}
+			}
+		}
+		private void FormatFieldDeclaration(FieldDeclaration fieldDeclaration)
+		{
+			VariableInitializer variable = fieldDeclaration.Variables.First<VariableInitializer>();
+			if (variable.Initializer.IsNull)
+			{
+				return;
+			}
+			var sym = fieldDeclaration.GetSymbol() as IEntity;
+			if (!sym.IsStatic)
+			{
+				Formatter.AppendIndented("");
+				WriteCommaSeparatedList(fieldDeclaration.Variables);
+				Formatter.AppendLine(";");
+			}
+		}
+
+		private void FormatStaticFieldDeclaration(FieldDeclaration fieldDeclaration)
+		{
+			VariableInitializer variable = fieldDeclaration.Variables.First<VariableInitializer>();
+			var sym = fieldDeclaration.GetSymbol() as IEntity;
+			if (sym.IsStatic)
+			{
+				Formatter.AppendIndented("");
+				fieldDeclaration.ReturnType.GetResolveResult().Type.AcceptVisitor(TypeVisitor);
+				Formatter.Append(" ");
+				Formatter.Append(CurrentClass);
+				Formatter.Append("Raw::");
+				WriteCommaSeparatedList(fieldDeclaration.Variables);
+				Formatter.AppendLine(";");
+			}
+		}
+		public virtual void VisitVariableInitializer(VariableInitializer variableInitializer)
+		{
+			Formatter.AppendName(variableInitializer.Name);
+			Formatter.Append(" = ");
+			variableInitializer.Initializer.AcceptVisitor(this);
+//			Formatter.AppendLine(";");
 		}
 
 		public void VisitTypeOfExpression(TypeOfExpression typeOfExpression)
@@ -1192,20 +1243,35 @@ namespace CppTranslator
 
 		public void VisitVariableDeclarationStatement(VariableDeclarationStatement variableDeclarationStatement)
 		{
-			variableDeclarationStatement.Type.AcceptVisitor(this);
+			SimpleType simpleType = variableDeclarationStatement.Type as SimpleType;
+			if (simpleType != null)
+			{
+				IType type = simpleType.GetResolveResult().Type;
+				FormatTypeDelaration(type, simpleType.IdentifierToken.Name);
+			}
+			else
+			{
+				variableDeclarationStatement.Type.AcceptVisitor(this);
+			}
 			Formatter.Append(" ");
 			WriteCommaSeparatedList(variableDeclarationStatement.Variables);
 			Formatter.Append(";");
 		}
-
-		public void VisitVariableInitializer(VariableInitializer variableInitializer)
+		public void FormatTypeDelaration(IType type, String typeName)
 		{
-			Formatter.AppendName(variableInitializer.Name);
-			if (!variableInitializer.Initializer.IsNull)
+			if (type != null && IsPointerType(type))
 			{
-				Formatter.Append(" = ");
-				variableInitializer.Initializer.AcceptVisitor(this);
+				Formatter.Append("PointerType<");
+				Formatter.Append(typeName);
+				Formatter.Append("Raw>");
+				return;
 			}
+			Formatter.Append(typeName);
+		}
+
+		private bool IsPointerType(IType type)
+		{
+			return (type.Kind == TypeKind.Class || type.Kind == TypeKind.Array || type.IsByRefLike);
 		}
 
 		public void VisitWhileStatement(WhileStatement whileStatement)

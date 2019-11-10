@@ -1,5 +1,6 @@
 ﻿using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.CSharp.Syntax;
+using ICSharpCode.Decompiler.TypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace CppTranslator
 
 		protected override void HeaderTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
+			HadConstructor = false;
 			bool isClass = false;
 			var sym = typeDeclaration.GetSymbol();
 			switch (typeDeclaration.ClassType)
@@ -51,10 +53,23 @@ namespace CppTranslator
 			{
 				member.AcceptVisitor(this);
 			}
+			if (isClass && !HadConstructor)
+			{
+				CreateDefaultConstructor(typeDeclaration);
+			}
 			Formatter.AddCloseBrace(true);
 		}
+
+		public override void CreateDefaultConstructor(TypeDeclaration typeDeclaration)
+		{
+			Formatter.AppendIndented("");
+			Formatter.AppendName(typeDeclaration.Name);
+			Formatter.AppendLine("Raw();");
+		}
+
 		public override void VisitConstructorDeclaration(ConstructorDeclaration constructorDeclaration)
 		{
+			HadConstructor = true;
 			TypeDeclaration type = constructorDeclaration.Parent as TypeDeclaration;
 			String name = null;
 			if (type != null && type.Name != constructorDeclaration.Name)
@@ -83,10 +98,24 @@ namespace CppTranslator
 		{
 			VariableInitializer variable = fieldDeclaration.Variables.First<VariableInitializer>();
 			Formatter.AppendIndented("");
+			var sym = fieldDeclaration.GetSymbol() as IEntity;
+			if (sym != null && sym.IsStatic)
+			{
+				Formatter.Append("static ");
+			}
 			fieldDeclaration.ReturnType.GetResolveResult().Type.AcceptVisitor(TypeVisitor);
 			Formatter.Append(" ");
-			Formatter.AppendName(variable.Name);
+			WriteCommaSeparatedList(fieldDeclaration.Variables);
 			Formatter.AppendLine(";");
+		}
+		public override void VisitVariableInitializer(VariableInitializer variableInitializer)
+		{
+			Formatter.AppendName(variableInitializer.Name);
+			//if (!variableInitializer.Initializer.IsNull)
+			//{
+			//	Formatter.Append(" = ");
+			//	variableInitializer.Initializer.AcceptVisitor(this);
+			//}
 		}
 	}
 }

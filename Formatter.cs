@@ -14,6 +14,7 @@ namespace CppTranslator
 		String tabs = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 		bool openBraceOnNewline = true;
 		private bool onNewline;
+		public bool IsOnNewline { get { return (onNewline); } }
 		private bool emitToConsole;
 		private StreamWriter outputFiler;
 		private String outputName;
@@ -281,7 +282,7 @@ namespace CppTranslator
 				AppendIndentedLine("{");
 			}
 			else
-				AppendLine("{");
+				AppendIndentedLine("{");
 			UpIndent();
 		}
 		/// <summary>

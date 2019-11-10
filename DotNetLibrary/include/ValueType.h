@@ -21,6 +21,11 @@ namespace DotnetLibrary
 		const T* operator ->() const {
 			return &value;
 		}
+		bool	Equals(T valueToCOmpare) {
+			return(valueToCOmpare == value);
+		}
+
+		static int32_t MaxValue;
 		T value;
 	};
 
