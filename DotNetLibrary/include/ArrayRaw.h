@@ -4,7 +4,7 @@
 namespace DotnetLibrary
 {
 	template< typename T >
-	class RawArray : public RawObject
+	class ArrayRaw : public ObjectRaw
 	{
 		int32_t		dimension1Size;			// size of dimension 1
 		int32_t		dimension2Size;			// size of dimension 2
@@ -13,7 +13,7 @@ namespace DotnetLibrary
 		int32_t		totalElementCount;		// total elements in the array
 		T*			data;					// point to data storage for array
 	public:
-		RawArray(Int32 dimension1Size, Int32 dimension2Size = -1, Int32 dimension3Size = -1) {
+		ArrayRaw(Int32 dimension1Size, Int32 dimension2Size = -1, Int32 dimension3Size = -1) {
 			this->dimension1Size = dimension1Size;
 			this->dimension2Size = dimension2Size;
 			this->dimension3Size = dimension2Size;
@@ -31,7 +31,7 @@ namespace DotnetLibrary
 			}
 			data = new T[totalElementCount];
 		}
-		virtual ~RawArray() {
+		virtual ~ArrayRaw() {
 			delete data;
 		}
 		T	GetValue(Int32 index1, Int32 index2 = -1, Int32 index3 = -1) {
@@ -42,8 +42,8 @@ namespace DotnetLibrary
 			int32_t index = ComputeIndex(index1, index2, index3);
 			data[index] = value;
 		}
-		static	PointerType<RawArray<T>>	CreateArray(Int32 dimension1Size, Int32 dimension2Size = -1, Int32 dimension3Size = -1) {
-			return (new RawArray<T>(dimension1Size, dimension2Size = -1, dimension3Size));
+		static	PointerType<ArrayRaw<T>>	CreateArray(Int32 dimension1Size, Int32 dimension2Size = -1, Int32 dimension3Size = -1) {
+			return (new ArrayRaw<T>(dimension1Size, dimension2Size = -1, dimension3Size));
 		}
 	private:
 		int32_t	ComputeIndex(Int32 index1, Int32 index2, Int32 index3) {

@@ -4,31 +4,48 @@ using ICSharpCode.Decompiler.CSharp.Syntax.PatternMatching;
 using ICSharpCode.Decompiler.TypeSystem;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace CppTranslator
 {
 	public class CppVisitorBase : IAstVisitor
 	{
-		private CppTypeVisitor typeVisitor;
-		private Formatter formatter;
+		private Dictionary<String, String> substitutes = new Dictionary<String, String>();
 		private String enumName;
 		public String EnumName { get => enumName; set => enumName = value; }
 		public String CurrentClass { get; set; }
 		public bool HadConstructor { get; set; }
 		public bool DoingConstructor { get; set; }
 		public AstNodeCollection<EntityDeclaration> Fields { get; set; }
-
+		private CppTypeVisitor typeVisitor;
 		public CppTypeVisitor TypeVisitor { get => typeVisitor; }
+		private Formatter formatter;
 		public Formatter Formatter { get => formatter; }
 
 		public CppVisitorBase(Formatter formatter)
 		{
 			this.formatter = formatter;
 			typeVisitor = new CppTypeVisitor(formatter);
+			substitutes.Add("byteMaxValue", Byte.MaxValue.ToString());
+			substitutes.Add("byteMinValue", Byte.MinValue.ToString());
+			substitutes.Add("sbyteMaxValue", SByte.MaxValue.ToString());
+			substitutes.Add("sbyteMinValue", SByte.MinValue.ToString());
+			substitutes.Add("shortMaxValue", Int16.MaxValue.ToString());
+			substitutes.Add("shortMinValue", Int16.MinValue.ToString());
+			substitutes.Add("ushortMaxValue", UInt16.MaxValue.ToString());
+			substitutes.Add("ushortMinValue", UInt16.MinValue.ToString());
+			substitutes.Add("intMaxValue", Int32.MaxValue.ToString());
+			substitutes.Add("intMinValue", Int32.MinValue.ToString());
+			substitutes.Add("uintMaxValue", UInt32.MaxValue.ToString());
+			substitutes.Add("uintMinValue", UInt32.MinValue.ToString());
+			substitutes.Add("longMaxValue", Int64.MaxValue.ToString());
+			substitutes.Add("longMinValue", Int64.MinValue.ToString());
+			substitutes.Add("ulongMaxValue", UInt64.MaxValue.ToString());
+			substitutes.Add("ulongMinValue", UInt64.MinValue.ToString());
+			substitutes.Add("floatMaxValue", Single.MaxValue.ToString());
+			substitutes.Add("floatMinValue", Single.MinValue.ToString());
+			substitutes.Add("doubleMaxValue", Double.MaxValue.ToString());
+			substitutes.Add("doubleMinValue", Double.MinValue.ToString());
 		}
 		public void VisitAccessor(Accessor accessor)
 		{
@@ -557,13 +574,8 @@ namespace CppTranslator
 		{
 			indexerExpression.Target.AcceptVisitor(this);
 			Formatter.Append(" ");
-			NewMethod(indexerExpression.Arguments);
-		}
-
-		private void NewMethod(IEnumerable<AstNode> nodes)
-		{
 			Formatter.Append("[ ");
-			WriteCommaSeparatedList(nodes);
+			WriteCommaSeparatedList(indexerExpression.Arguments);
 			Formatter.Append(" ]");
 		}
 
@@ -651,6 +663,10 @@ namespace CppTranslator
 				HandleEnumExpression(type, sym);
 				return;
 			}
+			if (HandleConstants(memberReferenceExpression.Target.ToString(), memberReferenceExpression.MemberNameToken.Name))
+			{
+				return;
+			}
 			memberReferenceExpression.Target.AcceptVisitor(this);
 			if (sym != null && sym.IsStatic)
 			{
@@ -668,6 +684,17 @@ namespace CppTranslator
 				}
 			}
 			Formatter.AppendName(memberReferenceExpression.MemberNameToken.Name);
+		}
+
+		private bool HandleConstants(String instance, String field)
+		{
+			String key = instance + field;
+			if (substitutes.ContainsKey(key))
+			{
+				Formatter.Append(substitutes[key]);
+				return (true);
+			}
+			return (false);
 		}
 
 		private void HandleEnumExpression(IType type, IEntity sym)
@@ -825,7 +852,9 @@ namespace CppTranslator
 			bool isString = primitiveExpression.Value is String;
 			if (isString)
 			{
+				Formatter.Append("new StringRaw(");
 				Formatter.AppendStringsWithControl(primitiveExpression.Value.ToString());
+				Formatter.Append(")");
 			}
 			else
 			{

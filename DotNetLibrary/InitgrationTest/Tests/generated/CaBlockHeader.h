@@ -8,7 +8,7 @@ namespace MiniTest_NS
 		static Int64 x_maxInt64;
 		Double x_bigNumber;
 		ProgramRaw();
-		static Int32 Main(PointerType<RawArray<String>> x_arvs);
+		static Int32 Main(PointerType<ArrayRaw<String>> x_arvs);
 	};
 
 }

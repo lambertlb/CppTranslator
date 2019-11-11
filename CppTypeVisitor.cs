@@ -14,7 +14,7 @@ namespace CppTranslator
 
 		public override IType VisitArrayType(ArrayType type)
 		{
-			formatter.Append("PointerType<RawArray<");
+			formatter.Append("PointerType<ArrayRaw<");
 			IType rtn =  base.VisitArrayType(type);
 			formatter.Append(">>");
 			return (rtn);

@@ -21,12 +21,12 @@
   <ItemGroup>
     <ClInclude Include="include\DotnetTypes.h" />
     <ClInclude Include="include\PointerType.h" />
-    <ClInclude Include="include\RawArray.h" />
-    <ClInclude Include="include\RawObject.h" />
     <ClInclude Include="include\ValueType.h" />
     <ClInclude Include="include\DateTime.h" />
     <ClInclude Include="include\TimeSpan.h" />
-    <ClInclude Include="include\RawString.h" />
-    <ClInclude Include="include\RawStringBuilder.h" />
+    <ClInclude Include="include\ArrayRaw.h" />
+    <ClInclude Include="include\ObjectRaw.h" />
+    <ClInclude Include="include\StringRaw.h" />
+    <ClInclude Include="include\StringBuilderRaw.h" />
   </ItemGroup>
 </Project>

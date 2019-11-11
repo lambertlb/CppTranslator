@@ -49,6 +49,6 @@ namespace DotnetLibrary
 	private:
 		T* value;
 	};
-	class RawString;
-	typedef PointerType<RawString> String;
+	class StringRaw;
+	typedef PointerType<StringRaw> String;
 }

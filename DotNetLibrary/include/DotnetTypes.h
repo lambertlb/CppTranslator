@@ -12,9 +12,9 @@
 
 #include "ValueType.h"
 #include "PointerType.h"
-#include "RawObject.h"
-#include "RawArray.h"
-#include "RawString.h"
-#include "RawStringBuilder.h"
+#include "ObjectRaw.h"
+#include "ArrayRaw.h"
+#include "StringRaw.h"
+#include "StringBuilderRaw.h"
 #include "DateTime.h"
 #include "TimeSpan.h"
