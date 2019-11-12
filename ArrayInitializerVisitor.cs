@@ -16,6 +16,7 @@ namespace CppTranslator
 		public Formatter Formatter { get => formatter; }
 		public int StaticArrayCount { get; set; }
 		public String CurrentMethod { get; set; }
+		public bool DoingArrayInitialize { get; set; }
 
 		public ArrayInitializerVisitor(Formatter formatter, String currentMethod)
 		{
@@ -45,6 +46,7 @@ namespace CppTranslator
 			{
 				return;
 			}
+			DoingArrayInitialize = true;
 			Formatter.AppendIndented("static ");
 			arrayCreateExpression.Type.AcceptVisitor(this);
 			Formatter.Append(" ");
@@ -174,6 +176,7 @@ namespace CppTranslator
 		{
 			foreach (var node in blockStatement.Statements)
 			{
+				DoingArrayInitialize = false;
 				node.AcceptVisitor(this);
 			}
 		}
@@ -351,10 +354,14 @@ namespace CppTranslator
 
 		public void VisitIdentifier(Identifier identifier)
 		{
+			if (DoingArrayInitialize)
+				Formatter.Append(identifier.Name);
 		}
 
 		public void VisitIdentifierExpression(IdentifierExpression identifierExpression)
 		{
+			if (DoingArrayInitialize)
+				Formatter.AppendName(identifierExpression.IdentifierToken.Name);
 		}
 
 		public void VisitIfElseStatement(IfElseStatement ifElseStatement)
@@ -403,13 +410,13 @@ namespace CppTranslator
 
 		public void VisitInvocationExpression(InvocationExpression invocationExpression)
 		{
-			invocationExpression.Target.AcceptVisitor(this);
-			WriteCommaSeparatedListInParenthesis(invocationExpression.Arguments);
 		}
 
 		protected void WriteCommaSeparatedListInParenthesis(IEnumerable<AstNode> nodes)
 		{
+			Formatter.Append("(");
 			WriteCommaSeparatedList(nodes);
+			Formatter.Append(")");
 		}
 
 		protected void WriteCommaSeparatedList(IEnumerable<AstNode> nodes)
@@ -497,6 +504,25 @@ namespace CppTranslator
 
 		public void VisitObjectCreateExpression(ObjectCreateExpression objectCreateExpression)
 		{
+			if (!DoingArrayInitialize)
+			{
+				return;
+			}
+			IType type = objectCreateExpression.GetResolveResult().Type;
+			if (type.Kind == TypeKind.Class)
+				Formatter.Append("new ");
+			objectCreateExpression.Type.AcceptVisitor(this);
+			bool useParenthesis = objectCreateExpression.Arguments.Any() || objectCreateExpression.Initializer.IsNull;
+			// also use parenthesis if there is an '(' token
+			if (!objectCreateExpression.LParToken.IsNull)
+			{
+				useParenthesis = true;
+			}
+			if (useParenthesis)
+			{
+				WriteCommaSeparatedListInParenthesis(objectCreateExpression.Arguments);
+			}
+			objectCreateExpression.Initializer.AcceptVisitor(this);
 		}
 
 		public void VisitOperatorDeclaration(OperatorDeclaration operatorDeclaration)
@@ -629,6 +655,8 @@ namespace CppTranslator
 		{
 			simpleType.IdentifierToken.AcceptVisitor(this);
 			IType type = simpleType.GetResolveResult().Type;
+			if (type.Kind == TypeKind.Class)
+				Formatter.Append("Raw");
 		}
 
 		public void VisitSizeOfExpression(SizeOfExpression sizeOfExpression)

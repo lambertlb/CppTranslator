@@ -585,11 +585,11 @@ namespace CppTranslator
 
 		public void VisitIndexerExpression(IndexerExpression indexerExpression)
 		{
-			Formatter.Append("*");
+			Formatter.Append("(*");
 			indexerExpression.Target.AcceptVisitor(this);
 			Formatter.Append("->Address(");
 			WriteCommaSeparatedList(indexerExpression.Arguments);
-			Formatter.Append(")");
+			Formatter.Append("))");
 		}
 
 		public void VisitInterpolatedStringExpression(InterpolatedStringExpression interpolatedStringExpression)
@@ -775,7 +775,9 @@ namespace CppTranslator
 
 		public void VisitObjectCreateExpression(ObjectCreateExpression objectCreateExpression)
 		{
-			Formatter.Append("new ");
+			IType type = objectCreateExpression.GetResolveResult().Type;
+			if (type.Kind == TypeKind.Class)
+				Formatter.Append("new ");
 			objectCreateExpression.Type.AcceptVisitor(this);
 			bool useParenthesis = objectCreateExpression.Arguments.Any() || objectCreateExpression.Initializer.IsNull;
 			// also use parenthesis if there is an '(' token
