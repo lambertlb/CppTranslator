@@ -42,7 +42,7 @@ namespace CppTranslator
 			Formatter.AppendName(typeDeclaration.Name);
 			if (isClass)
 			{
-				Formatter.Append("Raw");
+				Formatter.Append("Raw : public ObjectRaw");
 			}
 			Formatter.AddOpenBrace();
 			if (typeDeclaration.ClassType != ClassType.Struct)

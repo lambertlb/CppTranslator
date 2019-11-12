@@ -21,6 +21,8 @@ namespace CppTranslator
 		public CppTypeVisitor TypeVisitor { get => typeVisitor; }
 		private Formatter formatter;
 		public Formatter Formatter { get => formatter; }
+		public int StaticArrayCount { get; set; }
+		public String CurrentMethod { get; set; }
 
 		public CppVisitorBase(Formatter formatter)
 		{
@@ -67,25 +69,32 @@ namespace CppTranslator
 
 		public void VisitArrayCreateExpression(ArrayCreateExpression arrayCreateExpression)
 		{
-			Formatter.Append("new ");
+			Formatter.Append("(new ");
+			Formatter.Append("ArrayRaw<");
 			arrayCreateExpression.Type.AcceptVisitor(this);
+			Formatter.Append(">(");
 			if (arrayCreateExpression.Arguments.Count > 0)
 			{
-				WriteCommaSeparatedListInBrackets(arrayCreateExpression.Arguments);
+				WriteCommaSeparatedList(arrayCreateExpression.Arguments);
 			}
+			Formatter.Append(")");
 			foreach (var specifier in arrayCreateExpression.AdditionalArraySpecifiers)
 			{
 				specifier.AcceptVisitor(this);
 			}
-			arrayCreateExpression.Initializer.AcceptVisitor(this);
+			if (!arrayCreateExpression.Initializer.IsNull)
+			{
+				Formatter.Append(")->Initialize((");
+				arrayCreateExpression.Type.AcceptVisitor(this);
+				Formatter.Append("*) ");
+				Formatter.Append(CurrentMethod);
+				Formatter.Append("Array");
+				Formatter.Append(StaticArrayCount.ToString());
+				++StaticArrayCount;
+			}
+			Formatter.Append(")");
 		}
 
-		private void WriteCommaSeparatedListInBrackets(AstNodeCollection<Expression> arguments)
-		{
-			Formatter.Append("[");
-			WriteCommaSeparatedList(arguments);
-			Formatter.Append("]");
-		}
 
 		public void VisitArrayInitializerExpression(ArrayInitializerExpression arrayInitializerExpression)
 		{
@@ -103,7 +112,7 @@ namespace CppTranslator
 		}
 		protected virtual void PrintInitializerElements(AstNodeCollection<Expression> elements)
 		{
-			Formatter.Append("[");
+			Formatter.Append("{");
 			bool isFirst = true;
 			AstNode last = null;
 			foreach (AstNode node in elements)
@@ -119,7 +128,7 @@ namespace CppTranslator
 				last = node;
 				node.AcceptVisitor(this);
 			}
-			Formatter.Append("]");
+			Formatter.Append("}");
 		}
 		protected bool CanBeConfusedWithObjectInitializer(Expression expr)
 		{
@@ -301,9 +310,11 @@ namespace CppTranslator
 			}
 			WriteCommaSeparatedListInParenthesis(parameters);
 		}
-		protected virtual void WriteMethod(String medodName, AstNodeCollection<ParameterDeclaration> parameters, BlockStatement body)
+		protected virtual void WriteMethod(String methodName, AstNodeCollection<ParameterDeclaration> parameters, BlockStatement body)
 		{
-			WriteMethodHeader(medodName, parameters);
+			StaticArrayCount = 0;
+			CurrentMethod = methodName;
+			WriteMethodHeader(methodName, parameters);
 			WriteBlock(body);
 		}
 
@@ -311,6 +322,8 @@ namespace CppTranslator
 		{
 			Formatter.AddOpenBrace();
 			InitializeFields();
+			ArrayInitializerVisitor arrayVisitor = new ArrayInitializerVisitor(Formatter, CurrentMethod);
+			body.AcceptVisitor(arrayVisitor); // create array initializers
 			foreach (var node in body.Statements)
 			{
 				Formatter.AppendIndented("");
@@ -572,11 +585,11 @@ namespace CppTranslator
 
 		public void VisitIndexerExpression(IndexerExpression indexerExpression)
 		{
+			Formatter.Append("*");
 			indexerExpression.Target.AcceptVisitor(this);
-			Formatter.Append(" ");
-			Formatter.Append("[ ");
+			Formatter.Append("->Address(");
 			WriteCommaSeparatedList(indexerExpression.Arguments);
-			Formatter.Append(" ]");
+			Formatter.Append(")");
 		}
 
 		public void VisitInterpolatedStringExpression(InterpolatedStringExpression interpolatedStringExpression)

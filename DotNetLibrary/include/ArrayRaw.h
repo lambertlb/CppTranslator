@@ -42,9 +42,26 @@ namespace DotnetLibrary
 			int32_t index = ComputeIndex(index1, index2, index3);
 			data[index] = value;
 		}
-		static	PointerType<ArrayRaw<T>>	CreateArray(Int32 dimension1Size, Int32 dimension2Size = -1, Int32 dimension3Size = -1) {
-			return (new ArrayRaw<T>(dimension1Size, dimension2Size = -1, dimension3Size));
+		T*	Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1) {
+			int32_t index = ComputeIndex(index1, index2, index3);
+			return(data + index);
 		}
+		ArrayRaw<T>&	Initialize(T* initData) {
+			for (int i = 0; i < totalElementCount; ++i) {
+				data[i] = initData[i];
+			}
+			return(*this);
+		}
+		//T& operator() (Int32 index1, Int32 index2 = -1, Int32 index3 = -1)
+		//{
+		//	int32_t index = ComputeIndex(index1, index2, index3);
+		//	return data[index];
+		//}
+		//T operator() (Int32 index1, Int32 index2 = -1, Int32 index3 = -1) const
+		//{
+		//	int32_t index = ComputeIndex(index1, index2, index3);
+		//	return data[index];
+		//}
 	private:
 		int32_t	ComputeIndex(Int32 index1, Int32 index2, Int32 index3) {
 			int32_t index = index1;

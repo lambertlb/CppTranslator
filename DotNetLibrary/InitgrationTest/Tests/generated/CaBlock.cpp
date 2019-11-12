@@ -2,16 +2,17 @@
 #include "CaBlockHeader.h"
 namespace MiniTest_NS
 {
-	Int64 ProgramRaw::x_maxInt64 = 9223372036854775807;
 	ProgramRaw::ProgramRaw()
 	{
-		x_bigNumber = -33;
-		Int32 x_num = 2147483647;
-		String x_text = new StringRaw("AB\t");
+		static Int32 ProgramArray0[2][4] = {{1,2,3,4},{4,5,6,7}};
+		x_int2dArraya.Assign((new ArrayRaw<Int32>(2,2)));
+		x_int2dArray.Assign((new ArrayRaw<Int32>(2,4))->Initialize((Int32*) ProgramArray0));
+		*x_int2dArray->Address(0,2) = 3;
+		Boolean x_flag = *x_int2dArray->Address(0,2) == 3;
+		Boolean x_flag2 = *x_int2dArray->Address(0,3) == 4;
 	}
 	Int32 ProgramRaw::Main(PointerType<ArrayRaw<String>> x_arvs)
 	{
-		PointerType<ProgramRaw> x_program = new ProgramRaw();
 		return 0;
 	}
 

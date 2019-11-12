@@ -2,11 +2,11 @@
 #include "CaBlockProtos.h"
 namespace MiniTest_NS
 {
-	class ProgramRaw
+	class ProgramRaw : public ObjectRaw
 	{
 		public:
-		static Int64 x_maxInt64;
-		Double x_bigNumber;
+		PointerType<ArrayRaw<Int32>> x_int2dArray;
+		PointerType<ArrayRaw<Int32>> x_int2dArraya;
 		ProgramRaw();
 		static Int32 Main(PointerType<ArrayRaw<String>> x_arvs);
 	};

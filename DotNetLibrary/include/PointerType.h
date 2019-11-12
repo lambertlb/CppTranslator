@@ -38,13 +38,15 @@ namespace DotnetLibrary
 		{
 			return value;
 		}
-		void Assign(T& v)
+		T* Assign(T& v)
 		{
 			value = &v;
+			return value;
 		}
-		void Assign(T* v)
+		T* Assign(T* v)
 		{
 			value = v;
+			return value;
 		}
 	private:
 		T* value;
