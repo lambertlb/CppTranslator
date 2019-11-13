@@ -358,12 +358,13 @@ namespace CppTranslator
 
 		public void VisitDefaultValueExpression(DefaultValueExpression defaultValueExpression)
 		{
-			Formatter.Append("default ");
-			Formatter.Append("(");
-			Formatter.Append(" ");
+			IType type = defaultValueExpression.GetResolveResult().Type;
+			if (type.Kind == TypeKind.Class)
+			{
+				Formatter.Append("new ");
+			}
 			defaultValueExpression.Type.AcceptVisitor(this);
-			Formatter.Append(" ");
-			Formatter.Append(")");
+			Formatter.Append("()");
 		}
 
 		public void VisitDelegateDeclaration(DelegateDeclaration delegateDeclaration)
@@ -494,7 +495,7 @@ namespace CppTranslator
 
 		private void WriteVariableName(Identifier nameIdentifier)
 		{
-			Formatter.Append(nameIdentifier.Name);
+			Formatter.AppendName(nameIdentifier.Name);
 		}
 
 		protected virtual void WriteEmbeddedStatement(Statement embeddedStatement)
@@ -687,7 +688,8 @@ namespace CppTranslator
 			}
 			else
 			{
-				if (type.Kind == TypeKind.Struct)
+				IType type2 = memberReferenceExpression.Target.GetResolveResult().Type;
+				if (type2.Kind == TypeKind.Struct)
 				{
 					Formatter.Append(".");
 				}

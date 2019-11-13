@@ -52,16 +52,21 @@ namespace DotnetLibrary
 			}
 			return(*this);
 		}
-		//T& operator() (Int32 index1, Int32 index2 = -1, Int32 index3 = -1)
-		//{
-		//	int32_t index = ComputeIndex(index1, index2, index3);
-		//	return data[index];
-		//}
-		//T operator() (Int32 index1, Int32 index2 = -1, Int32 index3 = -1) const
-		//{
-		//	int32_t index = ComputeIndex(index1, index2, index3);
-		//	return data[index];
-		//}
+		Int32	GetLength(Int32 rank) {
+			if (rank == 0)
+				return(dimension1Size);
+			else if (rank == 1)
+				return(dimension2Size);
+			else if (rank == 2)
+				return(dimension3Size);
+			return(-1);
+		}
+		Int32	GetLowerBound(Int32 rank) {
+			return(0);
+		}
+		Int32	GetUpperBound(Int32 rank) {
+			return(0);
+		}
 	private:
 		int32_t	ComputeIndex(Int32 index1, Int32 index2, Int32 index3) {
 			int32_t index = index1;

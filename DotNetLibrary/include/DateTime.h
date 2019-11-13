@@ -3,7 +3,7 @@
 
 namespace DotnetLibrary
 {
-	struct DateTime {
+	struct DateTime : public ObjectRaw {
 		DateTime(int64_t val = int64_t{}) : value(val) {
 		}
 		DateTime(Int32 year, Int32 month, Int32 day, Int32 hour = -1, Int32 minute = -1, Int32 second = -1, Int32 millisecond = -1) {
@@ -30,6 +30,7 @@ namespace DotnetLibrary
 		bool	Equals(const DateTime& valueToCOmpare) {
 			return(valueToCOmpare.value == value);
 		}
+		virtual	String				ToString() { return(nullptr); }
 		int64_t value;
 	};
 }
