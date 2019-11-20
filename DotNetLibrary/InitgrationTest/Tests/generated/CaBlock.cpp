@@ -85,14 +85,15 @@ namespace CABlock_NS
 	}
 	void ArrayTestRaw::MiscTest()
 	{
-//		CxAssert(x_int3dArray->GetLength(2) == 4);
-//		CxAssert(x_int3dArray->GetLowerBound(2) == 0);
-//		CxAssert(x_int3dArray->GetUpperBound(2) == 3);
-//		PointerType<ArrayRaw<DateTime>> x_array = x_dateTime1dArray;
-//		foreach (DateTime x_dateTime in x_array )
-//		{
-//			String x_text = x_dateTime.ToString();
-//		}
+		CxAssert(x_int3dArray->GetLength(2) == 4);
+		CxAssert(x_int3dArray->GetLowerBound(2) == 0);
+		CxAssert(x_int3dArray->GetUpperBound(2) == 3);
+		PointerType<ArrayRaw<DateTime>> x_array = x_dateTime1dArray;
+		for ( int foreachi = 0; foreachi < x_array->GetLength(0) ; ++foreachi ) 
+		{
+			DateTime x_dateTime = x_array->GetValue(foreachi);
+			String x_text = x_dateTime.ToString();
+		}
 	}
 	void ArrayTestRaw::ArrayMethodTests()
 	{

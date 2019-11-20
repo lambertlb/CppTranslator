@@ -91,7 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\MsWorkspace\CppTranslator\DotNetLibrary\InitgrationTest\Tests\generated;C:\MsWorkspace\CppTranslator\DotNetLibrary\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\MsWorkspace\CppTranslator\DotNetLibrary\include;C:\MsWorkspace\CppTranslator\DotNetLibrary\InitgrationTest\Tests\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,7 +124,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\MsWorkspace\CppTranslator\DotNetLibrary\InitgrationTest\Tests\generated;C:\MsWorkspace\CppTranslator\DotNetLibrary\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\MsWorkspace\CppTranslator\DotNetLibrary\include;C:\MsWorkspace\CppTranslator\DotNetLibrary\InitgrationTest\Tests\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="InitgrationTest.cpp" />
+    <ClCompile Include="Tests\generated\CaBlock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tests\generated\CaBlockHeader.h" />

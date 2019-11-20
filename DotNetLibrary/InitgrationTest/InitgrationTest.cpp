@@ -1,9 +1,9 @@
 #include "CaBlockHeader.h"
-#include "CABlock.cpp"
+//#include "CABlock.cpp"
 
-using namespace MiniTest_NS;
+//using namespace MiniTest_NS;
 
 int main()
 {
-	ProgramRaw* pr = new ProgramRaw();
+//	ProgramRaw* pr = new ProgramRaw();
 }

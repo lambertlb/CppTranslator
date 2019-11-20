@@ -324,6 +324,12 @@ namespace CppTranslator
 			InitializeFields();
 			ArrayInitializerVisitor arrayVisitor = new ArrayInitializerVisitor(Formatter, CurrentMethod);
 			body.AcceptVisitor(arrayVisitor); // create array initializers
+			WriteStatements(body);
+			Formatter.AddCloseBrace();
+		}
+
+		private void WriteStatements(BlockStatement body)
+		{
 			foreach (var node in body.Statements)
 			{
 				Formatter.AppendIndented("");
@@ -333,7 +339,6 @@ namespace CppTranslator
 					Formatter.AppendLine("");
 				}
 			}
-			Formatter.AddCloseBrace();
 		}
 
 		public void VisitConstructorInitializer(ConstructorInitializer constructorInitializer)
@@ -480,6 +485,42 @@ namespace CppTranslator
 		}
 
 		public void VisitForeachStatement(ForeachStatement foreachStatement)
+		{
+			IType type = foreachStatement.InExpression.GetResolveResult().Type;
+			if (type.Kind == TypeKind.Array)
+			{
+				WriteForeachArray(foreachStatement);
+			}
+			else
+			{
+				WriteForeachEnumerable(foreachStatement);
+			}
+		}
+
+		private void WriteForeachArray(ForeachStatement foreachStatement)
+		{
+			Formatter.Append("for ( int foreachi = 0; foreachi < ");
+			foreachStatement.InExpression.AcceptVisitor(this);
+			Formatter.Append("->GetLength(0) ; ++foreachi ) ");
+			Formatter.AddOpenBrace();
+			Formatter.AppendIndented("");
+			foreachStatement.VariableType.AcceptVisitor(this);
+			Formatter.Append(" ");
+			WriteVariableName(foreachStatement.VariableNameToken);
+			Formatter.Append(" = ");
+			foreachStatement.InExpression.AcceptVisitor(this);
+			Formatter.AppendLine("->GetValue(foreachi);");
+			if (foreachStatement.EmbeddedStatement is BlockStatement)
+			{
+				WriteStatements(foreachStatement.EmbeddedStatement as BlockStatement);
+			}
+			else
+			{
+				foreachStatement.EmbeddedStatement.AcceptVisitor(this);
+			}
+			Formatter.AddCloseBrace();
+		}
+		private void WriteForeachEnumerable(ForeachStatement foreachStatement)
 		{
 			Formatter.Append("foreach ");
 			Formatter.Append("(");
@@ -1209,7 +1250,7 @@ namespace CppTranslator
 			Formatter.AppendName(variableInitializer.Name);
 			Formatter.Append(" = ");
 			variableInitializer.Initializer.AcceptVisitor(this);
-//			Formatter.AppendLine(";");
+			//			Formatter.AppendLine(";");
 		}
 
 		public void VisitTypeOfExpression(TypeOfExpression typeOfExpression)

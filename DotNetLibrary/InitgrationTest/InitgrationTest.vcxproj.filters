@@ -18,6 +18,9 @@
     <ClCompile Include="InitgrationTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\generated\CaBlock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tests\generated\CaBlockHeader.h">
