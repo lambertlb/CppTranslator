@@ -442,7 +442,8 @@ namespace CppTranslator
 		public void VisitExpressionStatement(ExpressionStatement expressionStatement)
 		{
 			expressionStatement.Expression.AcceptVisitor(this);
-			Formatter.Append(";");
+			if (!(expressionStatement.Parent is ForStatement))
+				Formatter.Append(";");
 		}
 
 		public void VisitExternAliasDeclaration(ExternAliasDeclaration externAliasDeclaration)
@@ -723,14 +724,15 @@ namespace CppTranslator
 				return;
 			}
 			memberReferenceExpression.Target.AcceptVisitor(this);
+			IType targetType = memberReferenceExpression.Target.GetResolveResult().Type;
+			var sym2 = memberReferenceExpression.Target.GetSymbol() as IEntity;
 			if (sym != null && sym.IsStatic)
 			{
 				Formatter.Append("::");
 			}
 			else
 			{
-				IType type2 = memberReferenceExpression.Target.GetResolveResult().Type;
-				if (type2.Kind == TypeKind.Struct)
+				if (targetType.Kind == TypeKind.Struct)
 				{
 					Formatter.Append(".");
 				}
@@ -739,7 +741,68 @@ namespace CppTranslator
 					Formatter.Append("->");
 				}
 			}
+			HandleMemberName(memberReferenceExpression);
+		}
+
+		private void HandleMemberName(MemberReferenceExpression memberReferenceExpression)
+		{
+			if (IsArrayLength(memberReferenceExpression))
+			{
+				Formatter.Append("GetLength(0)");
+				return;
+			}
+			if (IsProperty(memberReferenceExpression))
+			{
+				FormatProperty(memberReferenceExpression);
+				return;
+			}
 			Formatter.AppendName(memberReferenceExpression.MemberNameToken.Name);
+		}
+
+		private void FormatProperty(MemberReferenceExpression memberReferenceExpression)
+		{
+			if (IsGetProperty(memberReferenceExpression))
+			{
+				Formatter.Append("get_");
+				Formatter.AppendName(memberReferenceExpression.MemberNameToken.Name);
+				Formatter.Append("()");
+			}
+			else
+			{
+				Formatter.Append("set_");
+				Formatter.AppendName(memberReferenceExpression.MemberNameToken.Name);
+			}
+		}
+
+		private bool IsProperty(MemberReferenceExpression memberReferenceExpression)
+		{
+			return (IsGetProperty(memberReferenceExpression) || IsSetProperty(memberReferenceExpression));
+		}
+		private bool IsSetProperty(MemberReferenceExpression memberReferenceExpression)
+		{
+			ICSharpCode.Decompiler.IL.ILInstruction inst = memberReferenceExpression.Annotation<ICSharpCode.Decompiler.IL.ILInstruction>();
+			if (inst == null || !(inst is ICSharpCode.Decompiler.IL.CallVirt))
+			{
+				return (false);
+			}
+			ICSharpCode.Decompiler.IL.CallVirt call = inst as ICSharpCode.Decompiler.IL.CallVirt;
+			return (call.Method.Name.StartsWith("set_"));
+		}
+		private bool IsGetProperty(MemberReferenceExpression memberReferenceExpression)
+		{
+			ICSharpCode.Decompiler.IL.ILInstruction inst = memberReferenceExpression.Annotation<ICSharpCode.Decompiler.IL.ILInstruction>();
+			if (inst == null || !(inst is ICSharpCode.Decompiler.IL.CallVirt))
+			{
+				return (false);
+			}
+			ICSharpCode.Decompiler.IL.CallVirt call = inst as ICSharpCode.Decompiler.IL.CallVirt;
+			return (call.Method.Name.StartsWith("get_"));
+		}
+
+		private bool IsArrayLength(MemberReferenceExpression memberReferenceExpression)
+		{
+			ICSharpCode.Decompiler.IL.ILInstruction inst = memberReferenceExpression.Annotation<ICSharpCode.Decompiler.IL.ILInstruction>();
+			return (inst != null && inst is ICSharpCode.Decompiler.IL.LdLen);
 		}
 
 		private bool HandleConstants(String instance, String field)
@@ -1342,7 +1405,8 @@ namespace CppTranslator
 			}
 			Formatter.Append(" ");
 			WriteCommaSeparatedList(variableDeclarationStatement.Variables);
-			Formatter.Append(";");
+			if (!(variableDeclarationStatement.Parent is ForStatement))
+				Formatter.Append(";");
 		}
 		public void FormatTypeDelaration(IType type, String typeName)
 		{

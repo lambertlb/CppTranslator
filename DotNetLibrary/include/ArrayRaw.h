@@ -22,12 +22,12 @@ namespace DotnetLibrary
 			if (dimension2Size != -1)
 			{
 				++dimensionCount;
-				totalElementCount += dimension2Size;
+				totalElementCount *= dimension2Size;
 			}
 			if (dimension3Size != -1)
 			{
 				++dimensionCount;
-				totalElementCount += dimension3Size;
+				totalElementCount *= dimension3Size;
 			}
 			data = new T[totalElementCount];
 		}
@@ -66,6 +66,21 @@ namespace DotnetLibrary
 		}
 		Int32	GetUpperBound(Int32 rank) {
 			return(0);
+		}
+		Int32	get_Length() {
+			return(totalElementCount);
+		}
+		Int32	get_Rank() {
+			if (dimension3Size != -1) {
+				return(3);
+			}
+			if (dimension2Size != -1) {
+				return(2);
+			}
+			return(1);
+		}
+		static void  Copy(PointerType<ArrayRaw<T>> array1, PointerType<ArrayRaw<T>> array2, Int32 amount) {
+
 		}
 	private:
 		int32_t	ComputeIndex(Int32 index1, Int32 index2, Int32 index3) {
