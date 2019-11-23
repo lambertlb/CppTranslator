@@ -2,6 +2,7 @@
 
 namespace DotnetLibrary
 {
+	class ArrayBase;
 	template< typename T >
 	struct PointerType
 	{
@@ -32,6 +33,9 @@ namespace DotnetLibrary
 			return *value;
 		}
 		const T* operator &() const {
+			return value;
+		}
+		operator ArrayBase* () {
 			return value;
 		}
 		T* operator->()

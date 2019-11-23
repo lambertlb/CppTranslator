@@ -17,8 +17,8 @@ namespace CppTranslator
 		public bool HadConstructor { get; set; }
 		public bool DoingConstructor { get; set; }
 		public AstNodeCollection<EntityDeclaration> Fields { get; set; }
-		private CppTypeVisitor typeVisitor;
-		public CppTypeVisitor TypeVisitor { get => typeVisitor; }
+		public CppTypeVisitor TypeVisitor { get; set;  }
+		public CallInstructionVisitor CallVisitor { get; set; }
 		private Formatter formatter;
 		public Formatter Formatter { get => formatter; }
 		public int StaticArrayCount { get; set; }
@@ -27,7 +27,8 @@ namespace CppTranslator
 		public CppVisitorBase(Formatter formatter)
 		{
 			this.formatter = formatter;
-			typeVisitor = new CppTypeVisitor(formatter);
+			TypeVisitor = new CppTypeVisitor(formatter);
+			CallVisitor = new CallInstructionVisitor(formatter);
 			substitutes.Add("byteMaxValue", Byte.MaxValue.ToString());
 			substitutes.Add("byteMinValue", Byte.MinValue.ToString());
 			substitutes.Add("sbyteMaxValue", SByte.MaxValue.ToString());
@@ -652,7 +653,9 @@ namespace CppTranslator
 
 		public void VisitInvocationExpression(InvocationExpression invocationExpression)
 		{
-			invocationExpression.Target.AcceptVisitor(this);
+			ICSharpCode.Decompiler.IL.ILInstruction inst = invocationExpression.Annotation<ICSharpCode.Decompiler.IL.ILInstruction>();
+			inst.AcceptVisitor(CallVisitor);
+//			invocationExpression.Target.AcceptVisitor(this);
 			WriteCommaSeparatedListInParenthesis(invocationExpression.Arguments);
 		}
 
@@ -704,6 +707,10 @@ namespace CppTranslator
 
 		public void VisitMemberReferenceExpression(MemberReferenceExpression memberReferenceExpression)
 		{
+			if (HandleLengthProperty(memberReferenceExpression))
+			{
+				return;
+			}
 			IType type = memberReferenceExpression.GetResolveResult().Type;
 			if (type.Kind == TypeKind.Unknown)
 			{
@@ -742,6 +749,19 @@ namespace CppTranslator
 				}
 			}
 			HandleMemberName(memberReferenceExpression);
+		}
+
+		private bool HandleLengthProperty(MemberReferenceExpression memberReferenceExpression)
+		{
+			ICSharpCode.Decompiler.IL.ILInstruction inst = memberReferenceExpression.Annotation<ICSharpCode.Decompiler.IL.ILInstruction>();
+			if (inst != null && (inst is ICSharpCode.Decompiler.IL.LdLen))
+			{
+				memberReferenceExpression.Target.AcceptVisitor(this);
+				Formatter.Append("->get_Length()");
+				return (true);
+			}
+			ICSharpCode.Decompiler.IL.CallVirt call = inst as ICSharpCode.Decompiler.IL.CallVirt;
+			return (false);
 		}
 
 		private void HandleMemberName(MemberReferenceExpression memberReferenceExpression)

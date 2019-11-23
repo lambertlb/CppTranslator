@@ -3,15 +3,25 @@
 
 namespace DotnetLibrary
 {
+	class ArrayBase : public ObjectRaw
+	{
+	protected:
+		virtual void	Copy(ArrayBase* array1, Int32 amount) {};
+	public:
+		static void  Copy(ArrayBase* array1, ArrayBase* array2, Int32 amount) {
+			array2->Copy(array1, amount);
+		}
+	};
+
 	template< typename T >
-	class ArrayRaw : public ObjectRaw
+	class ArrayRaw : public ArrayBase
 	{
 		int32_t		dimension1Size;			// size of dimension 1
 		int32_t		dimension2Size;			// size of dimension 2
 		int32_t		dimension3Size;			// size of dimension 3
 		int32_t		dimensionCount;			// amount of dimensions
 		int32_t		totalElementCount;		// total elements in the array
-		T*			data;					// point to data storage for array
+		T* data;					// point to data storage for array
 	public:
 		ArrayRaw(Int32 dimension1Size, Int32 dimension2Size = -1, Int32 dimension3Size = -1) {
 			this->dimension1Size = dimension1Size;
@@ -42,11 +52,11 @@ namespace DotnetLibrary
 			int32_t index = ComputeIndex(index1, index2, index3);
 			data[index] = value;
 		}
-		T*	Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1) {
+		T* Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1) {
 			int32_t index = ComputeIndex(index1, index2, index3);
 			return(data + index);
 		}
-		ArrayRaw<T>&	Initialize(T* initData) {
+		ArrayRaw<T>& Initialize(T* initData) {
 			for (int i = 0; i < totalElementCount; ++i) {
 				data[i] = initData[i];
 			}
@@ -79,8 +89,10 @@ namespace DotnetLibrary
 			}
 			return(1);
 		}
-		static void  Copy(PointerType<ArrayRaw<T>> array1, PointerType<ArrayRaw<T>> array2, Int32 amount) {
-
+	protected:
+		virtual void	Copy(ArrayBase* array1, Int32 amount)
+		{
+			ArrayRaw<T>* source = (ArrayRaw<T>*)array1;
 		}
 	private:
 		int32_t	ComputeIndex(Int32 index1, Int32 index2, Int32 index3) {
