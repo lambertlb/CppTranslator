@@ -24,6 +24,9 @@ namespace DotnetLibrary
 		const int64_t* operator ->() const {
 			return &value;
 		}
+		bool	Equals(const TimeSpan& valueToCOmpare) {
+			return(valueToCOmpare.value == value);
+		}
 		int64_t value;
 	};
 }

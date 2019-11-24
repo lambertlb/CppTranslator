@@ -7,9 +7,13 @@ namespace DotnetLibrary
 	{
 	protected:
 		virtual void	Copy(ArrayBase* array1, Int32 amount) {};
+		virtual void	Clear(Int32 startingIndex, Int32 amount) {};
 	public:
 		static void  Copy(ArrayBase* array1, ArrayBase* array2, Int32 amount) {
 			array2->Copy(array1, amount);
+		}
+		static void  Clear(ArrayBase* array1, Int32 startingIndex, Int32 amount) {
+			array1->Clear(startingIndex, amount);
 		}
 	};
 
@@ -88,6 +92,18 @@ namespace DotnetLibrary
 				return(2);
 			}
 			return(1);
+		}
+		void	CopyTo(ArrayBase* array1, Int32 amount) {
+			ArrayRaw<T>* source = (ArrayRaw<T>*)array1;
+		}
+		void	SetValue(T value, ArrayBase* array1) {
+
+		}
+		T	GetValue(ArrayBase* array1) {
+			return(0);
+		}
+		void	Clear(Int32 startIndex, Int32 amount) {
+
 		}
 	protected:
 		virtual void	Copy(ArrayBase* array1, Int32 amount)

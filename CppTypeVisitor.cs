@@ -22,7 +22,6 @@ namespace CppTranslator
 		public override IType VisitTypeDefinition(ITypeDefinition type)
 		{
 			formatter.AppendType(type.Name);
-//			formatter.Append(type.Kind.ToString());
 			return base.VisitTypeDefinition(type);
 		}
 

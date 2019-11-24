@@ -738,7 +738,11 @@ namespace CppTranslator
 		}
 		public virtual void VisitVariableInitializer(VariableInitializer variableInitializer)
 		{
-			variableInitializer.Initializer.AcceptVisitor(this);
+			IType type = variableInitializer.GetResolveResult().Type;
+			if (type.Kind == TypeKind.Array)
+			{
+				variableInitializer.Initializer.AcceptVisitor(this);
+			}
 		}
 
 		public void VisitTypeOfExpression(TypeOfExpression typeOfExpression)
@@ -794,6 +798,8 @@ namespace CppTranslator
 
 		public void VisitVariableDeclarationStatement(VariableDeclarationStatement variableDeclarationStatement)
 		{
+			SimpleType simpleType = variableDeclarationStatement.Type as SimpleType;
+			WriteCommaSeparatedList(variableDeclarationStatement.Variables);
 		}
 		public void FormatTypeDelaration(IType type, String typeName)
 		{

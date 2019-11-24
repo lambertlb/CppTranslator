@@ -23,12 +23,13 @@ namespace CppTranslator
 		public Formatter Formatter { get => formatter; }
 		public int StaticArrayCount { get; set; }
 		public String CurrentMethod { get; set; }
+		public Expression CurrentExpression { get; set; }
 
 		public CppVisitorBase(Formatter formatter)
 		{
 			this.formatter = formatter;
 			TypeVisitor = new CppTypeVisitor(formatter);
-			CallVisitor = new CallInstructionVisitor(formatter);
+			CallVisitor = new CallInstructionVisitor(this);
 			substitutes.Add("byteMaxValue", Byte.MaxValue.ToString());
 			substitutes.Add("byteMinValue", Byte.MinValue.ToString());
 			substitutes.Add("sbyteMaxValue", SByte.MaxValue.ToString());
@@ -49,7 +50,28 @@ namespace CppTranslator
 			substitutes.Add("floatMinValue", Single.MinValue.ToString());
 			substitutes.Add("doubleMaxValue", Double.MaxValue.ToString());
 			substitutes.Add("doubleMinValue", Double.MinValue.ToString());
+			substitutes.Add("DateTimeMaxValue", DateTime.MaxValue.Ticks.ToString());
+			substitutes.Add("DateTimeMinValue", DateTime.MinValue.Ticks.ToString());
+			substitutes.Add("TimeSpaneMaxValue", TimeSpan.MaxValue.Ticks.ToString());
+			substitutes.Add("TimeSpaneMinValue", TimeSpan.MinValue.Ticks.ToString());
+			substitutes.Add("null", "nullptr");
 		}
+
+		internal void CastToType(IType targetType, AstNode memberReferenceExpression)
+		{
+			if (targetType.Kind != TypeKind.Unknown)
+			{
+				Formatter.Append("((");
+				Formatter.Append(targetType.Name);
+				Formatter.Append(")");
+			}
+			memberReferenceExpression.AcceptVisitor(this);
+			if (targetType.Kind != TypeKind.Unknown)
+			{
+				Formatter.Append(")");
+			}
+		}
+
 		public void VisitAccessor(Accessor accessor)
 		{
 		}
@@ -653,6 +675,7 @@ namespace CppTranslator
 
 		public void VisitInvocationExpression(InvocationExpression invocationExpression)
 		{
+			CurrentExpression = invocationExpression;
 			ICSharpCode.Decompiler.IL.ILInstruction inst = invocationExpression.Annotation<ICSharpCode.Decompiler.IL.ILInstruction>();
 			inst.AcceptVisitor(CallVisitor);
 //			invocationExpression.Target.AcceptVisitor(this);
@@ -905,6 +928,8 @@ namespace CppTranslator
 			if (type.Kind == TypeKind.Class)
 				Formatter.Append("new ");
 			objectCreateExpression.Type.AcceptVisitor(this);
+			if (type.Kind == TypeKind.Class)
+				Formatter.Append("Raw");
 			bool useParenthesis = objectCreateExpression.Arguments.Any() || objectCreateExpression.Initializer.IsNull;
 			// also use parenthesis if there is an '(' token
 			if (!objectCreateExpression.LParToken.IsNull)
@@ -1115,9 +1140,9 @@ namespace CppTranslator
 		public void VisitSimpleType(SimpleType simpleType)
 		{
 			simpleType.IdentifierToken.AcceptVisitor(this);
-			IType type = simpleType.GetResolveResult().Type;
-			if (type.Kind == TypeKind.Class)
-				Formatter.Append("Raw");
+			//IType type = simpleType.GetResolveResult().Type;
+			//if (type.Kind == TypeKind.Class)
+			//	Formatter.Append("Raw");
 		}
 
 		public void VisitSizeOfExpression(SizeOfExpression sizeOfExpression)
