@@ -64,7 +64,7 @@ namespace CppTranslator
 			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
 			Formatter.AppendIndented("");
 			FormatType(type, typeDeclaration.Name);
-			Formatter.Append(";");
+			Formatter.Append("();");
 		}
 
 		public override void VisitConstructorDeclaration(ConstructorDeclaration constructorDeclaration)
