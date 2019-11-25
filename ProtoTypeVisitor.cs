@@ -1,4 +1,6 @@
 ﻿using ICSharpCode.Decompiler.CSharp.Syntax;
+using ICSharpCode.Decompiler.Semantics;
+using ICSharpCode.Decompiler.TypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +22,8 @@ namespace CppTranslator
 
 		public override void VisitTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
-			bool isClass = false;
+			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
+			bool isClass = type.Kind == TypeKind.Class;
 			switch (typeDeclaration.ClassType)
 			{
 				case ClassType.Enum:
@@ -28,22 +31,15 @@ namespace CppTranslator
 					break;
 				case ClassType.Interface:
 					Formatter.AppendIndented("class ");
-					isClass = true;
 					break;
 				case ClassType.Struct:
 					Formatter.AppendIndented("struct ");
-					isClass = true;
 					break;
 				default:
 					Formatter.AppendIndented("class ");
-					isClass = true;
 					break;
 			}
-			Formatter.AppendName(typeDeclaration.Name);
-			if (isClass)
-			{
-				Formatter.Append("Raw");
-			}
+			FormatType(type, typeDeclaration.Name);
 			if (typeDeclaration.ClassType == ClassType.Enum)
 			{
 				OutputEnumValues(typeDeclaration);
@@ -55,9 +51,9 @@ namespace CppTranslator
 			if (isClass)
 			{
 				Formatter.AppendLine("");
-				Formatter.AppendIndented("typedef PointerType<");
-				Formatter.AppendName(typeDeclaration.Name);
-				Formatter.Append("Raw>\t");
+				Formatter.AppendIndented("typedef ");
+				FormatTypeDelaration(type, typeDeclaration.Name);
+				Formatter.Append("\t");
 				Formatter.AppendName(typeDeclaration.Name);
 				Formatter.Append(";");
 			}

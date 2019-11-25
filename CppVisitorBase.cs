@@ -1,6 +1,7 @@
 ﻿using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.CSharp.Syntax;
 using ICSharpCode.Decompiler.CSharp.Syntax.PatternMatching;
+using ICSharpCode.Decompiler.Semantics;
 using ICSharpCode.Decompiler.TypeSystem;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,11 @@ namespace CppTranslator
 		private Dictionary<String, String> substitutes = new Dictionary<String, String>();
 		private String enumName;
 		public String EnumName { get => enumName; set => enumName = value; }
-		public String CurrentClass { get; set; }
+		public IType CurrentClass { get; set; }
 		public bool HadConstructor { get; set; }
 		public bool DoingConstructor { get; set; }
 		public AstNodeCollection<EntityDeclaration> Fields { get; set; }
-		public CppTypeVisitor TypeVisitor { get; set;  }
+		public CppTypeVisitor TypeVisitor { get; set; }
 		public CallInstructionVisitor CallVisitor { get; set; }
 		private Formatter formatter;
 		public Formatter Formatter { get => formatter; }
@@ -54,7 +55,6 @@ namespace CppTranslator
 			substitutes.Add("DateTimeMinValue", DateTime.MinValue.Ticks.ToString());
 			substitutes.Add("TimeSpaneMaxValue", TimeSpan.MaxValue.Ticks.ToString());
 			substitutes.Add("TimeSpaneMinValue", TimeSpan.MinValue.Ticks.ToString());
-			substitutes.Add("null", "nullptr");
 		}
 
 		internal void CastToType(IType targetType, AstNode memberReferenceExpression)
@@ -74,6 +74,7 @@ namespace CppTranslator
 
 		public void VisitAccessor(Accessor accessor)
 		{
+			WriteBlock(accessor.Body);
 		}
 		public virtual void AddHeaders()
 		{
@@ -195,6 +196,14 @@ namespace CppTranslator
 		{
 			bool isAssignToPointer = IsAssignToPointer(assignmentExpression.Left) && assignmentExpression.Operator == AssignmentOperatorType.Assign;
 			assignmentExpression.Left.AcceptVisitor(this);
+			var sym = assignmentExpression.Left.GetSymbol();
+			if (sym != null && sym.SymbolKind == SymbolKind.Property)
+			{
+				Formatter.Append("(");
+				assignmentExpression.Right.AcceptVisitor(this);
+				Formatter.Append(")");
+				return;
+			}
 			if (isAssignToPointer)
 			{
 				Formatter.Append(".Assign(");
@@ -210,6 +219,11 @@ namespace CppTranslator
 			{
 				Formatter.Append(")");
 			}
+		}
+
+		private void AssignProperty(AssignmentExpression assignmentExpression)
+		{
+			var sym = assignmentExpression.Left.GetSymbol();
 		}
 
 		private bool IsAssignToPointer(Expression left)
@@ -324,10 +338,10 @@ namespace CppTranslator
 
 		protected virtual void WriteMethodHeader(String medodName, AstNodeCollection<ParameterDeclaration> parameters)
 		{
-			Formatter.AppendName(CurrentClass);
-			Formatter.Append("Raw::");
+			FormatType(CurrentClass, CurrentClass.Name);
+			Formatter.Append("::");
 			Formatter.AppendName(medodName);
-			if (CurrentClass == medodName)
+			if (CurrentClass.Name == medodName && CurrentClass.Kind == TypeKind.Class)
 			{
 				Formatter.Append("Raw");
 			}
@@ -678,7 +692,7 @@ namespace CppTranslator
 			CurrentExpression = invocationExpression;
 			ICSharpCode.Decompiler.IL.ILInstruction inst = invocationExpression.Annotation<ICSharpCode.Decompiler.IL.ILInstruction>();
 			inst.AcceptVisitor(CallVisitor);
-//			invocationExpression.Target.AcceptVisitor(this);
+			//			invocationExpression.Target.AcceptVisitor(this);
 			WriteCommaSeparatedListInParenthesis(invocationExpression.Arguments);
 		}
 
@@ -823,22 +837,17 @@ namespace CppTranslator
 		}
 		private bool IsSetProperty(MemberReferenceExpression memberReferenceExpression)
 		{
-			ICSharpCode.Decompiler.IL.ILInstruction inst = memberReferenceExpression.Annotation<ICSharpCode.Decompiler.IL.ILInstruction>();
-			if (inst == null || !(inst is ICSharpCode.Decompiler.IL.CallVirt))
-			{
-				return (false);
-			}
-			ICSharpCode.Decompiler.IL.CallVirt call = inst as ICSharpCode.Decompiler.IL.CallVirt;
-			return (call.Method.Name.StartsWith("set_"));
+			var sym = memberReferenceExpression.GetSymbol();
+			return (sym != null && sym.SymbolKind == SymbolKind.Property);
 		}
 		private bool IsGetProperty(MemberReferenceExpression memberReferenceExpression)
 		{
 			ICSharpCode.Decompiler.IL.ILInstruction inst = memberReferenceExpression.Annotation<ICSharpCode.Decompiler.IL.ILInstruction>();
-			if (inst == null || !(inst is ICSharpCode.Decompiler.IL.CallVirt))
+			if (inst == null || !(inst is ICSharpCode.Decompiler.IL.CallInstruction))
 			{
 				return (false);
 			}
-			ICSharpCode.Decompiler.IL.CallVirt call = inst as ICSharpCode.Decompiler.IL.CallVirt;
+			ICSharpCode.Decompiler.IL.CallInstruction call = inst as ICSharpCode.Decompiler.IL.CallInstruction;
 			return (call.Method.Name.StartsWith("get_"));
 		}
 
@@ -919,7 +928,7 @@ namespace CppTranslator
 
 		public void VisitNullReferenceExpression(NullReferenceExpression nullReferenceExpression)
 		{
-			Formatter.Append("null");
+			Formatter.Append("nullptr");
 		}
 
 		public void VisitObjectCreateExpression(ObjectCreateExpression objectCreateExpression)
@@ -1041,9 +1050,33 @@ namespace CppTranslator
 				Formatter.Append(".");
 			}
 		}
-		public void VisitPropertyDeclaration(PropertyDeclaration propertyDeclaration)
+		public virtual void VisitPropertyDeclaration(PropertyDeclaration propertyDeclaration)
 		{
-			return; // ToDo handle properties
+			if (propertyDeclaration.Getter != null)
+			{
+				Formatter.AppendIndented("");
+				propertyDeclaration.ReturnType.AcceptVisitor(this);
+				Formatter.Append(" ");
+				FormatType(CurrentClass, CurrentClass.Name);
+				Formatter.Append("::");
+				Formatter.Append("get_");
+				Formatter.Append(propertyDeclaration.NameToken.Name);
+				Formatter.AppendLine("()");
+				propertyDeclaration.Getter.AcceptVisitor(this);
+			}
+			if (propertyDeclaration.Setter != null)
+			{
+				Formatter.AppendIndented("void ");
+				FormatType(CurrentClass, CurrentClass.Name);
+				Formatter.Append("::");
+				Formatter.Append("set_");
+				Formatter.Append(propertyDeclaration.NameToken.Name);
+				Formatter.Append("(");
+				propertyDeclaration.ReturnType.AcceptVisitor(this);
+				Formatter.AppendLine(" x_value )");
+				propertyDeclaration.Setter.AcceptVisitor(this);
+			}
+			return;
 			propertyDeclaration.ReturnType.AcceptVisitor(this);
 			Formatter.Append(" ");
 			WritePrivateImplementationType(propertyDeclaration.PrivateImplementationType);
@@ -1140,9 +1173,6 @@ namespace CppTranslator
 		public void VisitSimpleType(SimpleType simpleType)
 		{
 			simpleType.IdentifierToken.AcceptVisitor(this);
-			//IType type = simpleType.GetResolveResult().Type;
-			//if (type.Kind == TypeKind.Class)
-			//	Formatter.Append("Raw");
 		}
 
 		public void VisitSizeOfExpression(SizeOfExpression sizeOfExpression)
@@ -1252,7 +1282,7 @@ namespace CppTranslator
 		protected virtual void HeaderTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
 			HadConstructor = false;
-			CurrentClass = typeDeclaration.Name;
+			CurrentClass = typeDeclaration.GetResolveResult().Type;
 			Fields = typeDeclaration.Members;
 			CreateStaticVariables();
 			foreach (var member in typeDeclaration.Members)
@@ -1297,12 +1327,12 @@ namespace CppTranslator
 		}
 		public virtual void CreateDefaultConstructor(TypeDeclaration typeDeclaration)
 		{
+			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
 			Formatter.AppendIndented("");
-			Formatter.AppendName(typeDeclaration.Name);
-			Formatter.Append("Raw");
+			FormatType(type, typeDeclaration.Name);
 			Formatter.Append("::");
-			Formatter.AppendName(typeDeclaration.Name);
-			Formatter.Append("Raw()");
+			FormatType(type, typeDeclaration.Name);
+			Formatter.Append("()");
 			Formatter.AddOpenBrace();
 			InitializeFields();
 			Formatter.AddCloseBrace();
@@ -1347,8 +1377,8 @@ namespace CppTranslator
 				Formatter.AppendIndented("");
 				fieldDeclaration.ReturnType.GetResolveResult().Type.AcceptVisitor(TypeVisitor);
 				Formatter.Append(" ");
-				Formatter.Append(CurrentClass);
-				Formatter.Append("Raw::");
+				FormatType(CurrentClass, CurrentClass.Name);
+				Formatter.Append("::");
 				WriteCommaSeparatedList(fieldDeclaration.Variables);
 				Formatter.AppendLine(";");
 			}
@@ -1458,11 +1488,17 @@ namespace CppTranslator
 			if (type != null && IsPointerType(type))
 			{
 				Formatter.Append("PointerType<");
-				Formatter.Append(typeName);
-				Formatter.Append("Raw>");
+				FormatType(type, typeName);
+				Formatter.Append(">");
 				return;
 			}
+			FormatType(type, typeName);
+		}
+		public void FormatType(IType type, String typeName)
+		{
 			Formatter.Append(typeName);
+			if (type != null && IsPointerType(type))
+				Formatter.Append("Raw");
 		}
 
 		private bool IsPointerType(IType type)

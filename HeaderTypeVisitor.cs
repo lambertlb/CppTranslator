@@ -1,5 +1,6 @@
 ﻿using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.CSharp.Syntax;
+using ICSharpCode.Decompiler.Semantics;
 using ICSharpCode.Decompiler.TypeSystem;
 using System;
 using System.Collections.Generic;
@@ -21,28 +22,26 @@ namespace CppTranslator
 
 		protected override void HeaderTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
+			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
+			bool isClass = type.Kind == TypeKind.Class;
 			HadConstructor = false;
-			bool isClass = false;
 			var sym = typeDeclaration.GetSymbol();
 			switch (typeDeclaration.ClassType)
 			{
 				case ClassType.Interface:
 					Formatter.AppendIndented("class ");
-					isClass = true;
 					break;
 				case ClassType.Struct:
 					Formatter.AppendIndented("struct ");
-					isClass = true;
 					break;
 				default:
 					Formatter.AppendIndented("class ");
-					isClass = true;
 					break;
 			}
-			Formatter.AppendName(typeDeclaration.Name);
+			FormatType(type, typeDeclaration.Name);
 			if (isClass)
 			{
-				Formatter.Append("Raw : public ObjectRaw");
+				Formatter.Append(" : public ObjectRaw");
 			}
 			Formatter.AddOpenBrace();
 			if (typeDeclaration.ClassType != ClassType.Struct)
@@ -62,9 +61,10 @@ namespace CppTranslator
 
 		public override void CreateDefaultConstructor(TypeDeclaration typeDeclaration)
 		{
+			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
 			Formatter.AppendIndented("");
-			Formatter.AppendName(typeDeclaration.Name);
-			Formatter.AppendLine("Raw();");
+			FormatType(type, typeDeclaration.Name);
+			Formatter.Append(";");
 		}
 
 		public override void VisitConstructorDeclaration(ConstructorDeclaration constructorDeclaration)
@@ -77,7 +77,10 @@ namespace CppTranslator
 			else
 				name = constructorDeclaration.NameToken.Name;
 			Formatter.AppendIndented("");
-			WriteMethodHeader(name + "Raw", constructorDeclaration.Parameters);
+			IType type2 = constructorDeclaration.GetResolveResult().Type;
+			if (type2.Kind == TypeKind.Class)
+				name += "Raw";
+			WriteMethodHeader(name, constructorDeclaration.Parameters);
 			Formatter.AppendLine(";");
 		}
 		public override void VisitMethodDeclaration(MethodDeclaration methodDeclaration)
@@ -111,11 +114,25 @@ namespace CppTranslator
 		public override void VisitVariableInitializer(VariableInitializer variableInitializer)
 		{
 			Formatter.AppendName(variableInitializer.Name);
-			//if (!variableInitializer.Initializer.IsNull)
-			//{
-			//	Formatter.Append(" = ");
-			//	variableInitializer.Initializer.AcceptVisitor(this);
-			//}
+		}
+		public override void VisitPropertyDeclaration(PropertyDeclaration propertyDeclaration)
+		{
+			if (propertyDeclaration.Getter != null)
+			{
+				Formatter.AppendIndented("");
+				propertyDeclaration.ReturnType.AcceptVisitor(this);
+				Formatter.Append(" get_");
+				Formatter.Append(propertyDeclaration.NameToken.Name);
+				Formatter.AppendLine("();");
+			}
+			if (propertyDeclaration.Setter != null)
+			{
+				Formatter.AppendIndented("void set_");
+				Formatter.Append(propertyDeclaration.NameToken.Name);
+				Formatter.Append("(");
+				propertyDeclaration.ReturnType.AcceptVisitor(this);
+				Formatter.AppendLine(" x_value );");
+			}
 		}
 	}
 }
