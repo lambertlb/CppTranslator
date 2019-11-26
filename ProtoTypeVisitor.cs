@@ -23,6 +23,7 @@ namespace CppTranslator
 		public override void VisitTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
 			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
+			Formatter.Name_space = type.Namespace;
 			bool isClass = type.Kind == TypeKind.Class;
 			switch (typeDeclaration.ClassType)
 			{
@@ -55,7 +56,7 @@ namespace CppTranslator
 				FormatTypeDelaration(type, typeDeclaration.Name);
 				Formatter.Append("\t");
 				Formatter.AppendName(typeDeclaration.Name);
-				Formatter.Append(";");
+				Formatter.AppendLine(";");
 			}
 		}
 		private void OutputEnumValues(TypeDeclaration typeDeclaration)

@@ -1,8 +1,25 @@
 #pragma once
 #include "CaBlockProtos.h"
+namespace CABlock_NS
+{
+	struct TestStruct
+	{
+		Int32 x_data;
+		Int32 get_Data();
+		void set_Data(Int32 x_value );
+		TestStruct(Int32 x_i);
+	};
+	struct TestStruct2
+	{
+		Int32 x_data;
+	};
+	struct TestStruct3
+	{
+		TestStruct2 x_ts;
+	};
+}
 namespace UNNAMED
 {
-
 	class typedefRaw : public ObjectRaw
 	{
 		public:
@@ -11,14 +28,12 @@ namespace UNNAMED
 		void set_Friend(TestNameEnu x_value );
 		typedefRaw();
 	};
-
 	class typedef1Raw : public ObjectRaw
 	{
 		public:
 		TestNameEnu x_friend();
 		typedef1Raw();
 	};
-
 }
 namespace CABlock_Extra_NS
 {
@@ -27,27 +42,9 @@ namespace CABlock_Extra_NS
 		public:
 		TestNamespaceClassRaw();
 	};
-
 }
 namespace CABlock_NS
 {
-	struct TestStruct
-	{
-		Int32 x_data;
-		Int32 get_Data();
-		void set_Data(Int32 x_value);
-		TestStruct(Int32 x_i);
-	};
-
-	struct TestStruct2
-	{
-		Int32 x_data;
-	};
-
-	struct TestStruct3
-	{
-		TestStruct2 x_ts;
-	};
 	class ArrayTestRaw : public ObjectRaw
 	{
 		public:
@@ -72,7 +69,6 @@ namespace CABlock_NS
 		void ArrayMethodTests();
 		void CxAssert(Boolean x_x);
 	};
-
 	class BasicTestRaw : public ObjectRaw
 	{
 		public:
@@ -99,7 +95,6 @@ namespace CABlock_NS
 		Boolean TestThis(Int32 x_a,Int32 x_b);
 		void TestNames();
 	};
-
 	class TestAbstractRaw : public ObjectRaw
 	{
 		public:
@@ -109,8 +104,6 @@ namespace CABlock_NS
 		Int32 MustImplement(Int64 x_i);
 		String ToString();
 	};
-
-
 	class AbstractRaw : public ObjectRaw
 	{
 		public:
@@ -120,9 +113,8 @@ namespace CABlock_NS
 		Int32 MustImplement();
 		Int32 MustImplement(Int32 x_i);
 		Int32 MustImplement(Int64 x_i);
-		Int32 DidImplement();
+		virtual Int32 DidImplement();
 	};
-
 	class BigEndianBitConverterTestRaw : public ObjectRaw
 	{
 		public:
@@ -133,7 +125,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
 	};
-
 	class BooleanTestRaw : public ObjectRaw
 	{
 		public:
@@ -146,7 +137,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x,Boolean x_y);
 		void CxAssert(Boolean x_x);
 	};
-
 	class BufferTestRaw : public ObjectRaw
 	{
 		public:
@@ -157,7 +147,6 @@ namespace CABlock_NS
 		void Test();
 		void CxAssert(Boolean x_x);
 	};
-
 	class ByteTestRaw : public ObjectRaw
 	{
 		public:
@@ -172,7 +161,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
 	};
-
 	class CharTestRaw : public ObjectRaw
 	{
 		public:
@@ -186,7 +174,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
 	};
-
 	class DoubleTestRaw : public ObjectRaw
 	{
 		public:
@@ -205,7 +192,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x,Boolean x_y);
 		void DoubleTestFailed();
 	};
-
 	class EncodingTestRaw : public ObjectRaw
 	{
 		public:
@@ -216,9 +202,6 @@ namespace CABlock_NS
 		Boolean CompareBytes(PointerType<ArrayRaw<Byte>> x_bytes,PointerType<ArrayRaw<Byte>> x_myCharsAsBytes);
 		void CxAssert(Boolean x_x);
 	};
-
-
-
 	class EnumTestRaw : public ObjectRaw
 	{
 		public:
@@ -229,8 +212,6 @@ namespace CABlock_NS
 		void Test1(TestEnum2 x_testEnum);
 		void EnumTestFailed();
 	};
-
-
 	class CABlockRaw : public ObjectRaw
 	{
 		public:
@@ -243,7 +224,6 @@ namespace CABlock_NS
 		void RunTests(FredEnum x_fre);
 		void TestFailed(String x_reason);
 	};
-
 	class Int16TestRaw : public ObjectRaw
 	{
 		public:
@@ -258,7 +238,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
 	};
-
 	class Int32TestRaw : public ObjectRaw
 	{
 		public:
@@ -274,7 +253,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
 	};
-
 	class Int64TestRaw : public ObjectRaw
 	{
 		public:
@@ -289,7 +267,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
 	};
-
 	class MathTestRaw : public ObjectRaw
 	{
 		public:
@@ -301,7 +278,6 @@ namespace CABlock_NS
 		void CxAssert(Double x_x,Double x_y);
 		void CxAssert(Boolean x_x);
 	};
-
 	class SByteTestRaw : public ObjectRaw
 	{
 		public:
@@ -316,7 +292,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
 	};
-
 	class SingleTestRaw : public ObjectRaw
 	{
 		public:
@@ -335,7 +310,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x,Boolean x_y);
 		void SingleTestFailed();
 	};
-
 	class StringBuilderTestRaw : public ObjectRaw
 	{
 		public:
@@ -352,7 +326,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
 	};
-
 	class StringTestRaw : public ObjectRaw
 	{
 		public:
@@ -367,7 +340,6 @@ namespace CABlock_NS
 		void DoConcatTest();
 		void CxAssert(Boolean x_x);
 	};
-
 	class TimeTestRaw : public ObjectRaw
 	{
 		public:
@@ -385,14 +357,12 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void TimeTestFailed();
 	};
-
 	class TimingTestRaw : public ObjectRaw
 	{
 		public:
 		TimingTestRaw();
 		static Int32 DoTimingTest(Int32 x_a,Int32 x_b,Int32 x_c);
 	};
-
 	class UInt16TestRaw : public ObjectRaw
 	{
 		public:
@@ -407,7 +377,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
 	};
-
 	class UInt32TestRaw : public ObjectRaw
 	{
 		public:
@@ -422,7 +391,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
 	};
-
 	class UInt64TestRaw : public ObjectRaw
 	{
 		public:
@@ -437,5 +405,4 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
 	};
-
 }

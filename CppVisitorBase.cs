@@ -57,6 +57,10 @@ namespace CppTranslator
 			substitutes.Add("TimeSpaneMinValue", TimeSpan.MinValue.Ticks.ToString());
 		}
 
+		public virtual void CreateHeaders()
+		{
+		}
+
 		internal void CastToType(IType targetType, AstNode memberReferenceExpression)
 		{
 			if (targetType.Kind != TypeKind.Unknown)
@@ -1223,7 +1227,7 @@ namespace CppTranslator
 			Formatter.AddCloseBrace();
 		}
 
-		public void VisitSyntaxTree(SyntaxTree syntaxTree)
+		public virtual void VisitSyntaxTree(SyntaxTree syntaxTree)
 		{
 			foreach (AstNode node in syntaxTree.Children)
 			{
@@ -1283,6 +1287,7 @@ namespace CppTranslator
 		{
 			HadConstructor = false;
 			CurrentClass = typeDeclaration.GetResolveResult().Type;
+			Formatter.Name_space = CurrentClass.Namespace;
 			Fields = typeDeclaration.Members;
 			CreateStaticVariables();
 			foreach (var member in typeDeclaration.Members)

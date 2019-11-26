@@ -5,12 +5,12 @@ using ICSharpCode.Decompiler.TypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CppTranslator
 {
 	public class HeaderTypeVisitor : CppVisitorBase
 	{
+		private List<TypeDeclaration> declarations = new List<TypeDeclaration>();
 		public HeaderTypeVisitor(Formatter formatter) : base(formatter)
 		{
 		}
@@ -18,11 +18,46 @@ namespace CppTranslator
 		{
 			Formatter.AppendLine("#pragma once");
 			Formatter.AppendLine("#include \"CaBlockProtos.h\"");
+			declarations.Clear();
+		}
+		public override void VisitSyntaxTree(SyntaxTree syntaxTree)
+		{
+			foreach (AstNode node in syntaxTree.Children)
+			{
+				node.AcceptVisitor(this);
+			}
+		}
+
+		public override void CreateHeaders()
+		{
+			foreach (TypeDeclaration declaration in declarations)
+			{
+				if (declaration.ClassType == ClassType.Struct)
+				{
+					HeaderTypeDeclaration(declaration);
+				}
+			}
+			foreach (TypeDeclaration declaration in declarations)
+			{
+				if (declaration.ClassType == ClassType.Class)
+				{
+					HeaderTypeDeclaration(declaration);
+				}
+			}
+		}
+
+		public override void VisitTypeDeclaration(TypeDeclaration typeDeclaration)
+		{
+			if (typeDeclaration.ClassType != ClassType.Enum)
+			{
+				declarations.Add(typeDeclaration);
+			}
 		}
 
 		protected override void HeaderTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
 			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
+			Formatter.Name_space = type.Namespace;
 			bool isClass = type.Kind == TypeKind.Class;
 			HadConstructor = false;
 			var sym = typeDeclaration.GetSymbol();

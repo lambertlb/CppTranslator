@@ -2,7 +2,6 @@
 #include "CaBlockHeader.h"
 namespace UNNAMED
 {
-
 	TestNameEnu typedefRaw::get_Friend()
 	{
 		return x_friend;
@@ -14,7 +13,6 @@ namespace UNNAMED
 	typedefRaw::typedefRaw()
 	{
 	}
-
 	TestNameEnu typedef1Raw::x_friend()
 	{
 		return x_friend_TestNameEnu;
@@ -22,14 +20,12 @@ namespace UNNAMED
 	typedef1Raw::typedef1Raw()
 	{
 	}
-
 }
 namespace CABlock_Extra_NS
 {
 	TestNamespaceClassRaw::TestNamespaceClassRaw()
 	{
 	}
-
 }
 namespace CABlock_NS
 {
@@ -155,7 +151,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("Array TestFailed"));
 		}
 	}
-
 	BasicTestRaw::BasicTestRaw(CABlock x_caBlock)
 	{
 		x_field1 = 0;
@@ -356,7 +351,6 @@ namespace CABlock_NS
 		Friend_TestNameEnu(x_friend_TestNameEnu);
 		CxAssert(Friend_TestNameEnu == x_friend_TestNameEnu);
 	}
-
 	TestAbstractRaw::TestAbstractRaw()
 	{
 	}
@@ -376,7 +370,6 @@ namespace CABlock_NS
 	{
 		return new StringRaw("TestAbstract");
 	}
-
 	Int32 TestStruct::get_Data()
 	{
 		return x_data;
@@ -389,15 +382,12 @@ namespace CABlock_NS
 	{
 		x_data = x_i;
 	}
-
 	TestStruct2::TestStruct2()
 	{
 	}
-
 	TestStruct3::TestStruct3()
 	{
 	}
-
 	AbstractRaw::AbstractRaw(Int32 x_i,Int32 x_j)
 	{
 		x_data1 = x_i;
@@ -416,7 +406,6 @@ namespace CABlock_NS
 	{
 		return x_data1;
 	}
-
 	BigEndianBitConverterTestRaw::BigEndianBitConverterTestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -471,7 +460,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("BigEndianBitConverterTest Failed"));
 		}
 	}
-
 	BooleanTestRaw::BooleanTestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -539,7 +527,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("Boolean TestFailed"));
 		}
 	}
-
 	BufferTestRaw::BufferTestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -571,7 +558,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("Buffer Test Failed"));
 		}
 	}
-
 	ByteTestRaw::ByteTestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -936,7 +922,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("Byte Test Failed"));
 		}
 	}
-
 	CharTestRaw::CharTestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -1139,7 +1124,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("Char TestFailed"));
 		}
 	}
-
 	DoubleTestRaw::DoubleTestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -1456,7 +1440,6 @@ namespace CABlock_NS
 	{
 		x_caBlock->TestFailed(new StringRaw("Double TestFailed"));
 	}
-
 	EncodingTestRaw::EncodingTestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -1502,9 +1485,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("Encoding TestFailed"));
 		}
 	}
-
-
-
 	EnumTestRaw::EnumTestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -1569,8 +1549,6 @@ namespace CABlock_NS
 	{
 		x_caBlock->TestFailed(new StringRaw("Enum TestFailed"));
 	}
-
-
 	Int32 CABlockRaw::x_intConstant = 8;
 	CABlockRaw::CABlockRaw()
 	{
@@ -1637,7 +1615,6 @@ namespace CABlock_NS
 	{
 		Send(new StringRaw("\t\tERROR: ") + x_reason);
 	}
-
 	Int16TestRaw::Int16TestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -1956,7 +1933,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("Int16 TestFailed"));
 		}
 	}
-
 	Int32TestRaw::Int32TestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -2208,7 +2184,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("Int32 TestFailed"));
 		}
 	}
-
 	Int64TestRaw::Int64TestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -2457,7 +2432,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("Int64 TestFailed"));
 		}
 	}
-
 	MathTestRaw::MathTestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -2548,7 +2522,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("BaseTest TestFailed"));
 		}
 	}
-
 	SByteTestRaw::SByteTestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -2867,7 +2840,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("SByte TestFailed"));
 		}
 	}
-
 	SingleTestRaw::SingleTestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -3183,7 +3155,6 @@ namespace CABlock_NS
 	{
 		x_caBlock->TestFailed(new StringRaw("Single TestFailed"));
 	}
-
 	StringBuilderTestRaw::StringBuilderTestRaw(CABlock x_caBlock)
 	{
 		x_sb = new StringBuilderRaw();
@@ -3380,7 +3351,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("StringBuilder TestFailed"));
 		}
 	}
-
 	StringTestRaw::StringTestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -3612,7 +3582,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("String TestFailed"));
 		}
 	}
-
 	TimeTestRaw::TimeTestRaw(CABlock x_caBlock)
 	{
 		x_dat1 = DateTime::get_Now();
@@ -3888,7 +3857,6 @@ namespace CABlock_NS
 	{
 		x_caBlock->TestFailed(new StringRaw("Time TestFailed"));
 	}
-
 	TimingTestRaw::TimingTestRaw()
 	{
 	}
@@ -3904,7 +3872,6 @@ namespace CABlock_NS
 		}
 		return x_result;
 	}
-
 	UInt16TestRaw::UInt16TestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -4143,7 +4110,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("UInt16 TestFailed"));
 		}
 	}
-
 	UInt32TestRaw::UInt32TestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -4380,7 +4346,6 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("UInt32 TestFailed"));
 		}
 	}
-
 	UInt64TestRaw::UInt64TestRaw(CABlock x_caBlock)
 	{
 		this->x_caBlock.Assign(x_caBlock);
@@ -4710,5 +4675,4 @@ namespace CABlock_NS
 			x_caBlock->TestFailed(new StringRaw("UInt64 TestFailed"));
 		}
 	}
-
 }

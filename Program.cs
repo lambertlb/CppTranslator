@@ -68,14 +68,13 @@ namespace CppTranslator
 									setOutput = true;
 									visitorToUse.AddHeaders();
 								}
-								formatter.Name_space = typeDefinition.Namespace;
 								List<EntityHandle> entities = new List<EntityHandle>() { typeDefinition.MetadataToken };
 								SyntaxTree syntaxTree = compiler.Decompile(entities);
 								syntaxTree.AcceptVisitor(visitorToUse);
-								formatter.AppendLine("");
 							}
 						}
 					}
+					visitorToUse.CreateHeaders();
 				}
 			}
 			formatter.Close();

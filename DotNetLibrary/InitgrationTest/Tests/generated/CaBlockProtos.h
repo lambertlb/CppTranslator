@@ -9,7 +9,6 @@ namespace UNNAMED
 		x_friend_TestNameEnu,
 		x_enemy_TestNameEnu
 	};
-
 	class typedefRaw;
 	typedef PointerType<typedefRaw>	x_typedef;
 	class typedef1Raw;
@@ -28,13 +27,7 @@ namespace CABlock_NS
 	typedef PointerType<BasicTestRaw>	BasicTest;
 	class TestAbstractRaw;
 	typedef PointerType<TestAbstractRaw>	TestAbstract;
-	struct TestStruct;
-	typedef struct TestStruct TestStruct;
-	struct TestStruct2;
-	typedef struct TestStruct2 TestStruct2;
-	struct TestStruct3;
-	typedef struct TestStruct3 TestStruct3;
-	class AbstractRaw;
+	struct TestStruct;	struct TestStruct2;	struct TestStruct3;	class AbstractRaw;
 	typedef PointerType<AbstractRaw>	Abstract;
 	class BigEndianBitConverterTestRaw;
 	typedef PointerType<BigEndianBitConverterTestRaw>	BigEndianBitConverterTest;
@@ -56,14 +49,12 @@ namespace CABlock_NS
 		Value2_TestEnum = 2,
 		Value3_TestEnum = 5
 	};
-
 	enum TestEnum2
 	{
 		Value1_TestEnum2 = 1,
 		Value2_TestEnum2 = 2,
 		Value3_TestEnum2 = 5
 	};
-
 	class EnumTestRaw;
 	typedef PointerType<EnumTestRaw>	EnumTest;
 	enum FredEnum
@@ -72,7 +63,6 @@ namespace CABlock_NS
 		FredValue2_FredEnum = 2,
 		FredValue3_FredEnum = 5
 	};
-
 	class CABlockRaw;
 	typedef PointerType<CABlockRaw>	CABlock;
 	class Int16TestRaw;
