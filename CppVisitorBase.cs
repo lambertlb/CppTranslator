@@ -956,9 +956,14 @@ namespace CppTranslator
 			objectCreateExpression.Initializer.AcceptVisitor(this);
 		}
 
-		public void VisitOperatorDeclaration(OperatorDeclaration operatorDeclaration)
+		public virtual void VisitOperatorDeclaration(OperatorDeclaration operatorDeclaration)
 		{
-			//			throw new NotImplementedException();
+			Formatter.AppendIndented("");
+			operatorDeclaration.ReturnType.AcceptVisitor(this);
+			Formatter.Append(" operator ");
+			Formatter.Append(OperatorDeclaration.GetToken(operatorDeclaration.OperatorType));
+			WriteCommaSeparatedListInParenthesis(operatorDeclaration.Parameters);
+			WriteBlock(operatorDeclaration.Body);
 		}
 
 		public void VisitOutVarDeclarationExpression(OutVarDeclarationExpression outVarDeclarationExpression)

@@ -169,5 +169,14 @@ namespace CppTranslator
 				Formatter.AppendLine(" x_value );");
 			}
 		}
+		public override void VisitOperatorDeclaration(OperatorDeclaration operatorDeclaration)
+		{
+			Formatter.AppendIndented("friend ");
+			operatorDeclaration.ReturnType.AcceptVisitor(this);
+			Formatter.Append(" operator ");
+			Formatter.Append(OperatorDeclaration.GetToken(operatorDeclaration.OperatorType));
+			WriteCommaSeparatedListInParenthesis(operatorDeclaration.Parameters);
+			Formatter.AppendLine(";");
+		}
 	}
 }
