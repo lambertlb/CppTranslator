@@ -215,13 +215,51 @@ namespace CppTranslator
 			else
 			{
 				Formatter.Append(" ");
-				Formatter.Append(AssignmentExpression.GetOperatorRole(assignmentExpression.Operator).ToString());
+				if (assignmentExpression.Operator == AssignmentOperatorType.Assign)
+				{
+					Formatter.Append(AssignmentExpression.GetOperatorRole(assignmentExpression.Operator).ToString());
+				}
+				else
+				{
+					Formatter.Append("= ");
+					assignmentExpression.Left.AcceptVisitor(this);
+					Formatter.Append(" ");
+					Formatter.Append(GetOperator(assignmentExpression.Operator));
+				}
 				Formatter.Append(" ");
 			}
 			assignmentExpression.Right.AcceptVisitor(this);
 			if (isAssignToPointer)
 			{
 				Formatter.Append(")");
+			}
+		}
+		public String GetOperator(AssignmentOperatorType op)
+		{
+			switch (op)
+			{
+				case AssignmentOperatorType.Add:
+					return "+";
+				case AssignmentOperatorType.Subtract:
+					return "-";
+				case AssignmentOperatorType.Multiply:
+					return "*";
+				case AssignmentOperatorType.Divide:
+					return "/";
+				case AssignmentOperatorType.Modulus:
+					return "%";
+				case AssignmentOperatorType.ShiftLeft:
+					return "<<";
+				case AssignmentOperatorType.ShiftRight:
+					return ">>";
+				case AssignmentOperatorType.BitwiseAnd:
+					return "&";
+				case AssignmentOperatorType.BitwiseOr:
+					return "|";
+				case AssignmentOperatorType.ExclusiveOr:
+					return "^";
+				default:
+					throw new NotSupportedException("Invalid value for AssignmentOperatorType");
 			}
 		}
 
@@ -780,7 +818,12 @@ namespace CppTranslator
 			}
 			else
 			{
-				if (targetType.Kind == TypeKind.Struct)
+				TypeKind kind = targetType.Kind;
+				if (kind == TypeKind.Unknown)
+				{
+					kind = type.Kind;
+				}
+				if (kind == TypeKind.Struct)
 				{
 					Formatter.Append(".");
 				}

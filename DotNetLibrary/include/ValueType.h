@@ -2,31 +2,73 @@
 
 namespace DotnetLibrary
 {
-	template <typename T>
-	struct ValueType {
-		ValueType(T val = T{}) : value(val) {
-		}
-		operator T& () {
-			return value;
-		}
-		operator const T& () const {
-			return value;
-		}
-		T* operator &() {
-			return &value;
-		}
-		const T* operator &() const {
-			return &value;
-		}
-		const T* operator ->() const {
-			return &value;
-		}
+	template<class T>
+	class ValueType {
+		T value;
+	public:
+		ValueType() :value() {}
+		ValueType(T v) :value(v) {}
+		operator T() const { return value; }
+
+		//modifiers
+		ValueType& operator=(T v) { value = v; return *this; }
+		ValueType& operator+=(T v) { value += v; return *this; }
+		ValueType& operator-=(T v) { value -= v; return *this; }
+		ValueType& operator*=(T v) { value *= value; return *this; }
+		ValueType& operator/=(T v) { value /= value; return *this; }
+		ValueType& operator%=(T v) { value %= value; return *this; }
+		ValueType& operator++() { ++value; return *this; }
+		ValueType& operator--() { --value; return *this; }
+		ValueType operator++(int) { return ValueType(value++); }
+		ValueType operator--(int) { return ValueType(value--); }
+		ValueType& operator&=(T v) { value &= v; return *this; }
+		ValueType& operator|=(T v) { value |= v; return *this; }
+		ValueType& operator^=(T v) { value ^= v; return *this; }
+		ValueType& operator<<=(T v) { value <<= v; return *this; }
+		ValueType& operator>>=(T v) { value >>= v; return *this; }
+
+		//accessors
+		ValueType operator+() const { return ValueType(+value); }
+		ValueType operator-() const { return ValueType(-value); }
+		ValueType operator!() const { return ValueType(!value); }
+		ValueType operator~() const { return ValueType(~value); }
+
+		//friends
+		friend ValueType operator+(ValueType iw, ValueType v) { return iw += v; }
+		friend ValueType operator+(ValueType iw, T v) { return iw += v; }
+		friend ValueType operator+(T v, ValueType iw) { return ValueType(v) += iw; }
+		friend ValueType operator-(ValueType iw, ValueType v) { return iw -= v; }
+		friend ValueType operator-(ValueType iw, T v) { return iw -= v; }
+		friend ValueType operator-(T v, ValueType iw) { return ValueType(v) -= iw; }
+		friend ValueType operator*(ValueType iw, ValueType v) { return iw *= v; }
+		friend ValueType operator*(ValueType iw, T v) { return iw *= v; }
+		friend ValueType operator*(T v, ValueType iw) { return ValueType(v) *= iw; }
+		friend ValueType operator/(ValueType iw, ValueType v) { return iw /= v; }
+		friend ValueType operator/(ValueType iw, T v) { return iw /= v; }
+		friend ValueType operator/(T v, ValueType iw) { return ValueType(v) /= iw; }
+		friend ValueType operator%(ValueType iw, ValueType v) { return iw %= v; }
+		friend ValueType operator%(ValueType iw, T v) { return iw %= v; }
+		friend ValueType operator%(T v, ValueType iw) { return ValueType(v) %= iw; }
+		friend ValueType operator&(ValueType iw, ValueType v) { return iw &= v; }
+		friend ValueType operator&(ValueType iw, T v) { return iw &= v; }
+		friend ValueType operator&(T v, ValueType iw) { return ValueType(v) &= iw; }
+		friend ValueType operator|(ValueType iw, ValueType v) { return iw |= v; }
+		friend ValueType operator|(ValueType iw, T v) { return iw |= v; }
+		friend ValueType operator|(T v, ValueType iw) { return ValueType(v) |= iw; }
+		friend ValueType operator^(ValueType iw, ValueType v) { return iw ^= v; }
+		friend ValueType operator^(ValueType iw, T v) { return iw ^= v; }
+		friend ValueType operator^(T v, ValueType iw) { return ValueType(v) ^= iw; }
+		friend ValueType operator<<(ValueType iw, ValueType v) { return iw <<= v; }
+		friend ValueType operator<<(ValueType iw, T v) { return iw <<= v; }
+		friend ValueType operator<<(T v, ValueType iw) { return ValueType(v) <<= iw; }
+		friend ValueType operator>>(ValueType iw, ValueType v) { return iw >>= v; }
+		friend ValueType operator>>(ValueType iw, T v) { return iw >>= v; }
+		friend ValueType operator>>(T v, ValueType iw) { return ValueType(v) >>= iw; }
+
+		// .Net functions
 		bool	Equals(T valueToCOmpare) {
 			return(valueToCOmpare == value);
 		}
-
-		static int32_t MaxValue;
-		T value;
 	};
 
 	// .Net types to C++ value type
