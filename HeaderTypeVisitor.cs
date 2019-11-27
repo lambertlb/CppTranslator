@@ -50,8 +50,30 @@ namespace CppTranslator
 		{
 			if (typeDeclaration.ClassType != ClassType.Enum)
 			{
+				for (int i = 0; i < declarations.Count; ++i)
+				{
+					if (IsParentOf(typeDeclaration, declarations[i]))
+					{
+						declarations.Insert(i, typeDeclaration);
+						return;
+					}
+				}
 				declarations.Add(typeDeclaration);
 			}
+		}
+
+		private bool IsParentOf(TypeDeclaration possibleParent, TypeDeclaration possibleChild)
+		{
+			IType parentType = possibleParent.GetResolveResult().Type;
+			foreach (AstType dependant in possibleChild.BaseTypes)
+			{
+				IType childtype = dependant.GetResolveResult().Type;
+				if (parentType.FullName == childtype.FullName)
+				{
+					return (true);
+				}
+			}
+			return (false);
 		}
 
 		protected override void HeaderTypeDeclaration(TypeDeclaration typeDeclaration)
@@ -149,7 +171,7 @@ namespace CppTranslator
 			WriteMethodHeader(methodDeclaration.NameToken.Name, methodDeclaration.Parameters);
 			if (methodDeclaration.Body.IsNull)
 			{
-				Formatter.AppendLine(" = 0");
+				Formatter.Append(" = 0");
 			}
 			Formatter.AppendLine(";");
 		}

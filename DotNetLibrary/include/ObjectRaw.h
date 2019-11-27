@@ -15,5 +15,10 @@ namespace DotnetLibrary
 
 		}
 	};
+	class BlockBaseRaw : public ObjectRaw
+	{
+	public:
+	};
 	typedef	PointerType<ObjectRaw>	Object;
+	typedef PointerType<BlockBaseRaw> BlockBase;
 }
