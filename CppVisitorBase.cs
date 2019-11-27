@@ -291,6 +291,24 @@ namespace CppTranslator
 
 		public void VisitBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression)
 		{
+			IType type = binaryOperatorExpression.Left.GetResolveResult().Type;
+			if ((type.Kind == TypeKind.Class || type.Kind == TypeKind.Struct) && (binaryOperatorExpression.Operator == BinaryOperatorType.Equality || binaryOperatorExpression.Operator == BinaryOperatorType.InEquality))
+			{
+				if (binaryOperatorExpression.Operator == BinaryOperatorType.InEquality)
+					Formatter.Append("!");
+				binaryOperatorExpression.Left.AcceptVisitor(this);
+				if (type.Kind == TypeKind.Class)
+				{
+					Formatter.Append("->");
+				} else
+				{
+					Formatter.Append(".");
+				}
+				Formatter.Append("Equals(");
+				binaryOperatorExpression.Right.AcceptVisitor(this);
+				Formatter.Append(")");
+				return;
+			}
 			binaryOperatorExpression.Left.AcceptVisitor(this);
 			Formatter.Append(" ");
 			Formatter.Append(BinaryOperatorExpression.GetOperatorRole(binaryOperatorExpression.Operator).ToString());

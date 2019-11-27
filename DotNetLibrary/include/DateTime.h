@@ -30,6 +30,9 @@ namespace DotnetLibrary
 		bool	Equals(const DateTime& valueToCOmpare) {
 			return(valueToCOmpare.value == value);
 		}
+		Int64 get_Ticks() {
+			return(value);
+		}
 		virtual	String				ToString() { return(nullptr); }
 		int64_t value;
 	};

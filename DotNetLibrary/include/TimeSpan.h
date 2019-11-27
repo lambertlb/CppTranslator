@@ -27,6 +27,9 @@ namespace DotnetLibrary
 		bool	Equals(const TimeSpan& valueToCOmpare) {
 			return(valueToCOmpare.value == value);
 		}
+		Int64 get_Ticks() {
+			return(value);
+		}
 		int64_t value;
 	};
 }

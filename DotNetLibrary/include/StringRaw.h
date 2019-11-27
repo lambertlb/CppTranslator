@@ -17,8 +17,16 @@ namespace DotnetLibrary
 				characterData->SetValue(string[i], i);
 			}
 		}
+		//friend Boolean operator==(const StringRaw& string1, const StringRaw& string2) {
+		//	return true;
+		//}
+		//friend Boolean operator==(const StringRaw& string1, const StringRaw* string2) {
+		//	return true;
+		//}
+		//friend Boolean operator==(const StringRaw& string1, const void* string2) {
+		//	return true;
+		//}
 	private:
 		PointerType<ArrayRaw<Char>>	characterData;
 	};
-	typedef PointerType<StringRaw>	String;
 }

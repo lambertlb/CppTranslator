@@ -3,6 +3,7 @@
 namespace DotnetLibrary
 {
 	class ArrayBase;
+	class StringRaw;
 	template< typename T >
 	struct PointerType
 	{
@@ -38,6 +39,9 @@ namespace DotnetLibrary
 		operator ArrayBase* () {
 			return value;
 		}
+		operator StringRaw* () {
+			return value;
+		}
 		T* operator->()
 		{
 			return value;
@@ -55,6 +59,5 @@ namespace DotnetLibrary
 	private:
 		T* value;
 	};
-	class StringRaw;
-	typedef PointerType<StringRaw> String;
+	typedef PointerType<StringRaw>	String;
 }

@@ -11,6 +11,7 @@ namespace CppTranslator
 	public class HeaderTypeVisitor : CppVisitorBase
 	{
 		private List<TypeDeclaration> declarations = new List<TypeDeclaration>();
+		private Dictionary<String, String> namespaces = new Dictionary<String, String>();
 		public HeaderTypeVisitor(Formatter formatter) : base(formatter)
 		{
 		}
@@ -43,6 +44,20 @@ namespace CppTranslator
 				{
 					HeaderTypeDeclaration(declaration);
 				}
+			}
+			WriteUsingNamespaces();
+		}
+
+		private void WriteUsingNamespaces()
+		{
+			foreach (String ns in namespaces.Values)
+			{
+				Formatter.Append("using namespace ");
+				if (String.IsNullOrEmpty(ns))
+					Formatter.Append("UNNAMED");
+				else
+					Formatter.Append(ns + "_NS");
+				Formatter.AppendLine(";");
 			}
 		}
 
@@ -80,6 +95,8 @@ namespace CppTranslator
 		{
 			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
 			Formatter.Name_space = type.Namespace;
+			if (!namespaces.ContainsKey(type.Namespace))
+				namespaces.Add(type.Namespace, type.Namespace);
 			HadConstructor = false;
 			var sym = typeDeclaration.GetSymbol();
 			switch (typeDeclaration.ClassType)
