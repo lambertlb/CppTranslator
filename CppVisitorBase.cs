@@ -474,21 +474,21 @@ namespace CppTranslator
 
 		public void VisitDirectionExpression(DirectionExpression directionExpression)
 		{
-			switch (directionExpression.FieldDirection)
-			{
-				case FieldDirection.Out:
-					Formatter.Append("out");
-					break;
-				case FieldDirection.Ref:
-					Formatter.Append("ref");
-					break;
-				case FieldDirection.In:
-					Formatter.Append("in");
-					break;
-				default:
-					throw new NotSupportedException("Invalid value for FieldDirection");
-			}
-			Formatter.Append(" ");
+			//switch (directionExpression.FieldDirection)
+			//{
+			//	case FieldDirection.Out:
+			//		Formatter.Append("out");
+			//		break;
+			//	case FieldDirection.Ref:
+			//		Formatter.Append("ref");
+			//		break;
+			//	case FieldDirection.In:
+			//		Formatter.Append("in");
+			//		break;
+			//	default:
+			//		throw new NotSupportedException("Invalid value for FieldDirection");
+			//}
+			//Formatter.Append(" ");
 			directionExpression.Expression.AcceptVisitor(this);
 		}
 
@@ -1040,8 +1040,27 @@ namespace CppTranslator
 		public void VisitParameterDeclaration(ParameterDeclaration parameterDeclaration)
 		{
 			parameterDeclaration.Type.AcceptVisitor(this);
+			AddParameterModifiers(parameterDeclaration);
+
 			Formatter.Append(" ");
 			Formatter.AppendName(parameterDeclaration.NameToken.Name);
+		}
+
+		protected void AddParameterModifiers(ParameterDeclaration parameterDeclaration)
+		{
+			switch (parameterDeclaration.ParameterModifier)
+			{
+				case ParameterModifier.Ref:
+					Formatter.Append("& ");
+					break;
+				case ParameterModifier.Out:
+					Formatter.Append("* ");
+					break;
+				case ParameterModifier.Params:
+					break;
+				case ParameterModifier.In:
+					break;
+			}
 		}
 
 		public void VisitParenthesizedExpression(ParenthesizedExpression parenthesizedExpression)
