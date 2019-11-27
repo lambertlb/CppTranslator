@@ -422,7 +422,18 @@ namespace CppTranslator
 
 		public void VisitConstructorInitializer(ConstructorInitializer constructorInitializer)
 		{
-			throw new NotImplementedException();
+			IType type = constructorInitializer.GetResolveResult().Type;
+			Formatter.Append(": ");
+			if (constructorInitializer.ConstructorInitializerType == ConstructorInitializerType.This)
+			{
+				Formatter.Append("this");
+			}
+			else
+			{
+				FormatType(type, type.Name);
+			}
+			Formatter.Append(" ");
+			WriteCommaSeparatedListInParenthesis(constructorInitializer.Arguments);
 		}
 
 		public void VisitContinueStatement(ContinueStatement continueStatement)
@@ -929,6 +940,10 @@ namespace CppTranslator
 
 		public virtual void VisitMethodDeclaration(MethodDeclaration methodDeclaration)
 		{
+			if (methodDeclaration.Body.IsNull)
+			{
+				return;
+			}
 			Formatter.AppendIndented("");
 			if (methodDeclaration.NameToken.Name == "BooleanOperatorTests")
 			{
@@ -945,6 +960,14 @@ namespace CppTranslator
 				if (modifier.Modifier == Modifiers.Static)
 				{
 					Formatter.Append("static ");
+				}
+				if (modifier.Modifier == Modifiers.Abstract)
+				{
+					Formatter.Append("virtual ");
+				}
+				if (modifier.Modifier == Modifiers.Virtual)
+				{
+					Formatter.Append("virtual ");
 				}
 			}
 		}
@@ -1375,7 +1398,15 @@ namespace CppTranslator
 			else
 				name = constructorDeclaration.NameToken.Name;
 			Formatter.AppendIndented("");
-			WriteMethod(name, constructorDeclaration.Parameters, constructorDeclaration.Body);
+			StaticArrayCount = 0;
+			CurrentMethod = name;
+			WriteMethodHeader(name, constructorDeclaration.Parameters);
+			if (!constructorDeclaration.Initializer.IsNull)
+			{
+				Formatter.Append(" ");
+				constructorDeclaration.Initializer.AcceptVisitor(this);
+			}
+			WriteBlock(constructorDeclaration.Body);
 			DoingConstructor = false;
 		}
 		public virtual void CreateDefaultConstructor(TypeDeclaration typeDeclaration)

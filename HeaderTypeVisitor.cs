@@ -58,7 +58,6 @@ namespace CppTranslator
 		{
 			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
 			Formatter.Name_space = type.Namespace;
-			bool isClass = type.Kind == TypeKind.Class;
 			HadConstructor = false;
 			var sym = typeDeclaration.GetSymbol();
 			switch (typeDeclaration.ClassType)
@@ -74,7 +73,12 @@ namespace CppTranslator
 					break;
 			}
 			FormatType(type, typeDeclaration.Name);
-			if (isClass)
+			if (typeDeclaration.BaseTypes.Any())
+			{
+				Formatter.Append(" : public ");
+				WriteBaseClasses(typeDeclaration.BaseTypes);
+			}
+			else if (type.Kind == TypeKind.Class || type.Kind == TypeKind.Struct)
 			{
 				Formatter.Append(" : public ObjectRaw");
 			}
@@ -87,11 +91,29 @@ namespace CppTranslator
 			{
 				member.AcceptVisitor(this);
 			}
-			if (isClass && !HadConstructor)
+			if ((type.Kind == TypeKind.Class || type.Kind == TypeKind.Struct) && !HadConstructor)
 			{
 				CreateDefaultConstructor(typeDeclaration);
 			}
 			Formatter.AddCloseBrace(true);
+		}
+		protected void WriteBaseClasses(IEnumerable<AstNode> nodes)
+		{
+			bool isFirst = true;
+			foreach (AstNode node in nodes)
+			{
+				IType type = node.Annotation<TypeResolveResult>().Type;
+				if (!isFirst)
+				{
+					Formatter.Append(",");
+				}
+				node.AcceptVisitor(this);
+				if (type.Kind == TypeKind.Class)
+				{
+					Formatter.Append("Raw");
+				}
+				isFirst = false;
+			}
 		}
 
 		public override void CreateDefaultConstructor(TypeDeclaration typeDeclaration)
@@ -125,6 +147,10 @@ namespace CppTranslator
 			methodDeclaration.ReturnType.AcceptVisitor(this);
 			Formatter.Append(" ");
 			WriteMethodHeader(methodDeclaration.NameToken.Name, methodDeclaration.Parameters);
+			if (methodDeclaration.Body.IsNull)
+			{
+				Formatter.AppendLine(" = 0");
+			}
 			Formatter.AppendLine(";");
 		}
 		protected override void WriteMethodHeader(String medodName, AstNodeCollection<ParameterDeclaration> parameters)
