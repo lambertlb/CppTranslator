@@ -26,8 +26,11 @@ namespace CppTranslator
 				Usage();
 				return;
 			}
+			var settings = new ICSharpCode.Decompiler.DecompilerSettings();
+			settings.UsingStatement = false;
+			settings.ObjectOrCollectionInitializers = false;
 			GetPathToAssembly(args);
-			compiler = new CSharpDecompiler(args[0], new ICSharpCode.Decompiler.DecompilerSettings());
+			compiler = new CSharpDecompiler(args[0], settings);
 			formatter.EmitToConsole = true;
 			ProcessModules(prototypeVisitor, pathToAssemble + "Protos.h");
 			ProcessModules(headerVisitor, pathToAssemble + "Header.h");

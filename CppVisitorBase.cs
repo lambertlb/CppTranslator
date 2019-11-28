@@ -199,8 +199,8 @@ namespace CppTranslator
 		public void VisitAssignmentExpression(AssignmentExpression assignmentExpression)
 		{
 			bool isAssignToPointer = IsAssignToPointer(assignmentExpression.Left) && assignmentExpression.Operator == AssignmentOperatorType.Assign;
-			assignmentExpression.Left.AcceptVisitor(this);
 			var sym = assignmentExpression.Left.GetSymbol();
+			assignmentExpression.Left.AcceptVisitor(this);
 			if (sym != null && sym.SymbolKind == SymbolKind.Property)
 			{
 				Formatter.Append("(");
@@ -830,7 +830,8 @@ namespace CppTranslator
 			{
 				sym = memberReferenceExpression.Parent.GetSymbol() as IEntity;
 			}
-			if (type.Kind == TypeKind.Enum)
+			var skind = sym == null ? SymbolKind.None : sym.SymbolKind;
+			if (skind != SymbolKind.Property && type.Kind == TypeKind.Enum)
 			{
 				HandleEnumExpression(type, sym);
 				return;
@@ -998,7 +999,9 @@ namespace CppTranslator
 
 		public void VisitNamedExpression(NamedExpression namedExpression)
 		{
-			throw new NotImplementedException();
+			Formatter.AppendName(namedExpression.NameToken.Name);
+			Formatter.Append(" = ");
+			namedExpression.Expression.AcceptVisitor(this);
 		}
 
 		public void VisitNamespaceDeclaration(NamespaceDeclaration namespaceDeclaration)
