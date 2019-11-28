@@ -17,14 +17,17 @@ namespace DotnetLibrary
 				characterData->SetValue(string[i], i);
 			}
 		}
-		//friend Boolean operator==(const StringRaw& string1, const StringRaw& string2) {
-		//	return true;
+		//friend bool operator== (const StringRaw& lhs, const StringRaw& rhs) noexcept {
+		//	return(true);
 		//}
-		//friend Boolean operator==(const StringRaw& string1, const StringRaw* string2) {
-		//	return true;
+		//friend bool operator== (const char* lhs, const StringRaw& rhs) {
+		//	return(true);
 		//}
-		//friend Boolean operator==(const StringRaw& string1, const void* string2) {
-		//	return true;
+		//friend bool operator== (const StringRaw& lhs, const char* rhs) {
+		//	return(true);
+		//}
+		//friend bool operator== (const StringRaw& lhs, const void* rhs) {
+		//	return(true);
 		//}
 	private:
 		PointerType<ArrayRaw<Char>>	characterData;

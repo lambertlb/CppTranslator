@@ -300,7 +300,8 @@ namespace CppTranslator
 				if (type.Kind == TypeKind.Class)
 				{
 					Formatter.Append("->");
-				} else
+				}
+				else
 				{
 					Formatter.Append(".");
 				}
