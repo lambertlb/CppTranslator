@@ -343,10 +343,17 @@ namespace CppTranslator
 
 		public void VisitCastExpression(CastExpression castExpression)
 		{
+			ICSharpCode.Decompiler.IL.UnboxAny inst = castExpression.Annotation<ICSharpCode.Decompiler.IL.UnboxAny>();
 			Formatter.Append("( ");
 			castExpression.Type.AcceptVisitor(this);
 			Formatter.Append(" ) ");
 			castExpression.Expression.AcceptVisitor(this);
+			if (inst != null)
+			{
+				Formatter.Append("->get_As");
+				Formatter.Append(inst.Type.Name);
+				Formatter.Append("()");
+			}
 		}
 
 		public void VisitCatchClause(CatchClause catchClause)
@@ -702,7 +709,18 @@ namespace CppTranslator
 
 		public void VisitIdentifierExpression(IdentifierExpression identifierExpression)
 		{
+			ICSharpCode.Decompiler.IL.Box inst = identifierExpression.Annotation<ICSharpCode.Decompiler.IL.Box>();
+			if (inst != null)
+			{
+				Formatter.Append("new ");
+				Formatter.AppendType(inst.Type.Name);
+				Formatter.Append("Box(");
+			}
 			Formatter.AppendName(identifierExpression.IdentifierToken.Name);
+			if (inst != null)
+			{
+				Formatter.Append(")");
+			}
 		}
 
 		public void VisitIfElseStatement(IfElseStatement ifElseStatement)

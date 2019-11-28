@@ -36,4 +36,5 @@ namespace DotnetLibrary
 		virtual	String				ToString() { return(nullptr); }
 		int64_t value;
 	};
+	typedef	BoxTypeRaw<DateTime>	DateTimeBox;
 }

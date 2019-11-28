@@ -28,5 +28,6 @@
     <ClInclude Include="include\ObjectRaw.h" />
     <ClInclude Include="include\StringRaw.h" />
     <ClInclude Include="include\StringBuilderRaw.h" />
+    <ClInclude Include="include\BoxTypeRaw.h" />
   </ItemGroup>
 </Project>

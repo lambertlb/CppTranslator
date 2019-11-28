@@ -1,4 +1,5 @@
 #pragma once
+#include "DotnetTypes.h"
 
 namespace DotnetLibrary
 {

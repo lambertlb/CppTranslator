@@ -32,4 +32,5 @@ namespace DotnetLibrary
 		}
 		int64_t value;
 	};
+	typedef	BoxTypeRaw<TimeSpan>	TimeSpanBox;
 }

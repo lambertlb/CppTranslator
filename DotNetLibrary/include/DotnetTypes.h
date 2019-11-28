@@ -13,6 +13,7 @@
 #include "ValueType.h"
 #include "PointerType.h"
 #include "ObjectRaw.h"
+#include "BoxTypeRaw.h"
 #include "ArrayRaw.h"
 #include "StringRaw.h"
 #include "StringBuilderRaw.h"
