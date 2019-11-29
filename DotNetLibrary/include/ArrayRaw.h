@@ -96,7 +96,10 @@ namespace DotnetLibrary
 		void	CopyTo(ArrayBase* array1, Int32 amount) {
 			ArrayRaw<T>* source = (ArrayRaw<T>*)array1;
 		}
-		void	SetValue(T value, ArrayBase* array1) {
+		void	SetValue(Object value, ArrayBase* array1) {
+
+		}
+		void	SetValue(Object value, Int32 index1, Int32 index2 = -1, Int32 index3 = -1) {
 
 		}
 		T	GetValue(ArrayBase* array1) {

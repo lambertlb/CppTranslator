@@ -31,8 +31,6 @@ namespace CABlock_NS
 	typedef PointerType<AbstractRaw>	Abstract;
 	class BooleanTestRaw;
 	typedef PointerType<BooleanTestRaw>	BooleanTest;
-	class BufferTestRaw;
-	typedef PointerType<BufferTestRaw>	BufferTest;
 	class ByteTestRaw;
 	typedef PointerType<ByteTestRaw>	ByteTest;
 	class CharTestRaw;

@@ -45,12 +45,12 @@ namespace CABlock_NS
 		Int32 x_num3 = 0;
 		Int32 x_num4 = x_num++ + x_num2++ + x_num3-- + x_num + x_num2 + x_num3;
 		CxAssert(!x_num4.Equals(0));
-		x_caBlock->Send(new StringRaw("Doing ArrayTest"));
-		x_caBlock->Send(new StringRaw("\tDoing TestArrayCreation"));
+		x_caBlock->Send((new StringRaw("Doing ArrayTest")));
+		x_caBlock->Send((new StringRaw("\tDoing TestArrayCreation")));
 		TestArrayCreation();
-		x_caBlock->Send(new StringRaw("\tDoing MiscTest"));
+		x_caBlock->Send((new StringRaw("\tDoing MiscTest")));
 		MiscTest();
-		x_caBlock->Send(new StringRaw("\tDoing ArrayMethodTests"));
+		x_caBlock->Send((new StringRaw("\tDoing ArrayMethodTests")));
 		ArrayMethodTests();
 	}
 	void ArrayTestRaw::TestArrayCreation()
@@ -148,7 +148,7 @@ namespace CABlock_NS
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("Array TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("Array TestFailed")));
 		}
 	}
 	BasicTestRaw::BasicTestRaw(CABlock x_caBlock)
@@ -158,26 +158,26 @@ namespace CABlock_NS
 	}
 	void BasicTestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing BasicTest"));
-		x_caBlock->Send(new StringRaw("\tDoing FieldTest"));
+		x_caBlock->Send((new StringRaw("Doing BasicTest")));
+		x_caBlock->Send((new StringRaw("\tDoing FieldTest")));
 		FieldTest();
-		x_caBlock->Send(new StringRaw("\tDoing SwitchTest"));
+		x_caBlock->Send((new StringRaw("\tDoing SwitchTest")));
 		SwitchTest();
-		x_caBlock->Send(new StringRaw("\tDoing IfThenElseTest"));
+		x_caBlock->Send((new StringRaw("\tDoing IfThenElseTest")));
 		IfThenElseTest();
-		x_caBlock->Send(new StringRaw("\tDoing StructTest"));
+		x_caBlock->Send((new StringRaw("\tDoing StructTest")));
 		StructTest();
-		x_caBlock->Send(new StringRaw("\tDoing StructTest2"));
+		x_caBlock->Send((new StringRaw("\tDoing StructTest2")));
 		StructTest2();
-		x_caBlock->Send(new StringRaw("\tDoing VirtualMethodTest"));
+		x_caBlock->Send((new StringRaw("\tDoing VirtualMethodTest")));
 		VirtualMethodTest();
-		x_caBlock->Send(new StringRaw("\tDoing PassByReferenceTest"));
+		x_caBlock->Send((new StringRaw("\tDoing PassByReferenceTest")));
 		PassByReferenceTest();
-		x_caBlock->Send(new StringRaw("\tDoing Namespace Test"));
+		x_caBlock->Send((new StringRaw("\tDoing Namespace Test")));
 		TestUsingNamespace();
-		x_caBlock->Send(new StringRaw("\tDoing Complex conditions"));
+		x_caBlock->Send((new StringRaw("\tDoing Complex conditions")));
 		ComplexConditions();
-		x_caBlock->Send(new StringRaw("\tDoing Naming test"));
+		x_caBlock->Send((new StringRaw("\tDoing Naming test")));
 		TestNames();
 	}
 	void BasicTestRaw::FieldTest()
@@ -276,7 +276,7 @@ namespace CABlock_NS
 		RefMethod(x_data3);
 		CxAssert(x_data3.get_Ticks().Equals(1000));
 		RefMethod(x_data4);
-		CxAssert(x_data4->Equals(new StringRaw("Test")));
+		CxAssert(x_data4->Equals((new StringRaw("Test"))));
 		RefMethod(x_data5);
 		CxAssert(x_data5->MustImplement().Equals(2));
 	}
@@ -299,7 +299,7 @@ namespace CABlock_NS
 	{
 		if ( x_data->Equals(nullptr) )
 		{
-			x_data.Assign(new StringRaw("Test"));
+			x_data.Assign((new StringRaw("Test")));
 		}
 	}
 	void BasicTestRaw::RefMethod(TestAbstract&  x_data)
@@ -318,7 +318,7 @@ namespace CABlock_NS
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("BaseTest TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("BaseTest TestFailed")));
 		}
 	}
 	void BasicTestRaw::ComplexConditions()
@@ -368,7 +368,7 @@ namespace CABlock_NS
 	}
 	String TestAbstractRaw::ToString()
 	{
-		return new StringRaw("TestAbstract");
+		return (new StringRaw("TestAbstract"));
 	}
 	Int32 TestStruct::get_Data()
 	{
@@ -413,12 +413,12 @@ namespace CABlock_NS
 	}
 	void BooleanTestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing BooleanTest"));
-		x_caBlock->Send(new StringRaw("\tDoing RunBooleanTest"));
+		x_caBlock->Send((new StringRaw("Doing BooleanTest")));
+		x_caBlock->Send((new StringRaw("\tDoing RunBooleanTest")));
 		RunBooleanTest();
-		x_caBlock->Send(new StringRaw("\tDoing BoolOperators"));
+		x_caBlock->Send((new StringRaw("\tDoing BoolOperators")));
 		BoolOperators();
-		x_caBlock->Send(new StringRaw("\tDoing BoolBoxTest"));
+		x_caBlock->Send((new StringRaw("\tDoing BoolBoxTest")));
 		BoolBoxTest();
 	}
 	void BooleanTestRaw::BoolBoxTest()
@@ -428,7 +428,7 @@ namespace CABlock_NS
 		CxAssert(((Boolean)x_flag).Equals(x_obj));
 		CxAssert(x_obj->Equals(x_obj));
 		CxAssert(( Boolean ) x_obj->get_AsBoolean());
-		CxAssert(x_obj->ToString()->Equals(new StringRaw("True")));
+		CxAssert(x_obj->ToString()->Equals((new StringRaw("True"))));
 	}
 	void BooleanTestRaw::RunBooleanTest()
 	{
@@ -437,10 +437,10 @@ namespace CABlock_NS
 		CxAssert(((Boolean)x_flag).CompareTo(true).Equals(0));
 		CxAssert(((Boolean)x_flag).CompareTo(x_obj).Equals(0));
 		CxAssert(((Boolean)x_flag).Equals(true));
-		CxAssert(BooleanRaw::Parse(new StringRaw("True")));
-		CxAssert(new StringRaw("True")->Equals(((Boolean)x_flag).ToString()));
-		CxAssert(Boolean::FalseString->Equals(new StringRaw("False")));
-		CxAssert(Boolean::TrueString->Equals(new StringRaw("True")));
+		CxAssert(BooleanRaw::Parse((new StringRaw("True"))));
+		CxAssert((new StringRaw("True"))->Equals(((Boolean)x_flag).ToString()));
+		CxAssert(Boolean::FalseString->Equals((new StringRaw("False"))));
+		CxAssert(Boolean::TrueString->Equals((new StringRaw("True"))));
 	}
 	void BooleanTestRaw::BoolOperators()
 	{
@@ -454,55 +454,19 @@ namespace CABlock_NS
 		CxAssert(x_flag | x_flag2);
 		CxAssert(x_flag.Equals(x_flag2),false);
 		CxAssert(!x_flag.Equals(x_flag2));
-		CxAssert(x_flag = x_flag);
-		Int32 x_num = ( x_flag ? 1 : 0 ) | 1;
-		x_flag = ( !( Byte ) x_num.Equals(0) );
-		CxAssert(!( Byte ) x_num.Equals(0));
-		CxAssert(x_flag = x_flag);
 	}
 	void BooleanTestRaw::CxAssert(Boolean x_x,Boolean x_y)
 	{
 		if ( !x_x.Equals(x_y) )
 		{
-			x_caBlock->TestFailed(new StringRaw("Boolean TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("Boolean TestFailed")));
 		}
 	}
 	void BooleanTestRaw::CxAssert(Boolean x_x)
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("Boolean TestFailed"));
-		}
-	}
-	BufferTestRaw::BufferTestRaw(CABlock x_caBlock)
-	{
-		this->x_caBlock.Assign(x_caBlock);
-	}
-	void BufferTestRaw::Test()
-	{
-		static Int32 TestArray0[5] = {0,1,2,3,4};
-		static Int32 TestArray1[5] = {5,4,3,2,1};
-		x_caBlock->Send(new StringRaw("Doing Buffer Test"));
-		x_in1dArray.Assign((new ArrayRaw<Int32>(5))->Initialize((Int32*) TestArray0));
-		x_out1dArray.Assign((new ArrayRaw<Int32>(5))->Initialize((Int32*) TestArray1));
-		Int32 x_count = x_in1dArray->GetLength(0) * 4;
-		BufferRaw::BlockCopy(x_in1dArray,0,x_out1dArray,0,x_count);
-		Boolean x_x = true;
-		for ( Int32 x_i = 0 ;  x_i < 5 ;   x_i++ )
-		{
-			if ( !(*x_in1dArray->Address(x_i)).Equals((*x_out1dArray->Address(x_i))) )
-			{
-				x_x = false;
-				break;
-			}
-		}
-		CxAssert(x_x);
-	}
-	void BufferTestRaw::CxAssert(Boolean x_x)
-	{
-		if ( !x_x )
-		{
-			x_caBlock->TestFailed(new StringRaw("Buffer Test Failed"));
+			x_caBlock->TestFailed((new StringRaw("Boolean TestFailed")));
 		}
 	}
 	ByteTestRaw::ByteTestRaw(CABlock x_caBlock)
@@ -511,36 +475,36 @@ namespace CABlock_NS
 	}
 	void ByteTestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing ByteTest"));
-		x_caBlock->Send(new StringRaw("\tDoing ByteMethodsTest"));
+		x_caBlock->Send((new StringRaw("Doing ByteTest")));
+		x_caBlock->Send((new StringRaw("\tDoing ByteMethodsTest")));
 		ByteMethodsTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoUnSignedMath"));
+		x_caBlock->Send((new StringRaw("\tDoing DoUnSignedMath")));
 		DoUnSignedMath();
-		x_caBlock->Send(new StringRaw("\tDoing ByteOperators"));
+		x_caBlock->Send((new StringRaw("\tDoing ByteOperators")));
 		ByteOperators();
-		x_caBlock->Send(new StringRaw("\tDoing ByteArrayTests"));
+		x_caBlock->Send((new StringRaw("\tDoing ByteArrayTests")));
 		ByteArrayTests();
-		x_caBlock->Send(new StringRaw("\tDoing ByteMiscTests"));
+		x_caBlock->Send((new StringRaw("\tDoing ByteMiscTests")));
 		ByteMiscTests();
 	}
 	void ByteTestRaw::ByteMethodsTest()
 	{
 		Byte x_b = 5;
 		CxAssert(((Byte)x_b).CompareTo(5).Equals(0));
-		CxAssert(((Byte)x_b).CompareTo(( Object ) ( Byte ) 5).Equals(0));
+		CxAssert(((Byte)x_b).CompareTo((new ByteBox(( Byte ) 5 ))).Equals(0));
 		CxAssert(((Byte)x_b).Equals(5));
-		CxAssert(((Byte)x_b).Equals(( Object ) ( Byte ) 5));
-		CxAssert(ByteRaw::Parse(new StringRaw("77")).Equals(77));
-		CxAssert(new StringRaw("5")->Equals(((Byte)x_b).ToString()));
+		CxAssert(((Byte)x_b).Equals((new ByteBox(( Byte ) 5 ))));
+		CxAssert(ByteRaw::Parse((new StringRaw("77"))).Equals(77));
+		CxAssert((new StringRaw("5"))->Equals(((Byte)x_b).ToString()));
 		x_b = 255;
 		CxAssert(255.Equals(x_b));
 		x_b = 0;
 		CxAssert(x_b.Equals(0));
 		String x_text = ((Byte)255).ToString();
-		CxAssert(x_text->Equals(new StringRaw("255")));
+		CxAssert(x_text->Equals((new StringRaw("255"))));
 		CxAssert(ByteRaw::Parse(x_text).Equals(255));
 		String x_text2 = ( ( Byte ) 0 )->ToString();
-		CxAssert(x_text2->Equals(new StringRaw("0")));
+		CxAssert(x_text2->Equals((new StringRaw("0"))));
 		CxAssert(ByteRaw::Parse(x_text2).Equals(0));
 		Int32 x_num = 50;
 		Byte x_b2 = ( Byte ) x_num;
@@ -553,7 +517,7 @@ namespace CABlock_NS
 		CxAssert(x_b2.Equals(0));
 		Object x_obj2 = ( Byte ) 5;
 		CxAssert(x_obj2->Equals(( Byte ) 5));
-		CxAssert(x_obj2->ToString()->Equals(new StringRaw("5")));
+		CxAssert(x_obj2->ToString()->Equals((new StringRaw("5"))));
 	}
 	void ByteTestRaw::DoUnSignedMath()
 	{
@@ -851,22 +815,22 @@ namespace CABlock_NS
 		CxAssert(MathRaw::Min(x_b,x_val).Equals(0));
 		PointerType<StringBuilderRaw> x_stringBuilder = new StringBuilderRaw();
 		x_stringBuilder->Append(x_b);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("0")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("0"))));
 		x_stringBuilder->Insert(1,x_b);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("00")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("00"))));
 	}
 	void ByteTestRaw::CxAssert(Boolean x_x)
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("Byte Test Failed"));
+			x_caBlock->TestFailed((new StringRaw("Byte Test Failed")));
 		}
 	}
 	void ByteTestRaw::CxAssert(Boolean x_x,Boolean x_y)
 	{
 		if ( !x_x.Equals(x_y) )
 		{
-			x_caBlock->TestFailed(new StringRaw("Byte Test Failed"));
+			x_caBlock->TestFailed((new StringRaw("Byte Test Failed")));
 		}
 	}
 	CharTestRaw::CharTestRaw(CABlock x_caBlock)
@@ -875,19 +839,19 @@ namespace CABlock_NS
 	}
 	void CharTestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing CharTest"));
-		x_caBlock->Send(new StringRaw("\tDoing CharMethodsTest"));
+		x_caBlock->Send((new StringRaw("Doing CharTest")));
+		x_caBlock->Send((new StringRaw("\tDoing CharMethodsTest")));
 		CharMethodsTest();
-		x_caBlock->Send(new StringRaw("\tDoing CharOperators"));
+		x_caBlock->Send((new StringRaw("\tDoing CharOperators")));
 		CharOperators();
-		x_caBlock->Send(new StringRaw("\tDoing CharArrayTest"));
+		x_caBlock->Send((new StringRaw("\tDoing CharArrayTest")));
 		CharArrayTests();
-		x_caBlock->Send(new StringRaw("\tDoing CharMiscTests"));
+		x_caBlock->Send((new StringRaw("\tDoing CharMiscTests")));
 		CharMiscTests();
 	}
 	void CharTestRaw::CharMethodsTest()
 	{
-		String x_s = new StringRaw("123aBc\t\n. ");
+		String x_s = (new StringRaw("123aBc\t\n. "));
 		Char x_c = 'A';
 		CxAssert(((Char)x_c).CompareTo('B') < 0);
 		CxAssert(((Char)x_c).Equals('A'));
@@ -917,14 +881,14 @@ namespace CABlock_NS
 		CxAssert(CharRaw::IsWhiteSpace(x_s,9));
 		CxAssert(CharRaw::ToLower('A').Equals('a'));
 		CxAssert(CharRaw::ToUpper('a').Equals('A'));
-		CxAssert(((String)new StringRaw("a"))->Equals(((Char)'a').ToString()));
-		CxAssert(((String)new StringRaw("a"))->Equals(CharRaw::ToString('a')));
-		CxAssert(((Char)'a').Equals(CharRaw::Parse(new StringRaw("a"))));
+		CxAssert(((String)(new StringRaw("a")))->Equals(((Char)'a').ToString()));
+		CxAssert(((String)(new StringRaw("a")))->Equals(CharRaw::ToString('a')));
+		CxAssert(((Char)'a').Equals(CharRaw::Parse((new StringRaw("a")))));
 		Object x_obj = new CharBox(x_c);
 		CxAssert(((Char)'A').Equals(( Char ) x_obj->get_AsChar()));
 		CxAssert(((Char)'A').Equals(x_obj));
 		CxAssert(((Char)'A').CompareTo(x_obj).Equals(0));
-		CxAssert(x_obj->ToString()->Equals(new StringRaw("A")));
+		CxAssert(x_obj->ToString()->Equals((new StringRaw("A"))));
 	}
 	void CharTestRaw::CharOperators()
 	{
@@ -1055,20 +1019,20 @@ namespace CABlock_NS
 		CxAssert(MathRaw::Min(x_c,x_val).Equals(48));
 		PointerType<StringBuilderRaw> x_stringBuilder = new StringBuilderRaw();
 		x_stringBuilder->Append(x_c);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("0")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("0"))));
 	}
 	void CharTestRaw::CxAssert(Boolean x_x)
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("Char TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("Char TestFailed")));
 		}
 	}
 	void CharTestRaw::CxAssert(Boolean x_x,Boolean x_y)
 	{
 		if ( !x_x.Equals(x_y) )
 		{
-			x_caBlock->TestFailed(new StringRaw("Char TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("Char TestFailed")));
 		}
 	}
 	DoubleTestRaw::DoubleTestRaw(CABlock x_caBlock)
@@ -1077,30 +1041,30 @@ namespace CABlock_NS
 	}
 	void DoubleTestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing DoubleTest"));
-		x_caBlock->Send(new StringRaw("\tDoing DoDoubleMethodsTest"));
+		x_caBlock->Send((new StringRaw("Doing DoubleTest")));
+		x_caBlock->Send((new StringRaw("\tDoing DoDoubleMethodsTest")));
 		DoDoubleMethodsTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoDoubleMath"));
+		x_caBlock->Send((new StringRaw("\tDoing DoDoubleMath")));
 		DoDoubleMath();
-		x_caBlock->Send(new StringRaw("\tDoing DoubleOperators"));
+		x_caBlock->Send((new StringRaw("\tDoing DoubleOperators")));
 		DoubleOperators();
-		x_caBlock->Send(new StringRaw("\tDoing DoubleNanTest"));
+		x_caBlock->Send((new StringRaw("\tDoing DoubleNanTest")));
 		DoubleNanTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoubleArrayTest"));
+		x_caBlock->Send((new StringRaw("\tDoing DoubleArrayTest")));
 		DoubleArrayTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoubleMiscTests"));
+		x_caBlock->Send((new StringRaw("\tDoing DoubleMiscTests")));
 		DoubleMiscTests();
 	}
 	void DoubleTestRaw::DoDoubleMethodsTest()
 	{
 		Double x_num = 3.159;
 		CxAssert(((Double)x_num).CompareTo(3.159).Equals(0));
-		CxAssert(((Double)x_num).CompareTo(( Object ) 3.159).Equals(0));
+		CxAssert(((Double)x_num).CompareTo((new DoubleBox(3.159 ))).Equals(0));
 		CxAssert(((Double)x_num).Equals(3.159));
-		CxAssert(DoubleRaw::Parse(new StringRaw("3.159")).Equals(3.159));
-		CxAssert(((Double)x_num).ToString()->Equals(new StringRaw("3.159")));
+		CxAssert(DoubleRaw::Parse((new StringRaw("3.159"))).Equals(3.159));
+		CxAssert(((Double)x_num).ToString()->Equals((new StringRaw("3.159"))));
 		String x_text = ((Double)-1.79769313486232E+308).ToString();
-		CxAssert(x_text->StartsWith(new StringRaw("-1.7976")) && x_text->EndsWith(new StringRaw("E+308")));
+		CxAssert(x_text->StartsWith((new StringRaw("-1.7976"))) && x_text->EndsWith((new StringRaw("E+308"))));
 		x_num = 1000000000001;
 		CxAssert(x_num > 1000000000000);
 		x_num = -1000000000000;
@@ -1119,7 +1083,7 @@ namespace CABlock_NS
 		CxAssert(x_num.Equals(-1.79769313486232E+308));
 		x_obj.Assign(5);
 		CxAssert(x_obj->Equals(5));
-		CxAssert(x_obj->ToString()->Equals(new StringRaw("5")));
+		CxAssert(x_obj->ToString()->Equals((new StringRaw("5"))));
 	}
 	void DoubleTestRaw::DoDoubleMath()
 	{
@@ -1356,7 +1320,7 @@ namespace CABlock_NS
 		CxAssert(MathRaw::Sign(x_num) < 0);
 		PointerType<StringBuilderRaw> x_stringBuilder = new StringBuilderRaw();
 		x_stringBuilder->Append(x_num);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("-1")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("-1"))));
 	}
 	void DoubleTestRaw::DoubleCompare(Double x_n1,Double x_n2,Double x_resolution)
 	{
@@ -1385,7 +1349,7 @@ namespace CABlock_NS
 	}
 	void DoubleTestRaw::DoubleTestFailed()
 	{
-		x_caBlock->TestFailed(new StringRaw("Double TestFailed"));
+		x_caBlock->TestFailed((new StringRaw("Double TestFailed")));
 	}
 	EncodingTestRaw::EncodingTestRaw(CABlock x_caBlock)
 	{
@@ -1393,26 +1357,26 @@ namespace CABlock_NS
 	}
 	void EncodingTestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing EncodingTest"));
-		x_caBlock->Send(new StringRaw("\tDoing EncodingMethodsTest"));
+		x_caBlock->Send((new StringRaw("Doing EncodingTest")));
+		x_caBlock->Send((new StringRaw("\tDoing EncodingMethodsTest")));
 		EncodingMethodsTest();
 	}
 	void EncodingTestRaw::EncodingMethodsTest()
 	{
 		static Byte EncodingMethodsTestArray0[7] = {84,101,115,116,63,63,63};
-		String x_s = new StringRaw("Test\u0394\u0396\u039f");
+		String x_s = (new StringRaw("Test\u0394\u0396\u039f"));
 		PointerType<ArrayRaw<Byte>> x_myCharsAsBytes = (new ArrayRaw<Byte>(7))->Initialize((Byte*) EncodingMethodsTestArray0);
 		PointerType<EncodingRaw> x_aSCII = Encoding::get_ASCII();
 		CxAssert(x_aSCII->GetByteCount(x_s).Equals(7));
 		PointerType<ArrayRaw<Byte>> x_bytes = x_aSCII->GetBytes(x_s);
 		CxAssert(CompareBytes(x_bytes,x_myCharsAsBytes));
 		String x_string = x_aSCII->GetString(x_bytes);
-		CxAssert(x_string->Equals(new StringRaw("Test???")));
-		String x_s2 = new StringRaw("123\u042e\u040b\u042f\u0403\u041c\u0422\u0464\u0460\u046a\u047a");
+		CxAssert(x_string->Equals((new StringRaw("Test???"))));
+		String x_s2 = (new StringRaw("123\u042e\u040b\u042f\u0403\u041c\u0422\u0464\u0460\u046a\u047a"));
 		CxAssert(x_aSCII->GetByteCount(x_s2).Equals(13));
 		PointerType<ArrayRaw<Byte>> x_bytes2 = x_aSCII->GetBytes(x_s2);
 		String x_string2 = x_aSCII->GetString(x_bytes2);
-		CxAssert(x_string2->Equals(new StringRaw("123??????????")));
+		CxAssert(x_string2->Equals((new StringRaw("123??????????"))));
 	}
 	Boolean EncodingTestRaw::CompareBytes(PointerType<ArrayRaw<Byte>> x_bytes,PointerType<ArrayRaw<Byte>> x_myCharsAsBytes)
 	{
@@ -1429,7 +1393,7 @@ namespace CABlock_NS
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("Encoding TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("Encoding TestFailed")));
 		}
 	}
 	EnumTestRaw::EnumTestRaw(CABlock x_caBlock)
@@ -1438,7 +1402,7 @@ namespace CABlock_NS
 	}
 	void EnumTestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing EnumTest"));
+		x_caBlock->Send((new StringRaw("Doing EnumTest")));
 		Test1(Value1_TestEnum);
 		Test1(Value1_TestEnum2);
 	}
@@ -1494,7 +1458,7 @@ namespace CABlock_NS
 	}
 	void EnumTestRaw::EnumTestFailed()
 	{
-		x_caBlock->TestFailed(new StringRaw("Enum TestFailed"));
+		x_caBlock->TestFailed((new StringRaw("Enum TestFailed")));
 	}
 	Int32 CABlockRaw::x_intConstant = 8;
 	CABlockRaw::CABlockRaw()
@@ -1539,8 +1503,6 @@ namespace CABlock_NS
 		x_doubleTest->Test();
 		PointerType<StringBuilderTestRaw> x_stringBuilderTest = new StringBuilderTestRaw(this);
 		x_stringBuilderTest->Test();
-		PointerType<BufferTestRaw> x_bufferTest = new BufferTestRaw(this);
-		x_bufferTest->Test();
 		PointerType<ByteTestRaw> x_byteTest = new ByteTestRaw(this);
 		x_byteTest->Test();
 		PointerType<SByteTestRaw> x_sByteTest = new SByteTestRaw(this);
@@ -1558,7 +1520,7 @@ namespace CABlock_NS
 	}
 	void CABlockRaw::TestFailed(String x_reason)
 	{
-		Send(new StringRaw("\t\tERROR: ") + x_reason);
+		Send((new StringRaw("\t\tERROR: ")) + x_reason);
 	}
 	Int16TestRaw::Int16TestRaw(CABlock x_caBlock)
 	{
@@ -1566,39 +1528,39 @@ namespace CABlock_NS
 	}
 	void Int16TestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing Int16Test"));
-		x_caBlock->Send(new StringRaw("\tDoing Int16MethodsTest"));
+		x_caBlock->Send((new StringRaw("Doing Int16Test")));
+		x_caBlock->Send((new StringRaw("\tDoing Int16MethodsTest")));
 		Int16MethodsTest();
-		x_caBlock->Send(new StringRaw("\tDoing Int16MathTest"));
+		x_caBlock->Send((new StringRaw("\tDoing Int16MathTest")));
 		Int16MathTest();
-		x_caBlock->Send(new StringRaw("\tDoing Int16Operators"));
+		x_caBlock->Send((new StringRaw("\tDoing Int16Operators")));
 		Int16Operators();
-		x_caBlock->Send(new StringRaw("\tDoing Int16ArrayTests"));
+		x_caBlock->Send((new StringRaw("\tDoing Int16ArrayTests")));
 		Int16ArrayTests();
-		x_caBlock->Send(new StringRaw("\tDoing Int16MiscTests"));
+		x_caBlock->Send((new StringRaw("\tDoing Int16MiscTests")));
 		Int16MiscTests();
 	}
 	void Int16TestRaw::Int16MethodsTest()
 	{
 		Int16 x_num = 5;
 		CxAssert(((Int16)x_num).CompareTo(5).Equals(0));
-		CxAssert(((Int16)x_num).CompareTo(( Object ) ( Int16 ) 5).Equals(0));
+		CxAssert(((Int16)x_num).CompareTo((new Int16Box(( Int16 ) 5 ))).Equals(0));
 		CxAssert(((Int16)x_num).Equals(5));
-		CxAssert(((Int16)x_num).Equals(( Object ) ( Int16 ) 5));
-		CxAssert(Int16Raw::Parse(new StringRaw("-55")).Equals(-55));
-		CxAssert(new StringRaw("-75")->Equals(( -75 )->ToString()));
+		CxAssert(((Int16)x_num).Equals((new Int16Box(( Int16 ) 5 ))));
+		CxAssert(Int16Raw::Parse((new StringRaw("-55"))).Equals(-55));
+		CxAssert((new StringRaw("-75"))->Equals(( -75 )->ToString()));
 		String x_text = ((Int16)32767).ToString();
-		CxAssert(x_text->Equals(new StringRaw("32767")));
+		CxAssert(x_text->Equals((new StringRaw("32767"))));
 		CxAssert(Int16Raw::Parse(x_text).Equals(32767));
 		String x_text2 = ((Int16)-32768).ToString();
-		CxAssert(x_text2->Equals(new StringRaw("-32768")));
+		CxAssert(x_text2->Equals((new StringRaw("-32768"))));
 		CxAssert(Int16Raw::Parse(x_text2).Equals(-32768));
 		Int64 x_num2 = 9223372036854775807;
 		x_num = ( Int16 ) x_num2;
 		CxAssert(x_num.Equals(-1));
 		Object x_obj = ( Int16 ) 5;
 		CxAssert(x_obj->Equals(( Int16 ) 5));
-		CxAssert(x_obj->ToString()->Equals(new StringRaw("5")));
+		CxAssert(x_obj->ToString()->Equals((new StringRaw("5"))));
 	}
 	void Int16TestRaw::Int16MathTest()
 	{
@@ -1860,22 +1822,22 @@ namespace CABlock_NS
 		CxAssert(MathRaw::Sign(x_num) < 0);
 		PointerType<StringBuilderRaw> x_stringBuilder = new StringBuilderRaw();
 		x_stringBuilder->Append(x_num);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("-1")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("-1"))));
 		x_stringBuilder->Insert(2,x_num);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("-1-1")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("-1-1"))));
 	}
 	void Int16TestRaw::CxAssert(Boolean x_x)
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("Int16 TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("Int16 TestFailed")));
 		}
 	}
 	void Int16TestRaw::CxAssert(Boolean x_x,Boolean x_y)
 	{
 		if ( !x_x.Equals(x_y) )
 		{
-			x_caBlock->TestFailed(new StringRaw("Int16 TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("Int16 TestFailed")));
 		}
 	}
 	Int32TestRaw::Int32TestRaw(CABlock x_caBlock)
@@ -1884,18 +1846,18 @@ namespace CABlock_NS
 	}
 	void Int32TestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing Int32Test"));
-		x_caBlock->Send(new StringRaw("\tDoing Int32MethodsTest"));
+		x_caBlock->Send((new StringRaw("Doing Int32Test")));
+		x_caBlock->Send((new StringRaw("\tDoing Int32MethodsTest")));
 		Int32MethodsTest();
-		x_caBlock->Send(new StringRaw("\tDoing Int32MathTest"));
+		x_caBlock->Send((new StringRaw("\tDoing Int32MathTest")));
 		Int32MathTest();
-		x_caBlock->Send(new StringRaw("\tDoing Int32Operators"));
+		x_caBlock->Send((new StringRaw("\tDoing Int32Operators")));
 		Int32Operators();
-		x_caBlock->Send(new StringRaw("\tDoing Int32Conversion"));
+		x_caBlock->Send((new StringRaw("\tDoing Int32Conversion")));
 		Int32Conversion();
-		x_caBlock->Send(new StringRaw("\tDoing Int32ArrayTests"));
+		x_caBlock->Send((new StringRaw("\tDoing Int32ArrayTests")));
 		Int32ArrayTests();
-		x_caBlock->Send(new StringRaw("\tDoing Int32MiscTests"));
+		x_caBlock->Send((new StringRaw("\tDoing Int32MiscTests")));
 		Int32MiscTests();
 	}
 	void Int32TestRaw::Int32Conversion()
@@ -1913,16 +1875,16 @@ namespace CABlock_NS
 	{
 		Int32 x_num = 5;
 		CxAssert(((Int32)x_num).CompareTo(5).Equals(0));
-		CxAssert(((Int32)x_num).CompareTo(( Object ) 5).Equals(0));
+		CxAssert(((Int32)x_num).CompareTo((new Int32Box(5 ))).Equals(0));
 		CxAssert(((Int32)x_num).Equals(5));
-		CxAssert(((Int32)x_num).Equals(( Object ) 5));
-		CxAssert(Int32Raw::Parse(new StringRaw("-55")).Equals(-55));
-		CxAssert(new StringRaw("-75")->Equals(( -75 )->ToString()));
+		CxAssert(((Int32)x_num).Equals((new Int32Box(5 ))));
+		CxAssert(Int32Raw::Parse((new StringRaw("-55"))).Equals(-55));
+		CxAssert((new StringRaw("-75"))->Equals(( -75 )->ToString()));
 		String x_text = ((Int32)2147483647).ToString();
-		CxAssert(x_text->Equals(new StringRaw("2147483647")));
+		CxAssert(x_text->Equals((new StringRaw("2147483647"))));
 		CxAssert(Int32Raw::Parse(x_text).Equals(2147483647));
 		String x_text2 = ((Int32)-2147483648).ToString();
-		CxAssert(x_text2->Equals(new StringRaw("-2147483648")));
+		CxAssert(x_text2->Equals((new StringRaw("-2147483648"))));
 		CxAssert(Int32Raw::Parse(x_text2).Equals(-2147483648));
 		Int64 x_num2 = 9223372036854775807;
 		x_num = ( Int32 ) x_num2;
@@ -2101,7 +2063,7 @@ namespace CABlock_NS
 		CxAssert((*x_array4->Address(0,0,3)).Equals(6));
 		x_array4->SetValue(4,0,0,3);
 		CxAssert((*x_array4->Address(0,0,3)).Equals(4));
-		CxAssert(((Int32)(*x_array4->Address(0,0,3))).ToString()->Equals(new StringRaw("4")));
+		CxAssert(((Int32)(*x_array4->Address(0,0,3))).ToString()->Equals((new StringRaw("4"))));
 	}
 	void Int32TestRaw::Int32MiscTests()
 	{
@@ -2113,20 +2075,20 @@ namespace CABlock_NS
 		CxAssert(MathRaw::Sign(x_num) < 0);
 		PointerType<StringBuilderRaw> x_stringBuilder = new StringBuilderRaw();
 		x_stringBuilder->Append(x_num);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("-1")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("-1"))));
 	}
 	void Int32TestRaw::CxAssert(Boolean x_x)
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("Int32 TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("Int32 TestFailed")));
 		}
 	}
 	void Int32TestRaw::CxAssert(Boolean x_x,Boolean x_y)
 	{
 		if ( !x_x.Equals(x_y) )
 		{
-			x_caBlock->TestFailed(new StringRaw("Int32 TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("Int32 TestFailed")));
 		}
 	}
 	Int64TestRaw::Int64TestRaw(CABlock x_caBlock)
@@ -2135,35 +2097,35 @@ namespace CABlock_NS
 	}
 	void Int64TestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing Int64Test"));
-		x_caBlock->Send(new StringRaw("\tDoing Int64MethodsTest"));
+		x_caBlock->Send((new StringRaw("Doing Int64Test")));
+		x_caBlock->Send((new StringRaw("\tDoing Int64MethodsTest")));
 		Int64MethodsTest();
-		x_caBlock->Send(new StringRaw("\tDoing Int64MathTest"));
+		x_caBlock->Send((new StringRaw("\tDoing Int64MathTest")));
 		Int64MathTest();
-		x_caBlock->Send(new StringRaw("\tDoing Int64Operators"));
+		x_caBlock->Send((new StringRaw("\tDoing Int64Operators")));
 		Int64Operators();
-		x_caBlock->Send(new StringRaw("\tDoing Int64ArrayTests"));
+		x_caBlock->Send((new StringRaw("\tDoing Int64ArrayTests")));
 		Int64ArrayTests();
-		x_caBlock->Send(new StringRaw("\tDoing Int64MiscTests"));
+		x_caBlock->Send((new StringRaw("\tDoing Int64MiscTests")));
 		Int64MiscTests();
 	}
 	void Int64TestRaw::Int64MethodsTest()
 	{
 		Int64 x_num = 5;
 		CxAssert(((Int64)x_num).CompareTo(5).Equals(0));
-		CxAssert(((Int64)x_num).CompareTo(( Object ) 5).Equals(0));
+		CxAssert(((Int64)x_num).CompareTo((new Int64Box(5 ))).Equals(0));
 		CxAssert(((Int64)x_num).Equals(5));
-		CxAssert(((Int64)x_num).Equals(( Object ) 5));
-		CxAssert(Int64Raw::Parse(new StringRaw("-55")).Equals(-55));
+		CxAssert(((Int64)x_num).Equals((new Int64Box(5 ))));
+		CxAssert(Int64Raw::Parse((new StringRaw("-55"))).Equals(-55));
 		String x_text = ((Int64)9223372036854775807).ToString();
-		CxAssert(x_text->Equals(new StringRaw("9223372036854775807")));
+		CxAssert(x_text->Equals((new StringRaw("9223372036854775807"))));
 		CxAssert(Int64Raw::Parse(x_text).Equals(9223372036854775807));
 		String x_text2 = ((Int64)-9223372036854775808).ToString();
-		CxAssert(x_text2->Equals(new StringRaw("-9223372036854775808")));
+		CxAssert(x_text2->Equals((new StringRaw("-9223372036854775808"))));
 		CxAssert(Int64Raw::Parse(x_text2).Equals(-9223372036854775808));
 		Object x_obj = 5;
 		CxAssert(x_obj->Equals(5));
-		CxAssert(x_obj->ToString()->Equals(new StringRaw("5")));
+		CxAssert(x_obj->ToString()->Equals((new StringRaw("5"))));
 	}
 	void Int64TestRaw::Int64MathTest()
 	{
@@ -2361,20 +2323,20 @@ namespace CABlock_NS
 		CxAssert(MathRaw::Sign(x_num) < 0);
 		PointerType<StringBuilderRaw> x_stringBuilder = new StringBuilderRaw();
 		x_stringBuilder->Append(x_num);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("-1")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("-1"))));
 	}
 	void Int64TestRaw::CxAssert(Boolean x_x)
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("Int64 TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("Int64 TestFailed")));
 		}
 	}
 	void Int64TestRaw::CxAssert(Boolean x_x,Boolean x_y)
 	{
 		if ( !x_x.Equals(x_y) )
 		{
-			x_caBlock->TestFailed(new StringRaw("Int64 TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("Int64 TestFailed")));
 		}
 	}
 	MathTestRaw::MathTestRaw(CABlock x_caBlock)
@@ -2383,7 +2345,7 @@ namespace CABlock_NS
 	}
 	void MathTestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing MathTest"));
+		x_caBlock->Send((new StringRaw("Doing MathTest")));
 		DoMathTest();
 	}
 	void MathTestRaw::DoMathTest()
@@ -2453,7 +2415,7 @@ namespace CABlock_NS
 	{
 		if ( MathRaw::Abs(x_n1 - x_n2) > x_resolution )
 		{
-			x_caBlock->TestFailed(new StringRaw("BaseTest TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("BaseTest TestFailed")));
 		}
 	}
 	void MathTestRaw::CxAssert(Double x_x,Double x_y)
@@ -2464,7 +2426,7 @@ namespace CABlock_NS
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("BaseTest TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("BaseTest TestFailed")));
 		}
 	}
 	SByteTestRaw::SByteTestRaw(CABlock x_caBlock)
@@ -2473,39 +2435,39 @@ namespace CABlock_NS
 	}
 	void SByteTestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing SByteTest"));
-		x_caBlock->Send(new StringRaw("\tDoing SByteMethodsTest"));
+		x_caBlock->Send((new StringRaw("Doing SByteTest")));
+		x_caBlock->Send((new StringRaw("\tDoing SByteMethodsTest")));
 		SByteMethodsTest();
-		x_caBlock->Send(new StringRaw("\tDoing SByteMathTest"));
+		x_caBlock->Send((new StringRaw("\tDoing SByteMathTest")));
 		SByteMathTest();
-		x_caBlock->Send(new StringRaw("\tDoing SByteOperators"));
+		x_caBlock->Send((new StringRaw("\tDoing SByteOperators")));
 		SByteOperators();
-		x_caBlock->Send(new StringRaw("\tDoing SByteArrayTests"));
+		x_caBlock->Send((new StringRaw("\tDoing SByteArrayTests")));
 		SByteArrayTests();
-		x_caBlock->Send(new StringRaw("\tDoing SByteMiscTests"));
+		x_caBlock->Send((new StringRaw("\tDoing SByteMiscTests")));
 		SByteMiscTests();
 	}
 	void SByteTestRaw::SByteMethodsTest()
 	{
 		SByte x_b = 5;
 		CxAssert(((SByte)x_b).CompareTo(5).Equals(0));
-		CxAssert(((SByte)x_b).CompareTo(( Object ) ( SByte ) 5).Equals(0));
+		CxAssert(((SByte)x_b).CompareTo((new SByteBox(( SByte ) 5 ))).Equals(0));
 		CxAssert(((SByte)x_b).Equals(5));
-		CxAssert(((SByte)x_b).Equals(( Object ) ( SByte ) 5));
-		CxAssert(SByteRaw::Parse(new StringRaw("-55")).Equals(-55));
-		CxAssert(new StringRaw("-75")->Equals(( -75 )->ToString()));
+		CxAssert(((SByte)x_b).Equals((new SByteBox(( SByte ) 5 ))));
+		CxAssert(SByteRaw::Parse((new StringRaw("-55"))).Equals(-55));
+		CxAssert((new StringRaw("-75"))->Equals(( -75 )->ToString()));
 		String x_text = ((SByte)127).ToString();
-		CxAssert(x_text->Equals(new StringRaw("127")));
+		CxAssert(x_text->Equals((new StringRaw("127"))));
 		CxAssert(SByteRaw::Parse(x_text).Equals(127));
 		String x_text2 = ((SByte)-128).ToString();
-		CxAssert(x_text2->Equals(new StringRaw("-128")));
+		CxAssert(x_text2->Equals((new StringRaw("-128"))));
 		CxAssert(SByteRaw::Parse(x_text2).Equals(-128));
 		Int64 x_num = 9223372036854775807;
 		x_b = ( SByte ) x_num;
 		CxAssert(x_b.Equals(-1));
 		Object x_obj = ( SByte ) 5;
 		CxAssert(x_obj->Equals(( SByte ) 5));
-		CxAssert(x_obj->ToString()->Equals(new StringRaw("5")));
+		CxAssert(x_obj->ToString()->Equals((new StringRaw("5"))));
 	}
 	void SByteTestRaw::SByteMathTest()
 	{
@@ -2767,22 +2729,22 @@ namespace CABlock_NS
 		CxAssert(MathRaw::Sign(x_b) < 0);
 		PointerType<StringBuilderRaw> x_stringBuilder = new StringBuilderRaw();
 		x_stringBuilder->Append(x_b);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("-1")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("-1"))));
 		x_stringBuilder->Insert(2,x_b);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("-1-1")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("-1-1"))));
 	}
 	void SByteTestRaw::CxAssert(Boolean x_x)
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("SByte TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("SByte TestFailed")));
 		}
 	}
 	void SByteTestRaw::CxAssert(Boolean x_x,Boolean x_y)
 	{
 		if ( !x_x.Equals(x_y) )
 		{
-			x_caBlock->TestFailed(new StringRaw("SByte TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("SByte TestFailed")));
 		}
 	}
 	SingleTestRaw::SingleTestRaw(CABlock x_caBlock)
@@ -2791,28 +2753,28 @@ namespace CABlock_NS
 	}
 	void SingleTestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing SingleTest"));
-		x_caBlock->Send(new StringRaw("\tDoing DoSingleMethodsTest"));
+		x_caBlock->Send((new StringRaw("Doing SingleTest")));
+		x_caBlock->Send((new StringRaw("\tDoing DoSingleMethodsTest")));
 		DoSingleMethodsTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoSingleMath"));
+		x_caBlock->Send((new StringRaw("\tDoing DoSingleMath")));
 		DoSingleMath();
-		x_caBlock->Send(new StringRaw("\tDoing SingleOperators"));
+		x_caBlock->Send((new StringRaw("\tDoing SingleOperators")));
 		SingleOperators();
-		x_caBlock->Send(new StringRaw("\tDoing SingleNanTest"));
+		x_caBlock->Send((new StringRaw("\tDoing SingleNanTest")));
 		SingleNanTest();
-		x_caBlock->Send(new StringRaw("\tDoing SingleArrayTest"));
+		x_caBlock->Send((new StringRaw("\tDoing SingleArrayTest")));
 		SingleArrayTest();
-		x_caBlock->Send(new StringRaw("\tDoing SingleMiscTests"));
+		x_caBlock->Send((new StringRaw("\tDoing SingleMiscTests")));
 		SingleMiscTests();
 	}
 	void SingleTestRaw::DoSingleMethodsTest()
 	{
 		Float x_num = 3.159;
 		CxAssert(((Single)x_num).CompareTo(3.159).Equals(0));
-		CxAssert(((Single)x_num).CompareTo(( Object ) 3.159).Equals(0));
+		CxAssert(((Single)x_num).CompareTo((new SingleBox(3.159 ))).Equals(0));
 		CxAssert(((Single)x_num).Equals(3.159));
-		CxAssert(SingleRaw::Parse(new StringRaw("3.159")),3.15899991989136);
-		CxAssert(((Single)x_num).ToString()->Equals(new StringRaw("3.159")));
+		CxAssert(SingleRaw::Parse((new StringRaw("3.159"))),3.15899991989136);
+		CxAssert(((Single)x_num).ToString()->Equals((new StringRaw("3.159"))));
 		CxAssert(SingleRaw::Parse(((Single)x_num).ToString()),x_num);
 		x_num = 1E+07;
 		CxAssert(x_num > 1E+07);
@@ -2832,7 +2794,7 @@ namespace CABlock_NS
 		CxAssert(x_num.Equals(-3.402823E+38));
 		x_obj.Assign(5);
 		CxAssert(x_obj->Equals(5));
-		CxAssert(x_obj->ToString()->Equals(new StringRaw("5")));
+		CxAssert(x_obj->ToString()->Equals((new StringRaw("5"))));
 	}
 	void SingleTestRaw::DoSingleMath()
 	{
@@ -3066,9 +3028,9 @@ namespace CABlock_NS
 		CxAssert(MathRaw::Sign(x_num) < 0);
 		PointerType<StringBuilderRaw> x_stringBuilder = new StringBuilderRaw();
 		x_stringBuilder->Append(x_num);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("-1")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("-1"))));
 		x_stringBuilder->Insert(2,x_num);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("-1-1")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("-1-1"))));
 	}
 	void SingleTestRaw::SingleCompare(Double x_n1,Double x_n2,Double x_resolution)
 	{
@@ -3098,7 +3060,7 @@ namespace CABlock_NS
 	}
 	void SingleTestRaw::SingleTestFailed()
 	{
-		x_caBlock->TestFailed(new StringRaw("Single TestFailed"));
+		x_caBlock->TestFailed((new StringRaw("Single TestFailed")));
 	}
 	StringBuilderTestRaw::StringBuilderTestRaw(CABlock x_caBlock)
 	{
@@ -3107,18 +3069,18 @@ namespace CABlock_NS
 	}
 	void StringBuilderTestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing StringBuilderTest"));
-		x_caBlock->Send(new StringRaw("\tDoing DoSBConstructTest"));
+		x_caBlock->Send((new StringRaw("Doing StringBuilderTest")));
+		x_caBlock->Send((new StringRaw("\tDoing DoSBConstructTest")));
 		DoSBConstructTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoSBPropertyTest"));
+		x_caBlock->Send((new StringRaw("\tDoing DoSBPropertyTest")));
 		DoSBPropertyTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoSBAppendTest"));
+		x_caBlock->Send((new StringRaw("\tDoing DoSBAppendTest")));
 		DoSBAppendTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoSBMiscTest"));
+		x_caBlock->Send((new StringRaw("\tDoing DoSBMiscTest")));
 		DoSBMiscTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoSBInsertTest"));
+		x_caBlock->Send((new StringRaw("\tDoing DoSBInsertTest")));
 		DoSBInsertTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoSBReplaceTest"));
+		x_caBlock->Send((new StringRaw("\tDoing DoSBReplaceTest")));
 		DoSBReplaceTest();
 	}
 	void StringBuilderTestRaw::DoSBConstructTest()
@@ -3128,17 +3090,17 @@ namespace CABlock_NS
 		CxAssert(x_sb->get_Length().Equals(0));
 		x_sb.Assign(new StringBuilderRaw(100));
 		CxAssert(x_sb->get_Capacity().Equals(100));
-		x_sb.Assign(new StringBuilderRaw(new StringRaw("Test")));
-		CxAssert(x_sb->ToString()->Equals(new StringRaw("Test")));
+		x_sb.Assign(new StringBuilderRaw((new StringRaw("Test"))));
+		CxAssert(x_sb->ToString()->Equals((new StringRaw("Test"))));
 		x_sb.Assign(new StringBuilderRaw(20,25));
 		CxAssert(x_sb->get_Capacity().Equals(20) && x_sb->get_MaxCapacity().Equals(25));
-		x_sb.Assign(new StringBuilderRaw(new StringRaw("Test"),20));
-		CxAssert(x_sb->ToString()->Equals(new StringRaw("Test")) && x_sb->get_Capacity().Equals(20));
-		x_sb.Assign(new StringBuilderRaw(new StringRaw("test1234"),1,4,20));
-		CxAssert(x_sb->ToString()->Equals(new StringRaw("est1")) && x_sb->get_Capacity().Equals(20));
-		String x_a = new StringBuilderRaw(new StringRaw("Test"))->ToString();
-		CxAssert(x_a->Equals(new StringRaw("Test")));
-		String x_b = new StringRaw("AB\a\b\t\r\v\f\n\"'\u00c2");
+		x_sb.Assign(new StringBuilderRaw((new StringRaw("Test")),20));
+		CxAssert(x_sb->ToString()->Equals((new StringRaw("Test"))) && x_sb->get_Capacity().Equals(20));
+		x_sb.Assign(new StringBuilderRaw((new StringRaw("test1234")),1,4,20));
+		CxAssert(x_sb->ToString()->Equals((new StringRaw("est1"))) && x_sb->get_Capacity().Equals(20));
+		String x_a = new StringBuilderRaw((new StringRaw("Test")))->ToString();
+		CxAssert(x_a->Equals((new StringRaw("Test"))));
+		String x_b = (new StringRaw("AB\a\b\t\r\v\f\n\"'\u00c2"));
 		PointerType<ArrayRaw<Char>> x_value = (new ArrayRaw<Char>(12))->Initialize((Char*) DoSBConstructTestArray0);
 		x_sb.Assign(new StringBuilderRaw());
 		x_sb->Append(x_value);
@@ -3147,7 +3109,7 @@ namespace CABlock_NS
 	}
 	void StringBuilderTestRaw::DoSBPropertyTest()
 	{
-		x_sb.Assign(new StringBuilderRaw(new StringRaw("Testing123"),0,10,20));
+		x_sb.Assign(new StringBuilderRaw((new StringRaw("Testing123")),0,10,20));
 		CxAssert(x_sb->get_Capacity().Equals(20) && x_sb->get_MaxCapacity().Equals(2147483647));
 		CxAssert((*x_sb->Address(7)).Equals('1'));
 		CxAssert(x_sb->get_Length().Equals(10));
@@ -3156,7 +3118,7 @@ namespace CABlock_NS
 		x_sb->set_Capacity(22);
 		CxAssert(x_sb->get_Capacity().Equals(22));
 		(*x_sb->Address(0)) = 't';
-		CxAssert(x_sb->ToString()->Equals(new StringRaw("testing")));
+		CxAssert(x_sb->ToString()->Equals((new StringRaw("testing"))));
 	}
 	void StringBuilderTestRaw::DoSBAppendTest()
 	{
@@ -3164,50 +3126,50 @@ namespace CABlock_NS
 		static Object DoSBAppendTestArray1[4] = {0,1,2,3};
 		x_sb->set_Length(0);
 		x_sb->Append(true);
-		CxAssert(x_sb->ToString()->Equals(new StringRaw("True")));
-		CxAssert(x_sb->Append('A')->Append()->Equals(new StringRaw("TrueA")));
+		CxAssert(x_sb->ToString()->Equals((new StringRaw("True"))));
+		CxAssert(x_sb->Append('A')->Append()->Equals((new StringRaw("TrueA"))));
 		PointerType<ArrayRaw<Char>> x_value = (new ArrayRaw<Char>(4))->Initialize((Char*) DoSBAppendTestArray0);
-		CxAssert(x_sb->Append(x_value)->Append()->Equals(new StringRaw("TrueA0123")));
+		CxAssert(x_sb->Append(x_value)->Append()->Equals((new StringRaw("TrueA0123"))));
 		x_sb->set_Length(0);
 		Double x_value2 = 3.14159;
-		CxAssert(x_sb->Append(x_value2)->Append()->Equals(new StringRaw("3.14159")));
+		CxAssert(x_sb->Append(x_value2)->Append()->Equals((new StringRaw("3.14159"))));
 		x_sb->set_Length(0);
 		Int32 x_value3 = 666;
-		CxAssert(x_sb->Append(x_value3)->Append()->Equals(new StringRaw("666")));
+		CxAssert(x_sb->Append(x_value3)->Append()->Equals((new StringRaw("666"))));
 		x_sb->set_Length(0);
 		Int64 x_value4 = 666666666;
-		CxAssert(x_sb->Append(x_value4)->Append()->Equals(new StringRaw("666666666")));
+		CxAssert(x_sb->Append(x_value4)->Append()->Equals((new StringRaw("666666666"))));
 		x_sb->set_Length(0);
 		Object x_obj = 1;
-		CxAssert(x_sb->Append(x_obj)->Append()->Equals(new StringRaw("1")));
+		CxAssert(x_sb->Append(x_obj)->Append()->Equals((new StringRaw("1"))));
 		x_sb->set_Length(0);
-		CxAssert(x_sb->Append(new StringRaw("fred"))->Append()->Equals(new StringRaw("fred")));
+		CxAssert(x_sb->Append((new StringRaw("fred")))->Append()->Equals((new StringRaw("fred"))));
 		UInt32 x_value5 = 777;
 		x_sb->set_Length(0);
-		CxAssert(x_sb->Append(x_value5)->Append()->Equals(new StringRaw("777")));
+		CxAssert(x_sb->Append(x_value5)->Append()->Equals((new StringRaw("777"))));
 		x_sb->set_Length(0);
-		CxAssert(x_sb->Append('A',4)->Append()->Equals(new StringRaw("AAAA")));
+		CxAssert(x_sb->Append('A',4)->Append()->Equals((new StringRaw("AAAA"))));
 		x_sb->set_Length(0);
-		CxAssert(x_sb->Append(x_value,1,3)->Append()->Equals(new StringRaw("123")));
+		CxAssert(x_sb->Append(x_value,1,3)->Append()->Equals((new StringRaw("123"))));
 		x_sb->set_Length(0);
-		CxAssert(x_sb->Append(new StringRaw("3210"),1,3)->Append()->Equals(new StringRaw("210")));
+		CxAssert(x_sb->Append((new StringRaw("3210")),1,3)->Append()->Equals((new StringRaw("210"))));
 		x_sb->set_Length(0);
-		CxAssert(x_sb->AppendFormat(new StringRaw("x={0}"),x_obj)->AppendFormat()->Equals(new StringRaw("x=1")));
+		CxAssert(x_sb->AppendFormat((new StringRaw("x={0}")),x_obj)->AppendFormat()->Equals((new StringRaw("x=1"))));
 		PointerType<ArrayRaw<Object>> x_array = (new ArrayRaw<Object>(4))->Initialize((Object*) DoSBAppendTestArray1);
 		x_sb->set_Length(0);
-		CxAssert(x_sb->AppendFormat(new StringRaw("y={0}{1}{2}{3}"),x_array)->AppendFormat()->Equals(new StringRaw("y=0123")));
+		CxAssert(x_sb->AppendFormat((new StringRaw("y={0}{1}{2}{3}")),x_array)->AppendFormat()->Equals((new StringRaw("y=0123"))));
 		x_sb->set_Length(0);
-		CxAssert(x_sb->AppendFormat(new StringRaw("y={0}{1}"),(*x_array->Address(0)),(*x_array->Address(1)))->AppendFormat()->Equals(new StringRaw("y=01")));
+		CxAssert(x_sb->AppendFormat((new StringRaw("y={0}{1}")),(*x_array->Address(0)),(*x_array->Address(1)))->AppendFormat()->Equals((new StringRaw("y=01"))));
 		x_sb->set_Length(0);
-		CxAssert(x_sb->AppendFormat(new StringRaw("y={0}{1}{2}"),(*x_array->Address(0)),(*x_array->Address(1)),(*x_array->Address(2)))->AppendFormat()->Equals(new StringRaw("y=012")));
+		CxAssert(x_sb->AppendFormat((new StringRaw("y={0}{1}{2}")),(*x_array->Address(0)),(*x_array->Address(1)),(*x_array->Address(2)))->AppendFormat()->Equals((new StringRaw("y=012"))));
 		x_sb->set_Length(0);
-		CxAssert(x_sb->Append('A')->Append()->Equals(new StringRaw("A")));
-		Object x_value6 = new StringRaw("Test string as Object");
+		CxAssert(x_sb->Append('A')->Append()->Equals((new StringRaw("A"))));
+		Object x_value6 = (new StringRaw("Test string as Object"));
 		x_sb->set_Length(0);
-		CxAssert(x_sb->Append(x_value6)->Append()->Equals(new StringRaw("Test string as Object")));
+		CxAssert(x_sb->Append(x_value6)->Append()->Equals((new StringRaw("Test string as Object"))));
 		PointerType<TestAbstractRaw> x_value7 = new TestAbstractRaw();
 		x_sb->set_Length(0);
-		CxAssert(x_sb->Append(x_value7)->Append()->Equals(new StringRaw("TestAbstract")));
+		CxAssert(x_sb->Append(x_value7)->Append()->Equals((new StringRaw("TestAbstract"))));
 	}
 	void StringBuilderTestRaw::DoSBMiscTest()
 	{
@@ -3215,85 +3177,85 @@ namespace CABlock_NS
 		x_sb->set_Capacity(10);
 		x_sb->EnsureCapacity(30);
 		CxAssert(x_sb->get_Capacity() >= 30);
-		x_sb->Append(new StringRaw("Test"));
-		PointerType<StringBuilderRaw> x_stringBuilder = new StringBuilderRaw(new StringRaw("Test"));
+		x_sb->Append((new StringRaw("Test")));
+		PointerType<StringBuilderRaw> x_stringBuilder = new StringBuilderRaw((new StringRaw("Test")));
 		x_stringBuilder->set_Capacity(10);
 		x_stringBuilder->EnsureCapacity(30);
 		CxAssert(x_sb->Equals(x_stringBuilder));
 		x_sb->set_Length(0);
-		x_sb->Append(new StringRaw("1234567890"));
+		x_sb->Append((new StringRaw("1234567890")));
 		x_sb->Remove(1,4);
-		CxAssert(x_sb->ToString()->Equals(new StringRaw("167890")));
+		CxAssert(x_sb->ToString()->Equals((new StringRaw("167890"))));
 		x_sb->set_Length(0);
-		x_sb->Append(new StringRaw("1234567890"));
-		CxAssert(x_sb->ToString(1,8)->Equals(new StringRaw("23456789")));
+		x_sb->Append((new StringRaw("1234567890")));
+		CxAssert(x_sb->ToString(1,8)->Equals((new StringRaw("23456789"))));
 	}
 	void StringBuilderTestRaw::DoSBInsertTest()
 	{
 		static Char DoSBInsertTestArray0[4] = {'0','1','2','3'};
-		String x_value = new StringRaw("{}");
+		String x_value = (new StringRaw("{}"));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
 		x_sb->Insert(1,true);
-		CxAssert(x_sb->ToString()->Equals(new StringRaw("{True}")));
-		CxAssert(x_sb->Insert(5,'A')->Insert()->Equals(new StringRaw("{TrueA}")));
+		CxAssert(x_sb->ToString()->Equals((new StringRaw("{True}"))));
+		CxAssert(x_sb->Insert(5,'A')->Insert()->Equals((new StringRaw("{TrueA}"))));
 		PointerType<ArrayRaw<Char>> x_value2 = (new ArrayRaw<Char>(4))->Initialize((Char*) DoSBInsertTestArray0);
-		CxAssert(x_sb->Insert(6,x_value2)->Insert()->Equals(new StringRaw("{TrueA0123}")));
+		CxAssert(x_sb->Insert(6,x_value2)->Insert()->Equals((new StringRaw("{TrueA0123}"))));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
 		Double x_value3 = 3.14159;
-		CxAssert(x_sb->Insert(1,x_value3)->Insert()->Equals(new StringRaw("{3.14159}")));
+		CxAssert(x_sb->Insert(1,x_value3)->Insert()->Equals((new StringRaw("{3.14159}"))));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
 		Int32 x_value4 = 666;
-		CxAssert(x_sb->Insert(1,x_value4)->Insert()->Equals(new StringRaw("{666}")));
+		CxAssert(x_sb->Insert(1,x_value4)->Insert()->Equals((new StringRaw("{666}"))));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
 		Int64 x_value5 = 666666666;
-		CxAssert(x_sb->Insert(1,x_value5)->Insert()->Equals(new StringRaw("{666666666}")));
+		CxAssert(x_sb->Insert(1,x_value5)->Insert()->Equals((new StringRaw("{666666666}"))));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
 		Object x_value6 = 1;
-		CxAssert(x_sb->Insert(1,x_value6)->Insert()->Equals(new StringRaw("{1}")));
+		CxAssert(x_sb->Insert(1,x_value6)->Insert()->Equals((new StringRaw("{1}"))));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
-		CxAssert(x_sb->Insert(1,new StringRaw("fred"))->Insert()->Equals(new StringRaw("{fred}")));
+		CxAssert(x_sb->Insert(1,(new StringRaw("fred")))->Insert()->Equals((new StringRaw("{fred}"))));
 		UInt32 x_value7 = 777;
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
-		CxAssert(x_sb->Insert(1,x_value7)->Insert()->Equals(new StringRaw("{777}")));
+		CxAssert(x_sb->Insert(1,x_value7)->Insert()->Equals((new StringRaw("{777}"))));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
-		CxAssert(x_sb->Insert(1,new StringRaw("A"),4)->Insert()->Equals(new StringRaw("{AAAA}")));
+		CxAssert(x_sb->Insert(1,(new StringRaw("A")),4)->Insert()->Equals((new StringRaw("{AAAA}"))));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
-		CxAssert(x_sb->Insert(1,x_value2,1,3)->Insert()->Equals(new StringRaw("{123}")));
+		CxAssert(x_sb->Insert(1,x_value2,1,3)->Insert()->Equals((new StringRaw("{123}"))));
 	}
 	void StringBuilderTestRaw::DoSBReplaceTest()
 	{
 		x_sb->set_Length(0);
-		x_sb->Append(new StringRaw("aaaaaaa"));
-		CxAssert(x_sb->Replace('a','A')->Replace()->Equals(new StringRaw("AAAAAAA")));
-		CxAssert(x_sb->Replace(new StringRaw("AA"),new StringRaw("BBB"))->Replace()->Equals(new StringRaw("BBBBBBBBBA")));
-		CxAssert(x_sb->Replace('B','C',1,7)->Replace()->Equals(new StringRaw("BCCCCCCCBA")));
-		CxAssert(x_sb->Replace(new StringRaw("CCC"),new StringRaw("DDD"),2,5)->Replace()->Equals(new StringRaw("BCDDDCCCBA")));
+		x_sb->Append((new StringRaw("aaaaaaa")));
+		CxAssert(x_sb->Replace('a','A')->Replace()->Equals((new StringRaw("AAAAAAA"))));
+		CxAssert(x_sb->Replace((new StringRaw("AA")),(new StringRaw("BBB")))->Replace()->Equals((new StringRaw("BBBBBBBBBA"))));
+		CxAssert(x_sb->Replace('B','C',1,7)->Replace()->Equals((new StringRaw("BCCCCCCCBA"))));
+		CxAssert(x_sb->Replace((new StringRaw("CCC")),(new StringRaw("DDD")),2,5)->Replace()->Equals((new StringRaw("BCDDDCCCBA"))));
 		x_sb->set_Length(0);
-		x_sb->Append(new StringRaw("aaaaaaa"));
-		String x_a = x_sb->Replace(new StringRaw("aa"),new StringRaw("BBB"),1,5)->Replace();
-		CxAssert(x_a->Equals(new StringRaw("aBBBBBBaa")));
+		x_sb->Append((new StringRaw("aaaaaaa")));
+		String x_a = x_sb->Replace((new StringRaw("aa")),(new StringRaw("BBB")),1,5)->Replace();
+		CxAssert(x_a->Equals((new StringRaw("aBBBBBBaa"))));
 	}
 	void StringBuilderTestRaw::CxAssert(Boolean x_x)
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("StringBuilder TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("StringBuilder TestFailed")));
 		}
 	}
 	void StringBuilderTestRaw::CxAssert(Boolean x_x,Boolean x_y)
 	{
 		if ( !x_x.Equals(x_y) )
 		{
-			x_caBlock->TestFailed(new StringRaw("StringBuilder TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("StringBuilder TestFailed")));
 		}
 	}
 	StringTestRaw::StringTestRaw(CABlock x_caBlock)
@@ -3302,21 +3264,21 @@ namespace CABlock_NS
 	}
 	void StringTestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing StringTest"));
-		x_caBlock->Send(new StringRaw("\tDoing DoIndexTest"));
+		x_caBlock->Send((new StringRaw("Doing StringTest")));
+		x_caBlock->Send((new StringRaw("\tDoing DoIndexTest")));
 		DoIndexTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoMiscTest"));
+		x_caBlock->Send((new StringRaw("\tDoing DoMiscTest")));
 		DoMiscTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoEqualsTest"));
+		x_caBlock->Send((new StringRaw("\tDoing DoEqualsTest")));
 		DoEqualsTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoParsingTest"));
+		x_caBlock->Send((new StringRaw("\tDoing DoParsingTest")));
 		DoParsingTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoConcatTest"));
+		x_caBlock->Send((new StringRaw("\tDoing DoConcatTest")));
 		DoConcatTest();
 	}
 	void StringTestRaw::DoIndexTest()
 	{
-		String x_text = new StringRaw("12345");
+		String x_text = (new StringRaw("12345"));
 		CxAssert(x_text->get_Length().Equals(5));
 		CxAssert((*x_text->Address(0)).Equals('1'));
 		CxAssert((*x_text->Address(1)).Equals('2'));
@@ -3329,7 +3291,7 @@ namespace CABlock_NS
 		static Object DoMiscTestArray0[3] = {1,2,3};
 		String x_text = new StringRaw(' ',10);
 		CxAssert(x_text->get_Length().Equals(10));
-		String x_text2 = new StringRaw("12345");
+		String x_text2 = (new StringRaw("12345"));
 		PointerType<ArrayRaw<Char>> x_array = (new ArrayRaw<Char>(30));
 		x_text2->CopyTo(0,x_array,0,x_text2->get_Length());
 		Int32 x_num = 0;
@@ -3344,30 +3306,30 @@ namespace CABlock_NS
 		String x_a = new StringRaw(x_array);
 		CxAssert(x_a->Equals(x_text2));
 		String x_a2 = new StringRaw(x_array,0,2);
-		CxAssert(x_a2->Equals(new StringRaw("12")));
-		CxAssert(!x_a2->Equals(new StringRaw("22")));
-		CxAssert(!( x_a2->Equals(new StringRaw("22")) ));
+		CxAssert(x_a2->Equals((new StringRaw("12"))));
+		CxAssert(!x_a2->Equals((new StringRaw("22"))));
+		CxAssert(!( x_a2->Equals((new StringRaw("22"))) ));
 		x_a2.Assign(new StringRaw(x_text2->ToCharArray(),0,x_text2->get_Length()));
 		CxAssert(x_a2->Equals(x_text2));
-		CxAssert(StringRaw::Compare(new StringRaw("abc"),new StringRaw("ABC"),true).Equals(0));
-		CxAssert(StringRaw::Compare(new StringRaw("1abce"),1,new StringRaw("abc"),0,3).Equals(0));
-		CxAssert(StringRaw::Compare(new StringRaw("1abce"),1,new StringRaw("ABC"),0,3,true).Equals(0));
-		CxAssert(StringRaw::CompareOrdinal(new StringRaw("abc"),new StringRaw("abc")).Equals(0));
-		CxAssert(StringRaw::CompareOrdinal(new StringRaw("1abce"),1,new StringRaw("abc"),0,3).Equals(0));
+		CxAssert(StringRaw::Compare((new StringRaw("abc")),(new StringRaw("ABC")),true).Equals(0));
+		CxAssert(StringRaw::Compare((new StringRaw("1abce")),1,(new StringRaw("abc")),0,3).Equals(0));
+		CxAssert(StringRaw::Compare((new StringRaw("1abce")),1,(new StringRaw("ABC")),0,3,true).Equals(0));
+		CxAssert(StringRaw::CompareOrdinal((new StringRaw("abc")),(new StringRaw("abc"))).Equals(0));
+		CxAssert(StringRaw::CompareOrdinal((new StringRaw("1abce")),1,(new StringRaw("abc")),0,3).Equals(0));
 		x_a2.Assign(StringRaw::Copy(x_text2));
 		CxAssert(x_a2->Equals(x_text2));
-		x_a2.Assign(StringRaw::Format(new StringRaw("1 = {{{0,-4}}} 2 = {1,4} 3 = {2}!"),1,2,3));
-		CxAssert(x_a2->Equals(new StringRaw("1 = {1   } 2 =    2 3 = 3!")));
+		x_a2.Assign(StringRaw::Format((new StringRaw("1 = {{{0,-4}}} 2 = {1,4} 3 = {2}!")),1,2,3));
+		CxAssert(x_a2->Equals((new StringRaw("1 = {1   } 2 =    2 3 = 3!"))));
 		String x_a3 = x_a2->ToString();
-		CxAssert(x_a3->Equals(new StringRaw("1 = {1   } 2 =    2 3 = 3!")));
+		CxAssert(x_a3->Equals((new StringRaw("1 = {1   } 2 =    2 3 = 3!"))));
 		String x_empty = String::Empty;
-		CxAssert(!x_empty->Equals(nullptr) && x_empty->Equals(new StringRaw("")));
-		x_a2.Assign(StringRaw::Format(new StringRaw("1 = {{{0,-4}}} 2 = {1,4}!"),1,2));
-		CxAssert(x_a2->Equals(new StringRaw("1 = {1   } 2 =    2!")));
-		x_a2.Assign(StringRaw::Format(new StringRaw("1 = {{{0,-4}}}!"),1));
-		CxAssert(x_a2->Equals(new StringRaw("1 = {1   }!")));
+		CxAssert(!x_empty->Equals(nullptr) && x_empty->Equals((new StringRaw(""))));
+		x_a2.Assign(StringRaw::Format((new StringRaw("1 = {{{0,-4}}} 2 = {1,4}!")),1,2));
+		CxAssert(x_a2->Equals((new StringRaw("1 = {1   } 2 =    2!"))));
+		x_a2.Assign(StringRaw::Format((new StringRaw("1 = {{{0,-4}}}!")),1));
+		CxAssert(x_a2->Equals((new StringRaw("1 = {1   }!"))));
 		PointerType<ArrayRaw<Object>> x_args = (new ArrayRaw<Object>(3))->Initialize((Object*) DoMiscTestArray0);
-		x_a2.Assign(StringRaw::Format(new StringRaw("1 = {{{0,-4}}} 2 = {1,4} 3 = {2}!"),x_args));
+		x_a2.Assign(StringRaw::Format((new StringRaw("1 = {{{0,-4}}} 2 = {1,4} 3 = {2}!")),x_args));
 		PointerType<CharEnumeratorRaw> x_enumerator = x_a2->GetEnumerator();
 		Int32 x_num2 = 0;
 		while (x_enumerator->MoveNext() )
@@ -3379,12 +3341,12 @@ namespace CABlock_NS
 		Double x_num3 = 2;
 		String x_text4 = x_text2 + x_empty + new Int32Box(x_num2) + new DoubleBox(x_num3) + new Int32Box(x_num);
 		StringTestRaw::TestConcat(x_text2,x_num,x_empty,x_num2,x_num3);
-		String x_a4 = new StringRaw("\"");
-		CxAssert(x_a4->Equals(new StringRaw("\"")));
-		x_a4.Assign(new StringRaw("c:\\Retest"));
-		CxAssert(x_a4->Equals(new StringRaw("c:\\Retest")));
-		x_a4.Assign(new StringRaw("c:\\Retest"));
-		CxAssert(x_a4->Equals(new StringRaw("c:\\Retest")));
+		String x_a4 = (new StringRaw("\""));
+		CxAssert(x_a4->Equals((new StringRaw("\""))));
+		x_a4.Assign((new StringRaw("c:\\Retest")));
+		CxAssert(x_a4->Equals((new StringRaw("c:\\Retest"))));
+		x_a4.Assign((new StringRaw("c:\\Retest")));
+		CxAssert(x_a4->Equals((new StringRaw("c:\\Retest"))));
 	}
 	void StringTestRaw::TestConcat(String x_str1,Int32 x_index,String x_str4,Int32 x_i,Double x_dbl)
 	{
@@ -3392,9 +3354,9 @@ namespace CABlock_NS
 	}
 	void StringTestRaw::DoEqualsTest()
 	{
-		String x_text = new StringRaw("12345");
-		CxAssert(StringRaw::Equals(x_text,new StringRaw("12345")));
-		CxAssert(x_text->Equals(new StringRaw("12345")));
+		String x_text = (new StringRaw("12345"));
+		CxAssert(StringRaw::Equals(x_text,(new StringRaw("12345"))));
+		CxAssert(x_text->Equals((new StringRaw("12345"))));
 		CxAssert(x_text->Equals(( Object ) x_text));
 		CxAssert(x_text->Equals(x_text));
 	}
@@ -3403,52 +3365,52 @@ namespace CABlock_NS
 		static Char DoParsingTestArray0[4] = {' ',',','.',':'};
 		static Char DoParsingTestArray1[2] = {'3','4'};
 		static String DoParsingTestArray2[3] = {new StringRaw("1"),new StringRaw("2"),new StringRaw("3")};
-		String x_text = new StringRaw("12 34 56");
+		String x_text = (new StringRaw("12 34 56"));
 		PointerType<ArrayRaw<String>> x_array = x_text->Split(nullptr);
 		CxAssert(x_array->get_Length().Equals(3));
-		CxAssert(new StringRaw("12")->Equals((*x_array->Address(0))));
-		CxAssert(new StringRaw("34")->Equals((*x_array->Address(1))));
-		CxAssert(new StringRaw("56")->Equals((*x_array->Address(2))));
-		String x_text2 = new StringRaw("42, 12, 19");
+		CxAssert((new StringRaw("12"))->Equals((*x_array->Address(0))));
+		CxAssert((new StringRaw("34"))->Equals((*x_array->Address(1))));
+		CxAssert((new StringRaw("56"))->Equals((*x_array->Address(2))));
+		String x_text2 = (new StringRaw("42, 12, 19"));
 		PointerType<ArrayRaw<Char>> x_separator = (new ArrayRaw<Char>(4))->Initialize((Char*) DoParsingTestArray0);
 		x_array.Assign(x_text2->Split(x_separator));
 		CxAssert(x_array->get_Length().Equals(5));
-		CxAssert(new StringRaw("42")->Equals((*x_array->Address(0))));
-		CxAssert(new StringRaw("")->Equals((*x_array->Address(1))));
-		CxAssert(new StringRaw("12")->Equals((*x_array->Address(2))));
-		CxAssert(new StringRaw("")->Equals((*x_array->Address(3))));
-		CxAssert(new StringRaw("19")->Equals((*x_array->Address(4))));
+		CxAssert((new StringRaw("42"))->Equals((*x_array->Address(0))));
+		CxAssert((new StringRaw(""))->Equals((*x_array->Address(1))));
+		CxAssert((new StringRaw("12"))->Equals((*x_array->Address(2))));
+		CxAssert((new StringRaw(""))->Equals((*x_array->Address(3))));
+		CxAssert((new StringRaw("19"))->Equals((*x_array->Address(4))));
 		x_array.Assign(x_text2->Split(x_separator,2));
 		CxAssert(x_array->get_Length().Equals(2));
-		CxAssert(new StringRaw("42")->Equals((*x_array->Address(0))));
-		CxAssert(new StringRaw(" 12, 19")->Equals((*x_array->Address(1))));
+		CxAssert((new StringRaw("42"))->Equals((*x_array->Address(0))));
+		CxAssert((new StringRaw(" 12, 19"))->Equals((*x_array->Address(1))));
 		String x_b = x_text->Substring(3);
-		CxAssert(new StringRaw("34 56")->Equals(x_b));
+		CxAssert((new StringRaw("34 56"))->Equals(x_b));
 		x_b.Assign(x_text->Substring(3,2));
-		CxAssert(new StringRaw("34")->Equals(x_b));
-		String x_text3 = new StringRaw("  12345  ");
+		CxAssert((new StringRaw("34"))->Equals(x_b));
+		String x_text3 = (new StringRaw("  12345  "));
 		String x_b2 = x_text3->Trim();
-		CxAssert(new StringRaw("12345")->Equals(x_b2));
-		String x_text4 = new StringRaw("*;|@123***456@|;*");
-		String x_text5 = new StringRaw("*;|@");
+		CxAssert((new StringRaw("12345"))->Equals(x_b2));
+		String x_text4 = (new StringRaw("*;|@123***456@|;*"));
+		String x_text5 = (new StringRaw("*;|@"));
 		PointerType<ArrayRaw<Char>> x_trimChars = x_text5->ToCharArray();
 		x_b2.Assign(x_text4->Trim(x_trimChars));
-		CxAssert(new StringRaw("123***456")->Equals(x_b2));
+		CxAssert((new StringRaw("123***456"))->Equals(x_b2));
 		x_b2.Assign(x_text3->TrimStart());
-		CxAssert(new StringRaw("12345  ")->Equals(x_b2));
+		CxAssert((new StringRaw("12345  "))->Equals(x_b2));
 		x_b2.Assign(x_text4->TrimStart(x_trimChars));
-		CxAssert(new StringRaw("123***456@|;*")->Equals(x_b2));
+		CxAssert((new StringRaw("123***456@|;*"))->Equals(x_b2));
 		x_b2.Assign(x_text3->TrimEnd());
-		CxAssert(new StringRaw("  12345")->Equals(x_b2));
+		CxAssert((new StringRaw("  12345"))->Equals(x_b2));
 		x_b2.Assign(x_text4->TrimEnd(x_trimChars));
-		CxAssert(new StringRaw("*;|@123***456")->Equals(x_b2));
+		CxAssert((new StringRaw("*;|@123***456"))->Equals(x_b2));
 		Int32 x_num = StringRaw::Compare(x_text,x_text3);
 		CxAssert(x_num > 0);
 		x_num = x_text3->CompareTo(x_text);
 		CxAssert(x_num < 0);
 		x_num = x_text3->CompareTo(( Object ) x_text);
 		CxAssert(x_num < 0);
-		CxAssert(x_text->EndsWith(new StringRaw("56")));
+		CxAssert(x_text->EndsWith((new StringRaw("56"))));
 		PointerType<ArrayRaw<Char>> x_array2 = (new ArrayRaw<Char>(2))->Initialize((Char*) DoParsingTestArray1);
 		CxAssert(x_text->IndexOfAny(x_array2).Equals(3));
 		CxAssert(x_text->IndexOfAny(x_array2,1).Equals(3));
@@ -3456,43 +3418,43 @@ namespace CABlock_NS
 		CxAssert(x_text->IndexOf('5').Equals(6));
 		CxAssert(x_text->IndexOf(' ',3).Equals(5));
 		CxAssert(x_text->IndexOf(' ',3,3).Equals(5));
-		CxAssert(x_text->IndexOf(new StringRaw("56")).Equals(6));
-		CxAssert(x_text->IndexOf(new StringRaw(" "),3).Equals(5));
-		CxAssert(x_text->IndexOf(new StringRaw(" "),3,3).Equals(5));
-		String x_text6 = new StringRaw("11223311");
+		CxAssert(x_text->IndexOf((new StringRaw("56"))).Equals(6));
+		CxAssert(x_text->IndexOf((new StringRaw(" ")),3).Equals(5));
+		CxAssert(x_text->IndexOf((new StringRaw(" ")),3,3).Equals(5));
+		String x_text6 = (new StringRaw("11223311"));
 		CxAssert(x_text6->LastIndexOf('1').Equals(7));
 		CxAssert(x_text6->LastIndexOf('1',4).Equals(1));
 		CxAssert(x_text6->LastIndexOf('1',4,4).Equals(1));
-		CxAssert(x_text6->LastIndexOf(new StringRaw("11")).Equals(6));
-		CxAssert(x_text6->LastIndexOf(new StringRaw("11"),4).Equals(0));
-		CxAssert(x_text6->LastIndexOf(new StringRaw("11"),4,5).Equals(0));
+		CxAssert(x_text6->LastIndexOf((new StringRaw("11"))).Equals(6));
+		CxAssert(x_text6->LastIndexOf((new StringRaw("11")),4).Equals(0));
+		CxAssert(x_text6->LastIndexOf((new StringRaw("11")),4,5).Equals(0));
 		(*x_array2->Address(0)) = '1';
 		(*x_array2->Address(1)) = '2';
 		CxAssert(x_text6->LastIndexOfAny(x_array2).Equals(7));
 		CxAssert(x_text6->LastIndexOfAny(x_array2,4).Equals(3));
 		CxAssert(x_text6->LastIndexOfAny(x_array2,4,4).Equals(3));
 		String x_a = x_text6->PadLeft(3 + x_text6->get_Length());
-		CxAssert(x_a->Equals(new StringRaw("   11223311")));
+		CxAssert(x_a->Equals((new StringRaw("   11223311"))));
 		x_a.Assign(x_text6->PadLeft(3 + x_text6->get_Length(),'-'));
-		CxAssert(x_a->Equals(new StringRaw("---11223311")));
+		CxAssert(x_a->Equals((new StringRaw("---11223311"))));
 		x_a.Assign(x_text6->PadRight(3 + x_text6->get_Length()));
-		CxAssert(x_a->Equals(new StringRaw("11223311   ")));
+		CxAssert(x_a->Equals((new StringRaw("11223311   "))));
 		x_a.Assign(x_text6->PadRight(3 + x_text6->get_Length(),'-'));
-		CxAssert(x_a->Equals(new StringRaw("11223311---")));
-		CxAssert(x_text6->StartsWith(new StringRaw("1122")));
-		CxAssert(x_text6->Replace('1','x')->Equals(new StringRaw("xx2233xx")));
-		CxAssert(x_text6->Replace(new StringRaw("1"),new StringRaw("x"))->Equals(new StringRaw("xx2233xx")));
-		CxAssert(x_text6->Replace(new StringRaw("11"),new StringRaw("x"))->Equals(new StringRaw("x2233x")));
-		CxAssert(x_text6->Remove(2,2)->Equals(new StringRaw("113311")));
-		CxAssert(((String)new StringRaw("aaAAaaAA"))->ToUpper()->Equals(new StringRaw("AAAAAAAA")));
-		CxAssert(((String)new StringRaw("aaAAaaAA"))->ToLower()->Equals(new StringRaw("aaaaaaaa")));
+		CxAssert(x_a->Equals((new StringRaw("11223311---"))));
+		CxAssert(x_text6->StartsWith((new StringRaw("1122"))));
+		CxAssert(x_text6->Replace('1','x')->Equals((new StringRaw("xx2233xx"))));
+		CxAssert(x_text6->Replace((new StringRaw("1")),(new StringRaw("x")))->Equals((new StringRaw("xx2233xx"))));
+		CxAssert(x_text6->Replace((new StringRaw("11")),(new StringRaw("x")))->Equals((new StringRaw("x2233x"))));
+		CxAssert(x_text6->Remove(2,2)->Equals((new StringRaw("113311"))));
+		CxAssert(((String)(new StringRaw("aaAAaaAA")))->ToUpper()->Equals((new StringRaw("AAAAAAAA"))));
+		CxAssert(((String)(new StringRaw("aaAAaaAA")))->ToLower()->Equals((new StringRaw("aaaaaaaa"))));
 		PointerType<ArrayRaw<String>> x_value = (new ArrayRaw<String>(3))->Initialize((String*) DoParsingTestArray2);
-		CxAssert(StringRaw::Join(new StringRaw(","),x_value)->Equals(new StringRaw("1,2,3")));
-		CxAssert(StringRaw::Join(new StringRaw(","),x_value,1,2)->Equals(new StringRaw("2,3")));
-		x_text6.Assign(x_text->Insert(3,new StringRaw("111")));
-		CxAssert(x_text6->Equals(new StringRaw("12 11134 56")));
-		String x_text7 = new StringRaw("3.33");
-		if ( !x_text7->CompareTo(new StringRaw("3.33")).Equals(0) )
+		CxAssert(StringRaw::Join((new StringRaw(",")),x_value)->Equals((new StringRaw("1,2,3"))));
+		CxAssert(StringRaw::Join((new StringRaw(",")),x_value,1,2)->Equals((new StringRaw("2,3"))));
+		x_text6.Assign(x_text->Insert(3,(new StringRaw("111"))));
+		CxAssert(x_text6->Equals((new StringRaw("12 11134 56"))));
+		String x_text7 = (new StringRaw("3.33"));
+		if ( !x_text7->CompareTo((new StringRaw("3.33"))).Equals(0) )
 		{
 			CxAssert(false);
 		}
@@ -3503,28 +3465,28 @@ namespace CABlock_NS
 		static String DoConcatTestArray1[4] = {new StringRaw("1 "),new StringRaw("2 "),new StringRaw("3 "),new StringRaw("4")};
 		PointerType<ArrayRaw<Object>> x_array = (new ArrayRaw<Object>(4))->Initialize((Object*) DoConcatTestArray0);
 		String x_a = StringRaw::Concat((*x_array->Address(0)));
-		CxAssert(x_a->Equals(new StringRaw("1 ")));
+		CxAssert(x_a->Equals((new StringRaw("1 "))));
 		x_a.Assign(StringRaw::Concat(x_array));
-		CxAssert(x_a->Equals(new StringRaw("1 2 3 4")));
+		CxAssert(x_a->Equals((new StringRaw("1 2 3 4"))));
 		PointerType<ArrayRaw<String>> x_array2 = (new ArrayRaw<String>(4))->Initialize((String*) DoConcatTestArray1);
 		x_a.Assign(StringRaw::Concat(x_array2));
-		CxAssert(x_a->Equals(new StringRaw("1 2 3 4")));
+		CxAssert(x_a->Equals((new StringRaw("1 2 3 4"))));
 		x_a.Assign(StringRaw::Concat((*x_array->Address(0)),(*x_array->Address(1))));
-		CxAssert(x_a->Equals(new StringRaw("1 2 ")));
+		CxAssert(x_a->Equals((new StringRaw("1 2 "))));
 		x_a.Assign((*x_array2->Address(0)) + (*x_array2->Address(1)));
-		CxAssert(x_a->Equals(new StringRaw("1 2 ")));
+		CxAssert(x_a->Equals((new StringRaw("1 2 "))));
 		x_a.Assign(StringRaw::Concat((*x_array->Address(0)),(*x_array->Address(1)),(*x_array->Address(2))));
-		CxAssert(x_a->Equals(new StringRaw("1 2 3 ")));
+		CxAssert(x_a->Equals((new StringRaw("1 2 3 "))));
 		x_a.Assign((*x_array2->Address(0)) + (*x_array2->Address(1)) + (*x_array2->Address(2)));
-		CxAssert(x_a->Equals(new StringRaw("1 2 3 ")));
+		CxAssert(x_a->Equals((new StringRaw("1 2 3 "))));
 		x_a.Assign((*x_array2->Address(0)) + (*x_array2->Address(1)) + (*x_array2->Address(2)) + (*x_array2->Address(3)));
-		CxAssert(x_a->Equals(new StringRaw("1 2 3 4")));
+		CxAssert(x_a->Equals((new StringRaw("1 2 3 4"))));
 	}
 	void StringTestRaw::CxAssert(Boolean x_x)
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("String TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("String TestFailed")));
 		}
 	}
 	TimeTestRaw::TimeTestRaw(CABlock x_caBlock)
@@ -3534,14 +3496,14 @@ namespace CABlock_NS
 	}
 	void TimeTestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing TimeTest"));
-		x_caBlock->Send(new StringRaw("\tDoing TestTimeSpan"));
+		x_caBlock->Send((new StringRaw("Doing TimeTest")));
+		x_caBlock->Send((new StringRaw("\tDoing TestTimeSpan")));
 		TestTimeSpan();
-		x_caBlock->Send(new StringRaw("\tDoing TestDateTime"));
+		x_caBlock->Send((new StringRaw("\tDoing TestDateTime")));
 		TestDateTime();
-		x_caBlock->Send(new StringRaw("\tDoing DateTimeMethodTests"));
+		x_caBlock->Send((new StringRaw("\tDoing DateTimeMethodTests")));
 		DateTimeMethodTests();
-		x_caBlock->Send(new StringRaw("\tDoing TimeArrayTests"));
+		x_caBlock->Send((new StringRaw("\tDoing TimeArrayTests")));
 		TimeArrayTests();
 	}
 	void TimeTestRaw::TestTimeSpan()
@@ -3550,7 +3512,7 @@ namespace CABlock_NS
 		TimeSpan x_timeSpan2 = ((TimeSpan)x_timeSpan).Add(x_timeSpan);
 		CxAssert(x_timeSpan2.get_Ticks().Equals(200));
 		CxAssert(TimeSpanRaw::Compare(x_timeSpan,x_timeSpan2) < 0);
-		CxAssert(((TimeSpan)x_timeSpan).CompareTo(( Object ) new TimeSpanBox(x_timeSpan2)) < 0);
+		CxAssert(((TimeSpan)x_timeSpan).CompareTo((new TimeSpanBox(new TimeSpanBox(x_timeSpan2) ))) < 0);
 		CxAssert(((TimeSpan)x_timeSpan).CompareTo(x_timeSpan2) < 0);
 		x_timeSpan = ((TimeSpan)x_timeSpan2).Duration();
 		CxAssert(x_timeSpan.get_Ticks().Equals(200));
@@ -3566,13 +3528,13 @@ namespace CABlock_NS
 		x_timeSpan = ((TimeSpan)x_timeSpan).Negate();
 		CxAssert(x_timeSpan.get_Ticks().Equals(-6500000));
 		CxAssert(((TimeSpan)x_timeSpan).Subtract(x_timeSpan2).get_Ticks().Equals(-6500200));
-		CxAssert(TimeSpanRaw::Parse(new StringRaw("1.1:1:1")).get_Ticks().Equals(900610000000));
-		CxAssert(TimeSpanRaw::Parse(new StringRaw("1.1:1:1.200")).get_Ticks().Equals(900612000000));
-		CxAssert(TimeSpanRaw::Parse(new StringRaw("1:1:1")).get_Ticks().Equals(36610000000));
-		CxAssert(TimeSpanRaw::Parse(new StringRaw("22")).get_Ticks().Equals(19008000000000));
-		x_timeSpan = TimeSpanRaw::Parse(new StringRaw("1.2:3:4.200"));
+		CxAssert(TimeSpanRaw::Parse((new StringRaw("1.1:1:1"))).get_Ticks().Equals(900610000000));
+		CxAssert(TimeSpanRaw::Parse((new StringRaw("1.1:1:1.200"))).get_Ticks().Equals(900612000000));
+		CxAssert(TimeSpanRaw::Parse((new StringRaw("1:1:1"))).get_Ticks().Equals(36610000000));
+		CxAssert(TimeSpanRaw::Parse((new StringRaw("22"))).get_Ticks().Equals(19008000000000));
+		x_timeSpan = TimeSpanRaw::Parse((new StringRaw("1.2:3:4.200")));
 		String x_a = x_timeSpan.ToString();
-		CxAssert(x_a->Equals(new StringRaw("1.02:03:04.2000000")));
+		CxAssert(x_a->Equals((new StringRaw("1.02:03:04.2000000"))));
 		CxAssert(x_timeSpan.get_Days().Equals(1));
 		CxAssert(x_timeSpan.get_Hours().Equals(2));
 		CxAssert(x_timeSpan.get_Minutes().Equals(3));
@@ -3607,15 +3569,15 @@ namespace CABlock_NS
 		x_timeSpan = TimeSpan(71,3,12,13);
 		CxAssert(x_timeSpan.get_Ticks().Equals(61459330000000));
 		String x_text = x_timeSpan.ToString();
-		CxAssert(x_text->Equals(new StringRaw("71.03:12:13")));
+		CxAssert(x_text->Equals((new StringRaw("71.03:12:13"))));
 		x_timeSpan = TimeSpan(-71,3,12,13);
 		CxAssert(x_timeSpan.get_Ticks().Equals(-61228670000000));
 		String x_text2 = x_timeSpan.ToString();
-		CxAssert(x_text2->Equals(new StringRaw("-70.20:47:47")));
-		x_timeSpan = TimeSpanRaw::Parse(new StringRaw("-71.03:12:13"));
+		CxAssert(x_text2->Equals((new StringRaw("-70.20:47:47"))));
+		x_timeSpan = TimeSpanRaw::Parse((new StringRaw("-71.03:12:13")));
 		CxAssert(x_timeSpan.get_Ticks().Equals(-61459330000000));
 		String x_text3 = x_timeSpan.ToString();
-		CxAssert(x_text3->Equals(new StringRaw("-71.03:12:13")));
+		CxAssert(x_text3->Equals((new StringRaw("-71.03:12:13"))));
 		Object x_obj = TimeSpan::MinValue;
 		CxAssert(( ( TimeSpan ) x_obj->get_AsTimeSpan() ).get_Ticks().Equals(TimeSpan::MinValue.get_Ticks()));
 		TimeSpan x_minValue = TimeSpan::MinValue;
@@ -3723,12 +3685,12 @@ namespace CABlock_NS
 		CxAssert(x_dateTime2.get_Ticks().Equals(631945657501000000));
 		CxAssert(x_dateTime2.get_Hour().Equals(14));
 		String x_text = ((DateTime)x_dateTime2).ToString();
-		CxAssert(x_text->Equals(new StringRaw("7/23/2003 2:02:30 PM")));
+		CxAssert(x_text->Equals((new StringRaw("7/23/2003 2:02:30 PM"))));
 		x_dateTime2 = DateTime(2003,7,23,2,20,1,100);
 		CxAssert(x_dateTime2.get_Ticks().Equals(631945236011000000));
 		CxAssert(x_dateTime2.get_Hour().Equals(2));
 		x_text.Assign(((DateTime)x_dateTime2).ToString());
-		CxAssert(x_text->Equals(new StringRaw("7/23/2003 2:20:01 AM")));
+		CxAssert(x_text->Equals((new StringRaw("7/23/2003 2:20:01 AM"))));
 		CxAssert(0.get_Ticks().Equals(0));
 		CxAssert(3155378975999999999.get_Ticks().Equals(3155378975999999999));
 		Object x_obj = 0;
@@ -3788,7 +3750,7 @@ namespace CABlock_NS
 	{
 		if ( MathRaw::Abs(x_x - x_y) > 1E-05 )
 		{
-			x_caBlock->TestFailed(new StringRaw("Time TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("Time TestFailed")));
 		}
 	}
 	void TimeTestRaw::CxAssert(Boolean x_x)
@@ -3800,7 +3762,7 @@ namespace CABlock_NS
 	}
 	void TimeTestRaw::TimeTestFailed()
 	{
-		x_caBlock->TestFailed(new StringRaw("Time TestFailed"));
+		x_caBlock->TestFailed((new StringRaw("Time TestFailed")));
 	}
 	TimingTestRaw::TimingTestRaw()
 	{
@@ -3823,40 +3785,40 @@ namespace CABlock_NS
 	}
 	void UInt16TestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing UInt16Test"));
-		x_caBlock->Send(new StringRaw("\tDoing UInt16MethodsTest"));
+		x_caBlock->Send((new StringRaw("Doing UInt16Test")));
+		x_caBlock->Send((new StringRaw("\tDoing UInt16MethodsTest")));
 		UInt16MethodsTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoUnSignedMath"));
+		x_caBlock->Send((new StringRaw("\tDoing DoUnSignedMath")));
 		DoUnSignedMath();
-		x_caBlock->Send(new StringRaw("\tDoing UInt16Operators"));
+		x_caBlock->Send((new StringRaw("\tDoing UInt16Operators")));
 		UInt16Operators();
-		x_caBlock->Send(new StringRaw("\tDoing UInt16ArrayTest"));
+		x_caBlock->Send((new StringRaw("\tDoing UInt16ArrayTest")));
 		UInt16ArrayTest();
-		x_caBlock->Send(new StringRaw("\tDoing UInt16MiscTests"));
+		x_caBlock->Send((new StringRaw("\tDoing UInt16MiscTests")));
 		UInt16MiscTests();
 	}
 	void UInt16TestRaw::UInt16MethodsTest()
 	{
 		UInt16 x_num = 5;
 		CxAssert(((UInt16)x_num).CompareTo(5).Equals(0));
-		CxAssert(((UInt16)x_num).CompareTo(( Object ) ( UInt16 ) 5).Equals(0));
+		CxAssert(((UInt16)x_num).CompareTo((new UInt16Box(( UInt16 ) 5 ))).Equals(0));
 		CxAssert(((UInt16)x_num).Equals(5));
-		CxAssert(((UInt16)x_num).Equals(( Object ) ( UInt16 ) 5));
-		CxAssert(UInt16Raw::Parse(new StringRaw("77")).Equals(77));
-		CxAssert(new StringRaw("5")->Equals(((UInt16)x_num).ToString()));
+		CxAssert(((UInt16)x_num).Equals((new UInt16Box(( UInt16 ) 5 ))));
+		CxAssert(UInt16Raw::Parse((new StringRaw("77"))).Equals(77));
+		CxAssert((new StringRaw("5"))->Equals(((UInt16)x_num).ToString()));
 		x_num = 65535;
 		CxAssert(65535.Equals(x_num));
 		x_num = 0;
 		CxAssert(x_num.Equals(0));
 		String x_text = ((UInt16)65535).ToString();
-		CxAssert(x_text->Equals(new StringRaw("65535")));
+		CxAssert(x_text->Equals((new StringRaw("65535"))));
 		CxAssert(UInt16Raw::Parse(x_text).Equals(65535));
 		String x_text2 = ( ( UInt16 ) 0 )->ToString();
-		CxAssert(x_text2->Equals(new StringRaw("0")));
+		CxAssert(x_text2->Equals((new StringRaw("0"))));
 		CxAssert(UInt16Raw::Parse(x_text2).Equals(0));
 		Object x_obj = ( UInt16 ) 5;
 		CxAssert(x_obj->Equals(( UInt16 ) 5));
-		CxAssert(x_obj->ToString()->Equals(new StringRaw("5")));
+		CxAssert(x_obj->ToString()->Equals((new StringRaw("5"))));
 	}
 	void UInt16TestRaw::DoUnSignedMath()
 	{
@@ -4037,22 +3999,22 @@ namespace CABlock_NS
 		CxAssert(MathRaw::Min(x_num,x_num2).Equals(0));
 		PointerType<StringBuilderRaw> x_stringBuilder = new StringBuilderRaw();
 		x_stringBuilder->Append(x_num2);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("1")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("1"))));
 		x_stringBuilder->Insert(1,x_num);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("10")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("10"))));
 	}
 	void UInt16TestRaw::CxAssert(Boolean x_x)
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("UInt16 TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("UInt16 TestFailed")));
 		}
 	}
 	void UInt16TestRaw::CxAssert(Boolean x_x,Boolean x_y)
 	{
 		if ( !x_x.Equals(x_y) )
 		{
-			x_caBlock->TestFailed(new StringRaw("UInt16 TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("UInt16 TestFailed")));
 		}
 	}
 	UInt32TestRaw::UInt32TestRaw(CABlock x_caBlock)
@@ -4061,40 +4023,40 @@ namespace CABlock_NS
 	}
 	void UInt32TestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing UInt32Test"));
-		x_caBlock->Send(new StringRaw("\tDoing UInt32MethodsTest"));
+		x_caBlock->Send((new StringRaw("Doing UInt32Test")));
+		x_caBlock->Send((new StringRaw("\tDoing UInt32MethodsTest")));
 		UInt32MethodsTest();
-		x_caBlock->Send(new StringRaw("\tDoing DoUnSignedMath"));
+		x_caBlock->Send((new StringRaw("\tDoing DoUnSignedMath")));
 		DoUnSignedMath();
-		x_caBlock->Send(new StringRaw("\tDoing UInt32Operators"));
+		x_caBlock->Send((new StringRaw("\tDoing UInt32Operators")));
 		UInt32Operators();
-		x_caBlock->Send(new StringRaw("\tDoing UInt32ArrayTest"));
+		x_caBlock->Send((new StringRaw("\tDoing UInt32ArrayTest")));
 		UInt32ArrayTest();
-		x_caBlock->Send(new StringRaw("\tDoing UInt32MiscTests"));
+		x_caBlock->Send((new StringRaw("\tDoing UInt32MiscTests")));
 		UInt32MiscTests();
 	}
 	void UInt32TestRaw::UInt32MethodsTest()
 	{
 		UInt32 x_num = 5;
 		CxAssert(((UInt32)x_num).CompareTo(5).Equals(0));
-		CxAssert(((UInt32)x_num).CompareTo(( Object ) 5).Equals(0));
+		CxAssert(((UInt32)x_num).CompareTo((new UInt32Box(5 ))).Equals(0));
 		CxAssert(((UInt32)x_num).Equals(5));
-		CxAssert(((UInt32)x_num).Equals(( Object ) 5));
-		CxAssert(UInt32Raw::Parse(new StringRaw("77")).Equals(77));
-		CxAssert(new StringRaw("5")->Equals(((UInt32)x_num).ToString()));
+		CxAssert(((UInt32)x_num).Equals((new UInt32Box(5 ))));
+		CxAssert(UInt32Raw::Parse((new StringRaw("77"))).Equals(77));
+		CxAssert((new StringRaw("5"))->Equals(((UInt32)x_num).ToString()));
 		x_num = 4294967295;
 		CxAssert(-1.Equals(( Int32 ) x_num));
 		x_num = 0;
 		CxAssert(x_num.Equals(0));
 		String x_text = ((UInt32)4294967295).ToString();
-		CxAssert(x_text->Equals(new StringRaw("4294967295")));
+		CxAssert(x_text->Equals((new StringRaw("4294967295"))));
 		CxAssert(UInt32Raw::Parse(x_text).Equals(4294967295));
 		String x_text2 = ((UInt32)0).ToString();
-		CxAssert(x_text2->Equals(new StringRaw("0")));
+		CxAssert(x_text2->Equals((new StringRaw("0"))));
 		CxAssert(UInt32Raw::Parse(x_text2).Equals(0));
 		Object x_obj = 5;
 		CxAssert(x_obj->Equals(5));
-		CxAssert(x_obj->ToString()->Equals(new StringRaw("5")));
+		CxAssert(x_obj->ToString()->Equals((new StringRaw("5"))));
 	}
 	void UInt32TestRaw::DoUnSignedMath()
 	{
@@ -4275,20 +4237,20 @@ namespace CABlock_NS
 		CxAssert(MathRaw::Min(x_val,x_num).Equals(0));
 		PointerType<StringBuilderRaw> x_stringBuilder = new StringBuilderRaw();
 		x_stringBuilder->Append(x_num);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("1")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("1"))));
 	}
 	void UInt32TestRaw::CxAssert(Boolean x_x)
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("UInt32 TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("UInt32 TestFailed")));
 		}
 	}
 	void UInt32TestRaw::CxAssert(Boolean x_x,Boolean x_y)
 	{
 		if ( !x_x.Equals(x_y) )
 		{
-			x_caBlock->TestFailed(new StringRaw("UInt32 TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("UInt32 TestFailed")));
 		}
 	}
 	UInt64TestRaw::UInt64TestRaw(CABlock x_caBlock)
@@ -4297,40 +4259,40 @@ namespace CABlock_NS
 	}
 	void UInt64TestRaw::Test()
 	{
-		x_caBlock->Send(new StringRaw("Doing UInt64Test"));
-		x_caBlock->Send(new StringRaw("\tDoing UInt64MethodsTest"));
+		x_caBlock->Send((new StringRaw("Doing UInt64Test")));
+		x_caBlock->Send((new StringRaw("\tDoing UInt64MethodsTest")));
 		UInt64MethodsTest();
-		x_caBlock->Send(new StringRaw("\tDoing UInt64UnSignedMath"));
+		x_caBlock->Send((new StringRaw("\tDoing UInt64UnSignedMath")));
 		UInt64UnSignedMath();
-		x_caBlock->Send(new StringRaw("\tDoing UInt64Operators"));
+		x_caBlock->Send((new StringRaw("\tDoing UInt64Operators")));
 		UInt64Operators();
-		x_caBlock->Send(new StringRaw("\tDoing UInt64ArrayTest"));
+		x_caBlock->Send((new StringRaw("\tDoing UInt64ArrayTest")));
 		UInt64ArrayTest();
-		x_caBlock->Send(new StringRaw("\tDoing UInt64MiscTests"));
+		x_caBlock->Send((new StringRaw("\tDoing UInt64MiscTests")));
 		UInt64MiscTests();
 	}
 	void UInt64TestRaw::UInt64MethodsTest()
 	{
 		UInt64 x_num = 5;
 		CxAssert(((UInt64)x_num).CompareTo(5).Equals(0));
-		CxAssert(((UInt64)x_num).CompareTo(( Object ) 5).Equals(0));
+		CxAssert(((UInt64)x_num).CompareTo((new UInt64Box(5 ))).Equals(0));
 		CxAssert(((UInt64)x_num).Equals(5));
-		CxAssert(((UInt64)x_num).Equals(( Object ) 5));
-		CxAssert(UInt64Raw::Parse(new StringRaw("77")).Equals(77));
-		CxAssert(new StringRaw("5")->Equals(((UInt64)x_num).ToString()));
+		CxAssert(((UInt64)x_num).Equals((new UInt64Box(5 ))));
+		CxAssert(UInt64Raw::Parse((new StringRaw("77"))).Equals(77));
+		CxAssert((new StringRaw("5"))->Equals(((UInt64)x_num).ToString()));
 		x_num = 18446744073709551615;
 		CxAssert(18446744073709551615.Equals(x_num));
 		x_num = 0;
 		CxAssert(x_num.Equals(0));
 		String x_text = ((UInt64)18446744073709551615).ToString();
-		CxAssert(x_text->Equals(new StringRaw("18446744073709551615")));
+		CxAssert(x_text->Equals((new StringRaw("18446744073709551615"))));
 		CxAssert(UInt64Raw::Parse(x_text).Equals(18446744073709551615));
 		String x_text2 = ((UInt64)0).ToString();
-		CxAssert(x_text2->Equals(new StringRaw("0")));
+		CxAssert(x_text2->Equals((new StringRaw("0"))));
 		CxAssert(UInt64Raw::Parse(x_text2).Equals(0));
 		Object x_obj = 5;
 		CxAssert(x_obj->Equals(5));
-		CxAssert(x_obj->ToString()->Equals(new StringRaw("5")));
+		CxAssert(x_obj->ToString()->Equals((new StringRaw("5"))));
 	}
 	void UInt64TestRaw::UInt64UnSignedMath()
 	{
@@ -4602,22 +4564,22 @@ namespace CABlock_NS
 		CxAssert(MathRaw::Min(x_num,x_num2).Equals(0));
 		PointerType<StringBuilderRaw> x_stringBuilder = new StringBuilderRaw();
 		x_stringBuilder->Append(x_num2);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("1")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("1"))));
 		x_stringBuilder->Insert(1,x_num);
-		CxAssert(x_stringBuilder->ToString()->Equals(new StringRaw("10")));
+		CxAssert(x_stringBuilder->ToString()->Equals((new StringRaw("10"))));
 	}
 	void UInt64TestRaw::CxAssert(Boolean x_x)
 	{
 		if ( !x_x )
 		{
-			x_caBlock->TestFailed(new StringRaw("UInt64 TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("UInt64 TestFailed")));
 		}
 	}
 	void UInt64TestRaw::CxAssert(Boolean x_x,Boolean x_y)
 	{
 		if ( !x_x.Equals(x_y) )
 		{
-			x_caBlock->TestFailed(new StringRaw("UInt64 TestFailed"));
+			x_caBlock->TestFailed((new StringRaw("UInt64 TestFailed")));
 		}
 	}
 }

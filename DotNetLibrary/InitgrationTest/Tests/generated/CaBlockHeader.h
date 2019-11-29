@@ -131,16 +131,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x,Boolean x_y);
 		void CxAssert(Boolean x_x);
 	};
-	class BufferTestRaw : public ObjectRaw
-	{
-		public:
-		CABlock x_caBlock;
-		PointerType<ArrayRaw<Int32>> x_in1dArray;
-		PointerType<ArrayRaw<Int32>> x_out1dArray;
-		BufferTestRaw(CABlock x_caBlock);
-		void Test();
-		void CxAssert(Boolean x_x);
-	};
 	class ByteTestRaw : public ObjectRaw
 	{
 		public:

@@ -32,4 +32,14 @@ namespace DotnetLibrary
 	private:
 		PointerType<ArrayRaw<Char>>	characterData;
 	};
+	struct BooleanRaw {
+		static Boolean	Parse(StringRaw* string) {
+			return(true);
+		}
+	};
+	struct ByteRaw {
+		static Byte	Parse(StringRaw* string) {
+			return(true);
+		}
+	};
 }

@@ -43,6 +43,9 @@ namespace DotnetLibrary
 		operator StringRaw* () {
 			return value;
 		}
+		operator ObjectRaw* () {
+			return value;
+		}
 		T* operator->()
 		{
 			return value;

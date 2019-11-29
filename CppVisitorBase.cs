@@ -344,6 +344,17 @@ namespace CppTranslator
 		public void VisitCastExpression(CastExpression castExpression)
 		{
 			ICSharpCode.Decompiler.IL.UnboxAny inst = castExpression.Annotation<ICSharpCode.Decompiler.IL.UnboxAny>();
+			IType type = castExpression.Type.GetResolveResult().Type;
+			IType fromType = castExpression.Expression.GetResolveResult().Type;
+			if (type.Name == "Object" && fromType.Kind != TypeKind.Class)
+			{
+				Formatter.Append("(new ");
+				Formatter.Append(fromType.Name);
+				Formatter.Append("Box(");
+				castExpression.Expression.AcceptVisitor(this);
+				Formatter.Append(" ))");
+				return;
+			}
 			Formatter.Append("( ");
 			castExpression.Type.AcceptVisitor(this);
 			Formatter.Append(" ) ");
@@ -1161,9 +1172,9 @@ namespace CppTranslator
 			bool isString = primitiveExpression.Value is String;
 			if (isString)
 			{
-				Formatter.Append("new StringRaw(");
+				Formatter.Append("(new StringRaw(");
 				Formatter.AppendStringsWithControl(primitiveExpression.Value.ToString());
-				Formatter.Append(")");
+				Formatter.Append("))");
 			}
 			else
 			{
