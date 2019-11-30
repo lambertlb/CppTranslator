@@ -63,13 +63,28 @@ namespace CppTranslator
 
 		internal void CastToType(IType targetType, AstNode memberReferenceExpression)
 		{
+			CastToType(targetType);
+			memberReferenceExpression.AcceptVisitor(this);
+			if (targetType.Kind != TypeKind.Unknown)
+			{
+				Formatter.Append(")");
+			}
+		}
+
+		private void CastToType(IType targetType)
+		{
 			if (targetType.Kind != TypeKind.Unknown)
 			{
 				Formatter.Append("((");
 				Formatter.Append(targetType.Name);
 				Formatter.Append(")");
 			}
-			memberReferenceExpression.AcceptVisitor(this);
+		}
+
+		internal void CastToType(IType targetType, String whatToCast)
+		{
+			CastToType(targetType);
+			Formatter.Append(whatToCast);
 			if (targetType.Kind != TypeKind.Unknown)
 			{
 				Formatter.Append(")");
@@ -306,7 +321,14 @@ namespace CppTranslator
 					Formatter.Append(".");
 				}
 				Formatter.Append("Equals(");
-				binaryOperatorExpression.Right.AcceptVisitor(this);
+				IType right = binaryOperatorExpression.Right.GetResolveResult().Type;
+				if (type.Kind == TypeKind.Struct)
+				{
+					CastToType(type, binaryOperatorExpression.Right);
+				} else
+				{
+					binaryOperatorExpression.Right.AcceptVisitor(this);
+				}
 				Formatter.Append(")");
 				return;
 			}
@@ -314,7 +336,14 @@ namespace CppTranslator
 			Formatter.Append(" ");
 			Formatter.Append(BinaryOperatorExpression.GetOperatorRole(binaryOperatorExpression.Operator).ToString());
 			Formatter.Append(" ");
-			binaryOperatorExpression.Right.AcceptVisitor(this);
+			if (type.Kind == TypeKind.Struct)
+			{
+				CastToType(type, binaryOperatorExpression.Right);
+			}
+			else
+			{
+				binaryOperatorExpression.Right.AcceptVisitor(this);
+			}
 		}
 
 		public void VisitBlockStatement(BlockStatement blockStatement)
@@ -865,12 +894,12 @@ namespace CppTranslator
 				HandleEnumExpression(type, sym);
 				return;
 			}
-			if (HandleConstants(memberReferenceExpression.Target.ToString(), memberReferenceExpression.MemberNameToken.Name))
+			IType targetType = memberReferenceExpression.Target.GetResolveResult().Type;
+			if (HandleConstants(memberReferenceExpression.Target.ToString(), memberReferenceExpression.MemberNameToken.Name, targetType))
 			{
 				return;
 			}
 			memberReferenceExpression.Target.AcceptVisitor(this);
-			IType targetType = memberReferenceExpression.Target.GetResolveResult().Type;
 			var sym2 = memberReferenceExpression.Target.GetSymbol() as IEntity;
 			if (sym != null && sym.IsStatic)
 			{
@@ -964,12 +993,12 @@ namespace CppTranslator
 			return (inst != null && inst is ICSharpCode.Decompiler.IL.LdLen);
 		}
 
-		private bool HandleConstants(String instance, String field)
+		private bool HandleConstants(String instance, String field, IType targetType)
 		{
 			String key = instance + field;
 			if (substitutes.ContainsKey(key))
 			{
-				Formatter.Append(substitutes[key]);
+				CastToType(targetType, substitutes[key]);
 				return (true);
 			}
 			return (false);
@@ -1541,8 +1570,9 @@ namespace CppTranslator
 		{
 			Formatter.AppendName(variableInitializer.Name);
 			Formatter.Append(" = ");
-			variableInitializer.Initializer.AcceptVisitor(this);
-			//			Formatter.AppendLine(";");
+			IType type = variableInitializer.GetResolveResult().Type;
+			CastToType(type, variableInitializer.Initializer);
+//			variableInitializer.Initializer.AcceptVisitor(this);
 		}
 
 		public void VisitTypeOfExpression(TypeOfExpression typeOfExpression)

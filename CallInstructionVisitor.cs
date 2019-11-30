@@ -53,7 +53,7 @@ namespace CppTranslator
 				{
 					IType targetType = memberReferenceExpression.Target.GetResolveResult().Type;
 					CppVisitorBase.CastToType(targetType, memberReferenceExpression.Target);
-					if (targetType.Kind == TypeKind.Struct)
+					if (inst.Method.DeclaringType.Kind == TypeKind.Struct)
 					{
 						Formatter.Append(".");
 					}
