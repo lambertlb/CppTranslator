@@ -49,6 +49,42 @@ namespace DotnetLibrary
 		virtual Double		get_AsDouble() {
 			return(0);
 		}
+		virtual Boolean		Equals(Boolean v) {
+			return(true);
+		}
+		virtual Boolean		Equals(Char v) {
+			return(true);
+		}
+		virtual Boolean		Equals(Byte v) {
+			return(true);
+		}
+		virtual Boolean		Equals(Int16 v) {
+			return(true);
+		}
+		virtual Boolean		Equals(UInt16 v) {
+			return(true);
+		}
+		virtual Boolean		Equals(Int32 v) {
+			return(true);
+		}
+		virtual Boolean		Equals(UInt32 v) {
+			return(true);
+		}
+		virtual Boolean		Equals(Int64 v) {
+			return(true);
+		}
+		virtual Boolean		Equals(UInt64 v) {
+			return(true);
+		}
+		virtual Boolean		Equals(Single v) {
+			return(true);
+		}
+		virtual Boolean		Equals(Double v) {
+			return(true);
+		}
+		virtual Boolean		Equals(StringRaw* v) {
+			return(true);
+		}
 	};
 	class BlockBaseRaw : public ObjectRaw
 	{
@@ -56,4 +92,5 @@ namespace DotnetLibrary
 	};
 	typedef	PointerType<ObjectRaw>	Object;
 	typedef PointerType<BlockBaseRaw> BlockBase;
+
 }

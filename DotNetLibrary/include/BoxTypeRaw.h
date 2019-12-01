@@ -63,4 +63,6 @@ namespace DotnetLibrary
 	typedef	BoxTypeRaw <UInt64>		UInt64Box;
 	typedef	BoxTypeRaw<Single>		SingleBox;
 	typedef	BoxTypeRaw<Double>		DoubleBox;
+	typedef	BoxTypeRaw<TimeSpan>	TimeSpanBox;
+	typedef	BoxTypeRaw<DateTime>	DateTimeBox;
 }

@@ -61,14 +61,37 @@ namespace CppTranslator
 		{
 		}
 
-		internal void CastToType(IType targetType, AstNode memberReferenceExpression)
+		public void CastToType(IType toType, IType fromType, AstNode expression, bool needGetAs)
 		{
-			CastToType(targetType);
-			memberReferenceExpression.AcceptVisitor(this);
-			if (targetType.Kind != TypeKind.Unknown)
+			if (toType.Kind == TypeKind.Array || toType.Kind == TypeKind.Unknown || toType.Kind == fromType.Kind)
 			{
-				Formatter.Append(")");
+				expression.AcceptVisitor(this);
+				return;
 			}
+			if (toType.Name == "Object" && fromType.Kind != TypeKind.Class)
+			{
+				Formatter.Append("(new ");
+				Formatter.Append(fromType.Name);
+				Formatter.Append("Box(");
+				expression.AcceptVisitor(this);
+				Formatter.Append(" ))");
+				return;
+			}
+			Formatter.Append("( ");
+			Formatter.Append(toType.Name);
+			Formatter.Append(" ) ");
+			expression.AcceptVisitor(this);
+			if (needGetAs)
+			{
+				Formatter.Append("->get_As");
+				Formatter.Append(toType.Name);
+				Formatter.Append("()");
+			}
+		}
+		internal void CastToType(IType toType, AstNode expression)
+		{
+			IType fromType = expression.GetResolveResult().Type;
+			CastToType(toType, fromType, expression, false);
 		}
 
 		private void CastToType(IType targetType)
@@ -373,29 +396,12 @@ namespace CppTranslator
 		public void VisitCastExpression(CastExpression castExpression)
 		{
 			ICSharpCode.Decompiler.IL.UnboxAny inst = castExpression.Annotation<ICSharpCode.Decompiler.IL.UnboxAny>();
-			IType type = castExpression.Type.GetResolveResult().Type;
+			IType toType = castExpression.Type.GetResolveResult().Type;
+			if (toType.Kind == TypeKind.Unknown)
+				toType = castExpression.GetResolveResult().Type;
 			IType fromType = castExpression.Expression.GetResolveResult().Type;
-			if (type.Name == "Object" && fromType.Kind != TypeKind.Class)
-			{
-				Formatter.Append("(new ");
-				Formatter.Append(fromType.Name);
-				Formatter.Append("Box(");
-				castExpression.Expression.AcceptVisitor(this);
-				Formatter.Append(" ))");
-				return;
-			}
-			Formatter.Append("( ");
-			castExpression.Type.AcceptVisitor(this);
-			Formatter.Append(" ) ");
-			castExpression.Expression.AcceptVisitor(this);
-			if (inst != null)
-			{
-				Formatter.Append("->get_As");
-				Formatter.Append(inst.Type.Name);
-				Formatter.Append("()");
-			}
+			CastToType(toType, fromType, castExpression.Expression, inst!= null);
 		}
-
 		public void VisitCatchClause(CatchClause catchClause)
 		{
 			throw new NotImplementedException();

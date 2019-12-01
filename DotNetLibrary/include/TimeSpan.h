@@ -3,7 +3,8 @@
 
 namespace DotnetLibrary
 {
-	struct TimeSpan {
+	class TimeSpan {
+	public:
 		TimeSpan(int64_t val = int64_t{}) : value(val) {
 		}
 		TimeSpan(Int32 day, Int32 hour = -1, Int32 minute = -1, Int32 second = -1, Int32 millisecond = -1) {
@@ -32,5 +33,4 @@ namespace DotnetLibrary
 		}
 		int64_t value;
 	};
-	typedef	BoxTypeRaw<TimeSpan>	TimeSpanBox;
 }

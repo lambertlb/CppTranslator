@@ -3,7 +3,8 @@
 
 namespace DotnetLibrary
 {
-	struct DateTime : public ObjectRaw {
+	class DateTime {
+	public:
 		DateTime(int64_t val = int64_t{}) : value(val) {
 		}
 		DateTime(Int32 year, Int32 month, Int32 day, Int32 hour = -1, Int32 minute = -1, Int32 second = -1, Int32 millisecond = -1) {
@@ -36,5 +37,4 @@ namespace DotnetLibrary
 		virtual	String				ToString() { return(nullptr); }
 		int64_t value;
 	};
-	typedef	BoxTypeRaw<DateTime>	DateTimeBox;
 }
