@@ -7,8 +7,8 @@ namespace DotnetLibrary
 	class StringRaw;
 	template<class T>
 	class  ValueType {
-		T value;
 	public:
+		T value;
 		ValueType() :value() {}
 		ValueType(T v) :value(v) {}
 		operator T() const { return value; }
@@ -69,7 +69,34 @@ namespace DotnetLibrary
 		friend ValueType operator>>(T v, ValueType iw) { return ValueType(v) >>= iw; }
 
 		// .Net functions
-		bool	Equals(T valueToCOmpare) {
+		bool	Equals(int8_t valueToCOmpare) {
+			return(valueToCOmpare == value);
+		}
+		bool	Equals(uint8_t valueToCOmpare) {
+			return(valueToCOmpare == value);
+		}
+		bool	Equals(int16_t valueToCOmpare) {
+			return(valueToCOmpare == value);
+		}
+		bool	Equals(uint16_t valueToCOmpare) {
+			return(valueToCOmpare == value);
+		}
+		bool	Equals(int32_t valueToCOmpare) {
+			return(valueToCOmpare == value);
+		}
+		bool	Equals(uint32_t valueToCOmpare) {
+			return(valueToCOmpare == value);
+		}
+		bool	Equals(int64_t valueToCOmpare) {
+			return(valueToCOmpare == value);
+		}
+		bool	Equals(uint64_t valueToCOmpare) {
+			return(valueToCOmpare == value);
+		}
+		bool	Equals(float valueToCOmpare) {
+			return(valueToCOmpare == value);
+		}
+		bool	Equals(double valueToCOmpare) {
 			return(valueToCOmpare == value);
 		}
 		bool	Equals(ObjectRaw* valueToCOmpare) {
@@ -103,6 +130,7 @@ namespace DotnetLibrary
 	typedef	ValueType <int64_t>		Int64;
 	typedef	ValueType <uint64_t>	UInt64;
 	typedef	ValueType<float>		Single;
+	typedef Single					Float;
 	typedef	ValueType<double>		Double;
 
 }

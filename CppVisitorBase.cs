@@ -367,7 +367,9 @@ namespace CppTranslator
 			{
 				if (binaryOperatorExpression.Operator == BinaryOperatorType.InEquality)
 					Formatter.Append("!");
+				Formatter.Append("(");
 				binaryOperatorExpression.Left.AcceptVisitor(this);
+				Formatter.Append(")");
 				if (type.Kind == TypeKind.Class)
 				{
 					Formatter.Append("->");
