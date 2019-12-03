@@ -33,5 +33,7 @@
     <ClInclude Include="include\StringBuilderRaw.h" />
     <ClInclude Include="include\BoxTypeRaw.h" />
     <ClInclude Include="include\Operators.h" />
+    <ClInclude Include="include\BufferRaw.h" />
+    <ClInclude Include="include\MathRaw.h" />
   </ItemGroup>
 </Project>

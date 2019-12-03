@@ -168,8 +168,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BoxTypeRaw.h" />
+    <ClInclude Include="include\BufferRaw.h" />
     <ClInclude Include="include\DateTime.h" />
     <ClInclude Include="include\DotnetTypes.h" />
+    <ClInclude Include="include\MathRaw.h" />
     <ClInclude Include="include\Operators.h" />
     <ClInclude Include="include\PointerType.h" />
     <ClInclude Include="include\ArrayRaw.h" />

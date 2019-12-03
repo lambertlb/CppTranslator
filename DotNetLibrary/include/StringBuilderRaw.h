@@ -8,6 +8,8 @@ namespace DotnetLibrary
 	public:
 		StringBuilderRaw() {
 		}
+		StringBuilderRaw& Append(Byte v) { return(*this); }
+		StringBuilderRaw& Insert(Int32 index, Byte v) { return(*this); }
 	private:
 		PointerType<ArrayRaw<Char>>	characterData;
 	};

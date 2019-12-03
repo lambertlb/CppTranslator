@@ -19,4 +19,6 @@
 #include "ArrayRaw.h"
 #include "StringRaw.h"
 #include "StringBuilderRaw.h"
+#include "BufferRaw.h"
+#include "MathRaw.h"
 #include "Operators.h"
