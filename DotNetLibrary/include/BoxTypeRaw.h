@@ -6,7 +6,7 @@ using namespace DotnetLibrary;
 namespace DotnetLibrary
 {
 	template<class T>
-	class BoxTypeRaw : public ObjectRaw {
+	class  BoxTypeRaw : public ObjectRaw {
 		T value;
 	public:
 		BoxTypeRaw() :value() {}

@@ -1,6 +1,6 @@
 #pragma once
 #ifdef WIN32
-#ifdef	BuildDLL
+#ifdef	DOTNETLIBRARY_EXPORTS
 #define	DLL_EXPORT	__declspec( dllexport )
 #else
 #define	DLL_EXPORT	__declspec( dllimport )
@@ -19,3 +19,4 @@
 #include "ArrayRaw.h"
 #include "StringRaw.h"
 #include "StringBuilderRaw.h"
+#include "Operators.h"

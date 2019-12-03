@@ -3,10 +3,10 @@
 
 namespace DotnetLibrary
 {
-	class ArrayBase;
-	class StringRaw;
+	class  ArrayBase;
+	class  StringRaw;
 	template< typename T >
-	struct PointerType
+	struct  PointerType
 	{
 	public:
 		PointerType(T* val)
@@ -63,5 +63,5 @@ namespace DotnetLibrary
 	private:
 		T* value;
 	};
-	typedef PointerType<StringRaw>	String;
+	typedef  PointerType<StringRaw>	String;
 }

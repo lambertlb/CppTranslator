@@ -6,7 +6,7 @@ namespace DotnetLibrary
 	class ObjectRaw;
 	class StringRaw;
 	template<class T>
-	class ValueType {
+	class  ValueType {
 		T value;
 	public:
 		ValueType() :value() {}
@@ -105,6 +105,4 @@ namespace DotnetLibrary
 	typedef	ValueType<float>		Single;
 	typedef	ValueType<double>		Double;
 
-	StringRaw* Boolean::FalseString = nullptr;
-	StringRaw* Boolean::TrueString = nullptr;
 }

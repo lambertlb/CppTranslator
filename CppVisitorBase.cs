@@ -12,6 +12,7 @@ namespace CppTranslator
 	public class CppVisitorBase : IAstVisitor
 	{
 		private Dictionary<String, String> substitutes = new Dictionary<String, String>();
+		private Dictionary<String, String> primatives = new Dictionary<String, String>();
 		private String enumName;
 		public String EnumName { get => enumName; set => enumName = value; }
 		public IType CurrentClass { get; set; }
@@ -55,6 +56,18 @@ namespace CppTranslator
 			substitutes.Add("DateTimeMinValue", DateTime.MinValue.Ticks.ToString());
 			substitutes.Add("TimeSpaneMaxValue", TimeSpan.MaxValue.Ticks.ToString());
 			substitutes.Add("TimeSpaneMinValue", TimeSpan.MinValue.Ticks.ToString());
+
+			primatives.Add("Char", "Char");
+			primatives.Add("Byte", "Byte");
+			primatives.Add("SByte", "SByte");
+			primatives.Add("Int16", "Int16");
+			primatives.Add("UInt16", "UInt16");
+			primatives.Add("Int32", "Int32");
+			primatives.Add("UInt32", "UInt32");
+			primatives.Add("Int64", "Int64");
+			primatives.Add("UInt64", "UInt64");
+			primatives.Add("Single", "Single");
+			primatives.Add("Double", "Double");
 		}
 
 		public virtual void CreateHeaders()
@@ -63,7 +76,13 @@ namespace CppTranslator
 
 		public void CastToType(IType toType, IType fromType, AstNode expression, bool needGetAs)
 		{
-			if (toType.Kind == TypeKind.Array || toType.Kind == TypeKind.Unknown || toType.Kind == fromType.Kind)
+			if (toType.Kind == TypeKind.Unknown)
+			{
+				expression.AcceptVisitor(this);
+				return;
+			}
+			bool castToPrimativeNumber = NeedToCastToNumber(toType, expression);
+			if (!castToPrimativeNumber && (toType.Kind == TypeKind.Array || toType.Kind == fromType.Kind))
 			{
 				expression.AcceptVisitor(this);
 				return;
@@ -77,10 +96,14 @@ namespace CppTranslator
 				Formatter.Append(" ))");
 				return;
 			}
+			if (castToPrimativeNumber)
+				Formatter.Append("(");
 			Formatter.Append("( ");
 			Formatter.Append(toType.Name);
 			Formatter.Append(" ) ");
 			expression.AcceptVisitor(this);
+			if (castToPrimativeNumber)
+				Formatter.Append(")");
 			if (needGetAs)
 			{
 				Formatter.Append("->get_As");
@@ -88,6 +111,16 @@ namespace CppTranslator
 				Formatter.Append("()");
 			}
 		}
+
+		private bool NeedToCastToNumber(IType toType, AstNode expression)
+		{
+			bool isPrimative = primatives.ContainsKey(toType.Name);
+			if (!isPrimative)
+				return (false);
+			String exp = expression.ToString();
+			return (Char.IsDigit(exp[0]));
+		}
+
 		internal void CastToType(IType toType, AstNode expression)
 		{
 			IType fromType = expression.GetResolveResult().Type;

@@ -18,7 +18,7 @@ namespace DotnetLibrary
 	};
 
 	template< typename T >
-	class ArrayRaw : public ArrayBase
+	class  ArrayRaw : public ArrayBase
 	{
 		int32_t		dimension1Size;			// size of dimension 1
 		int32_t		dimension2Size;			// size of dimension 2

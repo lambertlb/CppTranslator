@@ -158,6 +158,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="include\Operators.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -169,6 +170,7 @@
     <ClInclude Include="include\BoxTypeRaw.h" />
     <ClInclude Include="include\DateTime.h" />
     <ClInclude Include="include\DotnetTypes.h" />
+    <ClInclude Include="include\Operators.h" />
     <ClInclude Include="include\PointerType.h" />
     <ClInclude Include="include\ArrayRaw.h" />
     <ClInclude Include="include\ObjectRaw.h" />

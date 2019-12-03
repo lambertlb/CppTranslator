@@ -17,6 +17,9 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\Operators.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DotnetTypes.h" />
@@ -29,5 +32,6 @@
     <ClInclude Include="include\StringRaw.h" />
     <ClInclude Include="include\StringBuilderRaw.h" />
     <ClInclude Include="include\BoxTypeRaw.h" />
+    <ClInclude Include="include\Operators.h" />
   </ItemGroup>
 </Project>
