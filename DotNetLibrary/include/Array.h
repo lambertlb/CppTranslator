@@ -44,8 +44,8 @@ namespace DotnetLibrary
 		void* Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1) {
 			return(nullptr);
 		}
-		Array& Initialize(void* initData) {
-			return(*this);
+		Array* Initialize(void* initData) {
+			return(this);
 		}
 		Int32	GetLength(Int32 rank) {
 			if (rank == 0)

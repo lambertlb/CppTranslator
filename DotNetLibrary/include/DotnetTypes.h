@@ -47,31 +47,11 @@ namespace DotnetLibrary
 		SingleType = 13,
 		DoubleType = 14,
 		DecimalType = 15,
-		DateType = 16,
+		DateTimeType = 16,
 		TimeSpanType = 17,
 		StringType = 18
 	} DataType;
-	Int32	DataTypeSize[] =
-	{
-		0,				//NullType
-		sizeof(void*),	//ObjectType
-		sizeof(Boolean),//BooleanType
-		sizeof(Char),	//CharType
-		sizeof(SByte),	//SByteType
-		sizeof(Byte),	//ByteType
-		sizeof(Int16),	//Int16Type
-		sizeof(UInt16),	//UInt16Type
-		sizeof(Int32),	//Int32Type
-		sizeof(UInt32),	//UInt32Type
-		sizeof(Int64),	//Int64Type
-		sizeof(UInt64),	//UInt64Type
-		sizeof(Single),	//SingleType
-		sizeof(Double),	//DoubleType
-		sizeof(void*),	//DecimalType
-		sizeof(UInt64),	//DateTimeType
-		sizeof(UInt64),	//TimeSpanType
-		sizeof(void*)	//StringType
-	};
+	DLL_EXPORT Int32	DataTypeSize[];
 }
 
 #include "Object.h"

@@ -2,7 +2,7 @@
 #include "CaBlockProtos.h"
 namespace CABlock_NS
 {
-	struct TestStruct : public ObjectRaw
+	struct TestStruct : public Object
 	{
 		Int32 x_data;
 		Int32 get_Data();
@@ -10,13 +10,14 @@ namespace CABlock_NS
 		TestStruct(Int32 x_i);
 		friend TestStruct operator +(TestStruct x_ts,Int32 x_newData);
 		friend TestStruct operator &(TestStruct x_ts,Int32 x_newData);
+		TestStruct();
 	};
-	struct TestStruct2 : public ObjectRaw
+	struct TestStruct2 : public Object
 	{
 		Int32 x_data;
 		TestStruct2();
 	};
-	struct TestStruct3 : public ObjectRaw
+	struct TestStruct3 : public Object
 	{
 		TestStruct2 x_ts;
 		TestStruct3();
@@ -24,62 +25,63 @@ namespace CABlock_NS
 }
 namespace UNNAMED
 {
-	class typedefRaw : public ObjectRaw
+	class x_typedef : public Object
 	{
 		public:
 		TestNameEnu x_friend;
 		TestNameEnu get_Friend();
 		void set_Friend(TestNameEnu x_value );
-		typedefRaw();
+		x_typedef();
 	};
-	class typedef1Raw : public ObjectRaw
+	class x_typedef1 : public Object
 	{
 		public:
 		TestNameEnu x_friend();
-		typedef1Raw();
+		x_typedef1();
 	};
 }
 namespace CABlock_Extra_NS
 {
-	class TestNamespaceClassRaw : public ObjectRaw
+	class TestNamespaceClass : public Object
 	{
 		public:
-		TestNamespaceClassRaw();
+		TestNamespaceClass();
 	};
 }
 namespace CABlock_NS
 {
-	class ArrayTestRaw : public ObjectRaw
+	class ArrayTest : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		PointerType<ArrayRaw<Boolean>> x_boolArray;
-		PointerType<ArrayRaw<Int32>> x_int1dArray;
-		PointerType<ArrayRaw<Int32>> x_int2dArray;
-		PointerType<ArrayRaw<Int32>> x_int3dArray;
-		PointerType<ArrayRaw<Double>> x_double1dArray;
-		PointerType<ArrayRaw<Double>> x_double2dArray;
-		PointerType<ArrayRaw<Double>> x_double3dArray;
-		PointerType<ArrayRaw<DateTime>> x_dateTime1dArray;
-		PointerType<ArrayRaw<DateTime>> x_dateTime2dArray;
-		PointerType<ArrayRaw<DateTime>> x_dateTime3dArray;
-		PointerType<ArrayRaw<TimeSpan>> x_timeSpan1dArray;
-		PointerType<ArrayRaw<TimeSpan>> x_timeSpan2dArray;
-		PointerType<ArrayRaw<TimeSpan>> x_timeSpan3dArray;
-		ArrayTestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		Array* x_boolArray;
+		Array* x_int1dArray;
+		Array* x_int2dArray;
+		Array* x_int3dArray;
+		Array* x_double1dArray;
+		Array* x_double2dArray;
+		Array* x_double3dArray;
+		Array* x_dateTime1dArray;
+		Array* x_dateTime2dArray;
+		Array* x_dateTime3dArray;
+		Array* x_timeSpan1dArray;
+		Array* x_timeSpan2dArray;
+		Array* x_timeSpan3dArray;
+		ArrayTest(CABlock* x_caBlock);
 		void Test();
 		void TestArrayCreation();
 		void MiscTest();
 		void ArrayMethodTests();
 		void CxAssert(Boolean x_x);
+		ArrayTest();
 	};
-	class BasicTestRaw : public ObjectRaw
+	class BasicTest : public Object
 	{
 		public:
-		CABlock x_caBlock;
+		CABlock* x_caBlock;
 		Int32 x_field1;
 		TestStruct3 x_ts3;
-		BasicTestRaw(CABlock x_caBlock);
+		BasicTest(CABlock* x_caBlock);
 		void Test();
 		void FieldTest();
 		void SwitchTest();
@@ -91,51 +93,76 @@ namespace CABlock_NS
 		void RefMethod(Int32&  x_data);
 		void RefMethod(DateTime&  x_data);
 		void RefMethod(TimeSpan&  x_data);
-		void RefMethod(String&  x_data);
-		void RefMethod(TestAbstract&  x_data);
+		void RefMethod(String*&  x_data);
+		void RefMethod(TestAbstract*&  x_data);
 		void TestUsingNamespace();
 		void CxAssert(Boolean x_x);
 		void ComplexConditions();
 		Boolean TestThis(Int32 x_a,Int32 x_b);
 		void TestNames();
+		BasicTest();
 	};
-	class AbstractRaw : public ObjectRaw
+	class Abstract : public Object
 	{
 		public:
 		Int32 x_data1;
 		Int32 x_data2;
-		AbstractRaw(Int32 x_i,Int32 x_j);
+		Abstract(Int32 x_i,Int32 x_j);
 		virtual Int32 MustImplement() = 0;
 		virtual Int32 MustImplement(Int32 x_i) = 0;
 		virtual Int32 MustImplement(Int64 x_i) = 0;
 		Int32 DidImplement();
+		Abstract();
 	};
-	class TestAbstractRaw : public AbstractRaw
+	class TestAbstract : public Abstract
 	{
 		public:
-		TestAbstractRaw();
+		TestAbstract();
 		Int32 MustImplement();
 		Int32 MustImplement(Int32 x_i);
 		Int32 MustImplement(Int64 x_i);
-		String ToString();
+		String* ToString();
 	};
-	class BooleanTestRaw : public ObjectRaw
+	class BigEndianBitConverterTest : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		BooleanTestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		BigEndianBitConverterTest(CABlock* x_caBlock);
+		void Test();
+		void CompareBits(Array* x_converted,Int32 x_startingIndex,Array* x_bytes);
+		void CxAssert(Boolean x_x);
+		void CxAssert(Boolean x_x,Boolean x_y);
+		BigEndianBitConverterTest();
+	};
+	class BooleanTest : public Object
+	{
+		public:
+		CABlock* x_caBlock;
+		BooleanTest(CABlock* x_caBlock);
 		void Test();
 		void BoolBoxTest();
 		void RunBooleanTest();
 		void BoolOperators();
 		void CxAssert(Boolean x_x,Boolean x_y);
 		void CxAssert(Boolean x_x);
+		BooleanTest();
 	};
-	class ByteTestRaw : public ObjectRaw
+	class BufferTest : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		ByteTestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		Array* x_in1dArray;
+		Array* x_out1dArray;
+		BufferTest(CABlock* x_caBlock);
+		void Test();
+		void CxAssert(Boolean x_x);
+		BufferTest();
+	};
+	class ByteTest : public Object
+	{
+		public:
+		CABlock* x_caBlock;
+		ByteTest(CABlock* x_caBlock);
 		void Test();
 		void ByteMethodsTest();
 		void DoUnSignedMath();
@@ -144,12 +171,13 @@ namespace CABlock_NS
 		void ByteMiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
+		ByteTest();
 	};
-	class CharTestRaw : public ObjectRaw
+	class CharTest : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		CharTestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		CharTest(CABlock* x_caBlock);
 		void Test();
 		void CharMethodsTest();
 		void CharOperators();
@@ -157,12 +185,13 @@ namespace CABlock_NS
 		void CharMiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
+		CharTest();
 	};
-	class DoubleTestRaw : public ObjectRaw
+	class DoubleTest : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		DoubleTestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		DoubleTest(CABlock* x_caBlock);
 		void Test();
 		void DoDoubleMethodsTest();
 		void DoDoubleMath();
@@ -175,44 +204,47 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
 		void DoubleTestFailed();
+		DoubleTest();
 	};
-	class EncodingTestRaw : public ObjectRaw
+	class EncodingTest : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		EncodingTestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		EncodingTest(CABlock* x_caBlock);
 		void Test();
 		void EncodingMethodsTest();
-		Boolean CompareBytes(PointerType<ArrayRaw<Byte>> x_bytes,PointerType<ArrayRaw<Byte>> x_myCharsAsBytes);
+		Boolean CompareBytes(Array* x_bytes,Array* x_myCharsAsBytes);
 		void CxAssert(Boolean x_x);
+		EncodingTest();
 	};
-	class EnumTestRaw : public ObjectRaw
+	class EnumTest : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		EnumTestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		EnumTest(CABlock* x_caBlock);
 		void Test();
 		void Test1(TestEnum x_testEnum);
 		void Test1(TestEnum2 x_testEnum);
 		void EnumTestFailed();
+		EnumTest();
 	};
-	class CABlockRaw : public BlockBaseRaw
+	class CABlock : public BlockBase
 	{
 		public:
 		static Int32 x_intConstant;
 		FredEnum x_fe;
-		CABlockRaw();
-		CABlockRaw(Int32 x_i);
+		CABlock();
+		CABlock(Int32 x_i);
 		void Initialize();
 		void Execute();
 		void RunTests(FredEnum x_fre);
-		void TestFailed(String x_reason);
+		void TestFailed(String* x_reason);
 	};
-	class Int16TestRaw : public ObjectRaw
+	class Int16Test : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		Int16TestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		Int16Test(CABlock* x_caBlock);
 		void Test();
 		void Int16MethodsTest();
 		void Int16MathTest();
@@ -221,12 +253,13 @@ namespace CABlock_NS
 		void Int16MiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
+		Int16Test();
 	};
-	class Int32TestRaw : public ObjectRaw
+	class Int32Test : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		Int32TestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		Int32Test(CABlock* x_caBlock);
 		void Test();
 		void Int32Conversion();
 		void Int32MethodsTest();
@@ -236,12 +269,13 @@ namespace CABlock_NS
 		void Int32MiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
+		Int32Test();
 	};
-	class Int64TestRaw : public ObjectRaw
+	class Int64Test : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		Int64TestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		Int64Test(CABlock* x_caBlock);
 		void Test();
 		void Int64MethodsTest();
 		void Int64MathTest();
@@ -250,23 +284,25 @@ namespace CABlock_NS
 		void Int64MiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
+		Int64Test();
 	};
-	class MathTestRaw : public ObjectRaw
+	class MathTest : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		MathTestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		MathTest(CABlock* x_caBlock);
 		void Test();
 		void DoMathTest();
 		void DoubleCompare(Double x_n1,Double x_n2,Double x_resolution);
 		void CxAssert(Double x_x,Double x_y);
 		void CxAssert(Boolean x_x);
+		MathTest();
 	};
-	class SByteTestRaw : public ObjectRaw
+	class SByteTest : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		SByteTestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		SByteTest(CABlock* x_caBlock);
 		void Test();
 		void SByteMethodsTest();
 		void SByteMathTest();
@@ -275,12 +311,13 @@ namespace CABlock_NS
 		void SByteMiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
+		SByteTest();
 	};
-	class SingleTestRaw : public ObjectRaw
+	class SingleTest : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		SingleTestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		SingleTest(CABlock* x_caBlock);
 		void Test();
 		void DoSingleMethodsTest();
 		void DoSingleMath();
@@ -293,13 +330,14 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
 		void SingleTestFailed();
+		SingleTest();
 	};
-	class StringBuilderTestRaw : public ObjectRaw
+	class StringBuilderTest : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		StringBuilder x_sb;
-		StringBuilderTestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		StringBuilder* x_sb;
+		StringBuilderTest(CABlock* x_caBlock);
 		void Test();
 		void DoSBConstructTest();
 		void DoSBPropertyTest();
@@ -309,27 +347,29 @@ namespace CABlock_NS
 		void DoSBReplaceTest();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
+		StringBuilderTest();
 	};
-	class StringTestRaw : public ObjectRaw
+	class StringTest : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		StringTestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		StringTest(CABlock* x_caBlock);
 		void Test();
 		void DoIndexTest();
 		void DoMiscTest();
-		static void TestConcat(String x_str1,Int32 x_index,String x_str4,Int32 x_i,Double x_dbl);
+		static void TestConcat(String* x_str1,Int32 x_index,String* x_str4,Int32 x_i,Double x_dbl);
 		void DoEqualsTest();
 		void DoParsingTest();
 		void DoConcatTest();
 		void CxAssert(Boolean x_x);
+		StringTest();
 	};
-	class TimeTestRaw : public ObjectRaw
+	class TimeTest : public Object
 	{
 		public:
-		CABlock x_caBlock;
+		CABlock* x_caBlock;
 		DateTime x_dat1;
-		TimeTestRaw(CABlock x_caBlock);
+		TimeTest(CABlock* x_caBlock);
 		void Test();
 		void TestTimeSpan();
 		void TestDateTime();
@@ -340,18 +380,19 @@ namespace CABlock_NS
 		void CxAssert(Double x_x,Double x_y);
 		void CxAssert(Boolean x_x);
 		void TimeTestFailed();
+		TimeTest();
 	};
-	class TimingTestRaw : public ObjectRaw
+	class TimingTest : public Object
 	{
 		public:
-		TimingTestRaw();
+		TimingTest();
 		static Int32 DoTimingTest(Int32 x_a,Int32 x_b,Int32 x_c);
 	};
-	class UInt16TestRaw : public ObjectRaw
+	class UInt16Test : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		UInt16TestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		UInt16Test(CABlock* x_caBlock);
 		void Test();
 		void UInt16MethodsTest();
 		void DoUnSignedMath();
@@ -360,12 +401,13 @@ namespace CABlock_NS
 		void UInt16MiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
+		UInt16Test();
 	};
-	class UInt32TestRaw : public ObjectRaw
+	class UInt32Test : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		UInt32TestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		UInt32Test(CABlock* x_caBlock);
 		void Test();
 		void UInt32MethodsTest();
 		void DoUnSignedMath();
@@ -374,12 +416,13 @@ namespace CABlock_NS
 		void UInt32MiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
+		UInt32Test();
 	};
-	class UInt64TestRaw : public ObjectRaw
+	class UInt64Test : public Object
 	{
 		public:
-		CABlock x_caBlock;
-		UInt64TestRaw(CABlock x_caBlock);
+		CABlock* x_caBlock;
+		UInt64Test(CABlock* x_caBlock);
 		void Test();
 		void UInt64MethodsTest();
 		void UInt64UnSignedMath();
@@ -388,6 +431,7 @@ namespace CABlock_NS
 		void UInt64MiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
+		UInt64Test();
 	};
 using namespace CABlock_NS;
 using namespace UNNAMED;

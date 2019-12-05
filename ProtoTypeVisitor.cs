@@ -40,7 +40,7 @@ namespace CppTranslator
 					Formatter.AppendIndented("class ");
 					break;
 			}
-			FormatType(type, typeDeclaration.Name);
+			FormatType(type);
 			if (typeDeclaration.ClassType == ClassType.Enum)
 			{
 				OutputEnumValues(typeDeclaration);
@@ -49,15 +49,7 @@ namespace CppTranslator
 			{
 				Formatter.Append(";");
 			}
-			if (isClass)
-			{
-				Formatter.AppendLine("");
-				Formatter.AppendIndented("typedef ");
-				FormatTypeDelaration(type, typeDeclaration.Name);
-				Formatter.Append("\t");
-				Formatter.AppendName(typeDeclaration.Name);
-				Formatter.AppendLine(";");
-			}
+			Formatter.AppendLine("");
 		}
 		private void OutputEnumValues(TypeDeclaration typeDeclaration)
 		{

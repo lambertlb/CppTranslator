@@ -45,10 +45,10 @@ namespace CppTranslator
 			types.Add("uint", "UInt32");
 			types.Add("long", "Int64");
 			types.Add("ulong", "UInt64");
-			types.Add("object", "Object");
+			types.Add("object", "Object*");
 			types.Add("short", "Int16");
 			types.Add("ushort", "UInt16");
-			types.Add("string", "String");
+			types.Add("string", "String*");
 		}
 
 		private void SetNamespace(string value)

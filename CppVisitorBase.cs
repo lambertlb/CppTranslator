@@ -30,7 +30,7 @@ namespace CppTranslator
 		public CppVisitorBase(Formatter formatter)
 		{
 			this.formatter = formatter;
-			TypeVisitor = new CppTypeVisitor(formatter);
+			TypeVisitor = new CppTypeVisitor(this);
 			CallVisitor = new CallInstructionVisitor(this);
 			substitutes.Add("byteMaxValue", Byte.MaxValue.ToString());
 			substitutes.Add("byteMinValue", Byte.MinValue.ToString());
@@ -76,6 +76,8 @@ namespace CppTranslator
 
 		public void CastToType(IType toType, IType fromType, AstNode expression, bool needGetAs)
 		{
+			expression.AcceptVisitor(this);
+			return;
 			if (toType.Kind == TypeKind.Unknown)
 			{
 				expression.AcceptVisitor(this);
@@ -134,6 +136,8 @@ namespace CppTranslator
 
 		private void CastToType(IType targetType)
 		{
+			Formatter.Append(targetType.Name);
+			return;
 			if (targetType.Kind != TypeKind.Unknown)
 			{
 				Formatter.Append("((");
@@ -169,10 +173,9 @@ namespace CppTranslator
 
 		public void VisitArrayCreateExpression(ArrayCreateExpression arrayCreateExpression)
 		{
-			Formatter.Append("(new ");
-			Formatter.Append("ArrayRaw<");
+			Formatter.Append("(new Array(");
 			arrayCreateExpression.Type.AcceptVisitor(this);
-			Formatter.Append(">(");
+			Formatter.Append("Type,");
 			if (arrayCreateExpression.Arguments.Count > 0)
 			{
 				WriteCommaSeparatedList(arrayCreateExpression.Arguments);
@@ -270,7 +273,6 @@ namespace CppTranslator
 
 		public void VisitAssignmentExpression(AssignmentExpression assignmentExpression)
 		{
-			bool isAssignToPointer = IsAssignToPointer(assignmentExpression.Left) && assignmentExpression.Operator == AssignmentOperatorType.Assign;
 			var sym = assignmentExpression.Left.GetSymbol();
 			assignmentExpression.Left.AcceptVisitor(this);
 			if (sym != null && sym.SymbolKind == SymbolKind.Property)
@@ -280,26 +282,19 @@ namespace CppTranslator
 				Formatter.Append(")");
 				return;
 			}
-			if (isAssignToPointer)
+			Formatter.Append(" ");
+			if (assignmentExpression.Operator == AssignmentOperatorType.Assign)
 			{
-				Formatter.Append(".Assign(");
+				Formatter.Append(AssignmentExpression.GetOperatorRole(assignmentExpression.Operator).ToString());
 			}
 			else
 			{
+				Formatter.Append("= ");
+				assignmentExpression.Left.AcceptVisitor(this);
 				Formatter.Append(" ");
-				if (assignmentExpression.Operator == AssignmentOperatorType.Assign)
-				{
-					Formatter.Append(AssignmentExpression.GetOperatorRole(assignmentExpression.Operator).ToString());
-				}
-				else
-				{
-					Formatter.Append("= ");
-					assignmentExpression.Left.AcceptVisitor(this);
-					Formatter.Append(" ");
-					Formatter.Append(GetOperator(assignmentExpression.Operator));
-				}
-				Formatter.Append(" ");
+				Formatter.Append(GetOperator(assignmentExpression.Operator));
 			}
+			Formatter.Append(" ");
 			IType type = assignmentExpression.Left.GetResolveResult().Type;
 			if (type.Kind == TypeKind.Struct)
 			{
@@ -308,10 +303,6 @@ namespace CppTranslator
 			else
 			{
 				assignmentExpression.Right.AcceptVisitor(this);
-			}
-			if (isAssignToPointer)
-			{
-				Formatter.Append(")");
 			}
 		}
 		public String GetOperator(AssignmentOperatorType op)
@@ -379,7 +370,7 @@ namespace CppTranslator
 					Formatter.Append("!");
 				if (IsPrimative(left))
 				{
-					CastToType(left ,"");
+					CastToType(left, "");
 				}
 				Formatter.Append("(");
 				binaryOperatorExpression.Left.AcceptVisitor(this);
@@ -476,6 +467,12 @@ namespace CppTranslator
 
 		public void VisitComposedType(ComposedType composedType)
 		{
+			IType type = composedType.GetResolveResult().Type;
+			if (type.Kind == TypeKind.Array)
+			{
+				Formatter.Append("Array*");
+				return;
+			}
 			if (composedType.ArraySpecifiers.Count > 0)
 			{
 				composedType.GetResolveResult().Type.AcceptVisitor(TypeVisitor);
@@ -504,13 +501,9 @@ namespace CppTranslator
 
 		protected virtual void WriteMethodHeader(String medodName, AstNodeCollection<ParameterDeclaration> parameters)
 		{
-			FormatType(CurrentClass, CurrentClass.Name);
+			FormatType(CurrentClass);
 			Formatter.Append("::");
 			Formatter.AppendName(medodName);
-			if (CurrentClass.Name == medodName && CurrentClass.Kind == TypeKind.Class)
-			{
-				Formatter.Append("Raw");
-			}
 			WriteCommaSeparatedListInParenthesis(parameters);
 		}
 		protected virtual void WriteMethod(String methodName, AstNodeCollection<ParameterDeclaration> parameters, BlockStatement body)
@@ -525,7 +518,7 @@ namespace CppTranslator
 		{
 			Formatter.AddOpenBrace();
 			InitializeFields();
-			ArrayInitializerVisitor arrayVisitor = new ArrayInitializerVisitor(Formatter, CurrentMethod);
+			ArrayInitializerVisitor arrayVisitor = new ArrayInitializerVisitor(this, CurrentMethod);
 			body.AcceptVisitor(arrayVisitor); // create array initializers
 			WriteStatements(body);
 			Formatter.AddCloseBrace();
@@ -554,7 +547,7 @@ namespace CppTranslator
 			}
 			else
 			{
-				FormatType(type, type.Name);
+				FormatType(type);
 			}
 			Formatter.Append(" ");
 			WriteCommaSeparatedListInParenthesis(constructorInitializer.Arguments);
@@ -1149,8 +1142,6 @@ namespace CppTranslator
 			if (type.Kind == TypeKind.Class)
 				Formatter.Append("new ");
 			objectCreateExpression.Type.AcceptVisitor(this);
-			if (type.Kind == TypeKind.Class)
-				Formatter.Append("Raw");
 			bool useParenthesis = objectCreateExpression.Arguments.Any() || objectCreateExpression.Initializer.IsNull;
 			// also use parenthesis if there is an '(' token
 			if (!objectCreateExpression.LParToken.IsNull)
@@ -1181,7 +1172,9 @@ namespace CppTranslator
 
 		public void VisitParameterDeclaration(ParameterDeclaration parameterDeclaration)
 		{
-			parameterDeclaration.Type.AcceptVisitor(this);
+			IType type = parameterDeclaration.Type.GetResolveResult().Type;
+			FormatTypeDelaration(type);
+			//			parameterDeclaration.Type.AcceptVisitor(this);
 			AddParameterModifiers(parameterDeclaration);
 
 			Formatter.Append(" ");
@@ -1263,7 +1256,7 @@ namespace CppTranslator
 			bool isString = primitiveExpression.Value is String;
 			if (isString)
 			{
-				Formatter.Append("(new StringRaw(");
+				Formatter.Append("(new String(");
 				Formatter.AppendStringsWithControl(primitiveExpression.Value.ToString());
 				Formatter.Append("))");
 			}
@@ -1293,7 +1286,7 @@ namespace CppTranslator
 				Formatter.AppendIndented("");
 				propertyDeclaration.ReturnType.AcceptVisitor(this);
 				Formatter.Append(" ");
-				FormatType(CurrentClass, CurrentClass.Name);
+				FormatType(CurrentClass);
 				Formatter.Append("::");
 				Formatter.Append("get_");
 				Formatter.Append(propertyDeclaration.NameToken.Name);
@@ -1303,7 +1296,7 @@ namespace CppTranslator
 			if (propertyDeclaration.Setter != null)
 			{
 				Formatter.AppendIndented("void ");
-				FormatType(CurrentClass, CurrentClass.Name);
+				FormatType(CurrentClass);
 				Formatter.Append("::");
 				Formatter.Append("set_");
 				Formatter.Append(propertyDeclaration.NameToken.Name);
@@ -1550,7 +1543,6 @@ namespace CppTranslator
 
 		public virtual void VisitConstructorDeclaration(ConstructorDeclaration constructorDeclaration)
 		{
-			HadConstructor = true;
 			DoingConstructor = true;
 			TypeDeclaration type = constructorDeclaration.Parent as TypeDeclaration;
 			String name = null;
@@ -1561,6 +1553,8 @@ namespace CppTranslator
 			Formatter.AppendIndented("");
 			StaticArrayCount = 0;
 			CurrentMethod = name;
+			if (constructorDeclaration.Parameters.Count == 0)
+				HadConstructor = true;
 			WriteMethodHeader(name, constructorDeclaration.Parameters);
 			if (!constructorDeclaration.Initializer.IsNull)
 			{
@@ -1574,9 +1568,9 @@ namespace CppTranslator
 		{
 			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
 			Formatter.AppendIndented("");
-			FormatType(type, typeDeclaration.Name);
+			FormatType(type);
 			Formatter.Append("::");
-			FormatType(type, typeDeclaration.Name);
+			FormatType(type);
 			Formatter.Append("()");
 			Formatter.AddOpenBrace();
 			InitializeFields();
@@ -1622,7 +1616,7 @@ namespace CppTranslator
 				Formatter.AppendIndented("");
 				fieldDeclaration.ReturnType.GetResolveResult().Type.AcceptVisitor(TypeVisitor);
 				Formatter.Append(" ");
-				FormatType(CurrentClass, CurrentClass.Name);
+				FormatType(CurrentClass);
 				Formatter.Append("::");
 				WriteCommaSeparatedList(fieldDeclaration.Variables);
 				Formatter.AppendLine(";");
@@ -1718,7 +1712,8 @@ namespace CppTranslator
 			if (simpleType != null)
 			{
 				IType type = simpleType.GetResolveResult().Type;
-				FormatTypeDelaration(type, simpleType.IdentifierToken.Name);
+				//				FormatTypeDelaration(type, simpleType.IdentifierToken.Name);
+				FormatTypeDelaration(type);
 			}
 			else
 			{
@@ -1729,27 +1724,36 @@ namespace CppTranslator
 			if (!(variableDeclarationStatement.Parent is ForStatement))
 				Formatter.Append(";");
 		}
-		public void FormatTypeDelaration(IType type, String typeName)
+		public void FormatTypeDelaration(IType type)
 		{
-			if (type != null && IsPointerType(type))
+			FormatType(type);
+			if (IsPointerType(type))
 			{
-				Formatter.Append("PointerType<");
-				FormatType(type, typeName);
-				Formatter.Append(">");
-				return;
+				Formatter.Append("*");
 			}
-			FormatType(type, typeName);
 		}
-		public void FormatType(IType type, String typeName)
+		public void FormatType(IType type)
 		{
-			Formatter.Append(typeName);
-			if (type != null && IsPointerType(type))
-				Formatter.Append("Raw");
+			String name = type.Name;
+			if (type.Kind == TypeKind.ByReference)
+			{
+				name = name.Substring(0, name.Length - 1);
+			}
+			if (type.Kind == TypeKind.Array)
+			{
+				name = "Array*";
+			}
+			Formatter.AppendName(name);
 		}
 
 		private bool IsPointerType(IType type)
 		{
-			return (type.Kind == TypeKind.Class || type.Kind == TypeKind.Array || type.IsByRefLike);
+			if (type.Kind == TypeKind.ByReference)
+			{
+				ByReferenceType by = (ByReferenceType)type;
+				return (by.ElementType.Kind == TypeKind.Class);
+			}
+			return (type.Kind == TypeKind.Class);
 		}
 
 		public void VisitWhileStatement(WhileStatement whileStatement)

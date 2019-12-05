@@ -111,7 +111,7 @@ namespace CppTranslator
 					Formatter.AppendIndented("class ");
 					break;
 			}
-			FormatType(type, typeDeclaration.Name);
+			FormatType(type);
 			if (typeDeclaration.BaseTypes.Any())
 			{
 				Formatter.Append(" : public ");
@@ -119,7 +119,7 @@ namespace CppTranslator
 			}
 			else if (type.Kind == TypeKind.Class || type.Kind == TypeKind.Struct)
 			{
-				Formatter.Append(" : public ObjectRaw");
+				Formatter.Append(" : public Object");
 			}
 			Formatter.AddOpenBrace();
 			if (typeDeclaration.ClassType != ClassType.Struct)
@@ -147,10 +147,6 @@ namespace CppTranslator
 					Formatter.Append(",");
 				}
 				node.AcceptVisitor(this);
-				if (type.Kind == TypeKind.Class)
-				{
-					Formatter.Append("Raw");
-				}
 				isFirst = false;
 			}
 		}
@@ -159,13 +155,12 @@ namespace CppTranslator
 		{
 			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
 			Formatter.AppendIndented("");
-			FormatType(type, typeDeclaration.Name);
+			FormatType(type);
 			Formatter.Append("();");
 		}
 
 		public override void VisitConstructorDeclaration(ConstructorDeclaration constructorDeclaration)
 		{
-			HadConstructor = true;
 			TypeDeclaration type = constructorDeclaration.Parent as TypeDeclaration;
 			String name = null;
 			if (type != null && type.Name != constructorDeclaration.Name)
@@ -174,8 +169,8 @@ namespace CppTranslator
 				name = constructorDeclaration.NameToken.Name;
 			Formatter.AppendIndented("");
 			IType type2 = constructorDeclaration.GetResolveResult().Type;
-			if (type2.Kind == TypeKind.Class)
-				name += "Raw";
+			if (constructorDeclaration.Parameters.Count == 0)
+				HadConstructor = true;
 			WriteMethodHeader(name, constructorDeclaration.Parameters);
 			Formatter.AppendLine(";");
 		}

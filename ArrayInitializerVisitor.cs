@@ -12,17 +12,19 @@ namespace CppTranslator
 	{
 		private CppTypeVisitor typeVisitor;
 		public CppTypeVisitor TypeVisitor { get => typeVisitor; }
+		private CppVisitorBase baseVisitor;
 		private Formatter formatter;
 		public Formatter Formatter { get => formatter; }
 		public int StaticArrayCount { get; set; }
 		public String CurrentMethod { get; set; }
 		public bool DoingArrayInitialize { get; set; }
 
-		public ArrayInitializerVisitor(Formatter formatter, String currentMethod)
+		public ArrayInitializerVisitor(CppVisitorBase baseVisitor, String currentMethod)
 		{
-			this.formatter = formatter;
+			this.baseVisitor = baseVisitor;
+			this.formatter = baseVisitor.Formatter;
 			CurrentMethod = currentMethod;
-			typeVisitor = new CppTypeVisitor(formatter);
+			typeVisitor = new CppTypeVisitor(baseVisitor);
 		}
 		public void VisitAccessor(Accessor accessor)
 		{

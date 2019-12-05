@@ -7,22 +7,24 @@ namespace CppTranslator
 	public class CppTypeVisitor : TypeVisitor
 	{
 		private Formatter formatter;
-		public CppTypeVisitor(Formatter formatter)
+		private CppVisitorBase baseVisitor;
+		public CppTypeVisitor(CppVisitorBase baseVisitor)
 		{
-			this.formatter = formatter;
+			this.baseVisitor = baseVisitor;
+			this.formatter = baseVisitor.Formatter;
 		}
 
 		public override IType VisitArrayType(ArrayType type)
 		{
-			formatter.Append("PointerType<ArrayRaw<");
-			IType rtn =  base.VisitArrayType(type);
-			formatter.Append(">>");
-			return (rtn);
+			formatter.Append("Array*");
+			return (null);
 		}
 		public override IType VisitTypeDefinition(ITypeDefinition type)
 		{
 			formatter.AppendType(type.Name);
-			return base.VisitTypeDefinition(type);
+			if (type.Kind == TypeKind.Class)
+				formatter.Append("*");
+			return (null);
 		}
 
 		public override IType VisitByReferenceType(ByReferenceType type)
