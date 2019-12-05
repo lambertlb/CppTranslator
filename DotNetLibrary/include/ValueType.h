@@ -36,37 +36,37 @@ namespace DotnetLibrary
 		ValueType operator!() const { return ValueType(!value); }
 		ValueType operator~() const { return ValueType(~value); }
 
-		//friends
-		friend ValueType operator+(ValueType iw, ValueType v) { return iw += v; }
-		friend ValueType operator+(ValueType iw, T v) { return iw += v; }
-		friend ValueType operator+(T v, ValueType iw) { return ValueType(v) += iw; }
-		friend ValueType operator-(ValueType iw, ValueType v) { return iw -= v; }
-		friend ValueType operator-(ValueType iw, T v) { return iw -= v; }
-		friend ValueType operator-(T v, ValueType iw) { return ValueType(v) -= iw; }
-		friend ValueType operator*(ValueType iw, ValueType v) { return iw *= v; }
-		friend ValueType operator*(ValueType iw, T v) { return iw *= v; }
-		friend ValueType operator*(T v, ValueType iw) { return ValueType(v) *= iw; }
-		friend ValueType operator/(ValueType iw, ValueType v) { return iw /= v; }
-		friend ValueType operator/(ValueType iw, T v) { return iw /= v; }
-		friend ValueType operator/(T v, ValueType iw) { return ValueType(v) /= iw; }
-		friend ValueType operator%(ValueType iw, ValueType v) { return iw %= v; }
-		friend ValueType operator%(ValueType iw, T v) { return iw %= v; }
-		friend ValueType operator%(T v, ValueType iw) { return ValueType(v) %= iw; }
-		friend ValueType operator&(ValueType iw, ValueType v) { return iw &= v; }
-		friend ValueType operator&(ValueType iw, T v) { return iw &= v; }
-		friend ValueType operator&(T v, ValueType iw) { return ValueType(v) &= iw; }
-		friend ValueType operator|(ValueType iw, ValueType v) { return iw |= v; }
-		friend ValueType operator|(ValueType iw, T v) { return iw |= v; }
-		friend ValueType operator|(T v, ValueType iw) { return ValueType(v) |= iw; }
-		friend ValueType operator^(ValueType iw, ValueType v) { return iw ^= v; }
-		friend ValueType operator^(ValueType iw, T v) { return iw ^= v; }
-		friend ValueType operator^(T v, ValueType iw) { return ValueType(v) ^= iw; }
-		friend ValueType operator<<(ValueType iw, ValueType v) { return iw <<= v; }
-		friend ValueType operator<<(ValueType iw, T v) { return iw <<= v; }
-		friend ValueType operator<<(T v, ValueType iw) { return ValueType(v) <<= iw; }
-		friend ValueType operator>>(ValueType iw, ValueType v) { return iw >>= v; }
-		friend ValueType operator>>(ValueType iw, T v) { return iw >>= v; }
-		friend ValueType operator>>(T v, ValueType iw) { return ValueType(v) >>= iw; }
+		////friends
+		//friend ValueType operator+(ValueType iw, ValueType v) { return iw += v; }
+		//friend ValueType operator+(ValueType iw, T v) { return iw += v; }
+		//friend ValueType operator+(T v, ValueType iw) { return ValueType(v) += iw; }
+		//friend ValueType operator-(ValueType iw, ValueType v) { return iw -= v; }
+		//friend ValueType operator-(ValueType iw, T v) { return iw -= v; }
+		//friend ValueType operator-(T v, ValueType iw) { return ValueType(v) -= iw; }
+		//friend ValueType operator*(ValueType iw, ValueType v) { return iw *= v; }
+		//friend ValueType operator*(ValueType iw, T v) { return iw *= v; }
+		//friend ValueType operator*(T v, ValueType iw) { return ValueType(v) *= iw; }
+		//friend ValueType operator/(ValueType iw, ValueType v) { return iw /= v; }
+		//friend ValueType operator/(ValueType iw, T v) { return iw /= v; }
+		//friend ValueType operator/(T v, ValueType iw) { return ValueType(v) /= iw; }
+		//friend ValueType operator%(ValueType iw, ValueType v) { return iw %= v; }
+		//friend ValueType operator%(ValueType iw, T v) { return iw %= v; }
+		//friend ValueType operator%(T v, ValueType iw) { return ValueType(v) %= iw; }
+		//friend ValueType operator&(ValueType iw, ValueType v) { return iw &= v; }
+		//friend ValueType operator&(ValueType iw, T v) { return iw &= v; }
+		//friend ValueType operator&(T v, ValueType iw) { return ValueType(v) &= iw; }
+		//friend ValueType operator|(ValueType iw, ValueType v) { return iw |= v; }
+		//friend ValueType operator|(ValueType iw, T v) { return iw |= v; }
+		//friend ValueType operator|(T v, ValueType iw) { return ValueType(v) |= iw; }
+		//friend ValueType operator^(ValueType iw, ValueType v) { return iw ^= v; }
+		//friend ValueType operator^(ValueType iw, T v) { return iw ^= v; }
+		//friend ValueType operator^(T v, ValueType iw) { return ValueType(v) ^= iw; }
+		//friend ValueType operator<<(ValueType iw, ValueType v) { return iw <<= v; }
+		//friend ValueType operator<<(ValueType iw, T v) { return iw <<= v; }
+		//friend ValueType operator<<(T v, ValueType iw) { return ValueType(v) <<= iw; }
+		//friend ValueType operator>>(ValueType iw, ValueType v) { return iw >>= v; }
+		//friend ValueType operator>>(ValueType iw, T v) { return iw >>= v; }
+		//friend ValueType operator>>(T v, ValueType iw) { return ValueType(v) >>= iw; }
 
 		// .Net functions
 		bool	Equals(int8_t valueToCOmpare) {

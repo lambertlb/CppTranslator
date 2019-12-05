@@ -52,7 +52,15 @@ namespace CppTranslator
 				if (memberReferenceExpression != null)
 				{
 					IType targetType = memberReferenceExpression.Target.GetResolveResult().Type;
+					if (CppVisitorBase.IsPrimative(targetType))
+					{
+						Formatter.Append("(");
+					}
 					CppVisitorBase.CastToType(targetType, memberReferenceExpression.Target);
+					if (CppVisitorBase.IsPrimative(targetType))
+					{
+						Formatter.Append(")");
+					}
 					if (inst.Method.DeclaringType.Kind == TypeKind.Struct)
 					{
 						Formatter.Append(".");

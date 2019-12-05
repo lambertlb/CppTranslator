@@ -82,12 +82,14 @@ namespace CppTranslator
 				return;
 			}
 			bool castToPrimativeNumber = NeedToCastToNumber(toType, expression);
-			if (!castToPrimativeNumber && (toType.Kind == TypeKind.Array || toType.Kind == fromType.Kind))
+			//			if (!castToPrimativeNumber && (toType.Kind == TypeKind.Array || toType.Kind == fromType.Kind))
+			if (!IsPrimative(toType) && (toType.Kind == TypeKind.Array || toType.Kind == fromType.Kind))
 			{
 				expression.AcceptVisitor(this);
 				return;
 			}
-			if (toType.Name == "Object" && fromType.Kind != TypeKind.Class)
+			ICSharpCode.Decompiler.IL.Box box = expression.Annotation<ICSharpCode.Decompiler.IL.Box>();
+			if (box != null)
 			{
 				Formatter.Append("(new ");
 				Formatter.Append(fromType.Name);
@@ -112,10 +114,13 @@ namespace CppTranslator
 			}
 		}
 
+		public bool IsPrimative(IType toType)
+		{
+			return (primatives.ContainsKey(toType.Name));
+		}
 		private bool NeedToCastToNumber(IType toType, AstNode expression)
 		{
-			bool isPrimative = primatives.ContainsKey(toType.Name);
-			if (!isPrimative)
+			if (!IsPrimative(toType))
 				return (false);
 			String exp = expression.ToString();
 			return (Char.IsDigit(exp[0]));
@@ -141,10 +146,6 @@ namespace CppTranslator
 		{
 			CastToType(targetType);
 			Formatter.Append(whatToCast);
-			if (targetType.Kind != TypeKind.Unknown)
-			{
-				Formatter.Append(")");
-			}
 		}
 
 		public void VisitAccessor(Accessor accessor)
@@ -299,7 +300,15 @@ namespace CppTranslator
 				}
 				Formatter.Append(" ");
 			}
-			assignmentExpression.Right.AcceptVisitor(this);
+			IType type = assignmentExpression.Left.GetResolveResult().Type;
+			if (type.Kind == TypeKind.Struct)
+			{
+				CastToType(type, assignmentExpression.Right);
+			}
+			else
+			{
+				assignmentExpression.Right.AcceptVisitor(this);
+			}
 			if (isAssignToPointer)
 			{
 				Formatter.Append(")");
@@ -362,15 +371,23 @@ namespace CppTranslator
 
 		public void VisitBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression)
 		{
-			IType type = binaryOperatorExpression.Left.GetResolveResult().Type;
-			if ((type.Kind == TypeKind.Class || type.Kind == TypeKind.Struct) && (binaryOperatorExpression.Operator == BinaryOperatorType.Equality || binaryOperatorExpression.Operator == BinaryOperatorType.InEquality))
+			IType left = binaryOperatorExpression.Left.GetResolveResult().Type;
+			IType right = binaryOperatorExpression.Right.GetResolveResult().Type;
+			if ((left.Kind == TypeKind.Class || left.Kind == TypeKind.Struct) && (binaryOperatorExpression.Operator == BinaryOperatorType.Equality || binaryOperatorExpression.Operator == BinaryOperatorType.InEquality))
 			{
 				if (binaryOperatorExpression.Operator == BinaryOperatorType.InEquality)
 					Formatter.Append("!");
+				if (IsPrimative(left))
+				{
+					CastToType(left ,"");
+				}
 				Formatter.Append("(");
 				binaryOperatorExpression.Left.AcceptVisitor(this);
 				Formatter.Append(")");
-				if (type.Kind == TypeKind.Class)
+				if (IsPrimative(left))
+					Formatter.Append(")");
+
+				if (left.Kind == TypeKind.Class)
 				{
 					Formatter.Append("->");
 				}
@@ -379,11 +396,11 @@ namespace CppTranslator
 					Formatter.Append(".");
 				}
 				Formatter.Append("Equals(");
-				IType right = binaryOperatorExpression.Right.GetResolveResult().Type;
-				if (type.Kind == TypeKind.Struct)
+				if (left.Kind == TypeKind.Struct)
 				{
-					CastToType(type, binaryOperatorExpression.Right);
-				} else
+					CastToType(left, binaryOperatorExpression.Right);
+				}
+				else
 				{
 					binaryOperatorExpression.Right.AcceptVisitor(this);
 				}
@@ -394,9 +411,9 @@ namespace CppTranslator
 			Formatter.Append(" ");
 			Formatter.Append(BinaryOperatorExpression.GetOperatorRole(binaryOperatorExpression.Operator).ToString());
 			Formatter.Append(" ");
-			if (type.Kind == TypeKind.Struct)
+			if (right.Kind == TypeKind.Struct)
 			{
-				CastToType(type, binaryOperatorExpression.Right);
+				CastToType(right, binaryOperatorExpression.Right);
 			}
 			else
 			{
@@ -430,12 +447,12 @@ namespace CppTranslator
 
 		public void VisitCastExpression(CastExpression castExpression)
 		{
-			ICSharpCode.Decompiler.IL.UnboxAny inst = castExpression.Annotation<ICSharpCode.Decompiler.IL.UnboxAny>();
+			ICSharpCode.Decompiler.IL.UnboxAny unbox = castExpression.Annotation<ICSharpCode.Decompiler.IL.UnboxAny>();
 			IType toType = castExpression.Type.GetResolveResult().Type;
 			if (toType.Kind == TypeKind.Unknown)
 				toType = castExpression.GetResolveResult().Type;
 			IType fromType = castExpression.Expression.GetResolveResult().Type;
-			CastToType(toType, fromType, castExpression.Expression, inst!= null);
+			CastToType(toType, fromType, castExpression.Expression, unbox != null);
 		}
 		public void VisitCatchClause(CatchClause catchClause)
 		{
@@ -790,18 +807,18 @@ namespace CppTranslator
 
 		public void VisitIdentifierExpression(IdentifierExpression identifierExpression)
 		{
-			ICSharpCode.Decompiler.IL.Box inst = identifierExpression.Annotation<ICSharpCode.Decompiler.IL.Box>();
-			if (inst != null)
-			{
-				Formatter.Append("new ");
-				Formatter.AppendType(inst.Type.Name);
-				Formatter.Append("Box(");
-			}
+			//ICSharpCode.Decompiler.IL.Box inst = identifierExpression.Annotation<ICSharpCode.Decompiler.IL.Box>();
+			//if (inst != null)
+			//{
+			//	Formatter.Append("new ");
+			//	Formatter.AppendType(inst.Type.Name);
+			//	Formatter.Append("Box(");
+			//}
 			Formatter.AppendName(identifierExpression.IdentifierToken.Name);
-			if (inst != null)
-			{
-				Formatter.Append(")");
-			}
+			//if (inst != null)
+			//{
+			//	Formatter.Append(")");
+			//}
 		}
 
 		public void VisitIfElseStatement(IfElseStatement ifElseStatement)
@@ -938,6 +955,10 @@ namespace CppTranslator
 			IType targetType = memberReferenceExpression.Target.GetResolveResult().Type;
 			if (HandleConstants(memberReferenceExpression.Target.ToString(), memberReferenceExpression.MemberNameToken.Name, targetType))
 			{
+				if (targetType.Kind != TypeKind.Unknown)
+				{
+					Formatter.Append(")");
+				}
 				return;
 			}
 			memberReferenceExpression.Target.AcceptVisitor(this);
@@ -1613,7 +1634,7 @@ namespace CppTranslator
 			Formatter.Append(" = ");
 			IType type = variableInitializer.GetResolveResult().Type;
 			CastToType(type, variableInitializer.Initializer);
-//			variableInitializer.Initializer.AcceptVisitor(this);
+			//			variableInitializer.Initializer.AcceptVisitor(this);
 		}
 
 		public void VisitTypeOfExpression(TypeOfExpression typeOfExpression)
