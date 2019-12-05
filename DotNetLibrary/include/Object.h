@@ -3,15 +3,16 @@
 
 namespace DotnetLibrary
 {
-	class ObjectRaw
+
+	class Object
 	{
 	public:
-		ObjectRaw() {}
-		virtual				~ObjectRaw() {};
-		static	Boolean		Equals(PointerType<ObjectRaw> obj1, PointerType<ObjectRaw> obj2) { return(true); }
-		virtual Boolean		Equals(PointerType<ObjectRaw> object) { return(true); }
-		virtual	String		ToString() { return(nullptr); }
-		virtual void		Send(PointerType<StringRaw> message) {
+		Object() {}
+		virtual				~Object() {};
+		static	Boolean		Equals(Object* obj1, Object* obj2) { return(true); }
+		virtual Boolean		Equals(Object* object) { return(true); }
+		virtual	String*		ToString() { return(nullptr); }
+		virtual void		Send(String* message) {
 		}
 		virtual Boolean		get_AsBoolean() {
 			return(true);
@@ -82,15 +83,13 @@ namespace DotnetLibrary
 		virtual Boolean		Equals(Double v) {
 			return(true);
 		}
-		virtual Boolean		Equals(StringRaw* v) {
+		virtual Boolean		Equals(String* v) {
 			return(true);
 		}
 	};
-	class BlockBaseRaw : public ObjectRaw
+	class BlockBase : public Object
 	{
 	public:
 	};
-	typedef	PointerType<ObjectRaw>	Object;
-	typedef PointerType<BlockBaseRaw> BlockBase;
 
 }

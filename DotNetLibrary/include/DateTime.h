@@ -3,38 +3,30 @@
 
 namespace DotnetLibrary
 {
-	class DateTime {
+	class DateTime : public ValueType {
+		UInt64	value;
 	public:
-		DateTime(int64_t val = int64_t{}) : value(val) {
+		DateTime(uint64_t val) : value(val) {
 		}
 		DateTime(Int32 year, Int32 month, Int32 day, Int32 hour = -1, Int32 minute = -1, Int32 second = -1, Int32 millisecond = -1) {
 			value = 0;
 		}
-		operator int64_t& () {
-			return value;
-		}
-		operator const int64_t& () const {
-			return value;
-		}
-		int64_t* operator &() {
-			return &value;
-		}
-		const int64_t* operator &() const {
-			return &value;
-		}
-		const int64_t* operator ->() const {
-			return &value;
-		}
 		static DateTime	Now() {
 			return(DateTime(0));
 		}
+		// .Net functions
+		virtual bool	Equals(Object* valueToCompare) {
+			return(false);
+		}
+		virtual Int32	CompareTo(Object* valueToCompare) {
+			return(0);
+		}
 		bool	Equals(const DateTime& valueToCOmpare) {
-			return(valueToCOmpare.value == value);
+			return(false);
 		}
 		Int64 get_Ticks() {
-			return(value);
+			return(0);
 		}
-		virtual	String				ToString() { return(nullptr); }
-		int64_t value;
+		virtual	String*	ToString() { return(nullptr); }
 	};
 }

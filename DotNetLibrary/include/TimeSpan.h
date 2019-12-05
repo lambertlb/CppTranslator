@@ -3,27 +3,14 @@
 
 namespace DotnetLibrary
 {
-	class TimeSpan {
+	class TimeSpan : public ValueType {
+		UInt64	value;
 	public:
-		TimeSpan(int64_t val = int64_t{}) : value(val) {
+		TimeSpan(UInt64 val) {
+			value = val;
 		}
 		TimeSpan(Int32 day, Int32 hour = -1, Int32 minute = -1, Int32 second = -1, Int32 millisecond = -1) {
 			value = 0;
-		}
-		operator int64_t& () {
-			return value;
-		}
-		operator const int64_t& () const {
-			return value;
-		}
-		int64_t* operator &() {
-			return &value;
-		}
-		const int64_t* operator &() const {
-			return &value;
-		}
-		const int64_t* operator ->() const {
-			return &value;
 		}
 		bool	Equals(const TimeSpan& valueToCOmpare) {
 			return(valueToCOmpare.value == value);
@@ -31,6 +18,15 @@ namespace DotnetLibrary
 		Int64 get_Ticks() {
 			return(value);
 		}
-		int64_t value;
+		// .Net functions
+		virtual bool	Equals(Object* valueToCompare) {
+			return(false);
+		}
+		virtual Int32	CompareTo(Object* valueToCompare) {
+			return(0);
+		}
+		bool	Equals(const DateTime& valueToCOmpare) {
+			return(false);
+		}
 	};
 }
