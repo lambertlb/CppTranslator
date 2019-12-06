@@ -10,8 +10,8 @@ namespace UNNAMED
 		x_enemy_TestNameEnu
 	};
 
-	class x_typedef;
-	class x_typedef1;
+	class Typedef;
+	class Typedef1;
 }
 namespace CABlock_Extra_NS
 {
@@ -26,7 +26,6 @@ namespace CABlock_NS
 	struct TestStruct2;
 	struct TestStruct3;
 	class Abstract;
-	class BigEndianBitConverterTest;
 	class BooleanTest;
 	class BufferTest;
 	class ByteTest;

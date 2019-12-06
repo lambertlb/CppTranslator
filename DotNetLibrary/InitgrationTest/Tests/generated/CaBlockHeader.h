@@ -25,19 +25,19 @@ namespace CABlock_NS
 }
 namespace UNNAMED
 {
-	class x_typedef : public Object
+	class Typedef : public Object
 	{
 		public:
 		TestNameEnu x_friend;
 		TestNameEnu get_Friend();
 		void set_Friend(TestNameEnu x_value );
-		x_typedef();
+		Typedef();
 	};
-	class x_typedef1 : public Object
+	class Typedef1 : public Object
 	{
 		public:
 		TestNameEnu x_friend();
-		x_typedef1();
+		Typedef1();
 	};
 }
 namespace CABlock_Extra_NS
@@ -122,17 +122,6 @@ namespace CABlock_NS
 		Int32 MustImplement(Int32 x_i);
 		Int32 MustImplement(Int64 x_i);
 		String* ToString();
-	};
-	class BigEndianBitConverterTest : public Object
-	{
-		public:
-		CABlock* x_caBlock;
-		BigEndianBitConverterTest(CABlock* x_caBlock);
-		void Test();
-		void CompareBits(Array* x_converted,Int32 x_startingIndex,Array* x_bytes);
-		void CxAssert(Boolean x_x);
-		void CxAssert(Boolean x_x,Boolean x_y);
-		BigEndianBitConverterTest();
 	};
 	class BooleanTest : public Object
 	{

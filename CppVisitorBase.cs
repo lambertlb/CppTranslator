@@ -128,6 +128,13 @@ namespace CppTranslator
 			return (Char.IsDigit(exp[0]));
 		}
 
+		internal void CastToValueType(IType toType, AstNode expression)
+		{
+			Formatter.Append("(");
+			Formatter.Append(toType.Name);
+			Formatter.Append("Value)");
+			expression.AcceptVisitor(this);
+		}
 		internal void CastToType(IType toType, AstNode expression)
 		{
 			IType fromType = expression.GetResolveResult().Type;
@@ -368,15 +375,15 @@ namespace CppTranslator
 			{
 				if (binaryOperatorExpression.Operator == BinaryOperatorType.InEquality)
 					Formatter.Append("!");
+				Formatter.Append("(");
 				if (IsPrimative(left))
 				{
 					CastToType(left, "");
+					Formatter.Append("Value");
 				}
 				Formatter.Append("(");
 				binaryOperatorExpression.Left.AcceptVisitor(this);
-				Formatter.Append(")");
-				if (IsPrimative(left))
-					Formatter.Append(")");
+				Formatter.Append("))");
 
 				if (left.Kind == TypeKind.Class)
 				{
@@ -707,7 +714,7 @@ namespace CppTranslator
 
 		private void WriteForeachArray(ForeachStatement foreachStatement)
 		{
-			Formatter.Append("for ( int foreachi = 0; foreachi < ");
+			Formatter.Append("for ( Int32 foreachi = 0; foreachi < ");
 			foreachStatement.InExpression.AcceptVisitor(this);
 			Formatter.Append("->GetLength(0) ; ++foreachi ) ");
 			Formatter.AddOpenBrace();
@@ -716,8 +723,8 @@ namespace CppTranslator
 			Formatter.Append(" ");
 			WriteVariableName(foreachStatement.VariableNameToken);
 			Formatter.Append(" = ");
-			foreachStatement.InExpression.AcceptVisitor(this);
-			Formatter.AppendLine("->GetValue(foreachi);");
+			FormatInExpression(foreachStatement);
+			Formatter.Append(";");
 			if (foreachStatement.EmbeddedStatement is BlockStatement)
 			{
 				WriteStatements(foreachStatement.EmbeddedStatement as BlockStatement);
@@ -727,6 +734,21 @@ namespace CppTranslator
 				foreachStatement.EmbeddedStatement.AcceptVisitor(this);
 			}
 			Formatter.AddCloseBrace();
+		}
+		public void FormatInExpression(ForeachStatement foreachStatement)
+		{
+			IType target = foreachStatement.VariableType.GetResolveResult().Type;
+			Formatter.Append("(");
+			Formatter.Append("(*");
+			Formatter.Append("(");
+			Formatter.Append("(");
+			Formatter.AppendName(target.Name);
+			Formatter.Append("*)");
+			foreachStatement.InExpression.AcceptVisitor(this);
+			Formatter.Append("->Address(foreachi)");
+			Formatter.Append(")");
+			Formatter.Append(")");
+			Formatter.Append(")");
 		}
 		private void WriteForeachEnumerable(ForeachStatement foreachStatement)
 		{
@@ -795,23 +817,23 @@ namespace CppTranslator
 
 		public void VisitIdentifier(Identifier identifier)
 		{
-			Formatter.Append(identifier.Name);
+			Formatter.AppendName(identifier.Name);
 		}
 
 		public void VisitIdentifierExpression(IdentifierExpression identifierExpression)
 		{
-			//ICSharpCode.Decompiler.IL.Box inst = identifierExpression.Annotation<ICSharpCode.Decompiler.IL.Box>();
-			//if (inst != null)
-			//{
-			//	Formatter.Append("new ");
-			//	Formatter.AppendType(inst.Type.Name);
-			//	Formatter.Append("Box(");
-			//}
+			ICSharpCode.Decompiler.IL.Box inst = identifierExpression.Annotation<ICSharpCode.Decompiler.IL.Box>();
+			if (inst != null)
+			{
+				Formatter.Append("new ");
+				Formatter.AppendType(inst.Type.Name);
+				Formatter.Append("Value(");
+			}
 			Formatter.AppendName(identifierExpression.IdentifierToken.Name);
-			//if (inst != null)
-			//{
-			//	Formatter.Append(")");
-			//}
+			if (inst != null)
+			{
+				Formatter.Append(")");
+			}
 		}
 
 		public void VisitIfElseStatement(IfElseStatement ifElseStatement)
@@ -846,11 +868,23 @@ namespace CppTranslator
 
 		public void VisitIndexerExpression(IndexerExpression indexerExpression)
 		{
+			ArrayType target = indexerExpression.Target.GetResolveResult().Type as ArrayType;
+			String typeName = "Char";
+			if (target != null)
+				typeName = target.ElementType.Name;
+			Formatter.Append("(");
 			Formatter.Append("(*");
+			Formatter.Append("(");
+			Formatter.Append("(");
+			Formatter.AppendName(typeName);
+			Formatter.Append("*)");
 			indexerExpression.Target.AcceptVisitor(this);
 			Formatter.Append("->Address(");
 			WriteCommaSeparatedList(indexerExpression.Arguments);
-			Formatter.Append("))");
+			Formatter.Append(")");
+			Formatter.Append(")");
+			Formatter.Append(")");
+			Formatter.Append(")");
 		}
 
 		public void VisitInterpolatedStringExpression(InterpolatedStringExpression interpolatedStringExpression)
@@ -1050,12 +1084,12 @@ namespace CppTranslator
 
 		private bool HandleConstants(String instance, String field, IType targetType)
 		{
-			String key = instance + field;
-			if (substitutes.ContainsKey(key))
-			{
-				CastToType(targetType, substitutes[key]);
-				return (true);
-			}
+			//String key = instance + field;
+			//if (substitutes.ContainsKey(key))
+			//{
+			//	CastToType(targetType, substitutes[key]);
+			//	return (true);
+			//}
 			return (false);
 		}
 
@@ -1234,6 +1268,22 @@ namespace CppTranslator
 
 		public void VisitPrimitiveExpression(PrimitiveExpression primitiveExpression)
 		{
+			bool isString = primitiveExpression.Value is String;
+			if (isString)
+			{
+				Formatter.Append("(new String(");
+				Formatter.AppendStringsWithControl(primitiveExpression.Value.ToString());
+				Formatter.Append("))");
+				return;
+			}
+			ICSharpCode.Decompiler.IL.Box box = primitiveExpression.Annotation<ICSharpCode.Decompiler.IL.Box>();
+			IType type = primitiveExpression.GetResolveResult().Type;
+			if (box != null)
+			{
+				Formatter.Append("new ");
+				Formatter.Append(type.Name);
+				Formatter.Append("Value(");
+			}
 			if (primitiveExpression.Value is Boolean)
 			{
 				if ((Boolean)(primitiveExpression.Value))
@@ -1244,25 +1294,20 @@ namespace CppTranslator
 				{
 					Formatter.Append("false");
 				}
-				return;
 			}
-			if (primitiveExpression.Value is Char)
+			else if (primitiveExpression.Value is Char)
 			{
 				Formatter.Append("'");
 				Formatter.Append(primitiveExpression.Value.ToString());
 				Formatter.Append("'");
-				return;
-			}
-			bool isString = primitiveExpression.Value is String;
-			if (isString)
-			{
-				Formatter.Append("(new String(");
-				Formatter.AppendStringsWithControl(primitiveExpression.Value.ToString());
-				Formatter.Append("))");
 			}
 			else
 			{
 				Formatter.Append(primitiveExpression.Value.ToString());
+			}
+			if (box != null)
+			{
+				Formatter.Append(")");
 			}
 		}
 
@@ -1708,17 +1753,19 @@ namespace CppTranslator
 
 		public void VisitVariableDeclarationStatement(VariableDeclarationStatement variableDeclarationStatement)
 		{
-			SimpleType simpleType = variableDeclarationStatement.Type as SimpleType;
-			if (simpleType != null)
-			{
-				IType type = simpleType.GetResolveResult().Type;
-				//				FormatTypeDelaration(type, simpleType.IdentifierToken.Name);
-				FormatTypeDelaration(type);
-			}
-			else
-			{
-				variableDeclarationStatement.Type.AcceptVisitor(this);
-			}
+			IType variableType = variableDeclarationStatement.Type.GetResolveResult().Type;
+			FormatTypeDelaration(variableType);
+			//SimpleType simpleType = variableDeclarationStatement.Type as SimpleType;
+			//if (simpleType != null)
+			//{
+			//	IType type = simpleType.GetResolveResult().Type;
+			//	//				FormatTypeDelaration(type, simpleType.IdentifierToken.Name);
+			//	FormatTypeDelaration(type);
+			//}
+			//else
+			//{
+			//	variableDeclarationStatement.Type.AcceptVisitor(this);
+			//}
 			Formatter.Append(" ");
 			WriteCommaSeparatedList(variableDeclarationStatement.Variables);
 			if (!(variableDeclarationStatement.Parent is ForStatement))

@@ -6,6 +6,9 @@ namespace DotnetLibrary
 	class TimeSpan : public ValueType {
 		UInt64	value;
 	public:
+		TimeSpan() {
+			value = 0;
+		}
 		TimeSpan(UInt64 val) {
 			value = val;
 		}
@@ -28,5 +31,9 @@ namespace DotnetLibrary
 		bool	Equals(const DateTime& valueToCOmpare) {
 			return(false);
 		}
+		String* ToString() {
+			return(nullptr);
+		}
 	};
+	typedef TimeSpan TimeSpanValue;
 }

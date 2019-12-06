@@ -4,7 +4,7 @@
 namespace DotnetLibrary
 {
 
-	class Object
+	class DLL_EXPORT Object
 	{
 	public:
 		Object() {}
@@ -81,9 +81,6 @@ namespace DotnetLibrary
 			return(true);
 		}
 		virtual Boolean		Equals(Double v) {
-			return(true);
-		}
-		virtual Boolean		Equals(String* v) {
 			return(true);
 		}
 	};

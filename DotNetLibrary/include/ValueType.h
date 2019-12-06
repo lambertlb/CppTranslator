@@ -3,7 +3,7 @@
 
 namespace DotnetLibrary
 {
-	class  ValueType : public Object {
+	class DLL_EXPORT ValueType : public Object {
 	public:
 		ValueType(){}
 		// .Net functions

@@ -40,14 +40,15 @@ namespace CppTranslator
 			{
 				if (IsArray)
 				{
-					Formatter.Append("ArrayBase::");
+					Formatter.Append("Array::");
 				}
 				else
 				{
 					Formatter.Append(inst.Method.DeclaringType.Name);
-					Formatter.Append("Raw::");
+					Formatter.Append("::");
 				}
-			} else
+			}
+			else
 			{
 				if (memberReferenceExpression != null)
 				{
@@ -55,12 +56,11 @@ namespace CppTranslator
 					if (CppVisitorBase.IsPrimative(targetType))
 					{
 						Formatter.Append("(");
-					}
-					CppVisitorBase.CastToType(targetType, memberReferenceExpression.Target);
-					if (CppVisitorBase.IsPrimative(targetType))
-					{
+						CppVisitorBase.CastToValueType(targetType, memberReferenceExpression.Target);
 						Formatter.Append(")");
 					}
+					else
+						CppVisitorBase.CastToType(targetType, memberReferenceExpression.Target);
 					if (inst.Method.DeclaringType.Kind == TypeKind.Struct)
 					{
 						Formatter.Append(".");
@@ -97,13 +97,13 @@ namespace CppTranslator
 			{
 				if (IsArray)
 				{
-					Formatter.Append("ArrayBase::");
+					Formatter.Append("Array");
 				}
 				else
 				{
 					Formatter.Append(inst.Method.DeclaringType.Name);
-					Formatter.Append("Raw::");
 				}
+				Formatter.Append("::");
 			}
 			else
 			{

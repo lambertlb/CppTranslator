@@ -25,4 +25,5 @@ namespace DotnetLibrary
 		sizeof(UInt64),	//TimeSpanType
 		sizeof(void*)	//StringType
 	};
+	DLL_EXPORT DateTime	DateTime::MaxValue = DateTime(-1);
 }

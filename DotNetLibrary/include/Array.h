@@ -41,6 +41,8 @@ namespace DotnetLibrary
 		}
 		void	SetValue(Object* value, Int32 index1, Int32 index2 = -1, Int32 index3 = -1) {
 		}
+		void	SetValue(Object* value, Array* indexes) {
+		}
 		void* Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1) {
 			return(nullptr);
 		}
