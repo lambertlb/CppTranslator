@@ -57,6 +57,7 @@ namespace CppTranslator
 			substitutes.Add("TimeSpaneMaxValue", TimeSpan.MaxValue.Ticks.ToString());
 			substitutes.Add("TimeSpaneMinValue", TimeSpan.MinValue.Ticks.ToString());
 
+			primatives.Add("Boolean", "Boolean");
 			primatives.Add("Char", "Char");
 			primatives.Add("Byte", "Byte");
 			primatives.Add("SByte", "SByte");
@@ -118,6 +119,10 @@ namespace CppTranslator
 
 		public bool IsPrimative(IType toType)
 		{
+			if (toType == null)
+			{
+				return (false);
+			}
 			return (primatives.ContainsKey(toType.Name));
 		}
 		private bool NeedToCastToNumber(IType toType, AstNode expression)
@@ -131,10 +136,17 @@ namespace CppTranslator
 		internal void CastToValueType(IType toType, AstNode expression)
 		{
 			Formatter.Append("(");
-			Formatter.Append(toType.Name);
-			Formatter.Append("Value)");
+			ToValueType(toType);
+			Formatter.Append(")");
 			expression.AcceptVisitor(this);
 		}
+
+		internal void ToValueType(IType toType)
+		{
+			Formatter.Append(toType.Name);
+			Formatter.Append("Value");
+		}
+
 		internal void CastToType(IType toType, AstNode expression)
 		{
 			IType fromType = expression.GetResolveResult().Type;
@@ -450,8 +462,22 @@ namespace CppTranslator
 			if (toType.Kind == TypeKind.Unknown)
 				toType = castExpression.GetResolveResult().Type;
 			IType fromType = castExpression.Expression.GetResolveResult().Type;
-			CastToType(toType, fromType, castExpression.Expression, unbox != null);
+			if (unbox != null)
+			{
+				UnBox(toType, castExpression.Expression);
+			}
+			else
+				CastToType(toType, fromType, castExpression.Expression, unbox != null);
 		}
+
+		private void UnBox(IType toType, Expression expression)
+		{
+			expression.AcceptVisitor(this);
+			Formatter.Append("->get_As");
+			Formatter.Append(toType.Name);
+			Formatter.Append("()");
+		}
+
 		public void VisitCatchClause(CatchClause catchClause)
 		{
 			throw new NotImplementedException();
@@ -992,6 +1018,8 @@ namespace CppTranslator
 			var sym2 = memberReferenceExpression.Target.GetSymbol() as IEntity;
 			if (sym != null && sym.IsStatic)
 			{
+				if (IsPrimative(targetType))
+					Formatter.Append("Value");
 				Formatter.Append("::");
 			}
 			else

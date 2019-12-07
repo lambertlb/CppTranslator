@@ -36,6 +36,13 @@ namespace CppTranslator
 			IsArray = inst.Method.DeclaringType.Name == "Array";
 			InvocationExpression invocationExpression = CppVisitorBase.CurrentExpression as InvocationExpression;
 			MemberReferenceExpression memberReferenceExpression = invocationExpression.Target as MemberReferenceExpression;
+			IType targetType = null;
+			if (memberReferenceExpression != null)
+			{
+				targetType = memberReferenceExpression.Target.GetResolveResult().Type;
+				if (targetType.Kind == TypeKind.Unknown)
+					targetType = inst.Method.DeclaringType;
+			}
 			if (IsStatic)
 			{
 				if (IsArray)
@@ -44,7 +51,14 @@ namespace CppTranslator
 				}
 				else
 				{
-					Formatter.Append(inst.Method.DeclaringType.Name);
+					if (CppVisitorBase.IsPrimative(targetType))
+					{
+						CppVisitorBase.ToValueType(targetType);
+					}
+					else
+					{
+						Formatter.Append(inst.Method.DeclaringType.Name);
+					}
 					Formatter.Append("::");
 				}
 			}
@@ -52,7 +66,6 @@ namespace CppTranslator
 			{
 				if (memberReferenceExpression != null)
 				{
-					IType targetType = memberReferenceExpression.Target.GetResolveResult().Type;
 					if (CppVisitorBase.IsPrimative(targetType))
 					{
 						Formatter.Append("(");

@@ -3,7 +3,7 @@
 
 namespace DotnetLibrary
 {
-	class  ByteValue : public ValueType {
+	class DLL_EXPORT ByteValue : public ValueType {
 		Byte value;
 	public:
 		ByteValue(Byte v)
@@ -17,12 +17,20 @@ namespace DotnetLibrary
 		virtual bool	Equals(Char valueToCompare) {
 			return(false);
 		}
-		virtual Int32	CompareTo(Object* valueToCompare) {
+		virtual bool	Equals(Int32 valueToCompare) {
+			return(false);
+		}
+		virtual Int32	CompareTo(Byte valueToCompare) {
 			return(0);
 		}
 		String* ToString() {
 			return(nullptr);
 		}
+		static Byte Parse(String* stringToParse) {
+			return(0);
+		}
+		static Byte	MaxValue;
+		static Byte	MinValue;
 	};
 	typedef ByteValue CharValue;
 }

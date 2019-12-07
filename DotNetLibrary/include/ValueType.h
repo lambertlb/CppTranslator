@@ -8,7 +8,6 @@ namespace DotnetLibrary
 		ValueType(){}
 		// .Net functions
 		virtual bool	Equals(Object* valueToCOmpare) = 0;
-		virtual Int32	CompareTo(Object* valueToCOmpare) = 0;
 		String* ToString() = 0;
 	};
 }

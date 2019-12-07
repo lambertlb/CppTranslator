@@ -26,4 +26,10 @@ namespace DotnetLibrary
 		sizeof(void*)	//StringType
 	};
 	DLL_EXPORT DateTime	DateTime::MaxValue = DateTime(-1);
+	DLL_EXPORT Byte	ByteValue::MaxValue = 255;
+	DLL_EXPORT Byte	ByteValue::MinValue = 0;
+
+
+	DLL_EXPORT String* BooleanValue::TrueString = nullptr;
+	DLL_EXPORT String* BooleanValue::FalseString = nullptr;
 }

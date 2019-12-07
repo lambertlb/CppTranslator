@@ -21,7 +21,7 @@ namespace DotnetLibrary
 		virtual bool	Equals(Object* valueToCompare) {
 			return(false);
 		}
-		virtual Int32	CompareTo(Object* valueToCompare) {
+		virtual Int32	CompareTo(DateTime valueToCompare) {
 			return(0);
 		}
 		bool	Equals(const DateTime& valueToCOmpare) {
