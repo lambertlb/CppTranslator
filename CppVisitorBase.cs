@@ -381,18 +381,64 @@ namespace CppTranslator
 
 		public void VisitBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression)
 		{
+			if (HandleSpecialOperators(binaryOperatorExpression))
+				return;
 			IType left = binaryOperatorExpression.Left.GetResolveResult().Type;
 			IType right = binaryOperatorExpression.Right.GetResolveResult().Type;
-			if ((left.Kind == TypeKind.Class || left.Kind == TypeKind.Struct) && (binaryOperatorExpression.Operator == BinaryOperatorType.Equality || binaryOperatorExpression.Operator == BinaryOperatorType.InEquality))
+			binaryOperatorExpression.Left.AcceptVisitor(this);
+			Formatter.Append(" ");
+			Formatter.Append(BinaryOperatorExpression.GetOperatorRole(binaryOperatorExpression.Operator).ToString());
+			Formatter.Append(" ");
+			if (right.Kind == TypeKind.Struct)
+			{
+				CastToType(right, binaryOperatorExpression.Right);
+			}
+			else
+			{
+				binaryOperatorExpression.Right.AcceptVisitor(this);
+			}
+		}
+
+		private bool HandleSpecialOperators(BinaryOperatorExpression binaryOperatorExpression)
+		{
+			if (binaryOperatorExpression.Operator == BinaryOperatorType.Equality || binaryOperatorExpression.Operator == BinaryOperatorType.InEquality)
+				return (HandleEqualityOperator(binaryOperatorExpression));
+			if (binaryOperatorExpression.Operator == BinaryOperatorType.Modulus)
+				return (HandleModulusOperator(binaryOperatorExpression));
+			return (false);
+		}
+		internal bool IsDouble(IType type)
+		{
+			return (type.Name == "Double" || type.Name == "Single");
+		}
+		private bool HandleModulusOperator(BinaryOperatorExpression binaryOperatorExpression)
+		{
+			IType left = binaryOperatorExpression.Left.GetResolveResult().Type;
+			IType right = binaryOperatorExpression.Right.GetResolveResult().Type;
+			bool leftIsDouble = IsDouble(left);
+			bool rightIsDouble = IsDouble(right);
+			if (leftIsDouble || rightIsDouble)
+			{
+				Formatter.Append("((DoubleValue)");
+				binaryOperatorExpression.Left.AcceptVisitor(this);
+				Formatter.Append(") % ");
+				binaryOperatorExpression.Right.AcceptVisitor(this);
+				return (true);
+			}
+			return (false);
+		}
+
+		private bool HandleEqualityOperator(BinaryOperatorExpression binaryOperatorExpression)
+		{
+			IType left = binaryOperatorExpression.Left.GetResolveResult().Type;
+			IType right = binaryOperatorExpression.Right.GetResolveResult().Type;
+			if (left.Kind == TypeKind.Class || left.Kind == TypeKind.Struct)
 			{
 				if (binaryOperatorExpression.Operator == BinaryOperatorType.InEquality)
 					Formatter.Append("!");
 				Formatter.Append("(");
 				if (IsPrimative(left))
-				{
-					CastToType(left, "");
-					Formatter.Append("Value");
-				}
+					ToValueType(left);
 				Formatter.Append("(");
 				binaryOperatorExpression.Left.AcceptVisitor(this);
 				Formatter.Append("))");
@@ -406,29 +452,18 @@ namespace CppTranslator
 					Formatter.Append(".");
 				}
 				Formatter.Append("Equals(");
-				if (left.Kind == TypeKind.Struct)
+				String rt = binaryOperatorExpression.Right.ToString();
+				if (rt == "0")
 				{
-					CastToType(left, binaryOperatorExpression.Right);
+					Formatter.Append("(");
+					Formatter.Append(left.Name);
+					Formatter.Append(")");
 				}
-				else
-				{
-					binaryOperatorExpression.Right.AcceptVisitor(this);
-				}
-				Formatter.Append(")");
-				return;
-			}
-			binaryOperatorExpression.Left.AcceptVisitor(this);
-			Formatter.Append(" ");
-			Formatter.Append(BinaryOperatorExpression.GetOperatorRole(binaryOperatorExpression.Operator).ToString());
-			Formatter.Append(" ");
-			if (right.Kind == TypeKind.Struct)
-			{
-				CastToType(right, binaryOperatorExpression.Right);
-			}
-			else
-			{
 				binaryOperatorExpression.Right.AcceptVisitor(this);
+				Formatter.Append(")");
+				return (true);
 			}
+			return (false);
 		}
 
 		public void VisitBlockStatement(BlockStatement blockStatement)
@@ -458,6 +493,7 @@ namespace CppTranslator
 		public void VisitCastExpression(CastExpression castExpression)
 		{
 			ICSharpCode.Decompiler.IL.UnboxAny unbox = castExpression.Annotation<ICSharpCode.Decompiler.IL.UnboxAny>();
+			ICSharpCode.Decompiler.IL.Box box = castExpression.Annotation<ICSharpCode.Decompiler.IL.Box>();
 			IType toType = castExpression.Type.GetResolveResult().Type;
 			if (toType.Kind == TypeKind.Unknown)
 				toType = castExpression.GetResolveResult().Type;
@@ -466,8 +502,27 @@ namespace CppTranslator
 			{
 				UnBox(toType, castExpression.Expression);
 			}
+			else if (box != null)
+			{
+				Box(toType, castExpression.Expression);
+			}
 			else
 				CastToType(toType, fromType, castExpression.Expression, unbox != null);
+		}
+
+		private void Box(IType toType, Expression expression)
+		{
+			if (IsPrimative(toType))
+			{
+				Formatter.Append("(new ");
+				Formatter.Append(toType.Name);
+				Formatter.Append("Value(");
+				expression.AcceptVisitor(this);
+				Formatter.Append("))");
+			}
+			else
+			{
+			}
 		}
 
 		private void UnBox(IType toType, Expression expression)

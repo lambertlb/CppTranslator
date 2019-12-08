@@ -17,6 +17,9 @@ namespace DotnetLibrary
 		virtual bool	Equals(Int64 valueToCompare) {
 			return(false);
 		}
+		virtual bool	Equals(Int32 valueToCompare) {
+			return(false);
+		}
 		virtual Int32	CompareTo(Int64 valueToCompare) {
 			return(0);
 		}

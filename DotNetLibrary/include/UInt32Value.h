@@ -14,6 +14,12 @@ namespace DotnetLibrary
 		virtual bool	Equals(Object* valueToCompare) {
 			return(false);
 		}
+		virtual bool	Equals(UInt32 valueToCompare) {
+			return(false);
+		}
+		//virtual bool	Equals(Int32 valueToCompare) {
+		//	return(false);
+		//}
 		virtual Int32	CompareTo(UInt32 valueToCompare) {
 			return(0);
 		}

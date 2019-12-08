@@ -1,5 +1,7 @@
 #pragma once
 #ifdef WIN32
+#pragma warning( disable : 4244 )
+#pragma warning( disable : 4018 )
 #ifdef	DOTNETLIBRARY_EXPORTS
 #define	DLL_EXPORT	__declspec( dllexport )
 #else
