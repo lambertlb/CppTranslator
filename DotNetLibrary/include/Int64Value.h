@@ -3,7 +3,7 @@
 
 namespace DotnetLibrary
 {
-	class  Int64Value : public ValueType {
+	class DLL_EXPORT Int64Value : public ValueType {
 		Int64 value;
 	public:
 		Int64Value(Int64 v)
@@ -23,8 +23,16 @@ namespace DotnetLibrary
 		virtual Int32	CompareTo(Int64 valueToCompare) {
 			return(0);
 		}
+		virtual Int32	CompareTo(Object* valueToCompare) {
+			return(0);
+		}
+		static Int64 Parse(String* stringToParse) {
+			return(0);
+		}
 		String* ToString() {
 			return(nullptr);
 		}
+		static Int64	MaxValue;
+		static Int64	MinValue;
 	};
 }

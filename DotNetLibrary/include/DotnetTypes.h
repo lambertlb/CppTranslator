@@ -14,7 +14,7 @@
 
 // alias .Net types
 typedef	bool		Boolean;
-typedef	int8_t		Char;
+typedef	int16_t		Char;
 typedef	uint8_t		Byte;
 typedef	int8_t		SByte;
 typedef	int16_t		Int16;
@@ -76,6 +76,7 @@ namespace DotnetLibrary
 #include "DoubleValue.h"
 #include "DateTime.h"
 #include "TimeSpan.h"
+#include "Encoding.h"
 //#include "BoxTypeRaw.h"
 //#include "Operators.h"
 //#include "PointerType.h"

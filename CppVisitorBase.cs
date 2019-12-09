@@ -309,6 +309,8 @@ namespace CppTranslator
 			else
 			{
 				Formatter.Append("= ");
+				if (HandleSpecialOperators(assignmentExpression.Left, assignmentExpression.Right, assignmentExpression.Operator.ToString()))
+					return;
 				assignmentExpression.Left.AcceptVisitor(this);
 				Formatter.Append(" ");
 				Formatter.Append(GetOperator(assignmentExpression.Operator));
@@ -381,7 +383,7 @@ namespace CppTranslator
 
 		public void VisitBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression)
 		{
-			if (HandleSpecialOperators(binaryOperatorExpression))
+			if (HandleSpecialOperators(binaryOperatorExpression.Left, binaryOperatorExpression.Right, binaryOperatorExpression.Operator.ToString()))
 				return;
 			IType left = binaryOperatorExpression.Left.GetResolveResult().Type;
 			IType right = binaryOperatorExpression.Right.GetResolveResult().Type;
@@ -399,48 +401,70 @@ namespace CppTranslator
 			}
 		}
 
-		private bool HandleSpecialOperators(BinaryOperatorExpression binaryOperatorExpression)
+		private bool HandleSpecialOperators(Expression leftExpression, Expression rightExpression, String oper)
 		{
-			if (binaryOperatorExpression.Operator == BinaryOperatorType.Equality || binaryOperatorExpression.Operator == BinaryOperatorType.InEquality)
-				return (HandleEqualityOperator(binaryOperatorExpression));
-			if (binaryOperatorExpression.Operator == BinaryOperatorType.Modulus)
-				return (HandleModulusOperator(binaryOperatorExpression));
+			if (oper == "==" || oper == "!=" || oper == "Equality" || oper == "InEquality")
+				return (HandleEqualityOperator(leftExpression, rightExpression, oper));
+			if (oper == "%" || oper == "Modulus")
+				return (HandleModulusOperator(leftExpression, rightExpression, oper));
+			if (oper == "+" || oper == "Add")
+				return (HandleAddStringsOperator(leftExpression, rightExpression, oper));
 			return (false);
 		}
-		internal bool IsDouble(IType type)
+
+		internal bool IsString(IType type)
 		{
-			return (type.Name == "Double" || type.Name == "Single");
+			return (type.Name == "String");
 		}
-		private bool HandleModulusOperator(BinaryOperatorExpression binaryOperatorExpression)
+		private bool HandleAddStringsOperator(Expression leftExpression, Expression rightExpression, string oper)
 		{
-			IType left = binaryOperatorExpression.Left.GetResolveResult().Type;
-			IType right = binaryOperatorExpression.Right.GetResolveResult().Type;
-			bool leftIsDouble = IsDouble(left);
-			bool rightIsDouble = IsDouble(right);
-			if (leftIsDouble || rightIsDouble)
+			IType left = leftExpression.GetResolveResult().Type;
+			IType right = rightExpression.GetResolveResult().Type;
+			if (IsString(left) && IsString(right))
 			{
-				Formatter.Append("((DoubleValue)");
-				binaryOperatorExpression.Left.AcceptVisitor(this);
-				Formatter.Append(") % ");
-				binaryOperatorExpression.Right.AcceptVisitor(this);
+				leftExpression.AcceptVisitor(this);
+				Formatter.Append("->Combine(");
+				rightExpression.AcceptVisitor(this);
+				Formatter.Append(")");
 				return (true);
 			}
 			return (false);
 		}
 
-		private bool HandleEqualityOperator(BinaryOperatorExpression binaryOperatorExpression)
+		internal bool IsDouble(IType type)
 		{
-			IType left = binaryOperatorExpression.Left.GetResolveResult().Type;
-			IType right = binaryOperatorExpression.Right.GetResolveResult().Type;
+			return (type.Name == "Double" || type.Name == "Single");
+		}
+		private bool HandleModulusOperator(Expression leftExpression, Expression rightExpression, String oper)
+		{
+			IType left = leftExpression.GetResolveResult().Type;
+			IType right = rightExpression.GetResolveResult().Type;
+			bool leftIsDouble = IsDouble(left);
+			bool rightIsDouble = IsDouble(right);
+			if (leftIsDouble || rightIsDouble)
+			{
+				Formatter.Append("((DoubleValue)");
+				leftExpression.AcceptVisitor(this);
+				Formatter.Append(") % ");
+				rightExpression.AcceptVisitor(this);
+				return (true);
+			}
+			return (false);
+		}
+
+		private bool HandleEqualityOperator(Expression leftExpression, Expression rightExpression, String oper)
+		{
+			IType left = leftExpression.GetResolveResult().Type;
+			IType right = rightExpression.GetResolveResult().Type;
 			if (left.Kind == TypeKind.Class || left.Kind == TypeKind.Struct)
 			{
-				if (binaryOperatorExpression.Operator == BinaryOperatorType.InEquality)
+				if (oper == "!=" || oper == "InEquality")
 					Formatter.Append("!");
 				Formatter.Append("(");
 				if (IsPrimative(left))
 					ToValueType(left);
 				Formatter.Append("(");
-				binaryOperatorExpression.Left.AcceptVisitor(this);
+				leftExpression.AcceptVisitor(this);
 				Formatter.Append("))");
 
 				if (left.Kind == TypeKind.Class)
@@ -452,14 +476,14 @@ namespace CppTranslator
 					Formatter.Append(".");
 				}
 				Formatter.Append("Equals(");
-				String rt = binaryOperatorExpression.Right.ToString();
+				String rt = rightExpression.ToString();
 				if (rt == "0")
 				{
 					Formatter.Append("(");
 					Formatter.Append(left.Name);
 					Formatter.Append(")");
 				}
-				binaryOperatorExpression.Right.AcceptVisitor(this);
+				rightExpression.AcceptVisitor(this);
 				Formatter.Append(")");
 				return (true);
 			}
@@ -1380,9 +1404,8 @@ namespace CppTranslator
 			}
 			else if (primitiveExpression.Value is Char)
 			{
-				Formatter.Append("'");
-				Formatter.Append(primitiveExpression.Value.ToString());
-				Formatter.Append("'");
+				Char v = (Char)primitiveExpression.Value;
+				Formatter.AppendCharWithControls(v, false);
 			}
 			else
 			{

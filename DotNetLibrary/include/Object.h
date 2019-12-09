@@ -59,9 +59,9 @@ namespace DotnetLibrary
 		virtual Boolean		Equals(Byte v) {
 			return(true);
 		}
-		virtual Boolean		Equals(Int16 v) {
-			return(true);
-		}
+		//virtual Boolean		Equals(Int16 v) {
+		//	return(true);
+		//}
 		virtual Boolean		Equals(UInt16 v) {
 			return(true);
 		}

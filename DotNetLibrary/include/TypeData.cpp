@@ -28,7 +28,18 @@ namespace DotnetLibrary
 	DLL_EXPORT DateTime	DateTime::MaxValue = DateTime(-1);
 	DLL_EXPORT Byte	ByteValue::MaxValue = 255;
 	DLL_EXPORT Byte	ByteValue::MinValue = 0;
-
+	DLL_EXPORT Double	DoubleValue::MaxValue = 255;
+	DLL_EXPORT Double	DoubleValue::MinValue = 0;
+	DLL_EXPORT Double	DoubleValue::Epsilon = 0;
+	DLL_EXPORT Double	DoubleValue::NaN = 0;
+	DLL_EXPORT Double	DoubleValue::PositiveInfinity = 0;
+	DLL_EXPORT Double	DoubleValue::NegativeInfinity = 0;
+	DLL_EXPORT Int16	Int16Value::MaxValue = 255;
+	DLL_EXPORT Int16	Int16Value::MinValue = 0;
+	DLL_EXPORT Int64	Int64Value::MaxValue = 255;
+	DLL_EXPORT Int64	Int64Value::MinValue = 0;
+	DLL_EXPORT Int32	Int32Value::MaxValue = 255;
+	DLL_EXPORT Int32	Int32Value::MinValue = 0;
 
 	DLL_EXPORT String* BooleanValue::TrueString = nullptr;
 	DLL_EXPORT String* BooleanValue::FalseString = nullptr;

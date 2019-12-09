@@ -186,7 +186,7 @@ namespace CppTranslator
 		/// <param name="data">String to Append</param>
 		public void AppendStringsWithControl(String data)
 		{
-			Append("\"");
+			Append("(Char*)L\"");
 			Char[] chars = data.ToCharArray();
 			foreach (Char chr in chars)
 			{

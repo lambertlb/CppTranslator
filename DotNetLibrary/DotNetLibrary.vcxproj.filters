@@ -49,5 +49,6 @@
     <ClInclude Include="include\UInt64Value.h" />
     <ClInclude Include="include\SingleValue.h" />
     <ClInclude Include="include\DoubleValue.h" />
+    <ClInclude Include="include\Encoding.h" />
   </ItemGroup>
 </Project>

@@ -17,87 +17,14 @@ namespace DotnetLibrary
 				characterData[i] = string[i];
 			}
 		}
+		virtual Boolean StartsWith(String* what) {
+			return(false);
+		}
+		virtual Boolean EndsWith(String* what) {
+			return(false);
+		}
+		virtual String* Combine(String* v) { return(nullptr); }
 	private:
 		Char*	characterData;
-	};
-	struct CharRaw {
-		static Double	GetNumericValue(Char v) {
-			return(0);
-		}
-		static Double	GetNumericValue(String* v, Int32 index) {
-			return(0);
-		}
-		static Boolean	IsControl(Char v) {
-			return(false);
-		}
-		static Boolean	IsControl(String* v, Int32 index) {
-			return(false);
-		}
-		static Boolean	IsDigit(Char v) {
-			return(false);
-		}
-		static Boolean	IsDigit(String* v, Int32 index) {
-			return(false);
-		}
-		static Boolean	IsLetter(Char v) {
-			return(false);
-		}
-		static Boolean	IsLetter(String* v, Int32 index) {
-			return(false);
-		}
-		static Boolean	IsLetterOrDigit(Char v) {
-			return(false);
-		}
-		static Boolean	IsLetterOrDigit(String* v, Int32 index) {
-			return(false);
-		}
-		static Boolean	IsLower(Char v) {
-			return(false);
-		}
-		static Boolean	IsLower(String* v, Int32 index) {
-			return(false);
-		}
-		static Boolean	IsNumber(Char v) {
-			return(false);
-		}
-		static Boolean	IsNumber(String* v, Int32 index) {
-			return(false);
-		}
-		static Boolean	IsPunctuation(Char v) {
-			return(false);
-		}
-		static Boolean	IsPunctuation(String* v, Int32 index) {
-			return(false);
-		}
-		static Boolean	IsSeparator(Char v) {
-			return(false);
-		}
-		static Boolean	IsSeparator(String* v, Int32 index) {
-			return(false);
-		}
-		static Boolean	IsUpper(Char v) {
-			return(false);
-		}
-		static Boolean	IsUpper(String* v, Int32 index) {
-			return(false);
-		}
-		static Boolean	IsWhiteSpace(Char v) {
-			return(false);
-		}
-		static Boolean	IsWhiteSpace(String* v, Int32 index) {
-			return(false);
-		}
-		static Char	ToLower(Char v) {
-			return(0);
-		}
-		static Char	ToUpper(Char v) {
-			return(0);
-		}
-		static String*	ToString(Char v) {
-			return(nullptr);
-		}
-		static Char	Parse(String* string) {
-			return(0);
-		}
 	};
 }
