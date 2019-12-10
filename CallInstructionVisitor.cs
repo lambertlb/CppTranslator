@@ -134,7 +134,7 @@ namespace CppTranslator
 					}
 				}
 			}
-			Formatter.Append(MethodName);
+			Formatter.Append(inst.Method.Name);
 			return null;
 		}
 	}

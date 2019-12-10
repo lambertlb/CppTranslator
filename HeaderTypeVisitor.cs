@@ -178,7 +178,8 @@ namespace CppTranslator
 		{
 			Formatter.AppendIndented("");
 			WriteModifiers(methodDeclaration.ModifierTokens);
-			methodDeclaration.ReturnType.AcceptVisitor(this);
+			IType type = methodDeclaration.ReturnType.GetResolveResult().Type;
+			FormatTypeDelaration(type);
 			Formatter.Append(" ");
 			WriteMethodHeader(methodDeclaration.NameToken.Name, methodDeclaration.Parameters);
 			if (methodDeclaration.Body.IsNull)
@@ -201,7 +202,8 @@ namespace CppTranslator
 			{
 				Formatter.Append("static ");
 			}
-			fieldDeclaration.ReturnType.GetResolveResult().Type.AcceptVisitor(TypeVisitor);
+			IType type = fieldDeclaration.ReturnType.GetResolveResult().Type;
+			FormatTypeDelaration(type);
 			Formatter.Append(" ");
 			WriteCommaSeparatedList(fieldDeclaration.Variables);
 			Formatter.AppendLine(";");
@@ -215,7 +217,8 @@ namespace CppTranslator
 			if (propertyDeclaration.Getter != null)
 			{
 				Formatter.AppendIndented("");
-				propertyDeclaration.ReturnType.AcceptVisitor(this);
+				IType type = propertyDeclaration.ReturnType.GetResolveResult().Type;
+				FormatTypeDelaration(type);
 				Formatter.Append(" get_");
 				Formatter.Append(propertyDeclaration.NameToken.Name);
 				Formatter.AppendLine("();");

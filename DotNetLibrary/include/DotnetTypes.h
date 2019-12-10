@@ -14,7 +14,7 @@
 
 // alias .Net types
 typedef	bool		Boolean;
-typedef	int16_t		Char;
+typedef	wchar_t		Char;
 typedef	uint8_t		Byte;
 typedef	int8_t		SByte;
 typedef	int16_t		Int16;
@@ -53,6 +53,7 @@ namespace DotnetLibrary
 		TimeSpanType = 17,
 		StringType = 18
 	} DataType;
+#define FloatType SingleType
 	DLL_EXPORT Int32	DataTypeSize[];
 }
 
@@ -65,6 +66,7 @@ namespace DotnetLibrary
 #include "ValueType.h"
 #include "BooleanValue.h"
 #include "ByteValue.h"
+#include "CharValue.h"
 #include "SByteValue.h"
 #include "Int16Value.h"
 #include "UInt16Value.h"

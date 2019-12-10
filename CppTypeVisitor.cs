@@ -21,6 +21,8 @@ namespace CppTranslator
 		}
 		public override IType VisitTypeDefinition(ITypeDefinition type)
 		{
+			if (type.Name == "String")
+				formatter.Append("");
 			formatter.AppendType(type.Name);
 			if (type.Kind == TypeKind.Class)
 				formatter.Append("*");

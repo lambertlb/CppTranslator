@@ -14,7 +14,7 @@ namespace DotnetLibrary
 		virtual bool	Equals(Object* valueToCompare) {
 			return(false);
 		}
-		virtual bool	Equals(Char valueToCompare) {
+		virtual bool	Equals(Byte valueToCompare) {
 			return(false);
 		}
 		virtual bool	Equals(Int32 valueToCompare) {
@@ -29,7 +29,7 @@ namespace DotnetLibrary
 		String* ToString() {
 			return(nullptr);
 		}
-		static Byte Parse(String* stringToParse) {
+		static Char Parse(String* stringToParse) {
 			return(0);
 		}
 		static Byte	MaxValue;

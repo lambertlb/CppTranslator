@@ -565,41 +565,43 @@ namespace CppTranslator
 
 		public void VisitPrimitiveExpression(PrimitiveExpression primitiveExpression)
 		{
-			if (primitiveExpression.Value is Boolean)
-			{
-				if ((Boolean)(primitiveExpression.Value))
-				{
-					Formatter.Append("true");
-				}
-				else
-				{
-					Formatter.Append("false");
-				}
-				return;
-			}
-			if (primitiveExpression.Value is Char)
-			{
-				Formatter.Append("'");
-				Formatter.Append(primitiveExpression.Value.ToString());
-				Formatter.Append("'");
-				return;
-			}
-			bool isString = primitiveExpression.Value is String;
-			if (isString)
-			{
-				Formatter.Append("new StringRaw(");
-				Formatter.AppendStringsWithControl(primitiveExpression.Value.ToString());
-				Formatter.Append(")");
-			}
-			else
-			{
-				Formatter.Append(primitiveExpression.Value.ToString());
-			}
+			primitiveExpression.AcceptVisitor(baseVisitor);
+			//if (primitiveExpression.Value is Boolean)
+			//{
+			//	if ((Boolean)(primitiveExpression.Value))
+			//	{
+			//		Formatter.Append("true");
+			//	}
+			//	else
+			//	{
+			//		Formatter.Append("false");
+			//	}
+			//	return;
+			//}
+			//if (primitiveExpression.Value is Char)
+			//{
+			//	Char v = (Char)primitiveExpression.Value;
+			//	Formatter.AppendCharWithControls(v, false);
+			//	return;
+			//}
+			//bool isString = primitiveExpression.Value is String;
+			//if (isString)
+			//{
+			//	Formatter.Append("new StringRaw(");
+			//	Formatter.AppendStringsWithControl(primitiveExpression.Value.ToString());
+			//	Formatter.Append(")");
+			//}
+			//else
+			//{
+			//	Formatter.Append(primitiveExpression.Value.ToString());
+			//}
 		}
 
 		public void VisitPrimitiveType(PrimitiveType primitiveType)
 		{
 			Formatter.AppendType(primitiveType.Keyword);
+			if (primitiveType.Keyword == "object" || primitiveType.Keyword == "string")
+				Formatter.Append("*");
 		}
 
 		protected virtual void WritePrivateImplementationType(AstType privateImplementationType)

@@ -48,7 +48,7 @@ namespace CppTranslator
 			types.Add("object", "Object");
 			types.Add("short", "Int16");
 			types.Add("ushort", "UInt16");
-			types.Add("string", "String*");
+			types.Add("string", "String");
 		}
 
 		private void SetNamespace(string value)
@@ -148,7 +148,10 @@ namespace CppTranslator
 		/// <param name="name"></param>
 		public void AppendName(String name)
 		{
-			Append(PrefixName(name));
+			String nm = PrefixName(name);
+			if (nm == "Void")
+				nm = "void";
+			Append(nm);
 		}
 		/// <summary>
 		/// Append name and prefix it if needed

@@ -17,6 +17,7 @@ namespace DotnetLibrary
 				characterData[i] = string[i];
 			}
 		}
+		String(const Char chr, const Int32 amount) {}
 		virtual Boolean StartsWith(String* what) {
 			return(false);
 		}
@@ -24,6 +25,10 @@ namespace DotnetLibrary
 			return(false);
 		}
 		virtual String* Combine(String* v) { return(nullptr); }
+		Int32				get_Length() { return(0); }
+		Char* Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1) {
+			return(nullptr);
+		}
 	private:
 		Char*	characterData;
 	};

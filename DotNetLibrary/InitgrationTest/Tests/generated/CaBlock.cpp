@@ -76,16 +76,16 @@ namespace CABlock_NS
 		x_double3dArray = (new Array(DoubleType,2,2,4))->Initialize((Double*) TestArrayCreationArray5);
 		CxAssert((DoubleValue(((*((Double*)x_double3dArray->Address(0,0,3)))))).Equals(4));
 		x_dateTime1dArray = (new Array(DateTimeType,4))->Initialize((DateTime*) TestArrayCreationArray6);
-		CxAssert(((*((DateTime*)x_dateTime1dArray->Address(2)))).Equals(DateTime(2003,7,23,12,30,30,300)));
-		((*((DateTime*)x_dateTime2dArray->Address(1,1)))) = DateTime(2003,7,23,12,30,30,100);
-		((*((DateTime*)x_dateTime3dArray->Address(1,1,1)))) = DateTime(2003,7,23,12,30,30,100);
+		CxAssert(((*((DateTime*)x_dateTime1dArray->Address(2)))).Equals((DateTime(2003,7,23,12,30,30,300))));
+		((*((DateTime*)x_dateTime2dArray->Address(1,1)))) = (DateTime(2003,7,23,12,30,30,100));
+		((*((DateTime*)x_dateTime3dArray->Address(1,1,1)))) = (DateTime(2003,7,23,12,30,30,100));
 		((*((TimeSpan*)x_timeSpan1dArray->Address(0)))) = TimeSpan();
-		((*((TimeSpan*)x_timeSpan1dArray->Address(0)))) = TimeSpan(5,4,3,2,100);
-		((*((TimeSpan*)x_timeSpan1dArray->Address(1)))) = TimeSpan(5,4,3,2,200);
-		((*((TimeSpan*)x_timeSpan1dArray->Address(2)))) = TimeSpan(5,4,3,2,300);
-		((*((TimeSpan*)x_timeSpan1dArray->Address(3)))) = TimeSpan(5,4,3,2,400);
-		((*((TimeSpan*)x_timeSpan2dArray->Address(1,1)))) = TimeSpan(5,4,3,2,100);
-		((*((TimeSpan*)x_timeSpan3dArray->Address(1,1,1)))) = TimeSpan(5,4,3,2,100);
+		((*((TimeSpan*)x_timeSpan1dArray->Address(0)))) = (TimeSpan(5,4,3,2,100));
+		((*((TimeSpan*)x_timeSpan1dArray->Address(1)))) = (TimeSpan(5,4,3,2,200));
+		((*((TimeSpan*)x_timeSpan1dArray->Address(2)))) = (TimeSpan(5,4,3,2,300));
+		((*((TimeSpan*)x_timeSpan1dArray->Address(3)))) = (TimeSpan(5,4,3,2,400));
+		((*((TimeSpan*)x_timeSpan2dArray->Address(1,1)))) = (TimeSpan(5,4,3,2,100));
+		((*((TimeSpan*)x_timeSpan3dArray->Address(1,1,1)))) = (TimeSpan(5,4,3,2,100));
 	}
 	void ArrayTest::MiscTest()
 	{
@@ -120,8 +120,8 @@ namespace CABlock_NS
 		{
 			CxAssert(((((*((DateTime*)x_dateTime1dArray->Address(x_j - 1)))))).Equals(((*((DateTime*)x_array->Address(x_j))))));
 		}
-		CxAssert(TimeSpan(5,4,3,2,100).Equals(x_timeSpan3dArray->GetValue(1,1,1)));
-		TimeSpan x_timeSpan = TimeSpan(5,4,3,2,101);
+		CxAssert((TimeSpan(5,4,3,2,100)).Equals(x_timeSpan3dArray->GetValue(1,1,1)));
+		TimeSpan x_timeSpan = (TimeSpan(5,4,3,2,101));
 		Array* x_indices = (new Array(Int32Type,3))->Initialize((Int32*) ArrayMethodTestsArray0);
 		x_timeSpan3dArray->SetValue(new TimeSpanValue(x_timeSpan),x_indices);
 		CxAssert(x_timeSpan.Equals(x_timeSpan3dArray->GetValue(x_indices)));
@@ -184,14 +184,14 @@ namespace CABlock_NS
 	}
 	void BasicTest::FieldTest()
 	{
-		BasicTest* x_basicTest = new BasicTest(x_caBlock);
+		BasicTest* x_basicTest = (new BasicTest(x_caBlock));
 		Int32 x_num = x_field1;
 		CxAssert((Int32Value(x_num)).Equals(x_field1));
 		Int32 x_num2 = x_basicTest->x_field1;
 		CxAssert((Int32Value(x_num2)).Equals(x_basicTest->x_field1));
 		DateTime x_maxValue = DateTime::MaxValue;
 		CxAssert(((x_maxValue)).Equals(DateTime::MaxValue));
-		Object* x_obj = new Object();
+		Object* x_obj = (new Object());
 		CxAssert(!((x_obj->ToString()))->Equals(nullptr));
 		CxAssert(x_obj->Equals(x_obj));
 		CxAssert(Object::Equals(x_obj,x_obj));
@@ -242,7 +242,7 @@ namespace CABlock_NS
 	}
 	void BasicTest::StructTest()
 	{
-		TestStruct x_ts = TestStruct(2);
+		TestStruct x_ts = (TestStruct(2));
 		CxAssert((Int32Value(x_ts.get_Data())).Equals(2));
 		x_ts.set_Data(3);
 		CxAssert((Int32Value(x_ts.get_Data())).Equals(3));
@@ -260,7 +260,7 @@ namespace CABlock_NS
 	}
 	void BasicTest::VirtualMethodTest()
 	{
-		TestAbstract* x_testAbstract = new TestAbstract();
+		TestAbstract* x_testAbstract = (new TestAbstract());
 		CxAssert((Int32Value(x_testAbstract->MustImplement())).Equals(2));
 		CxAssert((Int32Value(x_testAbstract->DidImplement())).Equals(1));
 	}
@@ -291,11 +291,11 @@ namespace CABlock_NS
 	}
 	void BasicTest::RefMethod(DateTime&  x_data)
 	{
-		x_data = DateTime(1000);
+		x_data = (DateTime(1000));
 	}
 	void BasicTest::RefMethod(TimeSpan&  x_data)
 	{
-		x_data = TimeSpan(1000);
+		x_data = (TimeSpan(1000));
 	}
 	void BasicTest::RefMethod(String*&  x_data)
 	{
@@ -308,12 +308,12 @@ namespace CABlock_NS
 	{
 		if ( ((x_data))->Equals(nullptr) )
 		{
-			x_data = new TestAbstract();
+			x_data = (new TestAbstract());
 		}
 	}
 	void BasicTest::TestUsingNamespace()
 	{
-		TestNamespaceClass* x_testNamespaceClass = new TestNamespaceClass();
+		TestNamespaceClass* x_testNamespaceClass = (new TestNamespaceClass());
 		CxAssert(!((x_testNamespaceClass))->Equals(nullptr));
 	}
 	void BasicTest::CxAssert(Boolean x_x)
@@ -349,7 +349,7 @@ namespace CABlock_NS
 	}
 	void BasicTest::TestNames()
 	{
-		Typedef* x_typedef = new Typedef();
+		Typedef* x_typedef = (new Typedef());
 		x_typedef->set_Friend(x_friend_TestNameEnu);
 		CxAssert(x_typedef->get_Friend() == x_friend_TestNameEnu);
 	}
@@ -622,7 +622,7 @@ namespace CABlock_NS
 		UInt16 x_num4 = 1;
 		UInt32 x_num5 = 1;
 		UInt64 x_num6 = 1;
-		Single x_num7 = 1;
+		Single x_num7 = ((Single)1);
 		Double x_num8 = 1;
 		CxAssert((ByteValue(x_b)).Equals(66));
 		CxAssert((Int32Value(x_b + x_c)).Equals(67));
@@ -634,7 +634,7 @@ namespace CABlock_NS
 		CxAssert((Int32Value(x_b + x_num4)).Equals(67));
 		CxAssert((UInt32Value(x_b + x_num5)).Equals(67));
 		CxAssert((UInt64Value(x_b + x_num6)).Equals(67));
-		CxAssert((SingleValue(x_b + x_num7)).Equals(67));
+		CxAssert((SingleValue(x_b + x_num7)).Equals(((Single)67)));
 		CxAssert((DoubleValue(x_b + x_num8)).Equals(67));
 		CxAssert((Int32Value(x_b - x_c)).Equals(65));
 		CxAssert((Int32Value(x_b - x_b2)).Equals(65));
@@ -645,7 +645,7 @@ namespace CABlock_NS
 		CxAssert((Int32Value(x_b - x_num4)).Equals(65));
 		CxAssert((UInt32Value(x_b - x_num5)).Equals(65));
 		CxAssert((UInt64Value(x_b - x_num6)).Equals(65));
-		CxAssert((SingleValue(x_b - x_num7)).Equals(65));
+		CxAssert((SingleValue(x_b - x_num7)).Equals(((Single)65)));
 		CxAssert((DoubleValue(x_b - x_num8)).Equals(65));
 		CxAssert((Int32Value(x_b * x_c)).Equals(66));
 		CxAssert((Int32Value(x_b * x_b2)).Equals(66));
@@ -656,7 +656,7 @@ namespace CABlock_NS
 		CxAssert((Int32Value(x_b * x_num4)).Equals(66));
 		CxAssert((UInt32Value(x_b * x_num5)).Equals(66));
 		CxAssert((UInt64Value(x_b * x_num6)).Equals(66));
-		CxAssert((SingleValue(x_b * x_num7)).Equals(66));
+		CxAssert((SingleValue(x_b * x_num7)).Equals(((Single)66)));
 		CxAssert((DoubleValue(x_b * x_num8)).Equals(66));
 		CxAssert((Int32Value(x_b / x_c)).Equals(66));
 		CxAssert((Int32Value(x_b / x_b2)).Equals(66));
@@ -667,7 +667,7 @@ namespace CABlock_NS
 		CxAssert((Int32Value(x_b / x_num4)).Equals(66));
 		CxAssert((UInt32Value(x_b / x_num5)).Equals(66));
 		CxAssert((UInt64Value(x_b / x_num6)).Equals(66));
-		CxAssert((SingleValue(x_b / x_num7)).Equals(66));
+		CxAssert((SingleValue(x_b / x_num7)).Equals(((Single)66)));
 		CxAssert((DoubleValue(x_b / x_num8)).Equals(66));
 		CxAssert((Int32Value(x_b % x_c)).Equals((Int32)0));
 		CxAssert((Int32Value(x_b % x_b2)).Equals((Int32)0));
@@ -678,7 +678,7 @@ namespace CABlock_NS
 		CxAssert((Int32Value(x_b % x_num4)).Equals((Int32)0));
 		CxAssert((UInt32Value(x_b % x_num5)).Equals((UInt32)0));
 		CxAssert((UInt64Value(x_b % x_num6)).Equals((UInt64)0));
-		CxAssert((SingleValue(((DoubleValue)x_b) % x_num7)).Equals(0));
+		CxAssert((SingleValue(((DoubleValue)x_b) % x_num7)).Equals(((Single)0)));
 		CxAssert((DoubleValue(((DoubleValue)x_b) % x_num8)).Equals(0));
 		CxAssert(( x_b & x_c ) == 0);
 		CxAssert(( x_b & x_b2 ) == 0);
@@ -864,7 +864,7 @@ namespace CABlock_NS
 		Byte x_val = 1;
 		CxAssert((ByteValue(Math::Max(x_b,x_val))).Equals(1));
 		CxAssert((ByteValue(Math::Min(x_b,x_val))).Equals((Byte)0));
-		StringBuilder* x_stringBuilder = new StringBuilder();
+		StringBuilder* x_stringBuilder = (new StringBuilder());
 		x_stringBuilder->Append(x_b);
 		CxAssert(((x_stringBuilder->ToString()))->Equals((new String((Char*)L"0"))));
 		x_stringBuilder->Insert(1,x_b);
@@ -1047,10 +1047,10 @@ namespace CABlock_NS
 	}
 	void CharTest::CharArrayTests()
 	{
-		static Char CharArrayTestsArray0[5] = {'1','2','3','4','5'};
-		static Char CharArrayTestsArray1[4] = {'1','2','3','4'};
-		static Char CharArrayTestsArray2[2][4] = {{'1','2','3','4'},{'4','5','6','7'}};
-		static Char CharArrayTestsArray3[2][2][4] = {{{'1','2','3','4'},{'5','6','7','8'}},{{'9','A','B','C'},{'D','E','F','G'}}};
+		static Char CharArrayTestsArray0[5] = {L'1',L'2',L'3',L'4',L'5'};
+		static Char CharArrayTestsArray1[4] = {L'1',L'2',L'3',L'4'};
+		static Char CharArrayTestsArray2[2][4] = {{L'1',L'2',L'3',L'4'},{L'4',L'5',L'6',L'7'}};
+		static Char CharArrayTestsArray3[2][2][4] = {{{L'1',L'2',L'3',L'4'},{L'5',L'6',L'7',L'8'}},{{L'9',L'A',L'B',L'C'},{L'D',L'E',L'F',L'G'}}};
 		Array* x_array = (new Array(CharType,5))->Initialize((Char*) CharArrayTestsArray0);
 		CxAssert((Int32Value(x_array->get_Length())).Equals(5));
 		CxAssert((CharValue(((*((Char*)x_array->Address(3)))))).Equals(L'4'));
@@ -1071,7 +1071,7 @@ namespace CABlock_NS
 		Char x_val = L'1';
 		CxAssert((UInt16Value(Math::Max(x_c,x_val))).Equals(49));
 		CxAssert((UInt16Value(Math::Min(x_c,x_val))).Equals(48));
-		StringBuilder* x_stringBuilder = new StringBuilder();
+		StringBuilder* x_stringBuilder = (new StringBuilder());
 		x_stringBuilder->Append(x_c);
 		CxAssert(((x_stringBuilder->ToString()))->Equals((new String((Char*)L"0"))));
 	}
@@ -1375,7 +1375,7 @@ namespace CABlock_NS
 		CxAssert((DoubleValue(Math::Max(x_num,x_val))).Equals(1));
 		CxAssert((DoubleValue(Math::Min(x_num,x_val))).Equals(-1));
 		CxAssert(Math::Sign(x_num) < 0);
-		StringBuilder* x_stringBuilder = new StringBuilder();
+		StringBuilder* x_stringBuilder = (new StringBuilder());
 		x_stringBuilder->Append(x_num);
 		CxAssert(((x_stringBuilder->ToString()))->Equals((new String((Char*)L"-1"))));
 	}
@@ -1543,47 +1543,47 @@ namespace CABlock_NS
 	}
 	void CABlock::RunTests(FredEnum x_fre)
 	{
-		BasicTest* x_basicTest = new BasicTest(this);
+		BasicTest* x_basicTest = (new BasicTest(this));
 		x_basicTest->Test();
-		MathTest* x_mathTest = new MathTest(this);
+		MathTest* x_mathTest = (new MathTest(this));
 		x_mathTest->Test();
-		ArrayTest* x_arrayTest = new ArrayTest(this);
+		ArrayTest* x_arrayTest = (new ArrayTest(this));
 		x_arrayTest->Test();
-		StringTest* x_stringTest = new StringTest(this);
+		StringTest* x_stringTest = (new StringTest(this));
 		x_stringTest->Test();
-		EnumTest* x_enumTest = new EnumTest(this);
+		EnumTest* x_enumTest = (new EnumTest(this));
 		x_enumTest->Test();
-		TimeTest* x_timeTest = new TimeTest(this);
+		TimeTest* x_timeTest = (new TimeTest(this));
 		x_timeTest->Test();
-		CharTest* x_charTest = new CharTest(this);
+		CharTest* x_charTest = (new CharTest(this));
 		x_charTest->Test();
-		BooleanTest* x_booleanTest = new BooleanTest(this);
+		BooleanTest* x_booleanTest = (new BooleanTest(this));
 		x_booleanTest->Test();
-		Int32Test* x_int32Test = new Int32Test(this);
+		Int32Test* x_int32Test = (new Int32Test(this));
 		x_int32Test->Test();
-		UInt32Test* x_uInt32Test = new UInt32Test(this);
+		UInt32Test* x_uInt32Test = (new UInt32Test(this));
 		x_uInt32Test->Test();
-		Int64Test* x_int64Test = new Int64Test(this);
+		Int64Test* x_int64Test = (new Int64Test(this));
 		x_int64Test->Test();
-		DoubleTest* x_doubleTest = new DoubleTest(this);
+		DoubleTest* x_doubleTest = (new DoubleTest(this));
 		x_doubleTest->Test();
-		StringBuilderTest* x_stringBuilderTest = new StringBuilderTest(this);
+		StringBuilderTest* x_stringBuilderTest = (new StringBuilderTest(this));
 		x_stringBuilderTest->Test();
-		BufferTest* x_bufferTest = new BufferTest(this);
+		BufferTest* x_bufferTest = (new BufferTest(this));
 		x_bufferTest->Test();
-		ByteTest* x_byteTest = new ByteTest(this);
+		ByteTest* x_byteTest = (new ByteTest(this));
 		x_byteTest->Test();
-		SByteTest* x_sByteTest = new SByteTest(this);
+		SByteTest* x_sByteTest = (new SByteTest(this));
 		x_sByteTest->Test();
-		Int16Test* x_int16Test = new Int16Test(this);
+		Int16Test* x_int16Test = (new Int16Test(this));
 		x_int16Test->Test();
-		SingleTest* x_singleTest = new SingleTest(this);
+		SingleTest* x_singleTest = (new SingleTest(this));
 		x_singleTest->Test();
-		UInt16Test* x_uInt16Test = new UInt16Test(this);
+		UInt16Test* x_uInt16Test = (new UInt16Test(this));
 		x_uInt16Test->Test();
-		UInt64Test* x_uInt64Test = new UInt64Test(this);
+		UInt64Test* x_uInt64Test = (new UInt64Test(this));
 		x_uInt64Test->Test();
-		EncodingTest* x_encodingTest = new EncodingTest(this);
+		EncodingTest* x_encodingTest = (new EncodingTest(this));
 		x_encodingTest->Test();
 	}
 	void CABlock::TestFailed(String* x_reason)
@@ -1674,7 +1674,7 @@ namespace CABlock_NS
 		Int64 x_num4 = 1;
 		UInt16 x_num5 = 1;
 		UInt32 x_num6 = 1;
-		Single x_num7 = 1;
+		Single x_num7 = ((Single)1);
 		Double x_num8 = 1;
 		CxAssert((Int16Value(x_num)).Equals(66));
 		CxAssert((Int32Value(x_num + x_c)).Equals(67));
@@ -1685,7 +1685,7 @@ namespace CABlock_NS
 		CxAssert((Int64Value(x_num + x_num4)).Equals(67));
 		CxAssert((Int32Value(x_num + x_num5)).Equals(67));
 		CxAssert((Int64Value(x_num + x_num6)).Equals(67));
-		CxAssert((SingleValue(x_num + x_num7)).Equals(67));
+		CxAssert((SingleValue(x_num + x_num7)).Equals(((Single)67)));
 		CxAssert((DoubleValue(x_num + x_num8)).Equals(67));
 		CxAssert((Int32Value(x_num - x_c)).Equals(65));
 		CxAssert((Int32Value(x_num - x_b)).Equals(65));
@@ -1695,7 +1695,7 @@ namespace CABlock_NS
 		CxAssert((Int64Value(x_num - x_num4)).Equals(65));
 		CxAssert((Int32Value(x_num - x_num5)).Equals(65));
 		CxAssert((Int64Value(x_num - x_num6)).Equals(65));
-		CxAssert((SingleValue(x_num - x_num7)).Equals(65));
+		CxAssert((SingleValue(x_num - x_num7)).Equals(((Single)65)));
 		CxAssert((DoubleValue(x_num - x_num8)).Equals(65));
 		CxAssert((Int32Value(x_num * x_c)).Equals(66));
 		CxAssert((Int32Value(x_num * x_b)).Equals(66));
@@ -1705,7 +1705,7 @@ namespace CABlock_NS
 		CxAssert((Int64Value(x_num * x_num4)).Equals(66));
 		CxAssert((Int32Value(x_num * x_num5)).Equals(66));
 		CxAssert((Int64Value(x_num * x_num6)).Equals(66));
-		CxAssert((SingleValue(x_num * x_num7)).Equals(66));
+		CxAssert((SingleValue(x_num * x_num7)).Equals(((Single)66)));
 		CxAssert((DoubleValue(x_num * x_num8)).Equals(66));
 		CxAssert((Int32Value(x_num / x_c)).Equals(66));
 		CxAssert((Int32Value(x_num / x_b)).Equals(66));
@@ -1715,7 +1715,7 @@ namespace CABlock_NS
 		CxAssert((Int64Value(x_num / x_num4)).Equals(66));
 		CxAssert((Int32Value(x_num / x_num5)).Equals(66));
 		CxAssert((Int64Value(x_num / x_num6)).Equals(66));
-		CxAssert((SingleValue(x_num / x_num7)).Equals(66));
+		CxAssert((SingleValue(x_num / x_num7)).Equals(((Single)66)));
 		CxAssert((DoubleValue(x_num / x_num8)).Equals(66));
 		CxAssert((Int32Value(x_num % x_c)).Equals((Int32)0));
 		CxAssert((Int32Value(x_num % x_b)).Equals((Int32)0));
@@ -1725,7 +1725,7 @@ namespace CABlock_NS
 		CxAssert((Int64Value(x_num % x_num4)).Equals((Int64)0));
 		CxAssert((Int32Value(x_num % x_num5)).Equals((Int32)0));
 		CxAssert((Int64Value(x_num % x_num6)).Equals((Int64)0));
-		CxAssert((SingleValue(((DoubleValue)x_num) % x_num7)).Equals(0));
+		CxAssert((SingleValue(((DoubleValue)x_num) % x_num7)).Equals(((Single)0)));
 		CxAssert((DoubleValue(((DoubleValue)x_num) % x_num8)).Equals(0));
 		CxAssert(( x_num & x_c ) == 0);
 		CxAssert(( x_num & x_b ) == 0);
@@ -1888,7 +1888,7 @@ namespace CABlock_NS
 		CxAssert((Int16Value(Math::Max(x_num,x_val))).Equals(1));
 		CxAssert((Int16Value(Math::Min(x_num,x_val))).Equals(-1));
 		CxAssert(Math::Sign(x_num) < 0);
-		StringBuilder* x_stringBuilder = new StringBuilder();
+		StringBuilder* x_stringBuilder = (new StringBuilder());
 		x_stringBuilder->Append(x_num);
 		CxAssert(((x_stringBuilder->ToString()))->Equals((new String((Char*)L"-1"))));
 		x_stringBuilder->Insert(2,x_num);
@@ -2144,7 +2144,7 @@ namespace CABlock_NS
 		CxAssert((Int32Value(Math::Max(x_num,x_val))).Equals(1));
 		CxAssert((Int32Value(Math::Min(x_num,x_val))).Equals(-1));
 		CxAssert(Math::Sign(x_num) < 0);
-		StringBuilder* x_stringBuilder = new StringBuilder();
+		StringBuilder* x_stringBuilder = (new StringBuilder());
 		x_stringBuilder->Append(x_num);
 		CxAssert(((x_stringBuilder->ToString()))->Equals((new String((Char*)L"-1"))));
 	}
@@ -2395,7 +2395,7 @@ namespace CABlock_NS
 		CxAssert((Int64Value(Math::Max(x_num,x_val))).Equals(1));
 		CxAssert((Int64Value(Math::Min(x_num,x_val))).Equals(-1));
 		CxAssert(Math::Sign(x_num) < 0);
-		StringBuilder* x_stringBuilder = new StringBuilder();
+		StringBuilder* x_stringBuilder = (new StringBuilder());
 		x_stringBuilder->Append(x_num);
 		CxAssert(((x_stringBuilder->ToString()))->Equals((new String((Char*)L"-1"))));
 	}
@@ -2593,7 +2593,7 @@ namespace CABlock_NS
 		Int64 x_num2 = 1;
 		UInt16 x_num3 = 1;
 		UInt32 x_num4 = 1;
-		Single x_num5 = 1;
+		Single x_num5 = ((Single)1);
 		Double x_num6 = 1;
 		CxAssert((SByteValue(x_b)).Equals(66));
 		CxAssert((Int32Value(x_b + x_c)).Equals(67));
@@ -2604,7 +2604,7 @@ namespace CABlock_NS
 		CxAssert((Int64Value(x_b + x_num2)).Equals(67));
 		CxAssert((Int32Value(x_b + x_num3)).Equals(67));
 		CxAssert((Int64Value(x_b + x_num4)).Equals(67));
-		CxAssert((SingleValue(x_b + x_num5)).Equals(67));
+		CxAssert((SingleValue(x_b + x_num5)).Equals(((Single)67)));
 		CxAssert((DoubleValue(x_b + x_num6)).Equals(67));
 		CxAssert((Int32Value(x_b - x_c)).Equals(65));
 		CxAssert((Int32Value(x_b - x_b2)).Equals(65));
@@ -2614,7 +2614,7 @@ namespace CABlock_NS
 		CxAssert((Int64Value(x_b - x_num2)).Equals(65));
 		CxAssert((Int32Value(x_b - x_num3)).Equals(65));
 		CxAssert((Int64Value(x_b - x_num4)).Equals(65));
-		CxAssert((SingleValue(x_b - x_num5)).Equals(65));
+		CxAssert((SingleValue(x_b - x_num5)).Equals(((Single)65)));
 		CxAssert((DoubleValue(x_b - x_num6)).Equals(65));
 		CxAssert((Int32Value(x_b * x_c)).Equals(66));
 		CxAssert((Int32Value(x_b * x_b2)).Equals(66));
@@ -2624,7 +2624,7 @@ namespace CABlock_NS
 		CxAssert((Int64Value(x_b * x_num2)).Equals(66));
 		CxAssert((Int32Value(x_b * x_num3)).Equals(66));
 		CxAssert((Int64Value(x_b * x_num4)).Equals(66));
-		CxAssert((SingleValue(x_b * x_num5)).Equals(66));
+		CxAssert((SingleValue(x_b * x_num5)).Equals(((Single)66)));
 		CxAssert((DoubleValue(x_b * x_num6)).Equals(66));
 		CxAssert((Int32Value(x_b / x_c)).Equals(66));
 		CxAssert((Int32Value(x_b / x_b2)).Equals(66));
@@ -2634,7 +2634,7 @@ namespace CABlock_NS
 		CxAssert((Int64Value(x_b / x_num2)).Equals(66));
 		CxAssert((Int32Value(x_b / x_num3)).Equals(66));
 		CxAssert((Int64Value(x_b / x_num4)).Equals(66));
-		CxAssert((SingleValue(x_b / x_num5)).Equals(66));
+		CxAssert((SingleValue(x_b / x_num5)).Equals(((Single)66)));
 		CxAssert((DoubleValue(x_b / x_num6)).Equals(66));
 		CxAssert((Int32Value(x_b % x_c)).Equals((Int32)0));
 		CxAssert((Int32Value(x_b % x_b2)).Equals((Int32)0));
@@ -2644,7 +2644,7 @@ namespace CABlock_NS
 		CxAssert((Int64Value(x_b % x_num2)).Equals((Int64)0));
 		CxAssert((Int32Value(x_b % x_num3)).Equals((Int32)0));
 		CxAssert((Int64Value(x_b % x_num4)).Equals((Int64)0));
-		CxAssert((SingleValue(((DoubleValue)x_b) % x_num5)).Equals(0));
+		CxAssert((SingleValue(((DoubleValue)x_b) % x_num5)).Equals(((Single)0)));
 		CxAssert((DoubleValue(((DoubleValue)x_b) % x_num6)).Equals(0));
 		CxAssert(( x_b & x_c ) == 0);
 		CxAssert(( x_b & x_b2 ) == 0);
@@ -2807,7 +2807,7 @@ namespace CABlock_NS
 		CxAssert((SByteValue(Math::Max(x_b,x_val))).Equals(1));
 		CxAssert((SByteValue(Math::Min(x_b,x_val))).Equals(-1));
 		CxAssert(Math::Sign(x_b) < 0);
-		StringBuilder* x_stringBuilder = new StringBuilder();
+		StringBuilder* x_stringBuilder = (new StringBuilder());
 		x_stringBuilder->Append(x_b);
 		CxAssert(((x_stringBuilder->ToString()))->Equals((new String((Char*)L"-1"))));
 		x_stringBuilder->Insert(2,x_b);
@@ -2852,18 +2852,18 @@ namespace CABlock_NS
 	}
 	void SingleTest::DoSingleMethodsTest()
 	{
-		Single x_num = 3.159;
-		CxAssert((Int32Value(((SingleValue)x_num).CompareTo(3.159))).Equals((Int32)0));
-		CxAssert((Int32Value(((SingleValue)x_num).CompareTo(new SingleValue(3.159)))).Equals((Int32)0));
-		CxAssert(((SingleValue)x_num).Equals(3.159));
+		Single x_num = ((Single)3.159);
+		CxAssert((Int32Value(((SingleValue)x_num).CompareTo(((Single)3.159)))).Equals((Int32)0));
+		CxAssert((Int32Value(((SingleValue)x_num).CompareTo(new SingleValue(((Single)3.159))))).Equals((Int32)0));
+		CxAssert(((SingleValue)x_num).Equals(((Single)3.159)));
 		CxAssert(SingleValue::Parse((new String((Char*)L"3.159"))),3.15899991989136);
 		CxAssert(((((SingleValue)x_num).ToString()))->Equals((new String((Char*)L"3.159"))));
 		CxAssert(SingleValue::Parse(((SingleValue)x_num).ToString()),x_num);
-		x_num = 1E+07;
-		CxAssert(x_num > 1E+07);
-		x_num = -1E+07;
-		CxAssert(x_num <= -1E+07);
-		x_num = 10000;
+		x_num = ((Single)1E+07);
+		CxAssert(x_num > ((Single)1E+07));
+		x_num = ((Single)-1E+07);
+		CxAssert(x_num <= ((Single)-1E+07));
+		x_num = ((Single)10000);
 		CxAssert((Int64Value(x_num)).Equals(10000));
 		CxAssert((Int32Value(x_num)).Equals(10000));
 		CxAssert((UInt32Value(x_num)).Equals(10000));
@@ -2875,56 +2875,56 @@ namespace CABlock_NS
 		CxAssert((SingleValue(x_num)).Equals(FloatValue::MaxValue));
 		x_num = FloatValue::MinValue;
 		CxAssert((SingleValue(x_num)).Equals(FloatValue::MinValue));
-		x_obj = new SingleValue(5);
-		CxAssert(x_obj->Equals(new SingleValue(5)));
+		x_obj = new SingleValue(((Single)5));
+		CxAssert(x_obj->Equals(new SingleValue(((Single)5))));
 		CxAssert(((x_obj->ToString()))->Equals((new String((Char*)L"5"))));
 	}
 	void SingleTest::DoSingleMath()
 	{
-		Single x_num = 355;
-		Single x_num2 = 113;
+		Single x_num = ((Single)355);
+		Single x_num2 = ((Single)113);
 		Single x_num3 = x_num / x_num2;
 		CxAssert(x_num3,3.14159);
 		CxAssert(x_num3 * x_num2,355);
 		CxAssert(x_num + x_num2,468);
 		CxAssert(x_num - x_num2,242);
-		x_num = 1;
+		x_num = ((Single)1);
 		x_num2 = x_num + FloatValue::Epsilon;
 		CxAssert((DoubleValue(x_num2)).Equals(1));
 	}
 	void SingleTest::SingleOperators()
 	{
-		Single x_num = 66;
+		Single x_num = ((Single)66);
 		Char x_c = L'\u0001';
 		Int32 x_num2 = 1;
 		UInt32 x_num3 = 1;
 		Int64 x_num4 = 1;
 		Double x_num5 = 1;
-		CxAssert((SingleValue(x_num)).Equals(66));
-		CxAssert((SingleValue(x_num + x_c)).Equals(67));
-		CxAssert((SingleValue(x_num + x_num2)).Equals(67));
-		CxAssert((SingleValue(x_num + x_num3)).Equals(67));
-		CxAssert((SingleValue(x_num + x_num4)).Equals(67));
+		CxAssert((SingleValue(x_num)).Equals(((Single)66)));
+		CxAssert((SingleValue(x_num + x_c)).Equals(((Single)67)));
+		CxAssert((SingleValue(x_num + x_num2)).Equals(((Single)67)));
+		CxAssert((SingleValue(x_num + x_num3)).Equals(((Single)67)));
+		CxAssert((SingleValue(x_num + x_num4)).Equals(((Single)67)));
 		CxAssert((DoubleValue(x_num + x_num5)).Equals(67));
-		CxAssert((SingleValue(x_num - x_c)).Equals(65));
-		CxAssert((SingleValue(x_num - x_num2)).Equals(65));
-		CxAssert((SingleValue(x_num - x_num3)).Equals(65));
-		CxAssert((SingleValue(x_num - x_num4)).Equals(65));
+		CxAssert((SingleValue(x_num - x_c)).Equals(((Single)65)));
+		CxAssert((SingleValue(x_num - x_num2)).Equals(((Single)65)));
+		CxAssert((SingleValue(x_num - x_num3)).Equals(((Single)65)));
+		CxAssert((SingleValue(x_num - x_num4)).Equals(((Single)65)));
 		CxAssert((DoubleValue(x_num - x_num5)).Equals(65));
-		CxAssert((SingleValue(x_num * x_c)).Equals(66));
-		CxAssert((SingleValue(x_num * x_num2)).Equals(66));
-		CxAssert((SingleValue(x_num * x_num3)).Equals(66));
-		CxAssert((SingleValue(x_num * x_num4)).Equals(66));
+		CxAssert((SingleValue(x_num * x_c)).Equals(((Single)66)));
+		CxAssert((SingleValue(x_num * x_num2)).Equals(((Single)66)));
+		CxAssert((SingleValue(x_num * x_num3)).Equals(((Single)66)));
+		CxAssert((SingleValue(x_num * x_num4)).Equals(((Single)66)));
 		CxAssert((DoubleValue(x_num * x_num5)).Equals(66));
-		CxAssert((SingleValue(x_num / x_c)).Equals(66));
-		CxAssert((SingleValue(x_num / x_num2)).Equals(66));
-		CxAssert((SingleValue(x_num / x_num3)).Equals(66));
-		CxAssert((SingleValue(x_num / x_num4)).Equals(66));
+		CxAssert((SingleValue(x_num / x_c)).Equals(((Single)66)));
+		CxAssert((SingleValue(x_num / x_num2)).Equals(((Single)66)));
+		CxAssert((SingleValue(x_num / x_num3)).Equals(((Single)66)));
+		CxAssert((SingleValue(x_num / x_num4)).Equals(((Single)66)));
 		CxAssert((DoubleValue(x_num / x_num5)).Equals(66));
-		CxAssert((SingleValue(((DoubleValue)x_num) % x_c)).Equals(0));
-		CxAssert((SingleValue(((DoubleValue)x_num) % x_num2)).Equals(0));
-		CxAssert((SingleValue(((DoubleValue)x_num) % x_num3)).Equals(0));
-		CxAssert((SingleValue(((DoubleValue)x_num) % x_num4)).Equals(0));
+		CxAssert((SingleValue(((DoubleValue)x_num) % x_c)).Equals(((Single)0)));
+		CxAssert((SingleValue(((DoubleValue)x_num) % x_num2)).Equals(((Single)0)));
+		CxAssert((SingleValue(((DoubleValue)x_num) % x_num3)).Equals(((Single)0)));
+		CxAssert((SingleValue(((DoubleValue)x_num) % x_num4)).Equals(((Single)0)));
 		CxAssert((DoubleValue(((DoubleValue)x_num) % x_num5)).Equals(0));
 		CxAssert(x_c < x_num);
 		CxAssert(x_num2 < x_num);
@@ -2936,10 +2936,10 @@ namespace CABlock_NS
 		CxAssert(x_num3 > x_num,false);
 		CxAssert(x_num4 > x_num,false);
 		CxAssert(x_num5 > x_num,false);
-		CxAssert(( x_num = x_num + 1 ) == 67);
-		CxAssert(( x_num = x_num - 1 ) == 66);
-		CxAssert((SingleValue(x_num++)).Equals(66));
-		CxAssert((SingleValue(x_num--)).Equals(67));
+		CxAssert(( x_num = x_num + ((Single)1) ) == ((Single)67));
+		CxAssert(( x_num = x_num - ((Single)1) ) == ((Single)66));
+		CxAssert((SingleValue(x_num++)).Equals(((Single)66)));
+		CxAssert((SingleValue(x_num--)).Equals(((Single)67)));
 		CxAssert((SingleValue(x_c)).Equals(x_num),false);
 		CxAssert((SingleValue(x_num2)).Equals(x_num),false);
 		CxAssert((SingleValue(x_num3)).Equals(x_num),false);
@@ -2960,32 +2960,32 @@ namespace CABlock_NS
 		CxAssert(x_num3 >= x_num,false);
 		CxAssert(x_num4 >= x_num,false);
 		CxAssert(x_num5 >= x_num,false);
-		CxAssert(( x_num = x_num + x_c ) == 67);
-		CxAssert(( x_num = x_num - x_c ) == 66);
-		CxAssert(( x_num = x_num + x_num2 ) == 67);
-		CxAssert(( x_num = x_num - x_num2 ) == 66);
-		CxAssert(( x_num = x_num + x_num3 ) == 67);
-		CxAssert(( x_num = x_num - x_num3 ) == 66);
-		CxAssert(( x_num = x_num + x_num4 ) == 67);
-		CxAssert(( x_num = x_num - x_num4 ) == 66);
-		CxAssert(( x_num = x_num * x_c ) == 66);
-		CxAssert(( x_num = x_num / x_c ) == 66);
-		CxAssert(( x_num = x_num * x_num2 ) == 66);
-		CxAssert(( x_num = x_num / x_num2 ) == 66);
-		CxAssert(( x_num = x_num * x_num3 ) == 66);
-		CxAssert(( x_num = x_num / x_num3 ) == 66);
-		CxAssert(( x_num = x_num * x_num4 ) == 66);
-		CxAssert(( x_num = x_num / x_num4 ) == 66);
-		CxAssert(( x_num = ((DoubleValue)x_num) % x_c ) == 0);
-		x_num = 66;
-		CxAssert(( x_num = ((DoubleValue)x_num) % x_num2 ) == 0);
-		x_num = 5;
+		CxAssert(( x_num = x_num + x_c ) == ((Single)67));
+		CxAssert(( x_num = x_num - x_c ) == ((Single)66));
+		CxAssert(( x_num = x_num + x_num2 ) == ((Single)67));
+		CxAssert(( x_num = x_num - x_num2 ) == ((Single)66));
+		CxAssert(( x_num = x_num + x_num3 ) == ((Single)67));
+		CxAssert(( x_num = x_num - x_num3 ) == ((Single)66));
+		CxAssert(( x_num = x_num + x_num4 ) == ((Single)67));
+		CxAssert(( x_num = x_num - x_num4 ) == ((Single)66));
+		CxAssert(( x_num = x_num * x_c ) == ((Single)66));
+		CxAssert(( x_num = x_num / x_c ) == ((Single)66));
+		CxAssert(( x_num = x_num * x_num2 ) == ((Single)66));
+		CxAssert(( x_num = x_num / x_num2 ) == ((Single)66));
+		CxAssert(( x_num = x_num * x_num3 ) == ((Single)66));
+		CxAssert(( x_num = x_num / x_num3 ) == ((Single)66));
+		CxAssert(( x_num = x_num * x_num4 ) == ((Single)66));
+		CxAssert(( x_num = x_num / x_num4 ) == ((Single)66));
+		CxAssert(( x_num = ((DoubleValue)x_num) % x_c ) == ((Single)0));
+		x_num = ((Single)66);
+		CxAssert(( x_num = ((DoubleValue)x_num) % x_num2 ) == ((Single)0));
+		x_num = ((Single)5);
 		CxAssert(((DoubleValue)x_num) % 2.2,0.6);
 	}
 	void SingleTest::SingleNanTest()
 	{
 		Single x_num = FloatValue::NaN;
-		Single x_num2 = 1;
+		Single x_num2 = ((Single)1);
 		CxAssert(SingleValue::IsNaN(x_num));
 		CxAssert(SingleValue::IsInfinity(FloatValue::PositiveInfinity));
 		CxAssert(SingleValue::IsNegativeInfinity(FloatValue::NegativeInfinity));
@@ -3073,7 +3073,7 @@ namespace CABlock_NS
 		{
 			CxAssert(true);
 		}
-		if ( (SingleValue(x_num)).Equals(0) )
+		if ( (SingleValue(x_num)).Equals(((Single)0)) )
 		{
 			SingleTestFailed();
 		}
@@ -3085,31 +3085,31 @@ namespace CABlock_NS
 	}
 	void SingleTest::SingleArrayTest()
 	{
-		static Float SingleArrayTestArray0[4] = {1,2,3,4};
-		static Float SingleArrayTestArray1[2][4] = {{1,2,3,4},{4,5,6,7}};
-		static Float SingleArrayTestArray2[2][2][4] = {{{1,2,3,4},{5,6,7,8}},{{9,10,11,12},{13,14,15,16}}};
+		static Float SingleArrayTestArray0[4] = {((Single)1),((Single)2),((Single)3),((Single)4)};
+		static Float SingleArrayTestArray1[2][4] = {{((Single)1),((Single)2),((Single)3),((Single)4)},{((Single)4),((Single)5),((Single)6),((Single)7)}};
+		static Float SingleArrayTestArray2[2][2][4] = {{{((Single)1),((Single)2),((Single)3),((Single)4)},{((Single)5),((Single)6),((Single)7),((Single)8)}},{{((Single)9),((Single)10),((Single)11),((Single)12)},{((Single)13),((Single)14),((Single)15),((Single)16)}}};
 		Array* x_array = (new Array(FloatType,4))->Initialize((Float*) SingleArrayTestArray0);
-		CxAssert((SingleValue(((*((Single*)x_array->Address(1)))))).Equals(2));
+		CxAssert((SingleValue(((*((Single*)x_array->Address(1)))))).Equals(((Single)2)));
 		Array* x_array2 = (new Array(FloatType,2,4))->Initialize((Float*) SingleArrayTestArray1);
-		CxAssert((SingleValue(((*((Single*)x_array2->Address(0,2)))))).Equals(3));
+		CxAssert((SingleValue(((*((Single*)x_array2->Address(0,2)))))).Equals(((Single)3)));
 		Array* x_array3 = (new Array(FloatType,2,2,4))->Initialize((Float*) SingleArrayTestArray2);
-		CxAssert((SingleValue(((*((Single*)x_array3->Address(0,0,3)))))).Equals(4));
-		((*((Single*)x_array3->Address(0,0,3)))) = 22;
-		CxAssert((SingleValue(((*((Single*)x_array3->Address(0,0,3)))))).Equals(22));
+		CxAssert((SingleValue(((*((Single*)x_array3->Address(0,0,3)))))).Equals(((Single)4)));
+		((*((Single*)x_array3->Address(0,0,3)))) = ((Single)22);
+		CxAssert((SingleValue(((*((Single*)x_array3->Address(0,0,3)))))).Equals(((Single)22)));
 		((*((Single*)x_array2->Address(0,2)))) = FloatValue::NaN;
 		CxAssert(SingleValue::IsNaN(((*((Single*)x_array2->Address(0,2))))));
-		x_array3->SetValue(new SingleValue(4),0,0,3);
-		CxAssert((SingleValue(((*((Single*)x_array3->Address(0,0,3)))))).Equals(4));
+		x_array3->SetValue(new SingleValue(((Single)4)),0,0,3);
+		CxAssert((SingleValue(((*((Single*)x_array3->Address(0,0,3)))))).Equals(((Single)4)));
 	}
 	void SingleTest::SingleMiscTests()
 	{
-		Single x_num = -1;
-		Single x_val = 1;
-		CxAssert((SingleValue(Math::Abs(x_num))).Equals(1));
-		CxAssert((SingleValue(Math::Max(x_num,x_val))).Equals(1));
-		CxAssert((SingleValue(Math::Min(x_num,x_val))).Equals(-1));
+		Single x_num = ((Single)-1);
+		Single x_val = ((Single)1);
+		CxAssert((SingleValue(Math::Abs(x_num))).Equals(((Single)1)));
+		CxAssert((SingleValue(Math::Max(x_num,x_val))).Equals(((Single)1)));
+		CxAssert((SingleValue(Math::Min(x_num,x_val))).Equals(((Single)-1)));
 		CxAssert(Math::Sign(x_num) < 0);
-		StringBuilder* x_stringBuilder = new StringBuilder();
+		StringBuilder* x_stringBuilder = (new StringBuilder());
 		x_stringBuilder->Append(x_num);
 		CxAssert(((x_stringBuilder->ToString()))->Equals((new String((Char*)L"-1"))));
 		x_stringBuilder->Insert(2,x_num);
@@ -3150,7 +3150,7 @@ namespace CABlock_NS
 	}
 	StringBuilderTest::StringBuilderTest(CABlock* x_caBlock)
 	{
-		x_sb = new StringBuilder();
+		x_sb = (new StringBuilder());
 		this->x_caBlock = x_caBlock;
 	}
 	void StringBuilderTest::Test()
@@ -3171,31 +3171,30 @@ namespace CABlock_NS
 	}
 	void StringBuilderTest::DoSBConstructTest()
 	{
-		static Char DoSBConstructTestArray0[12] = {'A','B','','','	','','','','
-','"',''','Â'};
+		static Char DoSBConstructTestArray0[12] = {L'A',L'B',L'\a',L'\b',L'\t',L'\r',L'\v',L'\f',L'\n',L'\"',L'\'',L'\u00c2'};
 		CxAssert((Int32Value(x_sb->get_Length())).Equals((Int32)0));
-		x_sb = new StringBuilder(100);
+		x_sb = (new StringBuilder(100));
 		CxAssert((Int32Value(x_sb->get_Capacity())).Equals(100));
-		x_sb = new StringBuilder((new String((Char*)L"Test")));
+		x_sb = (new StringBuilder((new String((Char*)L"Test"))));
 		CxAssert(((x_sb->ToString()))->Equals((new String((Char*)L"Test"))));
-		x_sb = new StringBuilder(20,25);
+		x_sb = (new StringBuilder(20,25));
 		CxAssert((Int32Value(x_sb->get_Capacity())).Equals(20) && (Int32Value(x_sb->get_MaxCapacity())).Equals(25));
-		x_sb = new StringBuilder((new String((Char*)L"Test")),20);
+		x_sb = (new StringBuilder((new String((Char*)L"Test")),20));
 		CxAssert(((x_sb->ToString()))->Equals((new String((Char*)L"Test"))) && (Int32Value(x_sb->get_Capacity())).Equals(20));
-		x_sb = new StringBuilder((new String((Char*)L"test1234")),1,4,20);
+		x_sb = (new StringBuilder((new String((Char*)L"test1234")),1,4,20));
 		CxAssert(((x_sb->ToString()))->Equals((new String((Char*)L"est1"))) && (Int32Value(x_sb->get_Capacity())).Equals(20));
-		String* x_a = new StringBuilder((new String((Char*)L"Test")))->ToString();
+		String* x_a = (new StringBuilder((new String((Char*)L"Test"))))->ToString();
 		CxAssert(((x_a))->Equals((new String((Char*)L"Test"))));
 		String* x_b = (new String((Char*)L"AB\a\b\t\r\v\f\n\"'\u00c2"));
 		Array* x_value = (new Array(CharType,12))->Initialize((Char*) DoSBConstructTestArray0);
-		x_sb = new StringBuilder();
+		x_sb = (new StringBuilder());
 		x_sb->Append(x_value);
 		String* x_text = x_sb->ToString();
 		CxAssert(((x_sb->ToString()))->Equals(x_b));
 	}
 	void StringBuilderTest::DoSBPropertyTest()
 	{
-		x_sb = new StringBuilder((new String((Char*)L"Testing123")),0,10,20);
+		x_sb = (new StringBuilder((new String((Char*)L"Testing123")),0,10,20));
 		CxAssert((Int32Value(x_sb->get_Capacity())).Equals(20) && (Int32Value(x_sb->get_MaxCapacity())).Equals(Int32Value::MaxValue));
 		CxAssert((CharValue(((*((Char*)x_sb->Address(7)))))).Equals(L'1'));
 		CxAssert((Int32Value(x_sb->get_Length())).Equals(10));
@@ -3208,54 +3207,54 @@ namespace CABlock_NS
 	}
 	void StringBuilderTest::DoSBAppendTest()
 	{
-		static Char DoSBAppendTestArray0[4] = {'0','1','2','3'};
-		static Object DoSBAppendTestArray1[4] = {0,1,2,3};
+		static Char DoSBAppendTestArray0[4] = {L'0',L'1',L'2',L'3'};
+		static Object* DoSBAppendTestArray1[4] = {new Int32Value(0),new Int32Value(1),new Int32Value(2),new Int32Value(3)};
 		x_sb->set_Length(0);
 		x_sb->Append(true);
 		CxAssert(((x_sb->ToString()))->Equals((new String((Char*)L"True"))));
-		CxAssert(((x_sb->Append(L'A')->Append()))->Equals((new String((Char*)L"TrueA"))));
+		CxAssert(((x_sb->Append(L'A')->ToString()))->Equals((new String((Char*)L"TrueA"))));
 		Array* x_value = (new Array(CharType,4))->Initialize((Char*) DoSBAppendTestArray0);
-		CxAssert(((x_sb->Append(x_value)->Append()))->Equals((new String((Char*)L"TrueA0123"))));
+		CxAssert(((x_sb->Append(x_value)->ToString()))->Equals((new String((Char*)L"TrueA0123"))));
 		x_sb->set_Length(0);
 		Double x_value2 = 3.14159;
-		CxAssert(((x_sb->Append(x_value2)->Append()))->Equals((new String((Char*)L"3.14159"))));
+		CxAssert(((x_sb->Append(x_value2)->ToString()))->Equals((new String((Char*)L"3.14159"))));
 		x_sb->set_Length(0);
 		Int32 x_value3 = 666;
-		CxAssert(((x_sb->Append(x_value3)->Append()))->Equals((new String((Char*)L"666"))));
+		CxAssert(((x_sb->Append(x_value3)->ToString()))->Equals((new String((Char*)L"666"))));
 		x_sb->set_Length(0);
 		Int64 x_value4 = 666666666;
-		CxAssert(((x_sb->Append(x_value4)->Append()))->Equals((new String((Char*)L"666666666"))));
+		CxAssert(((x_sb->Append(x_value4)->ToString()))->Equals((new String((Char*)L"666666666"))));
 		x_sb->set_Length(0);
 		Object* x_obj = new Int32Value(1);
-		CxAssert(((x_sb->Append(x_obj)->Append()))->Equals((new String((Char*)L"1"))));
+		CxAssert(((x_sb->Append(x_obj)->ToString()))->Equals((new String((Char*)L"1"))));
 		x_sb->set_Length(0);
-		CxAssert(((x_sb->Append((new String((Char*)L"fred")))->Append()))->Equals((new String((Char*)L"fred"))));
+		CxAssert(((x_sb->Append((new String((Char*)L"fred")))->ToString()))->Equals((new String((Char*)L"fred"))));
 		UInt32 x_value5 = 777;
 		x_sb->set_Length(0);
-		CxAssert(((x_sb->Append(x_value5)->Append()))->Equals((new String((Char*)L"777"))));
+		CxAssert(((x_sb->Append(x_value5)->ToString()))->Equals((new String((Char*)L"777"))));
 		x_sb->set_Length(0);
-		CxAssert(((x_sb->Append(L'A',4)->Append()))->Equals((new String((Char*)L"AAAA"))));
+		CxAssert(((x_sb->Append(L'A',4)->ToString()))->Equals((new String((Char*)L"AAAA"))));
 		x_sb->set_Length(0);
-		CxAssert(((x_sb->Append(x_value,1,3)->Append()))->Equals((new String((Char*)L"123"))));
+		CxAssert(((x_sb->Append(x_value,1,3)->ToString()))->Equals((new String((Char*)L"123"))));
 		x_sb->set_Length(0);
-		CxAssert(((x_sb->Append((new String((Char*)L"3210")),1,3)->Append()))->Equals((new String((Char*)L"210"))));
+		CxAssert(((x_sb->Append((new String((Char*)L"3210")),1,3)->ToString()))->Equals((new String((Char*)L"210"))));
 		x_sb->set_Length(0);
-		CxAssert(((x_sb->AppendFormat((new String((Char*)L"x={0}")),x_obj)->AppendFormat()))->Equals((new String((Char*)L"x=1"))));
+		CxAssert(((x_sb->AppendFormat((new String((Char*)L"x={0}")),x_obj)->ToString()))->Equals((new String((Char*)L"x=1"))));
 		Array* x_array = (new Array(ObjectType,4))->Initialize((Object*) DoSBAppendTestArray1);
 		x_sb->set_Length(0);
-		CxAssert(((x_sb->AppendFormat((new String((Char*)L"y={0}{1}{2}{3}")),x_array)->AppendFormat()))->Equals((new String((Char*)L"y=0123"))));
+		CxAssert(((x_sb->AppendFormat((new String((Char*)L"y={0}{1}{2}{3}")),x_array)->ToString()))->Equals((new String((Char*)L"y=0123"))));
 		x_sb->set_Length(0);
-		CxAssert(((x_sb->AppendFormat((new String((Char*)L"y={0}{1}")),((*((Object*)x_array->Address(0)))),((*((Object*)x_array->Address(1)))))->AppendFormat()))->Equals((new String((Char*)L"y=01"))));
+		CxAssert(((x_sb->AppendFormat((new String((Char*)L"y={0}{1}")),((*((Object**)x_array->Address(0)))),((*((Object**)x_array->Address(1)))))->ToString()))->Equals((new String((Char*)L"y=01"))));
 		x_sb->set_Length(0);
-		CxAssert(((x_sb->AppendFormat((new String((Char*)L"y={0}{1}{2}")),((*((Object*)x_array->Address(0)))),((*((Object*)x_array->Address(1)))),((*((Object*)x_array->Address(2)))))->AppendFormat()))->Equals((new String((Char*)L"y=012"))));
+		CxAssert(((x_sb->AppendFormat((new String((Char*)L"y={0}{1}{2}")),((*((Object**)x_array->Address(0)))),((*((Object**)x_array->Address(1)))),((*((Object**)x_array->Address(2)))))->ToString()))->Equals((new String((Char*)L"y=012"))));
 		x_sb->set_Length(0);
-		CxAssert(((x_sb->Append(L'A')->Append()))->Equals((new String((Char*)L"A"))));
+		CxAssert(((x_sb->Append(L'A')->ToString()))->Equals((new String((Char*)L"A"))));
 		Object* x_value6 = (new String((Char*)L"Test string as Object"));
 		x_sb->set_Length(0);
-		CxAssert(((x_sb->Append(x_value6)->Append()))->Equals((new String((Char*)L"Test string as Object"))));
-		TestAbstract* x_value7 = new TestAbstract();
+		CxAssert(((x_sb->Append(x_value6)->ToString()))->Equals((new String((Char*)L"Test string as Object"))));
+		TestAbstract* x_value7 = (new TestAbstract());
 		x_sb->set_Length(0);
-		CxAssert(((x_sb->Append(x_value7)->Append()))->Equals((new String((Char*)L"TestAbstract"))));
+		CxAssert(((x_sb->Append(x_value7)->ToString()))->Equals((new String((Char*)L"TestAbstract"))));
 	}
 	void StringBuilderTest::DoSBMiscTest()
 	{
@@ -3264,7 +3263,7 @@ namespace CABlock_NS
 		x_sb->EnsureCapacity(30);
 		CxAssert(x_sb->get_Capacity() >= 30);
 		x_sb->Append((new String((Char*)L"Test")));
-		StringBuilder* x_stringBuilder = new StringBuilder((new String((Char*)L"Test")));
+		StringBuilder* x_stringBuilder = (new StringBuilder((new String((Char*)L"Test"))));
 		x_stringBuilder->set_Capacity(10);
 		x_stringBuilder->EnsureCapacity(30);
 		CxAssert(x_sb->Equals(x_stringBuilder));
@@ -3278,56 +3277,56 @@ namespace CABlock_NS
 	}
 	void StringBuilderTest::DoSBInsertTest()
 	{
-		static Char DoSBInsertTestArray0[4] = {'0','1','2','3'};
+		static Char DoSBInsertTestArray0[4] = {L'0',L'1',L'2',L'3'};
 		String* x_value = (new String((Char*)L"{}"));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
 		x_sb->Insert(1,true);
 		CxAssert(((x_sb->ToString()))->Equals((new String((Char*)L"{True}"))));
-		CxAssert(((x_sb->Insert(5,L'A')->Insert()))->Equals((new String((Char*)L"{TrueA}"))));
+		CxAssert(((x_sb->Insert(5,L'A')->ToString()))->Equals((new String((Char*)L"{TrueA}"))));
 		Array* x_value2 = (new Array(CharType,4))->Initialize((Char*) DoSBInsertTestArray0);
-		CxAssert(((x_sb->Insert(6,x_value2)->Insert()))->Equals((new String((Char*)L"{TrueA0123}"))));
+		CxAssert(((x_sb->Insert(6,x_value2)->ToString()))->Equals((new String((Char*)L"{TrueA0123}"))));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
 		Double x_value3 = 3.14159;
-		CxAssert(((x_sb->Insert(1,x_value3)->Insert()))->Equals((new String((Char*)L"{3.14159}"))));
+		CxAssert(((x_sb->Insert(1,x_value3)->ToString()))->Equals((new String((Char*)L"{3.14159}"))));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
 		Int32 x_value4 = 666;
-		CxAssert(((x_sb->Insert(1,x_value4)->Insert()))->Equals((new String((Char*)L"{666}"))));
+		CxAssert(((x_sb->Insert(1,x_value4)->ToString()))->Equals((new String((Char*)L"{666}"))));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
 		Int64 x_value5 = 666666666;
-		CxAssert(((x_sb->Insert(1,x_value5)->Insert()))->Equals((new String((Char*)L"{666666666}"))));
+		CxAssert(((x_sb->Insert(1,x_value5)->ToString()))->Equals((new String((Char*)L"{666666666}"))));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
 		Object* x_value6 = new Int32Value(1);
-		CxAssert(((x_sb->Insert(1,x_value6)->Insert()))->Equals((new String((Char*)L"{1}"))));
+		CxAssert(((x_sb->Insert(1,x_value6)->ToString()))->Equals((new String((Char*)L"{1}"))));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
-		CxAssert(((x_sb->Insert(1,(new String((Char*)L"fred")))->Insert()))->Equals((new String((Char*)L"{fred}"))));
+		CxAssert(((x_sb->Insert(1,(new String((Char*)L"fred")))->ToString()))->Equals((new String((Char*)L"{fred}"))));
 		UInt32 x_value7 = 777;
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
-		CxAssert(((x_sb->Insert(1,x_value7)->Insert()))->Equals((new String((Char*)L"{777}"))));
+		CxAssert(((x_sb->Insert(1,x_value7)->ToString()))->Equals((new String((Char*)L"{777}"))));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
-		CxAssert(((x_sb->Insert(1,(new String((Char*)L"A")),4)->Insert()))->Equals((new String((Char*)L"{AAAA}"))));
+		CxAssert(((x_sb->Insert(1,(new String((Char*)L"A")),4)->ToString()))->Equals((new String((Char*)L"{AAAA}"))));
 		x_sb->set_Length(0);
 		x_sb->Append(x_value);
-		CxAssert(((x_sb->Insert(1,x_value2,1,3)->Insert()))->Equals((new String((Char*)L"{123}"))));
+		CxAssert(((x_sb->Insert(1,x_value2,1,3)->ToString()))->Equals((new String((Char*)L"{123}"))));
 	}
 	void StringBuilderTest::DoSBReplaceTest()
 	{
 		x_sb->set_Length(0);
 		x_sb->Append((new String((Char*)L"aaaaaaa")));
-		CxAssert(((x_sb->Replace(L'a',L'A')->Replace()))->Equals((new String((Char*)L"AAAAAAA"))));
-		CxAssert(((x_sb->Replace((new String((Char*)L"AA")),(new String((Char*)L"BBB")))->Replace()))->Equals((new String((Char*)L"BBBBBBBBBA"))));
-		CxAssert(((x_sb->Replace(L'B',L'C',1,7)->Replace()))->Equals((new String((Char*)L"BCCCCCCCBA"))));
-		CxAssert(((x_sb->Replace((new String((Char*)L"CCC")),(new String((Char*)L"DDD")),2,5)->Replace()))->Equals((new String((Char*)L"BCDDDCCCBA"))));
+		CxAssert(((x_sb->Replace(L'a',L'A')->ToString()))->Equals((new String((Char*)L"AAAAAAA"))));
+		CxAssert(((x_sb->Replace((new String((Char*)L"AA")),(new String((Char*)L"BBB")))->ToString()))->Equals((new String((Char*)L"BBBBBBBBBA"))));
+		CxAssert(((x_sb->Replace(L'B',L'C',1,7)->ToString()))->Equals((new String((Char*)L"BCCCCCCCBA"))));
+		CxAssert(((x_sb->Replace((new String((Char*)L"CCC")),(new String((Char*)L"DDD")),2,5)->ToString()))->Equals((new String((Char*)L"BCDDDCCCBA"))));
 		x_sb->set_Length(0);
 		x_sb->Append((new String((Char*)L"aaaaaaa")));
-		String* x_a = x_sb->Replace((new String((Char*)L"aa")),(new String((Char*)L"BBB")),1,5)->Replace();
+		String* x_a = x_sb->Replace((new String((Char*)L"aa")),(new String((Char*)L"BBB")),1,5)->ToString();
 		CxAssert(((x_a))->Equals((new String((Char*)L"aBBBBBBaa"))));
 	}
 	void StringBuilderTest::CxAssert(Boolean x_x)
@@ -3377,8 +3376,8 @@ namespace CABlock_NS
 	}
 	void StringTest::DoMiscTest()
 	{
-		static Object DoMiscTestArray0[3] = {1,2,3};
-		String* x_text = new String*(L' ',10);
+		static Object* DoMiscTestArray0[3] = {new Int32Value(1),new Int32Value(2),new Int32Value(3)};
+		String* x_text = (new String(L' ',10));
 		CxAssert((Int32Value(x_text->get_Length())).Equals(10));
 		String* x_text2 = (new String((Char*)L"12345"));
 		Array* x_array = (new Array(CharType,30));
@@ -3392,13 +3391,13 @@ namespace CABlock_NS
 		}
 		x_array = x_text2->ToCharArray();
 		CxAssert(x_array != nullptr && (Int32Value(x_array->get_Length())).Equals(x_text2->get_Length()));
-		String* x_a = new String*(x_array);
+		String* x_a = (new String(x_array));
 		CxAssert(((x_a))->Equals(x_text2));
-		String* x_a2 = new String*(x_array,0,2);
+		String* x_a2 = (new String(x_array,0,2));
 		CxAssert(((x_a2))->Equals((new String((Char*)L"12"))));
 		CxAssert(!((x_a2))->Equals((new String((Char*)L"22"))));
 		CxAssert(!( ((x_a2))->Equals((new String((Char*)L"22"))) ));
-		x_a2 = new String*(x_text2->ToCharArray(),0,x_text2->get_Length());
+		x_a2 = (new String(x_text2->ToCharArray(),0,x_text2->get_Length()));
 		CxAssert(((x_a2))->Equals(x_text2));
 		CxAssert((Int32Value(String::Compare((new String((Char*)L"abc")),(new String((Char*)L"ABC")),true))).Equals((Int32)0));
 		CxAssert((Int32Value(String::Compare((new String((Char*)L"1abce")),1,(new String((Char*)L"abc")),0,3))).Equals((Int32)0));
@@ -3411,7 +3410,7 @@ namespace CABlock_NS
 		CxAssert(((x_a2))->Equals((new String((Char*)L"1 = {1   } 2 =    2 3 = 3!"))));
 		String* x_a3 = x_a2->ToString();
 		CxAssert(((x_a3))->Equals((new String((Char*)L"1 = {1   } 2 =    2 3 = 3!"))));
-		String* x_empty = String*::Empty;
+		String* x_empty = String::Empty;
 		CxAssert(!((x_empty))->Equals(nullptr) && ((x_empty))->Equals((new String((Char*)L""))));
 		x_a2 = String::Format((new String((Char*)L"1 = {{{0,-4}}} 2 = {1,4}!")),new Int32Value(1),new Int32Value(2));
 		CxAssert(((x_a2))->Equals((new String((Char*)L"1 = {1   } 2 =    2!"))));
@@ -3451,28 +3450,28 @@ namespace CABlock_NS
 	}
 	void StringTest::DoParsingTest()
 	{
-		static Char DoParsingTestArray0[4] = {' ',',','.',':'};
-		static Char DoParsingTestArray1[2] = {'3','4'};
-		static String* DoParsingTestArray2[3] = {new StringRaw((Char*)L"1"),new StringRaw((Char*)L"2"),new StringRaw((Char*)L"3")};
+		static Char DoParsingTestArray0[4] = {L' ',L',',L'.',L':'};
+		static Char DoParsingTestArray1[2] = {L'3',L'4'};
+		static String* DoParsingTestArray2[3] = {(new String((Char*)L"1")),(new String((Char*)L"2")),(new String((Char*)L"3"))};
 		String* x_text = (new String((Char*)L"12 34 56"));
 		Array* x_array = x_text->Split(nullptr);
 		CxAssert((Int32Value(x_array->get_Length())).Equals(3));
-		CxAssert((((new String((Char*)L"12"))))->Equals(((*((String*)x_array->Address(0))))));
-		CxAssert((((new String((Char*)L"34"))))->Equals(((*((String*)x_array->Address(1))))));
-		CxAssert((((new String((Char*)L"56"))))->Equals(((*((String*)x_array->Address(2))))));
+		CxAssert((((new String((Char*)L"12"))))->Equals(((*((String**)x_array->Address(0))))));
+		CxAssert((((new String((Char*)L"34"))))->Equals(((*((String**)x_array->Address(1))))));
+		CxAssert((((new String((Char*)L"56"))))->Equals(((*((String**)x_array->Address(2))))));
 		String* x_text2 = (new String((Char*)L"42, 12, 19"));
 		Array* x_separator = (new Array(CharType,4))->Initialize((Char*) DoParsingTestArray0);
 		x_array = x_text2->Split(x_separator);
 		CxAssert((Int32Value(x_array->get_Length())).Equals(5));
-		CxAssert((((new String((Char*)L"42"))))->Equals(((*((String*)x_array->Address(0))))));
-		CxAssert((((new String((Char*)L""))))->Equals(((*((String*)x_array->Address(1))))));
-		CxAssert((((new String((Char*)L"12"))))->Equals(((*((String*)x_array->Address(2))))));
-		CxAssert((((new String((Char*)L""))))->Equals(((*((String*)x_array->Address(3))))));
-		CxAssert((((new String((Char*)L"19"))))->Equals(((*((String*)x_array->Address(4))))));
+		CxAssert((((new String((Char*)L"42"))))->Equals(((*((String**)x_array->Address(0))))));
+		CxAssert((((new String((Char*)L""))))->Equals(((*((String**)x_array->Address(1))))));
+		CxAssert((((new String((Char*)L"12"))))->Equals(((*((String**)x_array->Address(2))))));
+		CxAssert((((new String((Char*)L""))))->Equals(((*((String**)x_array->Address(3))))));
+		CxAssert((((new String((Char*)L"19"))))->Equals(((*((String**)x_array->Address(4))))));
 		x_array = x_text2->Split(x_separator,2);
 		CxAssert((Int32Value(x_array->get_Length())).Equals(2));
-		CxAssert((((new String((Char*)L"42"))))->Equals(((*((String*)x_array->Address(0))))));
-		CxAssert((((new String((Char*)L" 12, 19"))))->Equals(((*((String*)x_array->Address(1))))));
+		CxAssert((((new String((Char*)L"42"))))->Equals(((*((String**)x_array->Address(0))))));
+		CxAssert((((new String((Char*)L" 12, 19"))))->Equals(((*((String**)x_array->Address(1))))));
 		String* x_b = x_text->Substring(3);
 		CxAssert((((new String((Char*)L"34 56"))))->Equals(x_b));
 		x_b = x_text->Substring(3,2);
@@ -3537,7 +3536,7 @@ namespace CABlock_NS
 		CxAssert(((x_text6->Remove(2,2)))->Equals((new String((Char*)L"113311"))));
 		CxAssert((((new String((Char*)L"aaAAaaAA"))->ToUpper()))->Equals((new String((Char*)L"AAAAAAAA"))));
 		CxAssert((((new String((Char*)L"aaAAaaAA"))->ToLower()))->Equals((new String((Char*)L"aaaaaaaa"))));
-		Array* x_value = (new Array(String*Type,3))->Initialize((String**) DoParsingTestArray2);
+		Array* x_value = (new Array(StringType,3))->Initialize((String*) DoParsingTestArray2);
 		CxAssert(((String::Join((new String((Char*)L",")),x_value)))->Equals((new String((Char*)L"1,2,3"))));
 		CxAssert(((String::Join((new String((Char*)L",")),x_value,1,2)))->Equals((new String((Char*)L"2,3"))));
 		x_text6 = x_text->Insert(3,(new String((Char*)L"111")));
@@ -3550,25 +3549,25 @@ namespace CABlock_NS
 	}
 	void StringTest::DoConcatTest()
 	{
-		static Object DoConcatTestArray0[4] = {new StringRaw((Char*)L"1 "),new StringRaw((Char*)L"2 "),new StringRaw((Char*)L"3 "),new StringRaw((Char*)L"4")};
-		static String* DoConcatTestArray1[4] = {new StringRaw((Char*)L"1 "),new StringRaw((Char*)L"2 "),new StringRaw((Char*)L"3 "),new StringRaw((Char*)L"4")};
+		static Object* DoConcatTestArray0[4] = {(new String((Char*)L"1 ")),(new String((Char*)L"2 ")),(new String((Char*)L"3 ")),(new String((Char*)L"4"))};
+		static String* DoConcatTestArray1[4] = {(new String((Char*)L"1 ")),(new String((Char*)L"2 ")),(new String((Char*)L"3 ")),(new String((Char*)L"4"))};
 		Array* x_array = (new Array(ObjectType,4))->Initialize((Object*) DoConcatTestArray0);
-		String* x_a = String::Concat(((*((Object*)x_array->Address(0)))));
+		String* x_a = String::Concat(((*((Object**)x_array->Address(0)))));
 		CxAssert(((x_a))->Equals((new String((Char*)L"1 "))));
 		x_a = String::Concat(x_array);
 		CxAssert(((x_a))->Equals((new String((Char*)L"1 2 3 4"))));
-		Array* x_array2 = (new Array(String*Type,4))->Initialize((String**) DoConcatTestArray1);
+		Array* x_array2 = (new Array(StringType,4))->Initialize((String*) DoConcatTestArray1);
 		x_a = String::Concat(x_array2);
 		CxAssert(((x_a))->Equals((new String((Char*)L"1 2 3 4"))));
-		x_a = String::Concat(((*((Object*)x_array->Address(0)))),((*((Object*)x_array->Address(1)))));
+		x_a = String::Concat(((*((Object**)x_array->Address(0)))),((*((Object**)x_array->Address(1)))));
 		CxAssert(((x_a))->Equals((new String((Char*)L"1 2 "))));
-		x_a = ((*((String*)x_array2->Address(0))))->Combine(((*((String*)x_array2->Address(1)))));
+		x_a = ((*((String**)x_array2->Address(0))))->Combine(((*((String**)x_array2->Address(1)))));
 		CxAssert(((x_a))->Equals((new String((Char*)L"1 2 "))));
-		x_a = String::Concat(((*((Object*)x_array->Address(0)))),((*((Object*)x_array->Address(1)))),((*((Object*)x_array->Address(2)))));
+		x_a = String::Concat(((*((Object**)x_array->Address(0)))),((*((Object**)x_array->Address(1)))),((*((Object**)x_array->Address(2)))));
 		CxAssert(((x_a))->Equals((new String((Char*)L"1 2 3 "))));
-		x_a = ((*((String*)x_array2->Address(0))))->Combine(((*((String*)x_array2->Address(1))))) + ((*((String*)x_array2->Address(2))));
+		x_a = ((*((String**)x_array2->Address(0))))->Combine(((*((String**)x_array2->Address(1))))) + ((*((String**)x_array2->Address(2))));
 		CxAssert(((x_a))->Equals((new String((Char*)L"1 2 3 "))));
-		x_a = ((*((String*)x_array2->Address(0))))->Combine(((*((String*)x_array2->Address(1))))) + ((*((String*)x_array2->Address(2)))) + ((*((String*)x_array2->Address(3))));
+		x_a = ((*((String**)x_array2->Address(0))))->Combine(((*((String**)x_array2->Address(1))))) + ((*((String**)x_array2->Address(2)))) + ((*((String**)x_array2->Address(3))));
 		CxAssert(((x_a))->Equals((new String((Char*)L"1 2 3 4"))));
 	}
 	void StringTest::CxAssert(Boolean x_x)
@@ -3600,7 +3599,7 @@ namespace CABlock_NS
 	}
 	void TimeTest::TestTimeSpan()
 	{
-		TimeSpan x_timeSpan = TimeSpan(100);
+		TimeSpan x_timeSpan = (TimeSpan(100));
 		TimeSpan x_timeSpan2 = x_timeSpan.Add(x_timeSpan);
 		CxAssert((Int64Value(x_timeSpan2.get_Ticks())).Equals(200));
 		CxAssert(TimeSpan::Compare(x_timeSpan,x_timeSpan2) < 0);
@@ -3642,7 +3641,7 @@ namespace CABlock_NS
 		x_timeSpan = x_timeSpan2;
 		CxAssert(((x_timeSpan)).Equals(x_timeSpan2));
 		CxAssert(!( !((x_timeSpan)).Equals(x_timeSpan2) ));
-		x_timeSpan = TimeSpan(100);
+		x_timeSpan = (TimeSpan(100));
 		CxAssert(!( x_timeSpan > x_timeSpan2 ));
 		CxAssert(!( x_timeSpan >= x_timeSpan2 ));
 		CxAssert(!( x_timeSpan2 < x_timeSpan ));
@@ -3653,16 +3652,16 @@ namespace CABlock_NS
 		x_timeSpan = -x_timeSpan;
 		CxAssert((Int64Value(x_timeSpan.get_Ticks())).Equals(-100));
 		CxAssert((Int64Value(( +x_timeSpan ).get_Ticks())).Equals(-100));
-		CxAssert((Int64Value(TimeSpan(1000).get_Ticks())).Equals(1000));
-		CxAssert((Int64Value(TimeSpan(10,11,30).get_Ticks())).Equals(366900000000));
-		CxAssert((Int64Value(TimeSpan(3,10,11,30).get_Ticks())).Equals(2958900000000));
-		CxAssert((Int64Value(TimeSpan(3,10,11,30,100).get_Ticks())).Equals(2958901000000));
-		CxAssert((Int64Value(TimeSpan(3,10,11,30,100).get_Ticks())).Equals(2958901000000));
-		x_timeSpan = TimeSpan(71,3,12,13);
+		CxAssert((Int64Value((TimeSpan(1000)).get_Ticks())).Equals(1000));
+		CxAssert((Int64Value((TimeSpan(10,11,30)).get_Ticks())).Equals(366900000000));
+		CxAssert((Int64Value((TimeSpan(3,10,11,30)).get_Ticks())).Equals(2958900000000));
+		CxAssert((Int64Value((TimeSpan(3,10,11,30,100)).get_Ticks())).Equals(2958901000000));
+		CxAssert((Int64Value((TimeSpan(3,10,11,30,100)).get_Ticks())).Equals(2958901000000));
+		x_timeSpan = (TimeSpan(71,3,12,13));
 		CxAssert((Int64Value(x_timeSpan.get_Ticks())).Equals(61459330000000));
 		String* x_text = x_timeSpan.ToString();
 		CxAssert(x_text->Equals((new String((Char*)L"71.03:12:13"))));
-		x_timeSpan = TimeSpan(-71,3,12,13);
+		x_timeSpan = (TimeSpan(-71,3,12,13));
 		CxAssert((Int64Value(x_timeSpan.get_Ticks())).Equals(-61228670000000));
 		String* x_text2 = x_timeSpan.ToString();
 		CxAssert(x_text2->Equals((new String((Char*)L"-70.20:47:47"))));
@@ -3695,10 +3694,10 @@ namespace CABlock_NS
 	void TimeTest::TestDateTime()
 	{
 		CxAssert((Int64Value(DateTime().get_Ticks())).Equals((Int64)0));
-		CxAssert((Int64Value(DateTime(1200).get_Ticks())).Equals(1200));
-		CxAssert((Int64Value(DateTime(2003,7,23).get_Ticks())).Equals(631945152000000000));
-		CxAssert((Int64Value(DateTime(2003,7,23,12,30,30).get_Ticks())).Equals(631945602300000000));
-		DateTime x_dateTime = DateTime(2003,7,23,12,30,30,100);
+		CxAssert((Int64Value((DateTime(1200)).get_Ticks())).Equals(1200));
+		CxAssert((Int64Value((DateTime(2003,7,23)).get_Ticks())).Equals(631945152000000000));
+		CxAssert((Int64Value((DateTime(2003,7,23,12,30,30)).get_Ticks())).Equals(631945602300000000));
+		DateTime x_dateTime = (DateTime(2003,7,23,12,30,30,100));
 		CxAssert((Int64Value(x_dateTime.get_Ticks())).Equals(631945602301000000));
 		CxAssert((Int64Value(x_dateTime.get_Date().get_Ticks())).Equals(631945152000000000));
 		Int32 x_day = x_dateTime.get_Day();
@@ -3738,8 +3737,8 @@ namespace CABlock_NS
 	}
 	void TimeTest::DateTimeMethodTests()
 	{
-		DateTime x_dateTime = DateTime(2003,7,23,12,30,30,100);
-		TimeSpan x_timeSpan = TimeSpan(0,2,0,0);
+		DateTime x_dateTime = (DateTime(2003,7,23,12,30,30,100));
+		TimeSpan x_timeSpan = (TimeSpan(0,2,0,0));
 		CxAssert((Int64Value(x_dateTime.Add(x_timeSpan).get_Ticks())).Equals(631945674301000000));
 		CxAssert((Int64Value(x_dateTime.AddDays(1.5).get_Ticks())).Equals(631946898301000000));
 		CxAssert((Int64Value(x_dateTime.AddHours(2.5).get_Ticks())).Equals(631945692301000000));
@@ -3773,12 +3772,12 @@ namespace CABlock_NS
 		x_dateTime2 = x_dateTime - x_timeSpan;
 		CxAssert((Int64Value(x_dateTime2.get_Ticks())).Equals(631945530301000000));
 		CxAssert((Int64Value(( x_dateTime - x_dateTime2 ).get_Ticks())).Equals(72000000000));
-		x_dateTime2 = DateTime(2003,7,23,14,2,30,100);
+		x_dateTime2 = (DateTime(2003,7,23,14,2,30,100));
 		CxAssert((Int64Value(x_dateTime2.get_Ticks())).Equals(631945657501000000));
 		CxAssert((Int32Value(x_dateTime2.get_Hour())).Equals(14));
 		String* x_text = x_dateTime2.ToString();
 		CxAssert(x_text->Equals((new String((Char*)L"7/23/2003 2:02:30 PM"))));
-		x_dateTime2 = DateTime(2003,7,23,2,20,1,100);
+		x_dateTime2 = (DateTime(2003,7,23,2,20,1,100));
 		CxAssert((Int64Value(x_dateTime2.get_Ticks())).Equals(631945236011000000));
 		CxAssert((Int32Value(x_dateTime2.get_Hour())).Equals(2));
 		x_text = x_dateTime2.ToString();
@@ -3805,17 +3804,17 @@ namespace CABlock_NS
 		static DateTime DateTimeArrayTestsArray2[2][2][4] = {{{DateTime(2000,4,6),DateTime(2000,4,7),DateTime(2000,4,8),DateTime(2000,4,9)},{DateTime(2000,4,10),DateTime(2000,4,11),DateTime(2000,4,12),DateTime(2000,4,13)}},{{DateTime(2000,4,14),DateTime(2000,4,15),DateTime(2000,4,16),DateTime(2000,4,17)},{DateTime(2000,4,18),DateTime(2000,4,19),DateTime(2000,4,20),DateTime(2000,4,21)}}};
 		Array* x_array = (new Array(DateTimeType,5))->Initialize((DateTime*) DateTimeArrayTestsArray0);
 		CxAssert((Int32Value(x_array->get_Length())).Equals(5));
-		CxAssert(((((*((DateTime*)x_array->Address(3)))))).Equals(DateTime(2000,4,9)));
-		CxAssert(((((*((DateTime*)x_array->Address(1)))))).Equals(DateTime(2000,4,7)));
+		CxAssert(((((*((DateTime*)x_array->Address(3)))))).Equals((DateTime(2000,4,9))));
+		CxAssert(((((*((DateTime*)x_array->Address(1)))))).Equals((DateTime(2000,4,7))));
 		Array* x_array2 = (new Array(DateTimeType,2,4))->Initialize((DateTime*) DateTimeArrayTestsArray1);
-		CxAssert(((((*((DateTime*)x_array2->Address(0,2)))))).Equals(DateTime(2000,4,8)));
+		CxAssert(((((*((DateTime*)x_array2->Address(0,2)))))).Equals((DateTime(2000,4,8))));
 		Array* x_array3 = (new Array(DateTimeType,2,2,4))->Initialize((DateTime*) DateTimeArrayTestsArray2);
-		CxAssert(((((*((DateTime*)x_array3->Address(0,0,3)))))).Equals(DateTime(2000,4,9)));
-		((*((DateTime*)x_array3->Address(0,0,3)))) = DateTime(2000,4,27);
-		CxAssert(((((*((DateTime*)x_array3->Address(0,0,3)))))).Equals(DateTime(2000,4,27)));
-		x_array3->SetValue(DateTime(2000,4,28),0,0,3);
-		CxAssert(((((*((DateTime*)x_array3->Address(0,0,3)))))).Equals(DateTime(2000,4,28)));
-		DateTime x_d = ((*((DateTime*)x_array->Address(2)))) = DateTime(2000,4,27);
+		CxAssert(((((*((DateTime*)x_array3->Address(0,0,3)))))).Equals((DateTime(2000,4,9))));
+		((*((DateTime*)x_array3->Address(0,0,3)))) = (DateTime(2000,4,27));
+		CxAssert(((((*((DateTime*)x_array3->Address(0,0,3)))))).Equals((DateTime(2000,4,27))));
+		x_array3->SetValue((DateTime(2000,4,28)),0,0,3);
+		CxAssert(((((*((DateTime*)x_array3->Address(0,0,3)))))).Equals((DateTime(2000,4,28))));
+		DateTime x_d = ((*((DateTime*)x_array->Address(2)))) = (DateTime(2000,4,27));
 		CxAssert(((((*((DateTime*)x_array->Address(2)))))).Equals(x_d));
 	}
 	void TimeTest::TimeSpanArrayTests()
@@ -3825,17 +3824,17 @@ namespace CABlock_NS
 		static TimeSpan TimeSpanArrayTestsArray2[2][2][4] = {{{TimeSpan(2000,4,6),TimeSpan(2000,4,7),TimeSpan(2000,4,8),TimeSpan(2000,4,9)},{TimeSpan(2000,4,10),TimeSpan(2000,4,11),TimeSpan(2000,4,12),TimeSpan(2000,4,13)}},{{TimeSpan(2000,4,14),TimeSpan(2000,4,15),TimeSpan(2000,4,16),TimeSpan(2000,4,17)},{TimeSpan(2000,4,18),TimeSpan(2000,4,19),TimeSpan(2000,4,20),TimeSpan(2000,4,21)}}};
 		Array* x_array = (new Array(TimeSpanType,5))->Initialize((TimeSpan*) TimeSpanArrayTestsArray0);
 		CxAssert((Int32Value(x_array->get_Length())).Equals(5));
-		CxAssert(((((*((TimeSpan*)x_array->Address(3)))))).Equals(TimeSpan(2000,4,9)));
-		CxAssert(((((*((TimeSpan*)x_array->Address(1)))))).Equals(TimeSpan(2000,4,7)));
+		CxAssert(((((*((TimeSpan*)x_array->Address(3)))))).Equals((TimeSpan(2000,4,9))));
+		CxAssert(((((*((TimeSpan*)x_array->Address(1)))))).Equals((TimeSpan(2000,4,7))));
 		Array* x_array2 = (new Array(TimeSpanType,2,4))->Initialize((TimeSpan*) TimeSpanArrayTestsArray1);
-		CxAssert(((((*((TimeSpan*)x_array2->Address(0,2)))))).Equals(TimeSpan(2000,4,8)));
+		CxAssert(((((*((TimeSpan*)x_array2->Address(0,2)))))).Equals((TimeSpan(2000,4,8))));
 		Array* x_array3 = (new Array(TimeSpanType,2,2,4))->Initialize((TimeSpan*) TimeSpanArrayTestsArray2);
-		CxAssert(((((*((TimeSpan*)x_array3->Address(0,0,3)))))).Equals(TimeSpan(2000,4,9)));
-		((*((TimeSpan*)x_array3->Address(0,0,3)))) = TimeSpan(2000,4,27);
-		CxAssert(((((*((TimeSpan*)x_array3->Address(0,0,3)))))).Equals(TimeSpan(2000,4,27)));
-		x_array3->SetValue(TimeSpan(2000,4,28),0,0,3);
-		CxAssert(((((*((TimeSpan*)x_array3->Address(0,0,3)))))).Equals(TimeSpan(2000,4,28)));
-		TimeSpan x_t = ((*((TimeSpan*)x_array->Address(2)))) = TimeSpan(2000,4,27);
+		CxAssert(((((*((TimeSpan*)x_array3->Address(0,0,3)))))).Equals((TimeSpan(2000,4,9))));
+		((*((TimeSpan*)x_array3->Address(0,0,3)))) = (TimeSpan(2000,4,27));
+		CxAssert(((((*((TimeSpan*)x_array3->Address(0,0,3)))))).Equals((TimeSpan(2000,4,27))));
+		x_array3->SetValue((TimeSpan(2000,4,28)),0,0,3);
+		CxAssert(((((*((TimeSpan*)x_array3->Address(0,0,3)))))).Equals((TimeSpan(2000,4,28))));
+		TimeSpan x_t = ((*((TimeSpan*)x_array->Address(2)))) = (TimeSpan(2000,4,27));
 		CxAssert(((((*((TimeSpan*)x_array->Address(2)))))).Equals(x_t));
 	}
 	void TimeTest::CxAssert(Double x_x,Double x_y)
@@ -4092,7 +4091,7 @@ namespace CABlock_NS
 		UInt16 x_num2 = 1;
 		CxAssert((UInt16Value(Math::Max(x_num,x_num2))).Equals(1));
 		CxAssert((UInt16Value(Math::Min(x_num,x_num2))).Equals((UInt16)0));
-		StringBuilder* x_stringBuilder = new StringBuilder();
+		StringBuilder* x_stringBuilder = (new StringBuilder());
 		x_stringBuilder->Append(x_num2);
 		CxAssert(((x_stringBuilder->ToString()))->Equals((new String((Char*)L"1"))));
 		x_stringBuilder->Insert(1,x_num);
@@ -4333,7 +4332,7 @@ namespace CABlock_NS
 		UInt32 x_num = 1;
 		CxAssert((UInt32Value(Math::Max(x_val,x_num))).Equals(1));
 		CxAssert((UInt32Value(Math::Min(x_val,x_num))).Equals((UInt32)0));
-		StringBuilder* x_stringBuilder = new StringBuilder();
+		StringBuilder* x_stringBuilder = (new StringBuilder());
 		x_stringBuilder->Append(x_num);
 		CxAssert(((x_stringBuilder->ToString()))->Equals((new String((Char*)L"1"))));
 	}
@@ -4444,7 +4443,7 @@ namespace CABlock_NS
 		UInt16 x_num5 = 1;
 		UInt32 x_num6 = 1;
 		UInt64 x_num7 = 1;
-		Single x_num8 = 1;
+		Single x_num8 = ((Single)1);
 		Double x_num9 = 1;
 		CxAssert((UInt64Value(x_num)).Equals(66));
 		CxAssert((UInt64Value(x_num + x_c)).Equals(67));
@@ -4456,7 +4455,7 @@ namespace CABlock_NS
 		CxAssert((UInt64Value(x_num + x_num5)).Equals(67));
 		CxAssert((UInt64Value(x_num + x_num6)).Equals(67));
 		CxAssert((UInt64Value(x_num + x_num7)).Equals(67));
-		CxAssert((SingleValue(x_num + x_num8)).Equals(67));
+		CxAssert((SingleValue(x_num + x_num8)).Equals(((Single)67)));
 		CxAssert((DoubleValue(x_num + x_num9)).Equals(67));
 		CxAssert((UInt64Value(x_num - x_c)).Equals(65));
 		CxAssert((UInt64Value(x_num - x_b)).Equals(65));
@@ -4467,7 +4466,7 @@ namespace CABlock_NS
 		CxAssert((UInt64Value(x_num - x_num5)).Equals(65));
 		CxAssert((UInt64Value(x_num - x_num6)).Equals(65));
 		CxAssert((UInt64Value(x_num - x_num7)).Equals(65));
-		CxAssert((SingleValue(x_num - x_num8)).Equals(65));
+		CxAssert((SingleValue(x_num - x_num8)).Equals(((Single)65)));
 		CxAssert((DoubleValue(x_num - x_num9)).Equals(65));
 		CxAssert((UInt64Value(x_num * x_c)).Equals(66));
 		CxAssert((UInt64Value(x_num * x_b)).Equals(66));
@@ -4478,7 +4477,7 @@ namespace CABlock_NS
 		CxAssert((UInt64Value(x_num * x_num5)).Equals(66));
 		CxAssert((UInt64Value(x_num * x_num6)).Equals(66));
 		CxAssert((UInt64Value(x_num * x_num7)).Equals(66));
-		CxAssert((SingleValue(x_num * x_num8)).Equals(66));
+		CxAssert((SingleValue(x_num * x_num8)).Equals(((Single)66)));
 		CxAssert((DoubleValue(x_num * x_num9)).Equals(66));
 		CxAssert((UInt64Value(x_num / x_c)).Equals(66));
 		CxAssert((UInt64Value(x_num / x_b)).Equals(66));
@@ -4489,7 +4488,7 @@ namespace CABlock_NS
 		CxAssert((UInt64Value(x_num / x_num5)).Equals(66));
 		CxAssert((UInt64Value(x_num / x_num6)).Equals(66));
 		CxAssert((UInt64Value(x_num / x_num7)).Equals(66));
-		CxAssert((SingleValue(x_num / x_num8)).Equals(66));
+		CxAssert((SingleValue(x_num / x_num8)).Equals(((Single)66)));
 		CxAssert((DoubleValue(x_num / x_num9)).Equals(66));
 		CxAssert((UInt64Value(x_num % x_c)).Equals((UInt64)0));
 		CxAssert((UInt64Value(x_num % x_b)).Equals((UInt64)0));
@@ -4500,7 +4499,7 @@ namespace CABlock_NS
 		CxAssert((UInt64Value(x_num % x_num5)).Equals((UInt64)0));
 		CxAssert((UInt64Value(x_num % x_num6)).Equals((UInt64)0));
 		CxAssert((UInt64Value(x_num % x_num7)).Equals((UInt64)0));
-		CxAssert((SingleValue(((DoubleValue)x_num) % x_num8)).Equals(0));
+		CxAssert((SingleValue(((DoubleValue)x_num) % x_num8)).Equals(((Single)0)));
 		CxAssert((DoubleValue(((DoubleValue)x_num) % x_num9)).Equals(0));
 		CxAssert(( x_num & x_c ) == 0);
 		CxAssert(( x_num & x_b ) == 0);
@@ -4663,7 +4662,7 @@ namespace CABlock_NS
 		UInt64 x_num2 = 1;
 		CxAssert((UInt64Value(Math::Max(x_num,x_num2))).Equals(1));
 		CxAssert((UInt64Value(Math::Min(x_num,x_num2))).Equals((UInt64)0));
-		StringBuilder* x_stringBuilder = new StringBuilder();
+		StringBuilder* x_stringBuilder = (new StringBuilder());
 		x_stringBuilder->Append(x_num2);
 		CxAssert(((x_stringBuilder->ToString()))->Equals((new String((Char*)L"1"))));
 		x_stringBuilder->Insert(1,x_num);
