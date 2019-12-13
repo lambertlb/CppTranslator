@@ -9,6 +9,7 @@ namespace CppTranslator
 {
 	class ProtoTypeVisitor : CppVisitorBase
 	{
+		private String EnumName { get; set; }
 		public ProtoTypeVisitor(Formatter formatter) : base(formatter)
 		{
 		}
@@ -66,6 +67,17 @@ namespace CppTranslator
 				first = false;
 			}
 			Formatter.AddCloseBrace(true);
+		}
+		public override void VisitEnumMemberDeclaration(EnumMemberDeclaration enumMemberDeclaration)
+		{
+			Formatter.AppendIndentedName(enumMemberDeclaration.NameToken.Name);
+			Formatter.Append("_");
+			Formatter.Append(EnumName);
+			if (!enumMemberDeclaration.Initializer.IsNull)
+			{
+				Formatter.Append(" = ");
+				enumMemberDeclaration.Initializer.AcceptVisitor(this);
+			}
 		}
 	}
 }

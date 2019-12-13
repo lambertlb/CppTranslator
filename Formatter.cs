@@ -15,6 +15,7 @@ namespace CppTranslator
 		bool openBraceOnNewline = true;
 		private bool onNewline;
 		public bool IsOnNewline { get { return (onNewline); } }
+		public bool CharactersAddedToLine { get; set; }
 		private bool emitToConsole;
 		private StreamWriter outputFiler;
 		private String outputName;
@@ -117,6 +118,7 @@ namespace CppTranslator
 		private void Indent()
 		{
 			Append(tabs.Substring(0, indentLevel));
+			CharactersAddedToLine = false;
 		}
 		/// <summary>
 		/// Increase indentation
@@ -169,6 +171,8 @@ namespace CppTranslator
 		{
 			onNewline = false;
 			stringBuilder.Append(data);
+			if (!String.IsNullOrEmpty(data))
+				CharactersAddedToLine = true;
 			if (emitToConsole)
 				System.Console.Out.Write(data);
 		}
@@ -179,6 +183,7 @@ namespace CppTranslator
 		public void Append(Char character)
 		{
 			onNewline = false;
+			CharactersAddedToLine = true;
 			stringBuilder.Append(character);
 			if (emitToConsole)
 				System.Console.Out.Write(character);
@@ -244,6 +249,7 @@ namespace CppTranslator
 		{
 			Append(nl);
 			onNewline = true;
+			CharactersAddedToLine = false;
 		}
 		/// <summary>
 		/// Add this data and start a new line
