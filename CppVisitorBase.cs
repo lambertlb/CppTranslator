@@ -150,8 +150,11 @@ namespace CppTranslator
 
 		internal void ToValueType(IType toType)
 		{
-			Formatter.Append(toType.Name);
-			Formatter.Append("Value");
+			if (IsPrimative(toType))
+			{
+				Formatter.Append(toType.Name);
+				Formatter.Append("Value");
+			}
 		}
 
 		internal void CastToType(IType toType, AstNode expression)
@@ -814,7 +817,7 @@ namespace CppTranslator
 		public void VisitForeachStatement(ForeachStatement foreachStatement)
 		{
 			IType type = foreachStatement.InExpression.GetResolveResult().Type;
-			if (type.Kind == TypeKind.Array)
+			if (type.Kind == TypeKind.Array || type.Name == "String")
 			{
 				WriteForeachArray(foreachStatement);
 			}
@@ -836,7 +839,7 @@ namespace CppTranslator
 			WriteVariableName(foreachStatement.VariableNameToken);
 			Formatter.Append(" = ");
 			FormatInExpression(foreachStatement);
-			Formatter.Append(";");
+			Formatter.AppendLine(";");
 			if (foreachStatement.EmbeddedStatement is BlockStatement)
 			{
 				WriteStatements(foreachStatement.EmbeddedStatement as BlockStatement);

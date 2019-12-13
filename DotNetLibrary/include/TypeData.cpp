@@ -58,6 +58,8 @@ namespace DotnetLibrary
 	DLL_EXPORT Int32	Int32Value::MinValue = 0;
 	DLL_EXPORT Double	Math::PI = 3.14159265358979;
 	DLL_EXPORT Double	Math::E = 2.71828182845905;
+	DLL_EXPORT String* String::Empty = new String("");
+
 
 	DLL_EXPORT String* BooleanValue::TrueString = nullptr;
 	DLL_EXPORT String* BooleanValue::FalseString = nullptr;

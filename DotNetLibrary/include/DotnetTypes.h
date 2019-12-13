@@ -79,6 +79,7 @@ namespace DotnetLibrary
 #include "DateTime.h"
 #include "TimeSpan.h"
 #include "Encoding.h"
+#include "CharEnumerator.h"
 //#include "BoxTypeRaw.h"
 //#include "Operators.h"
 //#include "PointerType.h"

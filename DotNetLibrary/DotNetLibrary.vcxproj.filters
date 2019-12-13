@@ -51,5 +51,6 @@
     <ClInclude Include="include\DoubleValue.h" />
     <ClInclude Include="include\Encoding.h" />
     <ClInclude Include="include\CharValue.h" />
+    <ClInclude Include="include\CharEnumerator.h" />
   </ItemGroup>
 </Project>
