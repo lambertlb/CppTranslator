@@ -140,7 +140,7 @@ namespace CppTranslator
 		}
 		private String PrefixName(String nameToPrefix)
 		{
-			if (Char.IsLower(nameToPrefix[0]))
+			if (Char.IsLower(nameToPrefix[0]) && nameToPrefix != "this")
 				return (Prefix + nameToPrefix);
 			return (nameToPrefix);
 		}

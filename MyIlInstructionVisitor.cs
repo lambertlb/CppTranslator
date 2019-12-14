@@ -12,7 +12,14 @@ namespace CppTranslator
 		public Dictionary<String, String> CurrentVariables { get; set; }
 		public Formatter Formatter { get; set; }
 		public IType MethodReturnType { get; set; }
+		public IlTypeVisitor TypeVisitor { get; set; }
+		public Dictionary<String, ILInstruction> variableTranslation = new Dictionary<String, ILInstruction>();
 
+		public MyIlInstructionVisitor(Formatter formatter)
+		{
+			Formatter = formatter;
+			TypeVisitor = new IlTypeVisitor(formatter);
+		}
 		private void NewLocalVariables()
 		{
 			if (CurrentVariables != null)
@@ -58,10 +65,6 @@ namespace CppTranslator
 			}
 			Formatter.AppendName(name);
 		}
-		public MyIlInstructionVisitor(Formatter formatter)
-		{
-			Formatter = formatter;
-		}
 		protected override ILInstruction Default(ILInstruction inst)
 		{
 			return (inst);
@@ -99,6 +102,7 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitBlockContainer(BlockContainer container)
 		{
+			variableTranslation.Clear();
 			foreach (Block block in container.Blocks)
 			{
 				NewLocalVariables();
@@ -146,46 +150,36 @@ namespace CppTranslator
 
 		private void FormatCall(CallInstruction inst)
 		{
-			var arg = inst.Arguments.FirstOrDefault();
-			bool skipFirstParameter = false;
-			bool isThis = false;
-			if (inst.IsInstanceCall)
+			if (inst.Method.Name != ".ctor")
 			{
-				LdLoc ldLoc = arg.AcceptVisitor(this) as LdLoc;
-				if (ldLoc != null && ldLoc.Variable.Name == "this")
-					isThis = true;
-				skipFirstParameter = true;
-			}
-			else
-			{
-				if (inst.Method.IsStatic)
+				var arg = inst.Arguments.FirstOrDefault();
+				bool skipFirstParameter = false;
+				if (inst.IsInstanceCall)
 				{
-					Formatter.Append(inst.Method.DeclaringType.Name);
+					LdLoc ldLoc = arg.AcceptVisitor(this) as LdLoc;
+					skipFirstParameter = true;
 				}
-			}
-			if (FormatMethodAccessType(inst.Method, isThis))
-			{
+				else
+				{
+					if (inst.Method.IsStatic)
+					{
+						Formatter.Append(inst.Method.DeclaringType.Name);
+					}
+				}
+				FormatMethodAccessType(inst.Method);
 				AddCallParameters(inst.Arguments, skipFirstParameter);
 			}
 		}
 
-		private bool FormatMethodAccessType(IMethod method, bool isThis)
+		private void FormatMethodAccessType(IMethod method)
 		{
-			if (!isThis)
-			{
-				if (method.IsStatic)
-					Formatter.Append("::");
-				else if (IsPointerType(method.DeclaringType))
-					Formatter.Append("->");
-				else
-					Formatter.Append(".");
-			}
-			if (method.Name != ".ctor")
-			{
-				Formatter.Append(method.Name);
-				return (true);
-			}
-			return (false);
+			if (method.IsStatic)
+				Formatter.Append("::");
+			else if (IsPointerType(method.DeclaringType))
+				Formatter.Append("->");
+			else
+				Formatter.Append(".");
+			Formatter.Append(method.Name);
 		}
 
 		private void AddCallParameters(InstructionCollection<ILInstruction> arguments, bool hasThis)
@@ -382,11 +376,19 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitLdElema(LdElema inst)
 		{
+			Formatter.Append("((");
+			FormatTypeDelaration(inst.Type);
+			Formatter.Append("*)");
+			inst.Array.AcceptVisitor(this);
+			Formatter.Append("->Address(");
+			WriteCommaSeparatedList(inst.Indices);
+			Formatter.Append("))");
 			return base.VisitLdElema(inst);
 		}
 
 		protected override ILInstruction VisitLdFlda(LdFlda inst)
 		{
+			HandleFieldAccess(inst.Target);
 			String name = inst.Field.Name;
 			name = ReplaceSpecial(name);
 			Formatter.AppendName(name);
@@ -415,8 +417,14 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitLdLoc(LdLoc inst)
 		{
-			if (inst.Variable.Name != "this")
-				Formatter.AppendName(inst.Variable.Name);
+			String name = inst.Variable.Name;
+			if (variableTranslation.ContainsKey(name))
+			{
+				ILInstruction ins =  variableTranslation[name];
+				ins.AcceptVisitor(this);
+			}
+			else
+				Formatter.AppendName(name);
 			return base.VisitLdLoc(inst);
 		}
 
@@ -512,7 +520,26 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitNewArr(NewArr inst)
 		{
+			Formatter.Append("new Array(");
+			FormatType(inst.Type);
+			Formatter.Append("Type,");
+			WriteCommaSeparatedList(inst.Indices);
+			Formatter.Append(")");
 			return base.VisitNewArr(inst);
+		}
+
+		private void WriteCommaSeparatedList(InstructionCollection<ILInstruction> indices)
+		{
+			bool isFirst = true;
+			foreach (ILInstruction node in indices)
+			{
+				if (!isFirst)
+				{
+					Formatter.Append(",");
+				}
+				node.AcceptVisitor(this);
+				isFirst = false;
+			}
 		}
 
 		protected override ILInstruction VisitNewObj(NewObj inst)
@@ -596,8 +623,57 @@ namespace CppTranslator
 		{
 			inst.Target.AcceptVisitor(this);
 			Formatter.Append(" = ");
-			inst.Value.AcceptVisitor(this);
+			if (IsNewInitilizedArray(inst.Value))
+				HandleInitializedArray(inst);
+			else
+				inst.Value.AcceptVisitor(this);
 			return base.VisitStObj(inst);
+		}
+
+		private bool IsNewInitilizedArray(ILInstruction inst)
+		{
+			if (!(inst is ICSharpCode.Decompiler.IL.Block))
+				return (false);
+			ILInstruction first = ((ICSharpCode.Decompiler.IL.Block)inst).Instructions.FirstOrDefault();
+			if (first != null)
+			{
+				ICSharpCode.Decompiler.IL.StLoc stLoc = first as ICSharpCode.Decompiler.IL.StLoc;
+				if (stLoc == null)
+					return (false);
+				ICSharpCode.Decompiler.IL.NewArr newArr = stLoc.Value as ICSharpCode.Decompiler.IL.NewArr;
+				if (newArr == null)
+					return (false);
+				return (((ICSharpCode.Decompiler.IL.Block)inst).Instructions.Count > 1);
+			}
+			return (false);
+		}
+
+		private void HandleInitializedArray(StObj inst)
+		{
+			ICSharpCode.Decompiler.IL.Block block = (ICSharpCode.Decompiler.IL.Block)inst.Value;
+			ICSharpCode.Decompiler.IL.StLoc stLoc = block.Instructions.FirstOrDefault() as ICSharpCode.Decompiler.IL.StLoc;
+			ICSharpCode.Decompiler.IL.NewArr newArr = stLoc.Value as ICSharpCode.Decompiler.IL.NewArr;
+			ICSharpCode.Decompiler.IL.LdFlda field = inst.Target as ICSharpCode.Decompiler.IL.LdFlda;
+			if (field != null && !variableTranslation.ContainsKey(stLoc.Variable.Name))
+			{
+				variableTranslation.Add(stLoc.Variable.Name, inst.Target);
+			}
+			newArr.AcceptVisitor(this);
+			Formatter.AppendLine(";");
+			block.Instructions.GetEnumerator();
+			InstructionCollection<ILInstruction>.Enumerator walker = block.Instructions.GetEnumerator();
+			walker.MoveNext();
+			Boolean first = true;
+			int index = 0;
+			while (walker.MoveNext())
+			{
+				if (!first)
+					Formatter.AppendLine(";");
+				ICSharpCode.Decompiler.IL.StObj store = walker.Current as ICSharpCode.Decompiler.IL.StObj;
+				Formatter.AppendIndented("*");
+				store.AcceptVisitor(this);
+				first = false;
+			}
 		}
 
 		protected override ILInstruction VisitStringToInt(StringToInt inst)
@@ -699,6 +775,16 @@ namespace CppTranslator
 				}
 			}
 			return (null);
+		}
+		private void HandleFieldAccess(ILInstruction target)
+		{
+			ILInstruction inst = target.AcceptVisitor(this);
+			if (inst is ICSharpCode.Decompiler.IL.LdLoc)
+			{
+				ICSharpCode.Decompiler.IL.LdLoc ldLoc = inst as ICSharpCode.Decompiler.IL.LdLoc;
+				IType md = ldLoc.Variable.Type;
+				md.AcceptVisitor(TypeVisitor);
+			}
 		}
 	}
 }
