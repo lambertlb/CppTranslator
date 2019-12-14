@@ -17,6 +17,7 @@ namespace CppTranslator
 		public AstNodeCollection<EntityDeclaration> Fields { get; set; }
 		public CppTypeVisitor TypeVisitor { get; set; }
 		MyIlInstructionVisitor myIlVisitor;
+		internal MyIlInstructionVisitor MyIlVisitor { get => myIlVisitor;}
 		private Formatter formatter;
 		public Formatter Formatter { get => formatter; }
 		public int StaticArrayCount { get; set; }
@@ -36,7 +37,8 @@ namespace CppTranslator
 
 		public void VisitAccessor(Accessor accessor)
 		{
-			WriteBlock(accessor.Body);
+			ICSharpCode.Decompiler.IL.BlockContainer inst = accessor.Body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
+			WriteBlock(inst);
 		}
 		public virtual void AddHeaders()
 		{
@@ -157,13 +159,13 @@ namespace CppTranslator
 			StaticArrayCount = 0;
 			CurrentMethod = methodName;
 			WriteMethodHeader(methodName, parameters);
-			WriteBlock(body);
+			ICSharpCode.Decompiler.IL.BlockContainer inst = body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
+			WriteBlock(inst);
 		}
 
-		private void WriteBlock(BlockStatement body)
+		private void WriteBlock(ICSharpCode.Decompiler.IL.BlockContainer inst)
 		{
-			ICSharpCode.Decompiler.IL.BlockContainer inst = body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
-			inst.AcceptVisitor(myIlVisitor);
+			inst.AcceptVisitor(MyIlVisitor);
 		}
 
 		public void VisitConstructorInitializer(ConstructorInitializer constructorInitializer)
@@ -419,7 +421,7 @@ namespace CppTranslator
 			}
 			Formatter.AppendIndented("");
 			IType type = methodDeclaration.ReturnType.GetResolveResult().Type;
-			myIlVisitor.MethodReturnType = type;
+			MyIlVisitor.MethodReturnType = type;
 			FormatTypeDelaration(type);
 			Formatter.Append(" ");
 			WriteMethod(methodDeclaration.NameToken.Name, methodDeclaration.Parameters, methodDeclaration.Body);
@@ -499,11 +501,12 @@ namespace CppTranslator
 		{
 			Formatter.AppendIndented("");
 			operatorDeclaration.ReturnType.AcceptVisitor(this);
-			myIlVisitor.MethodReturnType = operatorDeclaration.ReturnType.GetResolveResult().Type;
+			MyIlVisitor.MethodReturnType = operatorDeclaration.ReturnType.GetResolveResult().Type;
 			Formatter.Append(" operator ");
 			Formatter.Append(OperatorDeclaration.GetToken(operatorDeclaration.OperatorType));
 			WriteCommaSeparatedListInParenthesis(operatorDeclaration.Parameters);
-			WriteBlock(operatorDeclaration.Body);
+			ICSharpCode.Decompiler.IL.BlockContainer inst = operatorDeclaration.Body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
+			WriteBlock(inst);
 		}
 
 		public void VisitOutVarDeclarationExpression(OutVarDeclarationExpression outVarDeclarationExpression)
@@ -649,7 +652,8 @@ namespace CppTranslator
 				Formatter.Append("get_");
 				Formatter.Append(propertyDeclaration.NameToken.Name);
 				Formatter.AppendLine("()");
-				propertyDeclaration.Getter.AcceptVisitor(this);
+				ICSharpCode.Decompiler.IL.ILFunction inst = propertyDeclaration.Getter.Annotation<ICSharpCode.Decompiler.IL.ILFunction>();
+				WriteBlock(inst.Body as ICSharpCode.Decompiler.IL.BlockContainer);
 			}
 			if (propertyDeclaration.Setter != null)
 			{
@@ -661,7 +665,8 @@ namespace CppTranslator
 				Formatter.Append("(");
 				FormatTypeDelaration(type);
 				Formatter.AppendLine(" x_value )");
-				propertyDeclaration.Setter.AcceptVisitor(this);
+				ICSharpCode.Decompiler.IL.ILFunction inst = propertyDeclaration.Setter.Annotation<ICSharpCode.Decompiler.IL.ILFunction>();
+				WriteBlock(inst.Body as ICSharpCode.Decompiler.IL.BlockContainer);
 			}
 			return;
 			propertyDeclaration.ReturnType.AcceptVisitor(this);
@@ -930,7 +935,8 @@ namespace CppTranslator
 			}
 			else
 			{
-				WriteBlock(body);
+				ICSharpCode.Decompiler.IL.BlockContainer inst = body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
+				WriteBlock(inst);
 			}
 		}
 		public virtual void CreateDefaultConstructor(TypeDeclaration typeDeclaration)

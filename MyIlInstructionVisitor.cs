@@ -387,8 +387,20 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitLdFlda(LdFlda inst)
 		{
-			Formatter.AppendName(inst.Field.Name);
+			String name = inst.Field.Name;
+			name = ReplaceSpecial(name);
+			Formatter.AppendName(name);
 			return base.VisitLdFlda(inst);
+		}
+
+		private static String ReplaceSpecial(String name)
+		{
+			if (name.StartsWith("<"))
+			{
+				name = name.Replace("<", "");
+				name = name.Replace(">", "");
+			}
+			return name;
 		}
 
 		protected override ILInstruction VisitLdFtn(LdFtn inst)
@@ -666,6 +678,27 @@ namespace CppTranslator
 		protected override ILInstruction VisitYieldReturn(YieldReturn inst)
 		{
 			return base.VisitYieldReturn(inst);
+		}
+		public String GetHiddenPropertyName(ICSharpCode.Decompiler.IL.BlockContainer blockContainer)
+		{
+			ICSharpCode.Decompiler.IL.Block block = blockContainer.Blocks.FirstOrDefault();
+			foreach (ILInstruction inst in block.Instructions)
+			{
+				if (inst is ICSharpCode.Decompiler.IL.Leave)
+				{
+					ICSharpCode.Decompiler.IL.Leave leave = inst as ICSharpCode.Decompiler.IL.Leave;
+					ICSharpCode.Decompiler.IL.LdObj ldobj = leave.Value as ICSharpCode.Decompiler.IL.LdObj;
+					if (ldobj == null)
+						return (null);
+					ICSharpCode.Decompiler.IL.LdFlda ldFld = ldobj.Target as ICSharpCode.Decompiler.IL.LdFlda;
+					if (ldFld != null)
+					{
+						if (ldFld.Field.Name.StartsWith("<"))
+							return (ReplaceSpecial(ldFld.Field.Name));
+					}
+				}
+			}
+			return (null);
 		}
 	}
 }

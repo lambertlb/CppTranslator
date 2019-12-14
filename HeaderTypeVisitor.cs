@@ -214,10 +214,10 @@ namespace CppTranslator
 		}
 		public override void VisitPropertyDeclaration(PropertyDeclaration propertyDeclaration)
 		{
+			IType type = propertyDeclaration.ReturnType.GetResolveResult().Type;
 			if (propertyDeclaration.Getter != null)
 			{
 				Formatter.AppendIndented("");
-				IType type = propertyDeclaration.ReturnType.GetResolveResult().Type;
 				FormatTypeDelaration(type);
 				Formatter.Append(" get_");
 				Formatter.Append(propertyDeclaration.NameToken.Name);
@@ -228,8 +228,18 @@ namespace CppTranslator
 				Formatter.AppendIndented("void set_");
 				Formatter.Append(propertyDeclaration.NameToken.Name);
 				Formatter.Append("(");
-				propertyDeclaration.ReturnType.AcceptVisitor(this);
+				FormatTypeDelaration(type);
 				Formatter.AppendLine(" x_value );");
+			}
+			ICSharpCode.Decompiler.IL.ILFunction inst = propertyDeclaration.Getter.Annotation<ICSharpCode.Decompiler.IL.ILFunction>();
+			String hiddenName = MyIlVisitor.GetHiddenPropertyName(inst.Body as ICSharpCode.Decompiler.IL.BlockContainer);
+			if (!String.IsNullOrEmpty(hiddenName))
+			{
+				Formatter.AppendIndented("");
+				FormatTypeDelaration(type);
+				Formatter.Append(" ");
+				Formatter.Append(hiddenName);
+				Formatter.AppendLine(";");
 			}
 		}
 		public override void VisitOperatorDeclaration(OperatorDeclaration operatorDeclaration)
