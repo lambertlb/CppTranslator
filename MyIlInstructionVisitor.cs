@@ -14,11 +14,26 @@ namespace CppTranslator
 		public IType MethodReturnType { get; set; }
 		public IlTypeVisitor TypeVisitor { get; set; }
 		public Dictionary<String, ILInstruction> variableTranslation = new Dictionary<String, ILInstruction>();
+		public Dictionary<String, String> specialCallNames = new Dictionary<String, String>();
+		public Dictionary<BinaryNumericOperator, String> operatorSymbols = new Dictionary<BinaryNumericOperator, String>();
 
 		public MyIlInstructionVisitor(Formatter formatter)
 		{
 			Formatter = formatter;
 			TypeVisitor = new IlTypeVisitor(formatter);
+			specialCallNames.Add(".ctor", "");
+			specialCallNames.Add("op_Equality", "Equals");
+
+			operatorSymbols.Add(BinaryNumericOperator.Add, " + ");
+			operatorSymbols.Add(BinaryNumericOperator.Sub, " - ");
+			operatorSymbols.Add(BinaryNumericOperator.Mul, " * ");
+			operatorSymbols.Add(BinaryNumericOperator.Div, " / ");
+			operatorSymbols.Add(BinaryNumericOperator.Rem, " % ");
+			operatorSymbols.Add(BinaryNumericOperator.BitAnd, " & ");
+			operatorSymbols.Add(BinaryNumericOperator.BitOr, " | ");
+			operatorSymbols.Add(BinaryNumericOperator.BitXor, " ^ ");
+			operatorSymbols.Add(BinaryNumericOperator.ShiftLeft, " << ");
+			operatorSymbols.Add(BinaryNumericOperator.ShiftRight, " >> ");
 		}
 		private void NewLocalVariables()
 		{
@@ -61,7 +76,7 @@ namespace CppTranslator
 			}
 			if (type.Kind == TypeKind.Array)
 			{
-				name = "Array*";
+				name = "Array";
 			}
 			Formatter.AppendName(name);
 		}
@@ -87,6 +102,11 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitBinaryNumericInstruction(BinaryNumericInstruction inst)
 		{
+			Formatter.Append("(");
+			inst.Left.AcceptVisitor(this);
+			Formatter.Append(operatorSymbols[inst.Operator]);
+			inst.Right.AcceptVisitor(this);
+			Formatter.Append(")");
 			return base.VisitBinaryNumericInstruction(inst);
 		}
 
@@ -97,6 +117,7 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitBlock(Block block)
 		{
+			WriteBlock(block);
 			return base.VisitBlock(block);
 		}
 
@@ -150,28 +171,28 @@ namespace CppTranslator
 
 		private void FormatCall(CallInstruction inst)
 		{
-			if (inst.Method.Name != ".ctor")
+			String methodName = GetMethodName(inst.Method.Name);
+			if (String.IsNullOrEmpty(methodName))
+				return;
+			var arg = inst.Arguments.FirstOrDefault();
+			bool skipFirstParameter = false;
+			if (inst.IsInstanceCall)
 			{
-				var arg = inst.Arguments.FirstOrDefault();
-				bool skipFirstParameter = false;
-				if (inst.IsInstanceCall)
-				{
-					LdLoc ldLoc = arg.AcceptVisitor(this) as LdLoc;
-					skipFirstParameter = true;
-				}
-				else
-				{
-					if (inst.Method.IsStatic)
-					{
-						Formatter.Append(inst.Method.DeclaringType.Name);
-					}
-				}
-				FormatMethodAccessType(inst.Method);
-				AddCallParameters(inst.Arguments, skipFirstParameter);
+				LdLoc ldLoc = arg.AcceptVisitor(this) as LdLoc;
+				skipFirstParameter = true;
 			}
+			else
+			{
+				if (inst.Method.IsStatic)
+				{
+					Formatter.Append(inst.Method.DeclaringType.Name);
+				}
+			}
+			FormatMethodAccessType(inst.Method, methodName);
+			AddCallParameters(inst.Arguments, skipFirstParameter);
 		}
 
-		private void FormatMethodAccessType(IMethod method)
+		private void FormatMethodAccessType(IMethod method, String methodName)
 		{
 			if (method.IsStatic)
 				Formatter.Append("::");
@@ -179,7 +200,16 @@ namespace CppTranslator
 				Formatter.Append("->");
 			else
 				Formatter.Append(".");
-			Formatter.Append(method.Name);
+			Formatter.Append(methodName);
+		}
+
+		private string GetMethodName(String methodName)
+		{
+			if (specialCallNames.ContainsKey(methodName))
+			{
+				return (specialCallNames[methodName]);
+			}
+			return (methodName);
 		}
 
 		private void AddCallParameters(InstructionCollection<ILInstruction> arguments, bool hasThis)
@@ -217,6 +247,9 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitComp(Comp inst)
 		{
+			inst.Left.AcceptVisitor(this);
+			Formatter.Append(" == ");
+			inst.Right.AcceptVisitor(this);
 			return base.VisitComp(inst);
 		}
 
@@ -237,6 +270,10 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitDefaultValue(DefaultValue inst)
 		{
+			if (inst.Type.Kind == TypeKind.Class)
+				Formatter.Append("new ");
+			FormatType(inst.Type);
+			Formatter.Append("()");
 			return base.VisitDefaultValue(inst);
 		}
 
@@ -317,7 +354,23 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitIfInstruction(IfInstruction inst)
 		{
+			Formatter.Append("if (");
+			inst.Condition.AcceptVisitor(this);
+			Formatter.AppendLine(")");
+			WriteBlockWithBraces(inst.TrueInst);
+			if (!inst.FalseInst.MatchNop())
+			{
+				Formatter.AppendIndentedLine("else");
+				WriteBlockWithBraces(inst.FalseInst);
+			}
 			return base.VisitIfInstruction(inst);
+		}
+
+		private void WriteBlockWithBraces(ILInstruction trueInst)
+		{
+			Formatter.AddOpenBrace();
+			trueInst.AcceptVisitor(this);
+			Formatter.AddCloseBrace();
 		}
 
 		protected override ILInstruction VisitILFunction(ILFunction function)
@@ -376,7 +429,7 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitLdElema(LdElema inst)
 		{
-			Formatter.Append("((");
+			Formatter.Append("*((");
 			FormatTypeDelaration(inst.Type);
 			Formatter.Append("*)");
 			inst.Array.AcceptVisitor(this);
@@ -420,7 +473,7 @@ namespace CppTranslator
 			String name = inst.Variable.Name;
 			if (variableTranslation.ContainsKey(name))
 			{
-				ILInstruction ins =  variableTranslation[name];
+				ILInstruction ins = variableTranslation[name];
 				ins.AcceptVisitor(this);
 			}
 			else
@@ -430,6 +483,7 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitLdLoca(LdLoca inst)
 		{
+			Formatter.AppendName(inst.Variable.Name);
 			return base.VisitLdLoca(inst);
 		}
 
@@ -572,6 +626,11 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitNumericCompoundAssign(NumericCompoundAssign inst)
 		{
+			inst.Target.AcceptVisitor(this);
+			if (inst.Operator == BinaryNumericOperator.Add)
+				Formatter.Append("++");
+			else
+				Formatter.Append("--");
 			return base.VisitNumericCompoundAssign(inst);
 		}
 
@@ -602,12 +661,37 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitStLoc(StLoc inst)
 		{
+			if (HandleIncrementAndDecrement(inst))
+				return base.VisitStLoc(inst);
+
 			DeclareVariableIfNeeded(inst.Variable);
 			Formatter.AppendName(inst.Variable.Name);
 			Formatter.Append(" = ");
 			inst.Value.AcceptVisitor(this);
 
 			return base.VisitStLoc(inst);
+		}
+		private bool HandleIncrementAndDecrement(StLoc inst)
+		{
+			BinaryNumericInstruction bin = inst.Value as BinaryNumericInstruction;
+			if (bin == null)
+				return (false);
+			ICSharpCode.Decompiler.IL.LdLoc ldLoc = bin.Left as ICSharpCode.Decompiler.IL.LdLoc;
+			ICSharpCode.Decompiler.IL.LdcI4 ldci4 = bin.Right as ICSharpCode.Decompiler.IL.LdcI4;
+			if (ldLoc == null || ldci4 == null || (bin.Operator != BinaryNumericOperator.Add && bin.Operator != BinaryNumericOperator.Sub))
+				return (false);
+			if (inst.Variable.Name != ldLoc.Variable.Name)
+				return (false);
+			if (ldci4.Value != 1)
+				return (false);
+			ICSharpCode.Decompiler.IL.StLoc parent = inst.Parent as ICSharpCode.Decompiler.IL.StLoc;
+			String oper = bin.Operator == BinaryNumericOperator.Add ? "++" : "--";
+			if (parent != null)
+				Formatter.Append(oper);
+			Formatter.AppendName(ldLoc.Variable.Name);
+			if (parent == null)
+				Formatter.Append(oper);
+			return (true);
 		}
 
 		private void DeclareVariableIfNeeded(ILVariable variable)
@@ -664,13 +748,12 @@ namespace CppTranslator
 			InstructionCollection<ILInstruction>.Enumerator walker = block.Instructions.GetEnumerator();
 			walker.MoveNext();
 			Boolean first = true;
-			int index = 0;
 			while (walker.MoveNext())
 			{
 				if (!first)
 					Formatter.AppendLine(";");
 				ICSharpCode.Decompiler.IL.StObj store = walker.Current as ICSharpCode.Decompiler.IL.StObj;
-				Formatter.AppendIndented("*");
+				Formatter.AppendIndented("");
 				store.AcceptVisitor(this);
 				first = false;
 			}
