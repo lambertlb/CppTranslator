@@ -19,14 +19,12 @@ namespace MiniTest_NS
 	Program::Program()
 	{
 		
-		Int32 x_num = 1;
-		Int32 x_num2 = x_num++;
-		x_num2 = (x_num-- + 1);
-		x_num2 = --x_num;
-		x_num2++;
-		x_num2 = ++x_num;
-		x_num2++;
-		x_num2++;
+		Int32 x_num = 0;
+		Int32 x_num2 = 0;
+		Int32 x_num3 = 0;
+		Int32 x_num4 = 0;
+		Int32 x_num5 = (((++x_num + --x_num2) + x_num3++) + x_num4--);
+		this->CxAssert(x_num5 == 0);
 		return;
 	}
 	void Program::CxAssert(Boolean x_isTrue)

@@ -686,11 +686,11 @@ namespace CppTranslator
 				return (false);
 			ICSharpCode.Decompiler.IL.StLoc parent = inst.Parent as ICSharpCode.Decompiler.IL.StLoc;
 			String oper = bin.Operator == BinaryNumericOperator.Add ? "++" : "--";
-			if (parent != null)
+//			if (parent != null)
 				Formatter.Append(oper);
 			Formatter.AppendName(ldLoc.Variable.Name);
-			if (parent == null)
-				Formatter.Append(oper);
+			//if (parent == null)
+			//	Formatter.Append(oper);
 			return (true);
 		}
 
