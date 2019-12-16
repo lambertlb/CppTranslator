@@ -27,6 +27,9 @@ namespace DotnetLibrary
 		bool	Equals(const DateTime& valueToCOmpare) {
 			return(false);
 		}
+		static bool	Equals(const DateTime& valueToCOmpare, const DateTime& valueToCOmpare2) {
+			return(false);
+		}
 		Int64 get_Ticks() {
 			return(0);
 		}

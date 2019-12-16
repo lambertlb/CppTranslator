@@ -15,6 +15,7 @@ namespace MiniTest_NS
 	class Program : public Object
 	{
 		public:
+		Array* x_dateTime1dArray;
 		Program();
 		void CxAssert(Boolean x_isTrue);
 		void CxAssert(Double x_x,Double x_y);

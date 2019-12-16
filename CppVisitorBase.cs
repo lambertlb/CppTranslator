@@ -165,7 +165,7 @@ namespace CppTranslator
 
 		private void WriteBlock(ICSharpCode.Decompiler.IL.BlockContainer inst)
 		{
-			inst.AcceptVisitor(MyIlVisitor);
+			MyIlVisitor.StartMainBlock(inst);
 		}
 
 		public void VisitConstructorInitializer(ConstructorInitializer constructorInitializer)

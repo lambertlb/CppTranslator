@@ -16,6 +16,10 @@ namespace CppTranslator
 		public Dictionary<String, ILInstruction> variableTranslation = new Dictionary<String, ILInstruction>();
 		public Dictionary<String, String> specialCallNames = new Dictionary<String, String>();
 		public Dictionary<BinaryNumericOperator, String> operatorSymbols = new Dictionary<BinaryNumericOperator, String>();
+		public Dictionary<ComparisonKind, String> comparisonSymbols = new Dictionary<ComparisonKind, String>();
+		internal BlockContainer currentReturnContainer;
+		internal BlockContainer mainContainer;
+		internal int blockIndex;
 
 		public MyIlInstructionVisitor(Formatter formatter)
 		{
@@ -34,6 +38,13 @@ namespace CppTranslator
 			operatorSymbols.Add(BinaryNumericOperator.BitXor, " ^ ");
 			operatorSymbols.Add(BinaryNumericOperator.ShiftLeft, " << ");
 			operatorSymbols.Add(BinaryNumericOperator.ShiftRight, " >> ");
+
+			comparisonSymbols.Add(ComparisonKind.Equality, " == ");
+			comparisonSymbols.Add(ComparisonKind.Inequality, " != ");
+			comparisonSymbols.Add(ComparisonKind.LessThan, " < ");
+			comparisonSymbols.Add(ComparisonKind.LessThanOrEqual, " <= ");
+			comparisonSymbols.Add(ComparisonKind.GreaterThan, " > ");
+			comparisonSymbols.Add(ComparisonKind.GreaterThanOrEqual, " >= ");
 		}
 		private void NewLocalVariables()
 		{
@@ -121,9 +132,17 @@ namespace CppTranslator
 			return base.VisitBlock(block);
 		}
 
+		internal void StartMainBlock(BlockContainer container)
+		{
+			mainContainer = container;
+			variableTranslation.Clear();
+			blockIndex = 0;
+			container.AcceptVisitor(this);
+		}
 		protected override ILInstruction VisitBlockContainer(BlockContainer container)
 		{
-			variableTranslation.Clear();
+			currentReturnContainer = container;
+			++blockIndex;
 			foreach (Block block in container.Blocks)
 			{
 				NewLocalVariables();
@@ -132,11 +151,24 @@ namespace CppTranslator
 				Formatter.AddCloseBrace();
 				PopVariables();
 			}
+			if (container != mainContainer && container.LeaveCount > 0)
+			{
+				LabelBlock();
+				Formatter.AppendLine(":");
+			}
+			--blockIndex;
 			return (null);
+		}
+
+		private void LabelBlock()
+		{
+			Formatter.Append("leaveBlock");
+			Formatter.Append(blockIndex.ToString());
 		}
 
 		private void WriteBlock(Block block)
 		{
+			AddLableIfNeeded(block);
 			foreach (ILInstruction inst in block.Instructions)
 			{
 				Formatter.AppendIndented("");
@@ -147,6 +179,15 @@ namespace CppTranslator
 			}
 		}
 
+		private void AddLableIfNeeded(Block block)
+		{
+			ICSharpCode.Decompiler.IL.Leave leave = block.Instructions.FirstOrDefault() as ICSharpCode.Decompiler.IL.Leave;
+			if (block.Instructions.Count == 1 && leave != null)
+				return;
+			Formatter.Append(block.Label);
+			Formatter.AppendLine(":");
+		}
+
 		protected override ILInstruction VisitBox(Box inst)
 		{
 			return base.VisitBox(inst);
@@ -154,6 +195,8 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitBranch(Branch inst)
 		{
+			Formatter.Append("goto ");
+			Formatter.Append(inst.TargetLabel);
 			return base.VisitBranch(inst);
 		}
 
@@ -248,7 +291,7 @@ namespace CppTranslator
 		protected override ILInstruction VisitComp(Comp inst)
 		{
 			inst.Left.AcceptVisitor(this);
-			Formatter.Append(" == ");
+			Formatter.Append(comparisonSymbols[inst.Kind]);
 			inst.Right.AcceptVisitor(this);
 			return base.VisitComp(inst);
 		}
@@ -369,7 +412,11 @@ namespace CppTranslator
 		private void WriteBlockWithBraces(ILInstruction trueInst)
 		{
 			Formatter.AddOpenBrace();
+			Formatter.AppendIndented("");
 			trueInst.AcceptVisitor(this);
+			ICSharpCode.Decompiler.IL.Block block = trueInst as ICSharpCode.Decompiler.IL.Block;
+			if (block == null)
+				Formatter.Append(";");
 			Formatter.AddCloseBrace();
 		}
 
@@ -465,6 +512,8 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitLdLen(LdLen inst)
 		{
+			inst.Array.AcceptVisitor(this);
+			Formatter.Append("->get_Length()");
 			return base.VisitLdLen(inst);
 		}
 
@@ -536,18 +585,29 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitLeave(Leave inst)
 		{
-			Formatter.Append("return");
-			if (!inst.Value.MatchNop())
+			if (inst.TargetLabel == "IL_0000")
 			{
-				Formatter.Append("(");
-				if (MethodReturnType != null && MethodReturnType.Kind != TypeKind.Unknown)
+				Formatter.Append("return");
+				if (!inst.Value.MatchNop())
 				{
 					Formatter.Append("(");
-					FormatTypeDelaration(MethodReturnType);
+					if (MethodReturnType != null && MethodReturnType.Kind != TypeKind.Unknown)
+					{
+						Formatter.Append("(");
+						FormatTypeDelaration(MethodReturnType);
+						Formatter.Append(")");
+					}
+					inst.Value.AcceptVisitor(this);
 					Formatter.Append(")");
 				}
-				inst.Value.AcceptVisitor(this);
-				Formatter.Append(")");
+			}
+			else
+			{
+				Formatter.Append("goto ");
+				if (currentReturnContainer == inst.TargetContainer)
+					LabelBlock();
+				else
+					Formatter.Append(inst.TargetLabel);
 			}
 			return base.VisitLeave(inst);
 		}
@@ -598,7 +658,8 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitNewObj(NewObj inst)
 		{
-			Formatter.Append("new ");
+			if (inst.Method.DeclaringType.Kind == TypeKind.Class)
+				Formatter.Append("new ");
 			Formatter.Append(inst.Method.DeclaringType.Name);
 			AddCallParameters(inst.Arguments, false);
 			return base.VisitNewObj(inst);
@@ -686,8 +747,8 @@ namespace CppTranslator
 				return (false);
 			ICSharpCode.Decompiler.IL.StLoc parent = inst.Parent as ICSharpCode.Decompiler.IL.StLoc;
 			String oper = bin.Operator == BinaryNumericOperator.Add ? "++" : "--";
-//			if (parent != null)
-				Formatter.Append(oper);
+			//			if (parent != null)
+			Formatter.Append(oper);
 			Formatter.AppendName(ldLoc.Variable.Name);
 			//if (parent == null)
 			//	Formatter.Append(oper);

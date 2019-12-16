@@ -44,7 +44,8 @@ namespace DotnetLibrary
 		void	SetValue(Object* value, Array* indexes) {
 		}
 		void* Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1) {
-			return(nullptr);
+			Int32 idx = index1 * DataTypeSize[dataType];
+			return(((char*)data) + idx);
 		}
 		Array* Initialize(void* initData) {
 			return(this);
