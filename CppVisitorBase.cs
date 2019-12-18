@@ -23,12 +23,16 @@ namespace CppTranslator
 		public int StaticArrayCount { get; set; }
 		public String CurrentMethod { get; set; }
 		public Expression CurrentExpression { get; set; }
+		internal Dictionary<OperatorType, String> operators = new Dictionary<OperatorType, string>();
 
 		public CppVisitorBase(Formatter formatter)
 		{
 			this.formatter = formatter;
 			TypeVisitor = new CppTypeVisitor(this);
 			myIlVisitor = new MyIlInstructionVisitor(Formatter);
+			operators.Add(OperatorType.Addition, "op_Addition");
+			operators.Add(OperatorType.Subtraction, "op_Subtraction");
+			operators.Add(OperatorType.BitwiseAnd, "op_BitwiseAnd");
 		}
 
 		public virtual void CreateHeaders()
@@ -501,9 +505,10 @@ namespace CppTranslator
 		{
 			Formatter.AppendIndented("");
 			operatorDeclaration.ReturnType.AcceptVisitor(this);
-			MyIlVisitor.MethodReturnType = operatorDeclaration.ReturnType.GetResolveResult().Type;
-			Formatter.Append(" operator ");
-			Formatter.Append(OperatorDeclaration.GetToken(operatorDeclaration.OperatorType));
+			Formatter.Append(" ");
+			operatorDeclaration.ReturnType.AcceptVisitor(this);
+			Formatter.Append("::");
+			Formatter.Append(operators[operatorDeclaration.OperatorType]);
 			WriteCommaSeparatedListInParenthesis(operatorDeclaration.Parameters);
 			ICSharpCode.Decompiler.IL.BlockContainer inst = operatorDeclaration.Body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
 			WriteBlock(inst);

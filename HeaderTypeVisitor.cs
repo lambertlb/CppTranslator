@@ -244,10 +244,10 @@ namespace CppTranslator
 		}
 		public override void VisitOperatorDeclaration(OperatorDeclaration operatorDeclaration)
 		{
-			Formatter.AppendIndented("friend ");
+			Formatter.AppendIndented("static ");
 			operatorDeclaration.ReturnType.AcceptVisitor(this);
-			Formatter.Append(" operator ");
-			Formatter.Append(OperatorDeclaration.GetToken(operatorDeclaration.OperatorType));
+			Formatter.Append(" ");
+			Formatter.Append(operators[operatorDeclaration.OperatorType]);
 			WriteCommaSeparatedListInParenthesis(operatorDeclaration.Parameters);
 			Formatter.AppendLine(";");
 		}

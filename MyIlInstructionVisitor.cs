@@ -95,6 +95,27 @@ namespace CppTranslator
 			}
 			Formatter.AppendName(name);
 		}
+		private void FormatMethodAccessType(IMethod method, IType type, String methodName)
+		{
+			if (method.IsStatic)
+				Formatter.Append("::");
+			else if (IsPointerType(type))
+				Formatter.Append("->");
+			else
+				Formatter.Append(".");
+			Formatter.Append(methodName);
+		}
+		private void FormatFieldAccessType(IField field)
+		{
+			if (field.IsStatic)
+				Formatter.Append("::");
+			else if (IsPointerType(field.Type))
+				Formatter.Append("->");
+			else
+				Formatter.Append(".");
+			Formatter.Append(field.Name);
+		}
+
 		protected override ILInstruction Default(ILInstruction inst)
 		{
 			return (inst);
@@ -310,16 +331,6 @@ namespace CppTranslator
 			Trace.Assert(type != null);
 			FormatMethodAccessType(method, type, methodName);
 		}
-		private void FormatMethodAccessType(IMethod method, IType type, String methodName)
-		{
-			if (method.IsStatic)
-				Formatter.Append("::");
-			else if (IsPointerType(type))
-				Formatter.Append("->");
-			else
-				Formatter.Append(".");
-			Formatter.Append(methodName);
-		}
 
 		private string GetMethodName(String methodName)
 		{
@@ -373,6 +384,7 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitConv(Conv inst)
 		{
+			inst.Argument.AcceptVisitor(this);
 			return base.VisitConv(inst);
 		}
 
@@ -608,6 +620,12 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitLdLoca(LdLoca inst)
 		{
+			if (DeclareVariableIfNeeded(inst.Variable))
+			{
+				Formatter.AppendName(inst.Variable.Name);
+				Formatter.AppendLine(";");
+				Formatter.AppendIndented("");
+			}
 			Formatter.AppendName(inst.Variable.Name);
 			return base.VisitLdLoca(inst);
 		}
@@ -619,6 +637,7 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitLdNull(LdNull inst)
 		{
+			Formatter.Append("nullptr");
 			return base.VisitLdNull(inst);
 		}
 
@@ -631,8 +650,7 @@ namespace CppTranslator
 		protected override ILInstruction VisitLdsFlda(LdsFlda inst)
 		{
 			Formatter.Append(inst.Field.DeclaringType.Name);
-			Formatter.Append(".");
-			Formatter.Append(inst.Field.Name);
+			FormatFieldAccessType(inst.Field);
 			return base.VisitLdsFlda(inst);
 		}
 
@@ -831,13 +849,14 @@ namespace CppTranslator
 			return (true);
 		}
 
-		private void DeclareVariableIfNeeded(ILVariable variable)
+		private bool DeclareVariableIfNeeded(ILVariable variable)
 		{
 			if (CurrentVariables.ContainsKey(variable.Name))
-				return;
+				return (false);
 			CurrentVariables.Add(variable.Name, variable.Name);
 			FormatTypeDelaration(variable.Type);
 			Formatter.Append(" ");
+			return (true);
 		}
 
 		protected override ILInstruction VisitStObj(StObj inst)
@@ -933,7 +952,35 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitSwitchInstruction(SwitchInstruction inst)
 		{
+			Formatter.Append("switch(");
+			inst.Value.AcceptVisitor(this);
+			Formatter.Append(")");
+			Formatter.AddOpenBrace();
+			FormatSwitchCases(inst.Sections);
+			Formatter.AddCloseBrace();
 			return base.VisitSwitchInstruction(inst);
+		}
+
+		private void FormatSwitchCases(InstructionCollection<SwitchSection> sections)
+		{
+			foreach (SwitchSection section in sections)
+			{
+				foreach (long lbl in section.Labels.Values)
+				{
+					if (lbl == long.MinValue)
+						Formatter.AppendIndented("default");
+					else
+					{
+						Formatter.AppendIndented("case ");
+						Formatter.Append(lbl.ToString());
+					}
+					break;
+				}
+				Formatter.AppendLine(":");
+				Formatter.AppendIndented("");
+				section.Body.AcceptVisitor(this);
+				Formatter.AppendLine(";");
+			}
 		}
 
 		protected override ILInstruction VisitSwitchSection(SwitchSection inst)
@@ -988,6 +1035,15 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitUserDefinedCompoundAssign(UserDefinedCompoundAssign inst)
 		{
+			inst.Target.AcceptVisitor(this);
+			Formatter.Append(" = ");
+			FormatType(inst.Method.DeclaringType);
+			FormatMethodAccessType(inst.Method, inst.Method.DeclaringType, inst.Method.Name);
+			Formatter.Append("(");
+			inst.Target.AcceptVisitor(this);
+			Formatter.Append(",");
+			inst.Value.AcceptVisitor(this);
+			Formatter.Append(")");
 			return base.VisitUserDefinedCompoundAssign(inst);
 		}
 
@@ -1028,11 +1084,29 @@ namespace CppTranslator
 		}
 		private void HandleFieldAccess(ILInstruction target)
 		{
-			ILInstruction inst = target.AcceptVisitor(this);
-			if (inst is ICSharpCode.Decompiler.IL.LdLoc)
+			target.AcceptVisitor(this);
+			if (target is ICSharpCode.Decompiler.IL.LdLoc)
 			{
-				ICSharpCode.Decompiler.IL.LdLoc ldLoc = inst as ICSharpCode.Decompiler.IL.LdLoc;
+				ICSharpCode.Decompiler.IL.LdLoc ldLoc = target as ICSharpCode.Decompiler.IL.LdLoc;
 				IType md = ldLoc.Variable.Type;
+				md.AcceptVisitor(TypeVisitor);
+			}
+			else if (target is ICSharpCode.Decompiler.IL.LdFlda)
+			{
+				ICSharpCode.Decompiler.IL.LdFlda ldFlda = target as ICSharpCode.Decompiler.IL.LdFlda;
+				IType md = ldFlda.Field.Type;
+				md.AcceptVisitor(TypeVisitor);
+			}
+			else if (target is ICSharpCode.Decompiler.IL.LdLoca)
+			{
+				ICSharpCode.Decompiler.IL.LdLoca ldLoca = target as ICSharpCode.Decompiler.IL.LdLoca;
+				IType md = ldLoca.Variable.Type;
+				md.AcceptVisitor(TypeVisitor);
+			}
+			else if (target is ICSharpCode.Decompiler.IL.AddressOf)
+			{
+				ICSharpCode.Decompiler.IL.AddressOf addressOf = target as ICSharpCode.Decompiler.IL.AddressOf;
+				IType md = addressOf.Type;
 				md.AcceptVisitor(TypeVisitor);
 			}
 		}
