@@ -219,6 +219,7 @@ namespace CppTranslator
 			{
 				if (Formatter.IsOnNewline)
 					Formatter.AppendIndented("");
+String st = inst.ToString();
 				inst.AcceptVisitor(this);
 				if (Formatter.CharactersAddedToLine)
 					Formatter.Append(";");
@@ -484,16 +485,68 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitIfInstruction(IfInstruction inst)
 		{
-			Formatter.Append("if (");
-			inst.Condition.AcceptVisitor(this);
-			Formatter.AppendLine(")");
-			WriteBlockWithBraces(inst.TrueInst);
-			if (!inst.FalseInst.MatchNop())
+			bool justCondition = Formatter.CharactersAddedToLine;
+			if (!justCondition)
+				Formatter.Append("if ");
+			Formatter.Append("(");
+			BuildCondition(inst);
+			Formatter.Append(")");
+			if (!justCondition)
 			{
-				Formatter.AppendIndentedLine("else");
-				WriteBlockWithBraces(inst.FalseInst);
+				Formatter.AppendLine("");
+				WriteBlockWithBraces(inst.TrueInst);
+				if (!inst.FalseInst.MatchNop())
+				{
+					Formatter.AppendIndentedLine("else");
+					WriteBlockWithBraces(inst.FalseInst);
+				}
 			}
 			return base.VisitIfInstruction(inst);
+		}
+
+		private void BuildCondition(IfInstruction inst)
+		{
+			bool wasIf = false;
+			if (inst.Condition is IfInstruction)
+			{
+				wasIf = true;
+				BuildCondition(inst.Condition as IfInstruction);
+			}
+			if (!wasIf)
+			{
+				inst.Condition.AcceptVisitor(this);
+			}
+			bool leftIsConstant = IsConstant(inst.TrueInst);
+			int leftConstant = GetAsIntConstant(inst.TrueInst);
+			bool rightIsConstant = IsConstant(inst.FalseInst);
+			int rightConstant = GetAsIntConstant(inst.FalseInst);
+			String logicalOpertor = null;
+			if (rightIsConstant)
+			{
+				if (rightConstant == 1)
+					logicalOpertor = " || ";
+				else
+					logicalOpertor = " && ";
+				Formatter.Append(logicalOpertor);
+				inst.TrueInst.AcceptVisitor(this);
+
+			}
+			else if (leftIsConstant)
+			{
+				if (leftConstant == 1)
+					logicalOpertor = " || ";
+				else
+					logicalOpertor = " && ";
+				Formatter.Append(logicalOpertor);
+				inst.FalseInst.AcceptVisitor(this);
+			}
+		}
+
+		private int GetAsIntConstant(ILInstruction inst)
+		{
+			if (inst is LdcI4)
+				return (((LdcI4)inst).Value);
+			return (-1);
 		}
 
 		private void WriteBlockWithBraces(ILInstruction trueInst)
