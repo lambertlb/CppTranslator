@@ -673,37 +673,6 @@ namespace CppTranslator
 				ICSharpCode.Decompiler.IL.ILFunction inst = propertyDeclaration.Setter.Annotation<ICSharpCode.Decompiler.IL.ILFunction>();
 				WriteBlock(inst.Body as ICSharpCode.Decompiler.IL.BlockContainer);
 			}
-			return;
-			propertyDeclaration.ReturnType.AcceptVisitor(this);
-			Formatter.Append(" ");
-			WritePrivateImplementationType(propertyDeclaration.PrivateImplementationType);
-			Formatter.Append(propertyDeclaration.NameToken.Name);
-			if (propertyDeclaration.ExpressionBody.IsNull)
-			{
-				Formatter.Append("{");
-				// output get/set in their original order
-				foreach (AstNode node in propertyDeclaration.Children)
-				{
-					if (node.Role == IndexerDeclaration.GetterRole || node.Role == IndexerDeclaration.SetterRole)
-					{
-						node.AcceptVisitor(this);
-					}
-				}
-				Formatter.Append("}");
-				if (!propertyDeclaration.Initializer.IsNull)
-				{
-					Formatter.Append(" = ");
-					propertyDeclaration.Initializer.AcceptVisitor(this);
-					Formatter.Append(";");
-				}
-				Formatter.AppendLine("");
-			}
-			else
-			{
-				Formatter.Append(" > ");
-				propertyDeclaration.ExpressionBody.AcceptVisitor(this);
-				Formatter.Append(";");
-			}
 		}
 
 		public void VisitQueryContinuationClause(QueryContinuationClause queryContinuationClause)

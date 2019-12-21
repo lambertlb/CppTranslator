@@ -1,4 +1,5 @@
 ﻿using ICSharpCode.Decompiler.IL;
+using ICSharpCode.Decompiler.IL.Patterns;
 using ICSharpCode.Decompiler.TypeSystem;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,6 @@ namespace CppTranslator
 		public Dictionary<String, String> CurrentVariables { get; set; }
 		public Formatter Formatter { get; set; }
 		public IType MethodReturnType { get; set; }
-		public IlTypeVisitor TypeVisitor { get; set; }
 		public Dictionary<String, String> variableTranslation = new Dictionary<String, String>();
 		public Dictionary<String, String> specialCallNames = new Dictionary<String, String>();
 		public Dictionary<BinaryNumericOperator, String> operatorSymbols = new Dictionary<BinaryNumericOperator, String>();
@@ -26,7 +26,6 @@ namespace CppTranslator
 		public MyIlInstructionVisitor(Formatter formatter)
 		{
 			Formatter = formatter;
-			TypeVisitor = new IlTypeVisitor(formatter);
 			CurrentVariables = new Dictionary<string, string>();
 
 			specialCallNames.Add(".ctor", "");
@@ -65,12 +64,20 @@ namespace CppTranslator
 			//	CurrentVariables = localVariable.Pop();
 			//}
 		}
+		internal bool IsPrimative(IType type)
+		{
+			if (type.Name == "Boolean")
+				return (true);
+			PrimitiveType pt = type.ToPrimitiveType();
+			return (pt >= PrimitiveType.I1 && pt <= PrimitiveType.U8);
+		}
 		internal bool IsPointerType(IType type)
 		{
 			if (type.Kind == TypeKind.ByReference)
 			{
-				ByReferenceType by = (ByReferenceType)type;
-				return (by.ElementType.Kind == TypeKind.Class);
+				return (true);
+				//ByReferenceType by = (ByReferenceType)type;
+				//return (by.ElementType.Kind == TypeKind.Class);
 			}
 			return (type.Kind == TypeKind.Class || type.Kind == TypeKind.Array);
 		}
@@ -99,21 +106,38 @@ namespace CppTranslator
 		{
 			if (method.IsStatic)
 				Formatter.Append("::");
-			else if (IsPointerType(type))
-				Formatter.Append("->");
 			else
-				Formatter.Append(".");
+				FormatTypeAccess(type);
 			Formatter.Append(methodName);
 		}
-		private void FormatFieldAccessType(IField field)
+		public void FormatTypeAccess(IType type)
 		{
-			if (field.IsStatic)
-				Formatter.Append("::");
-			else if (IsPointerType(field.Type))
+			if (IsPointerType(type))
 				Formatter.Append("->");
 			else
 				Formatter.Append(".");
-			Formatter.Append(field.Name);
+		}
+		IType GetTypeForInstruction(ILInstruction inst, IType defaultType)
+		{
+			if (inst is LdLoc)
+				return (((LdLoc)inst).Variable.Type);
+			else if (inst is LdLoca)
+				return (((LdLoca)inst).Variable.Type);
+			else if (inst is LdObj)
+				return (((LdObj)inst).Type);
+			else if (inst is LdFlda)
+				return (((LdFlda)inst).Field.Type);
+			else if (inst is LdElema)
+				return (((LdElema)inst).Type);
+			else if (inst is AddressOf)
+				return (((AddressOf)inst).Type);
+			return (defaultType);
+		}
+		private void HandleFieldAccess(ILInstruction target)
+		{
+			target.AcceptVisitor(this);
+			IType type = GetTypeForInstruction(target, null);
+			FormatTypeAccess(type);
 		}
 
 		protected override ILInstruction Default(ILInstruction inst)
@@ -181,11 +205,22 @@ namespace CppTranslator
 		internal void StartMainBlock(BlockContainer container)
 		{
 			mainContainer = container;
-			CurrentVariables.Clear();
+			InitilizeLocalVariableNames(container.Parent as ILFunction);
 			variableTranslation.Clear();
 			blockIndex = 0;
 			container.AcceptVisitor(this);
 		}
+
+		private void InitilizeLocalVariableNames(ILFunction ilFunction)
+		{
+			IMethod method = ilFunction.Method;
+			CurrentVariables.Clear();
+			foreach(IParameter parameter in method.Parameters)
+			{
+				CurrentVariables.Add(parameter.Name, parameter.Name);
+			}
+		}
+
 		protected override ILInstruction VisitBlockContainer(BlockContainer container)
 		{
 			currentReturnContainer = container;
@@ -219,7 +254,7 @@ namespace CppTranslator
 			{
 				if (Formatter.IsOnNewline)
 					Formatter.AppendIndented("");
-String st = inst.ToString();
+				String st = inst.ToString();
 				inst.AcceptVisitor(this);
 				if (Formatter.CharactersAddedToLine)
 					Formatter.Append(";");
@@ -295,19 +330,25 @@ String st = inst.ToString();
 				}
 				FormatMethodAccessType(inst.Method, inst.Method.DeclaringType, methodName);
 			}
-			AddCallParameters(inst.Arguments, skipFirstParameter);
+			AddCallParameters(inst.Arguments, inst.Method, skipFirstParameter);
 		}
 
 		private void FormatCallInstance(ILInstruction arg)
 		{
-			if (arg is AddressOf)
+			IType type = GetTypeForInstruction(arg, null);
+			if (IsPrimative(type))
 			{
-				if (IsConstant(((AddressOf)arg).Value))
-				{
-					BoxExpression(((AddressOf)arg).Type, ((AddressOf)arg).Value);
-					return;
-				}
+				BoxExpression(type, arg);
+				return;
 			}
+			//if (arg is AddressOf)
+			//{
+			//	if (IsConstant(((AddressOf)arg).Value))
+			//	{
+			//		BoxExpression(((AddressOf)arg).Type, ((AddressOf)arg).Value);
+			//		return;
+			//	}
+			//}
 			arg.AcceptVisitor(this);
 		}
 
@@ -318,21 +359,10 @@ String st = inst.ToString();
 
 		private void FormatMethodAccessType(IMethod method, ILInstruction inst, String methodName)
 		{
-			IType type = null;
-			if (inst is LdLoc)
-				type = ((LdLoc)inst).Variable.Type;
-			else if (inst is LdLoca)
-				type = ((LdLoca)inst).Variable.Type;
-			else if (inst is LdObj)
-				type = ((LdObj)inst).Type;
-			else if (inst is LdElema)
-				type = ((LdElema)inst).Type;
-			else if (inst is AddressOf)
-				type = ((AddressOf)inst).Type;
+			IType type = GetTypeForInstruction(inst, null);
 			Trace.Assert(type != null);
 			FormatMethodAccessType(method, type, methodName);
 		}
-
 		private string GetMethodName(String methodName)
 		{
 			if (specialCallNames.ContainsKey(methodName))
@@ -342,21 +372,33 @@ String st = inst.ToString();
 			return (methodName);
 		}
 
-		private void AddCallParameters(InstructionCollection<ILInstruction> arguments, bool hasThis)
+		private void AddCallParameters(InstructionCollection<ILInstruction> arguments, IMethod method, bool hasThis)
 		{
 			InstructionCollection<ILInstruction>.Enumerator walker = arguments.GetEnumerator();
 			if (hasThis)
 				walker.MoveNext();
 			bool first = true;
 			Formatter.Append("(");
+			int paramterIndex = -1;
 			while (walker.MoveNext())
 			{
+				++paramterIndex;
 				if (!first)
 					Formatter.Append(", ");
 				ILInstruction inst = walker.Current;
+				DoCastOnCallParamterIfNeeded(method.Parameters[paramterIndex]);
 				inst.AcceptVisitor(this);
 				first = false;
 			}
+			Formatter.Append(")");
+		}
+
+		private void DoCastOnCallParamterIfNeeded(IParameter parameter)
+		{
+			if (parameter.Type.Kind != TypeKind.Enum)
+				return;
+			Formatter.Append("(");
+			FormatTypeDelaration(parameter.Type);
 			Formatter.Append(")");
 		}
 
@@ -377,9 +419,11 @@ String st = inst.ToString();
 
 		protected override ILInstruction VisitComp(Comp inst)
 		{
+			Formatter.Append("(");
 			inst.Left.AcceptVisitor(this);
 			Formatter.Append(comparisonSymbols[inst.Kind]);
 			inst.Right.AcceptVisitor(this);
+			Formatter.Append(")");
 			return base.VisitComp(inst);
 		}
 
@@ -703,7 +747,8 @@ String st = inst.ToString();
 		protected override ILInstruction VisitLdsFlda(LdsFlda inst)
 		{
 			Formatter.Append(inst.Field.DeclaringType.Name);
-			FormatFieldAccessType(inst.Field);
+			Formatter.Append("::");
+			Formatter.Append(inst.Field.Name);
 			return base.VisitLdsFlda(inst);
 		}
 
@@ -738,12 +783,9 @@ String st = inst.ToString();
 				if (!inst.Value.MatchNop())
 				{
 					Formatter.Append("(");
-					if (MethodReturnType != null && MethodReturnType.Kind != TypeKind.Unknown)
-					{
-						Formatter.Append("(");
-						FormatTypeDelaration(MethodReturnType);
-						Formatter.Append(")");
-					}
+					Formatter.Append("(");
+					FormatTypeDelaration(GetTypeForInstruction(inst.Value, MethodReturnType));
+					Formatter.Append(")");
 					inst.Value.AcceptVisitor(this);
 					Formatter.Append(")");
 				}
@@ -808,7 +850,7 @@ String st = inst.ToString();
 			if (inst.Method.DeclaringType.Kind == TypeKind.Class)
 				Formatter.Append("new ");
 			Formatter.Append(inst.Method.DeclaringType.Name);
-			AddCallParameters(inst.Arguments, false);
+			AddCallParameters(inst.Arguments, inst.Method, false);
 			return base.VisitNewObj(inst);
 		}
 
@@ -1083,6 +1125,10 @@ String st = inst.ToString();
 
 		protected override ILInstruction VisitUnboxAny(UnboxAny inst)
 		{
+			inst.Argument.AcceptVisitor(this);
+			Formatter.Append("->get_As");
+			FormatType(inst.Type);
+			Formatter.Append("()");
 			return base.VisitUnboxAny(inst);
 		}
 
@@ -1134,34 +1180,6 @@ String st = inst.ToString();
 				}
 			}
 			return (null);
-		}
-		private void HandleFieldAccess(ILInstruction target)
-		{
-			target.AcceptVisitor(this);
-			if (target is ICSharpCode.Decompiler.IL.LdLoc)
-			{
-				ICSharpCode.Decompiler.IL.LdLoc ldLoc = target as ICSharpCode.Decompiler.IL.LdLoc;
-				IType md = ldLoc.Variable.Type;
-				md.AcceptVisitor(TypeVisitor);
-			}
-			else if (target is ICSharpCode.Decompiler.IL.LdFlda)
-			{
-				ICSharpCode.Decompiler.IL.LdFlda ldFlda = target as ICSharpCode.Decompiler.IL.LdFlda;
-				IType md = ldFlda.Field.Type;
-				md.AcceptVisitor(TypeVisitor);
-			}
-			else if (target is ICSharpCode.Decompiler.IL.LdLoca)
-			{
-				ICSharpCode.Decompiler.IL.LdLoca ldLoca = target as ICSharpCode.Decompiler.IL.LdLoca;
-				IType md = ldLoca.Variable.Type;
-				md.AcceptVisitor(TypeVisitor);
-			}
-			else if (target is ICSharpCode.Decompiler.IL.AddressOf)
-			{
-				ICSharpCode.Decompiler.IL.AddressOf addressOf = target as ICSharpCode.Decompiler.IL.AddressOf;
-				IType md = addressOf.Type;
-				md.AcceptVisitor(TypeVisitor);
-			}
 		}
 	}
 }

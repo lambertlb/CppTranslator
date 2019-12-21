@@ -9,6 +9,4 @@ namespace CABlock_NS
 namespace MiniTest_NS
 {
 	class Program;
-	struct TestStruct2;
-	struct TestStruct3;
 }
