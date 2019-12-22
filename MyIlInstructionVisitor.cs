@@ -17,6 +17,7 @@ namespace CppTranslator
 		public IType MethodReturnType { get; set; }
 		public Dictionary<String, String> variableTranslation = new Dictionary<String, String>();
 		public Dictionary<String, String> specialCallNames = new Dictionary<String, String>();
+		public Dictionary<String, String> constantConversions = new Dictionary<String, String>();
 		public Dictionary<BinaryNumericOperator, String> operatorSymbols = new Dictionary<BinaryNumericOperator, String>();
 		public Dictionary<ComparisonKind, String> comparisonSymbols = new Dictionary<ComparisonKind, String>();
 		internal BlockContainer currentReturnContainer;
@@ -48,36 +49,57 @@ namespace CppTranslator
 			comparisonSymbols.Add(ComparisonKind.LessThanOrEqual, " <= ");
 			comparisonSymbols.Add(ComparisonKind.GreaterThan, " > ");
 			comparisonSymbols.Add(ComparisonKind.GreaterThanOrEqual, " >= ");
-		}
-		private void NewLocalVariables()
-		{
-			//if (CurrentVariables != null)
-			//	localVariable.Push(CurrentVariables);
-			//CurrentVariables = null;
-			//CurrentVariables = new Dictionary<string, string>();
-		}
-		private void PopVariables()
-		{
-			//CurrentVariables = null;
-			//if (localVariable.Count > 0)
-			//{
-			//	CurrentVariables = localVariable.Pop();
-			//}
+
+			constantConversions.Add(Byte.MaxValue.ToString(), "ByteValue::MaxValue");
+			constantConversions.Add(SByte.MaxValue.ToString(), "SByteValue::MaxValue");
+			constantConversions.Add(Int16.MaxValue.ToString(), "Int16Value::MaxValue");
+			constantConversions.Add(Int32.MaxValue.ToString(), "Int32Value::MaxValue");
+			constantConversions.Add(Int64.MaxValue.ToString(), "Int64Value::MaxValue");
+			constantConversions.Add(UInt16.MaxValue.ToString(), "UInt16Value::MaxValue");
+			constantConversions.Add(UInt32.MaxValue.ToString(), "UInt32Value::MaxValue");
+			constantConversions.Add(UInt64.MaxValue.ToString(), "UInt64Value::MaxValue");
+			constantConversions.Add(Single.MaxValue.ToString(), "SingleValue::MaxValue");
+			constantConversions.Add(Double.MaxValue.ToString(), "DoubleValue::MaxValue");
+
+			//            constantConversions.Add("0", "Int32Value::MinValue");
+			constantConversions.Add(SByte.MinValue.ToString(), "SByteValue::MinValue");
+			constantConversions.Add(Int16.MinValue.ToString(), "Int16Value::MinValue");
+			constantConversions.Add(Int32.MinValue.ToString(), "Int32Value::MinValue");
+			constantConversions.Add(Int64.MinValue.ToString(), "Int64Value::MinValue");
+			constantConversions.Add(Single.MinValue.ToString(), "SingleValue::MinValue");
+			constantConversions.Add(Double.MinValue.ToString(), "DoubleValue::MinValue");
+
+			constantConversions.Add("NaN", "DoubleValue::NaN");
+			constantConversions.Add(Double.PositiveInfinity.ToString(), "DoubleValue::PositiveInfinity");
+			constantConversions.Add(Double.NegativeInfinity.ToString(), "DoubleValue::NegativeInfinity");
 		}
 		internal bool IsPrimative(IType type)
 		{
 			if (type.Name == "Boolean")
 				return (true);
 			PrimitiveType pt = type.ToPrimitiveType();
-			return (pt >= PrimitiveType.I1 && pt <= PrimitiveType.U8);
+			switch (pt)
+			{
+				case PrimitiveType.I1:
+				case PrimitiveType.I2:
+				case PrimitiveType.I4:
+				case PrimitiveType.I8:
+				case PrimitiveType.R4:
+				case PrimitiveType.R8:
+				case PrimitiveType.U1:
+				case PrimitiveType.U2:
+				case PrimitiveType.U4:
+				case PrimitiveType.U8:
+					return (true);
+				default:
+					return (false);
+			}
 		}
 		internal bool IsPointerType(IType type)
 		{
 			if (type.Kind == TypeKind.ByReference)
 			{
 				return (true);
-				//ByReferenceType by = (ByReferenceType)type;
-				//return (by.ElementType.Kind == TypeKind.Class);
 			}
 			return (type.Kind == TypeKind.Class || type.Kind == TypeKind.Array);
 		}
@@ -112,7 +134,7 @@ namespace CppTranslator
 		}
 		public void FormatTypeAccess(IType type)
 		{
-			if (IsPointerType(type))
+			if (type == null || IsPointerType(type))
 				Formatter.Append("->");
 			else
 				Formatter.Append(".");
@@ -138,6 +160,20 @@ namespace CppTranslator
 			target.AcceptVisitor(this);
 			IType type = GetTypeForInstruction(target, null);
 			FormatTypeAccess(type);
+		}
+		private void BoxExpression(IType type, ILInstruction inst)
+		{
+			WrapTypeIfNeeded(type);
+			Formatter.Append("(");
+			inst.AcceptVisitor(this);
+			Formatter.Append(")");
+		}
+
+		private void WrapTypeIfNeeded(IType type)
+		{
+			FormatType(type);
+			if (IsPrimative(type))
+				Formatter.Append("Value");
 		}
 
 		protected override ILInstruction Default(ILInstruction inst)
@@ -165,6 +201,8 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitBinaryNumericInstruction(BinaryNumericInstruction inst)
 		{
+			if (HandleSpecialModulusWithFLoatingNumbers(inst))
+				return base.VisitBinaryNumericInstruction(inst);
 			Formatter.Append("(");
 			inst.Left.AcceptVisitor(this);
 			Formatter.Append(operatorSymbols[inst.Operator]);
@@ -173,8 +211,24 @@ namespace CppTranslator
 			return base.VisitBinaryNumericInstruction(inst);
 		}
 
+		private bool HandleSpecialModulusWithFLoatingNumbers(BinaryNumericInstruction inst)
+		{
+			if (inst.Operator != BinaryNumericOperator.Rem)
+				return (false);
+			if (inst.UnderlyingResultType != StackType.F4 && inst.UnderlyingResultType != StackType.F8)
+				return (false);
+			Formatter.Append("DoubleValue::Modulus(");
+			inst.Left.AcceptVisitor(this);
+			Formatter.Append(",");
+			inst.Right.AcceptVisitor(this);
+			Formatter.Append(")");
+			return (true);
+		}
+
 		protected override ILInstruction VisitBitNot(BitNot inst)
 		{
+			Formatter.Append("~");
+			inst.Argument.AcceptVisitor(this);
 			return base.VisitBitNot(inst);
 		}
 
@@ -188,11 +242,6 @@ namespace CppTranslator
 		{
 			++blockIndex;
 			leaveBlocks.Push("leaveBlock" + blockIndex);
-			//if (blockIndex != 1)
-			//{
-			//	Formatter.AppendLine("");
-			//	Formatter.AppendLine("Start" + CurrentLeaveBlock() + ":");
-			//}
 		}
 		private String CurrentLeaveBlock()
 		{
@@ -215,7 +264,7 @@ namespace CppTranslator
 		{
 			IMethod method = ilFunction.Method;
 			CurrentVariables.Clear();
-			foreach(IParameter parameter in method.Parameters)
+			foreach (IParameter parameter in method.Parameters)
 			{
 				CurrentVariables.Add(parameter.Name, parameter.Name);
 			}
@@ -227,11 +276,9 @@ namespace CppTranslator
 			NewLeaveBlock();
 			foreach (Block block in container.Blocks)
 			{
-				NewLocalVariables();
 				Formatter.AddOpenBrace();
 				WriteBlock(block);
 				Formatter.AddCloseBrace();
-				PopVariables();
 			}
 			if (container != mainContainer && container.LeaveCount > 0)
 			{
@@ -282,14 +329,6 @@ namespace CppTranslator
 			return base.VisitBox(inst);
 		}
 
-		private void BoxExpression(IType type, ILInstruction inst)
-		{
-			FormatType(type);
-			Formatter.Append("Value(");
-			inst.AcceptVisitor(this);
-			Formatter.Append(")");
-		}
-
 		protected override ILInstruction VisitBranch(Branch inst)
 		{
 			Formatter.Append("goto ");
@@ -325,9 +364,7 @@ namespace CppTranslator
 			else
 			{
 				if (inst.Method.IsStatic)
-				{
-					Formatter.Append(inst.Method.DeclaringType.Name);
-				}
+					WrapTypeIfNeeded(inst.Method.DeclaringType);
 				FormatMethodAccessType(inst.Method, inst.Method.DeclaringType, methodName);
 			}
 			AddCallParameters(inst.Arguments, inst.Method, skipFirstParameter);
@@ -336,19 +373,11 @@ namespace CppTranslator
 		private void FormatCallInstance(ILInstruction arg)
 		{
 			IType type = GetTypeForInstruction(arg, null);
-			if (IsPrimative(type))
+			if (type != null && IsPrimative(type))
 			{
 				BoxExpression(type, arg);
 				return;
 			}
-			//if (arg is AddressOf)
-			//{
-			//	if (IsConstant(((AddressOf)arg).Value))
-			//	{
-			//		BoxExpression(((AddressOf)arg).Type, ((AddressOf)arg).Value);
-			//		return;
-			//	}
-			//}
 			arg.AcceptVisitor(this);
 		}
 
@@ -360,7 +389,6 @@ namespace CppTranslator
 		private void FormatMethodAccessType(IMethod method, ILInstruction inst, String methodName)
 		{
 			IType type = GetTypeForInstruction(inst, null);
-			Trace.Assert(type != null);
 			FormatMethodAccessType(method, type, methodName);
 		}
 		private string GetMethodName(String methodName)
@@ -636,25 +664,41 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitLdcF4(LdcF4 inst)
 		{
-			Formatter.Append(inst.Value.ToString());
+			String value = inst.Value.ToString();
+			if (!ConvertConstants(value))
+			{
+				if (value.Contains("."))
+					Formatter.Append("F");
+			}
 			return base.VisitLdcF4(inst);
 		}
 
 		protected override ILInstruction VisitLdcF8(LdcF8 inst)
 		{
-			Formatter.Append(inst.Value.ToString());
+			ConvertConstants(inst.Value.ToString());
 			return base.VisitLdcF8(inst);
 		}
 
 		protected override ILInstruction VisitLdcI4(LdcI4 inst)
 		{
-			Formatter.Append(inst.Value.ToString());
+			ConvertConstants(inst.Value.ToString());
 			return base.VisitLdcI4(inst);
+		}
+
+		private bool ConvertConstants(String v)
+		{
+			if (constantConversions.ContainsKey(v))
+			{
+				Formatter.Append(constantConversions[v]);
+				return (true);
+			}
+			Formatter.Append(v);
+			return (false);
 		}
 
 		protected override ILInstruction VisitLdcI8(LdcI8 inst)
 		{
-			Formatter.Append(inst.Value.ToString());
+			ConvertConstants(inst.Value.ToString());
 			return base.VisitLdcI8(inst);
 		}
 
@@ -746,7 +790,7 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitLdsFlda(LdsFlda inst)
 		{
-			Formatter.Append(inst.Field.DeclaringType.Name);
+			WrapTypeIfNeeded(inst.Field.DeclaringType);
 			Formatter.Append("::");
 			Formatter.Append(inst.Field.Name);
 			return base.VisitLdsFlda(inst);
@@ -754,9 +798,9 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitLdStr(LdStr inst)
 		{
-			Formatter.Append("new String(L\"");
-			Formatter.Append(inst.Value);
-			Formatter.Append("\")");
+			Formatter.Append("(new String(");
+			Formatter.AppendStringsWithControl(inst.Value);
+			Formatter.Append("))");
 			return base.VisitLdStr(inst);
 		}
 
@@ -848,9 +892,10 @@ namespace CppTranslator
 		protected override ILInstruction VisitNewObj(NewObj inst)
 		{
 			if (inst.Method.DeclaringType.Kind == TypeKind.Class)
-				Formatter.Append("new ");
+				Formatter.Append("(new ");
 			Formatter.Append(inst.Method.DeclaringType.Name);
 			AddCallParameters(inst.Arguments, inst.Method, false);
+			Formatter.Append(")");
 			return base.VisitNewObj(inst);
 		}
 
@@ -917,6 +962,12 @@ namespace CppTranslator
 			DeclareVariableIfNeeded(inst.Variable);
 			Formatter.AppendName(inst.Variable.Name);
 			Formatter.Append(" = ");
+			if (inst.Variable.Type.Kind == TypeKind.Enum)
+			{
+				Formatter.Append("(");
+				FormatTypeDelaration(inst.Variable.Type);
+				Formatter.Append(")");
+			}
 			inst.Value.AcceptVisitor(this);
 
 			return base.VisitStLoc(inst);

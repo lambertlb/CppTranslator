@@ -20,7 +20,13 @@ namespace DotnetLibrary
 		virtual bool	Equals(Int32 valueToCompare) {
 			return(false);
 		}
+		virtual bool	Equals(Double valueToCompare) {
+			return(false);
+		}
 		virtual Int32	CompareTo(Single valueToCompare) {
+			return(0);
+		}
+		virtual Int32	CompareTo(Double valueToCompare) {
 			return(0);
 		}
 		virtual Int32	CompareTo(Object* valueToCompare) {
@@ -42,8 +48,6 @@ namespace DotnetLibrary
 		static Single	NaN;
 		static Single	PositiveInfinity;
 		static Single	NegativeInfinity;
-		Double operator %(Double v) { return (int32_t)value % (int32_t)v; };
-		Double operator %(Single v) { return (int32_t)value % (int32_t)v; };
 	};
 	class DLL_EXPORT FloatValue : public SingleValue {
 	public:

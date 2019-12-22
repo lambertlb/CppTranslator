@@ -98,6 +98,9 @@ namespace DotnetLibrary
 		}
 		static void  Clear(Array* array1, Int32 startingIndex, Int32 amount) {
 		}
+		static Array*  Empty() {
+			return(nullptr);
+		}
 	private:
 		int32_t	ComputeIndex(Int32 index1, Int32 index2, Int32 index3) {
 			int32_t index = index1;

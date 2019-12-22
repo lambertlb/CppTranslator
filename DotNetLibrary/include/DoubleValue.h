@@ -39,7 +39,7 @@ namespace DotnetLibrary
 		static Boolean IsInfinity(Double v) { return(false); }
 		static Boolean IsNegativeInfinity(Double v) { return(false); }
 		static Boolean IsPositiveInfinity(Double v) { return(false); }
-		Double operator %(Double v) { return (int32_t)value % (int32_t)v; };
+		static Double	Modulus(Double v1, Double v2) { return(0); }
 		static Double	MaxValue;
 		static Double	MinValue;
 		static Double	Epsilon;

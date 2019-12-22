@@ -46,7 +46,7 @@ namespace DotnetLibrary
 		StringBuilder* AppendFormat(String* format, Array* args) { return(this); }
 		StringBuilder* AppendFormat(String* format, Object* arg0, Object* arg1) { return(this); }
 		StringBuilder* AppendFormat(String* format, Object* arg0, Object* arg1, Object* arg2) { return(this); }
-		Int32			EnsureCapacity(Int32 capacity) {}
+		Int32			EnsureCapacity(Int32 capacity) { return(0); }
 		StringBuilder* Remove(Int32 startIndex, Int32 length) { return(this); }
 		StringBuilder*	Insert(const Int32 index, const Boolean value) { return(this); }
 		StringBuilder*	Insert(const Int32 index, const Byte value) { return(this); }

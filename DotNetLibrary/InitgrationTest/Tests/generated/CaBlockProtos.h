@@ -5,8 +5,16 @@ using namespace DotnetLibrary;
 namespace CABlock_NS
 {
 	class CABlock;
+	class StringTest;
 }
 namespace MiniTest_NS
 {
 	class Program;
+	enum TestEnum
+	{
+		Value1_TestEnum = 1,
+		Value2_TestEnum = 2,
+		Value3_TestEnum = 5
+	};
+
 }
