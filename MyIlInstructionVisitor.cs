@@ -72,6 +72,7 @@ namespace CppTranslator
 			constantConversions.Add("NaN", "DoubleValue::NaN");
 			constantConversions.Add(Double.PositiveInfinity.ToString(), "DoubleValue::PositiveInfinity");
 			constantConversions.Add(Double.NegativeInfinity.ToString(), "DoubleValue::NegativeInfinity");
+
 		}
 		internal bool IsPrimative(IType type)
 		{
@@ -376,6 +377,76 @@ namespace CppTranslator
 		{
 			if (HandleStringConcat(inst))
 				return (true);
+			if (HandleDateTime(inst))
+				return (true);
+			return (false);
+		}
+
+		/// <summary>
+		/// Because C++ is single pass there is an issue with DateTime knowing about TimeSpan
+		/// because it is compiled after. So we will use UInt64 instead.
+		/// This means we will have to do some artificial castime for date time functions
+		/// Dealing with Time span.
+		/// </summary>
+		/// <returns></returns>
+		private bool HandleDateTime(CallInstruction inst)
+		{
+			if (inst.Method.DeclaringType.Name != "DateTime")
+				return (false);
+			var arg = inst.Arguments.FirstOrDefault();
+			if (inst.Method.Name == "get_TimeOfDay")
+			{
+				Formatter.Append("TimeSpan(");
+				FormatCallInstance(arg);
+				FormatMethodAccessType(inst.Method, arg, inst.Method.Name);
+				AddCallParameters(inst.Arguments, inst.Method, true);
+				Formatter.Append(")");
+				return (true);
+			}
+			if (inst.Method.Name == "Add")
+			{
+				FormatCallInstance(arg);
+				FormatMethodAccessType(inst.Method, arg, inst.Method.Name);
+				Formatter.Append("(");
+				var second = inst.Arguments.ElementAtOrDefault(1);
+				second.AcceptVisitor(this);
+				Formatter.Append(".get_Ticks())");
+				return (true);
+			}
+			if (inst.Method.Name == "Subtract")
+			{
+				if (inst.Method.ReturnType.Name != "DateTime")
+				{
+					Formatter.Append("TimeSpan(");
+					FormatCallInstance(arg);
+					FormatMethodAccessType(inst.Method, arg, inst.Method.Name);
+					AddCallParameters(inst.Arguments, inst.Method, true);
+					Formatter.Append(")");
+					return (true);
+				}
+				FormatCallInstance(arg);
+				FormatMethodAccessType(inst.Method, arg, inst.Method.Name);
+				Formatter.Append("(");
+				var second = inst.Arguments.ElementAtOrDefault(1);
+				second.AcceptVisitor(this);
+				Formatter.Append(".get_Ticks())");
+				return (true);
+			}
+			if (inst.Method.Name == "op_Addition" || inst.Method.Name == "op_Subtraction")
+			{
+				var second = inst.Arguments.ElementAtOrDefault(1);
+				IType type = GetTypeForInstruction(second, null);
+				if (type == null || type.Name != "TimeSpan")
+					return (false);
+				Formatter.Append("DateTime::");
+				Formatter.Append(inst.Method.Name);
+				Formatter.Append("(");
+				arg.AcceptVisitor(this);
+				Formatter.Append(",");
+				second.AcceptVisitor(this);
+				Formatter.Append(".get_Ticks())");
+				return (true);
+			}
 			return (false);
 		}
 
@@ -1014,16 +1085,22 @@ namespace CppTranslator
 			DeclareVariableIfNeeded(inst.Variable);
 			Formatter.AppendName(inst.Variable.Name);
 			Formatter.Append(" = ");
-			if (inst.Variable.Type.Kind == TypeKind.Enum)
-			{
-				Formatter.Append("(");
-				FormatTypeDelaration(inst.Variable.Type);
-				Formatter.Append(")");
-			}
-			inst.Value.AcceptVisitor(this);
+			HandleStoreVariable(inst.Variable.Type, inst.Value);
 
 			return base.VisitStLoc(inst);
 		}
+
+		private void HandleStoreVariable(IType type, ILInstruction inst)
+		{
+			if (type.Kind == TypeKind.Enum)
+			{
+				Formatter.Append("(");
+				FormatTypeDelaration(type);
+				Formatter.Append(")");
+			}
+			inst.AcceptVisitor(this);
+		}
+
 		private bool HandleIncrementAndDecrement(StLoc inst)
 		{
 			BinaryNumericInstruction bin = inst.Value as BinaryNumericInstruction;
@@ -1064,7 +1141,7 @@ namespace CppTranslator
 			if (IsNewInitilizedArray(inst.Value))
 				HandleInitializedArray(inst);
 			else
-				inst.Value.AcceptVisitor(this);
+				HandleStoreVariable(inst.Type, inst.Value);
 			return base.VisitStObj(inst);
 		}
 
@@ -1228,10 +1305,19 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitUnboxAny(UnboxAny inst)
 		{
+			if (inst.Type.Name == "DateTime" || inst.Type.Name == "TimeSpan")
+			{
+				FormatType(inst.Type);
+				Formatter.Append("(");
+			}
 			inst.Argument.AcceptVisitor(this);
 			Formatter.Append("->get_As");
 			FormatType(inst.Type);
 			Formatter.Append("()");
+			if (inst.Type.Name == "DateTime" || inst.Type.Name == "TimeSpan")
+			{
+				Formatter.Append(")");
+			}
 			return base.VisitUnboxAny(inst);
 		}
 

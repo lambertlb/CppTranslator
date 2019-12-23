@@ -42,6 +42,7 @@ namespace DotnetLibrary
 		}
 		Int32					CompareTo(const DateTime& ts1) { return(0); }
 		Int32					CompareTo(Object* obj) { return(0); }
+		static	Int32				Compare(const DateTime& date1, const DateTime& date2) { return(0); }
 		bool	Equals(const DateTime& valueToCOmpare) {
 			return(false);
 		}
@@ -64,6 +65,7 @@ namespace DotnetLibrary
 		static	DateTime			get_Today() { return(0); }
 		static	DateTime			get_UtcNow() { return(0); }
 		Int32						get_Year() { return(0); }
+		DateTime					Add(const UInt64 ts) { return(0); }
 		DateTime					AddDays(const Double delta) { return(0); }
 		DateTime					AddHours(const Double delta) { return(0); }
 		DateTime					AddMilliseconds(const Double delta) { return(0); }
@@ -72,8 +74,29 @@ namespace DotnetLibrary
 		DateTime					AddSeconds(const Double delta) { return(0); }
 		DateTime					AddTicks(const Int64 delta) { return(0); }
 		DateTime					AddYears(const Int32 delta) { return(0); }
+		static Int64		DateToTicks(Int32 year, Int32 month, Int32 day) { return(0); }
+		static Int64		TimeToTicks(Int32 hour, Int32 minute, Int32 second, Int32 milliseconds) { return(0); }
+		static Int32		DaysInMonth(Int32 year, Int32 month) { return(0); }
+		static Boolean	IsLeapYear(Int32 year) { return(false); }
+		UInt64					Subtract(const DateTime& date1) { return(0); }
+		DateTime					Subtract(const UInt64 ts) { return(0); }
+		DateTime					ToLocalTime() { return(0); }
+		DateTime					ToUniversalTime() { return(0); }
+		static DateTime			op_Addition(const DateTime& ts1, const DateTime& ts2) { return(0); }
+		static DateTime			op_Addition(const DateTime& ts1, const UInt64 ts2) { return(0); }
+		static DateTime			op_Subtraction(const DateTime& ts1, const DateTime& ts2) { return(0); }
+		static DateTime			op_Subtraction(const DateTime& ts1, const UInt64 ts2) { return(0); }
+		static DateTime			op_UnaryNegation(const DateTime& ts1) { return(0); }
+		static DateTime			op_UnaryPlus(const DateTime& ts1) { return(0); }
+
+		static Boolean			op_Inequality(const DateTime& ts1, const DateTime& ts2) { return(false); }
+		static Boolean			op_GreaterThan(const DateTime& ts1, const DateTime& ts2) { return(false); }
+		static Boolean			op_GreaterThanOrEqual(const DateTime& ts1, const DateTime& ts2) { return(false); }
+		static Boolean			op_LessThan(const DateTime& ts1, const DateTime& ts2) { return(false); }
+		static Boolean			op_LessThanOrEqual(const DateTime& ts1, const DateTime& ts2) { return(false); }
 
 		static DateTime	MaxValue;
+		static DateTime	MinValue;
 	};
 	typedef DateTime DateTimeValue;
 }

@@ -3,7 +3,7 @@
 
 namespace DotnetLibrary
 {
-	class  UInt16Value : public ValueType {
+	class DLL_EXPORT UInt16Value : public ValueType {
 		UInt16 value;
 	public:
 		UInt16Value(UInt16 v)
@@ -20,8 +20,16 @@ namespace DotnetLibrary
 		virtual Int32	CompareTo(UInt16 valueToCompare) {
 			return(0);
 		}
+		virtual Int32	CompareTo(Object* valueToCompare) {
+			return(0);
+		}
+		static UInt16 Parse(String* stringToParse) {
+			return(0);
+		}
 		String* ToString() {
 			return(nullptr);
 		}
+		static UInt16	MaxValue;
+		static UInt16	MinValue;
 	};
 }

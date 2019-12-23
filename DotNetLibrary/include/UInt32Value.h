@@ -3,7 +3,7 @@
 
 namespace DotnetLibrary
 {
-	class  UInt32Value : public ValueType {
+	class DLL_EXPORT UInt32Value : public ValueType {
 		UInt32 value;
 	public:
 		UInt32Value(UInt32 v)
@@ -23,8 +23,16 @@ namespace DotnetLibrary
 		virtual Int32	CompareTo(UInt32 valueToCompare) {
 			return(0);
 		}
+		virtual Int32	CompareTo(Object* valueToCompare) {
+			return(0);
+		}
+		static UInt32 Parse(String* stringToParse) {
+			return(0);
+		}
 		String* ToString() {
 			return(nullptr);
 		}
+		static UInt32	MaxValue;
+		static UInt32	MinValue;
 	};
 }
