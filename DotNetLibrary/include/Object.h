@@ -50,6 +50,8 @@ namespace DotnetLibrary
 		virtual Double		get_AsDouble() {
 			return(0);
 		}
+		virtual UInt64		get_AsTimeSpan() { return(0); }
+		virtual UInt64		get_AsDateTime() { return(0); }
 		virtual Boolean		Equals(Boolean v) {
 			return(true);
 		}

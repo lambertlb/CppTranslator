@@ -3,6 +3,25 @@
 
 namespace DotnetLibrary
 {
+	// Enumeration to represent days in a week
+	enum DayOfWeek
+	{
+		Sunday,
+		Monday,
+		Tuesday,
+		Wednesday,
+		Thursday,
+		Friday,
+		Saturday
+	};
+	// Enumeration to represent different parts of the date value
+	enum DatePart
+	{
+		Day,
+		DayYear,
+		Month,
+		Year
+	};
 	class DLL_EXPORT DateTime : public ValueType {
 		UInt64	value;
 	public:
@@ -21,19 +40,39 @@ namespace DotnetLibrary
 		virtual bool	Equals(Object* valueToCompare) {
 			return(false);
 		}
-		virtual Int32	CompareTo(DateTime valueToCompare) {
-			return(0);
-		}
+		Int32					CompareTo(const DateTime& ts1) { return(0); }
+		Int32					CompareTo(Object* obj) { return(0); }
 		bool	Equals(const DateTime& valueToCOmpare) {
 			return(false);
 		}
 		static bool	Equals(const DateTime& valueToCOmpare, const DateTime& valueToCOmpare2) {
 			return(false);
 		}
-		Int64 get_Ticks() {
-			return(0);
-		}
-		virtual	String*	ToString() { return(nullptr); }
+		virtual	String* ToString() { return(nullptr); }
+		DateTime					get_Date() { return(0); }
+		Int32						get_Day() { return(0); }
+		DayOfWeek					get_DayOfWeek() { return(Sunday); }
+		Int32						get_DayOfYear() { return(0); }
+		Int32						get_Hour() { return(0); }
+		Int32						get_Millisecond() { return(0); }
+		Int32						get_Minute() { return(0); }
+		Int32						get_Month() { return(0); }
+		static	DateTime			get_Now() { return(0); }
+		Int32						get_Second() { return(0); }
+		Int64						get_Ticks() { return(0); }
+		Int64						get_TimeOfDay() { return(0); }
+		static	DateTime			get_Today() { return(0); }
+		static	DateTime			get_UtcNow() { return(0); }
+		Int32						get_Year() { return(0); }
+		DateTime					AddDays(const Double delta) { return(0); }
+		DateTime					AddHours(const Double delta) { return(0); }
+		DateTime					AddMilliseconds(const Double delta) { return(0); }
+		DateTime					AddMinutes(const Double delta) { return(0); }
+		DateTime					AddMonths(const Int32 delta) { return(0); }
+		DateTime					AddSeconds(const Double delta) { return(0); }
+		DateTime					AddTicks(const Int64 delta) { return(0); }
+		DateTime					AddYears(const Int32 delta) { return(0); }
+
 		static DateTime	MaxValue;
 	};
 	typedef DateTime DateTimeValue;

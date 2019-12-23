@@ -350,6 +350,8 @@ namespace CppTranslator
 
 		private void FormatCall(CallInstruction inst)
 		{
+			if (HandleSpecialCalls(inst))
+				return;
 			String methodName = GetMethodName(inst.Method.Name);
 			if (String.IsNullOrEmpty(methodName))
 				return;
@@ -368,6 +370,55 @@ namespace CppTranslator
 				FormatMethodAccessType(inst.Method, inst.Method.DeclaringType, methodName);
 			}
 			AddCallParameters(inst.Arguments, inst.Method, skipFirstParameter);
+		}
+
+		private bool HandleSpecialCalls(CallInstruction inst)
+		{
+			if (HandleStringConcat(inst))
+				return (true);
+			return (false);
+		}
+
+		private bool HandleStringConcat(CallInstruction inst)
+		{
+			if (inst.Method.FullName != "System.String.Concat")
+				return (false);
+			Block block = inst.Arguments.FirstOrDefault() as Block;
+			if (block == null && inst.Arguments.Count < 2)
+				return (false);
+			Formatter.Append("String::Concat(");
+			if (block != null)
+			{
+				HandleConcatBlock(inst, block);
+			}
+			else
+			{
+				bool first = true;
+				foreach (ILInstruction parameter in inst.Arguments)
+				{
+					if (!first)
+						Formatter.Append(", ");
+					first = false;
+					parameter.AcceptVisitor(this);
+				}
+			}
+			Formatter.Append(")");
+			return (true);
+		}
+
+		private void HandleConcatBlock(CallInstruction inst, Block block)
+		{
+			bool first = true;
+			foreach (ILInstruction element in block.Instructions)
+			{
+				if (element is StLoc)
+					continue;
+				ILInstruction todo = ((StObj)element).Value;
+				if (!first)
+					Formatter.Append(", ");
+				first = false;
+				todo.AcceptVisitor(this);
+			}
 		}
 
 		private void FormatCallInstance(ILInstruction arg)
@@ -895,7 +946,8 @@ namespace CppTranslator
 				Formatter.Append("(new ");
 			Formatter.Append(inst.Method.DeclaringType.Name);
 			AddCallParameters(inst.Arguments, inst.Method, false);
-			Formatter.Append(")");
+			if (inst.Method.DeclaringType.Kind == TypeKind.Class)
+				Formatter.Append(")");
 			return base.VisitNewObj(inst);
 		}
 

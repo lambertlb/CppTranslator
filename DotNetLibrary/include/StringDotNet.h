@@ -47,7 +47,7 @@ namespace DotnetLibrary
 		Array* Split(Array* separator, const Int32 count) { return(nullptr); }
 		String* Substring(const Int32 startIndex) { return(nullptr); }
 		String* Substring(const Int32 startIndex, const Int32 length) { return(nullptr); }
-		String* Trim();
+		String* Trim() { return(nullptr); }
 		String* Trim(Array* separator) { return(nullptr); }
 		String* TrimEnd(Array* separator) { return(nullptr); }
 		String* TrimStart(Array* separator) { return(nullptr); }
@@ -79,13 +79,8 @@ namespace DotnetLibrary
 		String* ToLower() { return(nullptr); }
 		String* ToUpper() { return(nullptr); }
 		String*			Insert(const Int32 startIndex, String* value) { return(nullptr); }
-		static	String*	Concat(Object* obj) { return(nullptr); }
 		static	String*	Concat(Array* values) { return(nullptr); }
-		static	String*	Concat(Object* obj1, Object* obj2) { return(nullptr); }
-		static	String*	Concat(String* s1, String* s2) { return(nullptr); }
-		static	String*	Concat(Object* obj1, Object* obj2, Object* obj3) { return(nullptr); }
-		static	String*	Concat(String* s1, String* s2, String* s3) { return(nullptr); }
-		static	String*	Concat(String* s1, String* s2, String* s3, String* s4) { return(nullptr); }
+		static	String*	Concat(Object* s1, ...) { return(nullptr); }
 
 		static	Int32		Compare(String* s1, String* s2, Boolean ignoreCase = false) { return(0); }
 		static	Int32		Compare(String* s1, const Int32 index1, String* s2, const Int32 index2, const Int32 length, Boolean ignoreCase = false) { return(0); }

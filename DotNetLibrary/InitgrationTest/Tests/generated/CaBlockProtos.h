@@ -5,7 +5,7 @@ using namespace DotnetLibrary;
 namespace CABlock_NS
 {
 	class CABlock;
-	class StringTest;
+	class TimeTest;
 }
 namespace MiniTest_NS
 {

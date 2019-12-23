@@ -9,20 +9,23 @@ namespace CABlock_NS
 		void TestFailed(String* x_v);
 		CABlock();
 	};
-	class StringTest : public Object
+	class TimeTest : public Object
 	{
 		public:
 		CABlock* x_caBlock;
-		StringTest(CABlock* x_caBlock);
+		DateTime x_dat1;
+		TimeTest(CABlock* x_caBlock);
 		void Test();
-		void DoIndexTest();
-		void DoMiscTest();
-		static void TestConcat(String* x_str1,Int32 x_index,String* x_str4,Int32 x_i,Double x_dbl);
-		void DoEqualsTest();
-		void DoParsingTest();
-		void DoConcatTest();
+		void TestTimeSpan();
+		void TestDateTime();
+		void DateTimeMethodTests();
+		void TimeArrayTests();
+		void DateTimeArrayTests();
+		void TimeSpanArrayTests();
+		void CxAssert(Double x_x,Double x_y);
 		void CxAssert(Boolean x_x);
-		StringTest();
+		void TimeTestFailed();
+		TimeTest();
 	};
 }
 namespace MiniTest_NS
