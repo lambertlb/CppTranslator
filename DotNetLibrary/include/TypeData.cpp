@@ -25,11 +25,11 @@ namespace DotnetLibrary
 		sizeof(UInt64),	//TimeSpanType
 		sizeof(void*)	//StringType
 	};
-	DLL_EXPORT DateTime	DateTime::MaxValue = DateTime(-1);
-	DLL_EXPORT DateTime	DateTime::MinValue = DateTime(-1);
-	DLL_EXPORT TimeSpan	TimeSpan::MaxValue = TimeSpan(-1);
-	DLL_EXPORT TimeSpan	TimeSpan::MinValue = TimeSpan(-1);
-	DLL_EXPORT TimeSpan	TimeSpan::Zero = TimeSpan(0);
+	DLL_EXPORT DateTime	DateTimeValue::MaxValue = DateTime(-1);
+	DLL_EXPORT DateTime	DateTimeValue::MinValue = DateTime(-1);
+	DLL_EXPORT TimeSpan	TimeSpanValue::MaxValue = TimeSpan(-1);
+	DLL_EXPORT TimeSpan	TimeSpanValue::MinValue = TimeSpan(-1);
+	DLL_EXPORT TimeSpan	TimeSpanValue::Zero = TimeSpan(0);
 
 	DLL_EXPORT Byte	ByteValue::MaxValue = 255;
 	DLL_EXPORT Byte	ByteValue::MinValue = 0;

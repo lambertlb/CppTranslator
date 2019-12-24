@@ -76,7 +76,7 @@ namespace CppTranslator
 		}
 		internal bool IsPrimative(IType type)
 		{
-			if (type.Name == "Boolean")
+			if (type.Name == "Boolean" || type.Name == "DateTime" || type.Name == "TimeSpan")
 				return (true);
 			PrimitiveType pt = type.ToPrimitiveType();
 			switch (pt)
@@ -377,76 +377,6 @@ namespace CppTranslator
 		{
 			if (HandleStringConcat(inst))
 				return (true);
-			if (HandleDateTime(inst))
-				return (true);
-			return (false);
-		}
-
-		/// <summary>
-		/// Because C++ is single pass there is an issue with DateTime knowing about TimeSpan
-		/// because it is compiled after. So we will use UInt64 instead.
-		/// This means we will have to do some artificial castime for date time functions
-		/// Dealing with Time span.
-		/// </summary>
-		/// <returns></returns>
-		private bool HandleDateTime(CallInstruction inst)
-		{
-			if (inst.Method.DeclaringType.Name != "DateTime")
-				return (false);
-			var arg = inst.Arguments.FirstOrDefault();
-			if (inst.Method.Name == "get_TimeOfDay")
-			{
-				Formatter.Append("TimeSpan(");
-				FormatCallInstance(arg);
-				FormatMethodAccessType(inst.Method, arg, inst.Method.Name);
-				AddCallParameters(inst.Arguments, inst.Method, true);
-				Formatter.Append(")");
-				return (true);
-			}
-			if (inst.Method.Name == "Add")
-			{
-				FormatCallInstance(arg);
-				FormatMethodAccessType(inst.Method, arg, inst.Method.Name);
-				Formatter.Append("(");
-				var second = inst.Arguments.ElementAtOrDefault(1);
-				second.AcceptVisitor(this);
-				Formatter.Append(".get_Ticks())");
-				return (true);
-			}
-			if (inst.Method.Name == "Subtract")
-			{
-				if (inst.Method.ReturnType.Name != "DateTime")
-				{
-					Formatter.Append("TimeSpan(");
-					FormatCallInstance(arg);
-					FormatMethodAccessType(inst.Method, arg, inst.Method.Name);
-					AddCallParameters(inst.Arguments, inst.Method, true);
-					Formatter.Append(")");
-					return (true);
-				}
-				FormatCallInstance(arg);
-				FormatMethodAccessType(inst.Method, arg, inst.Method.Name);
-				Formatter.Append("(");
-				var second = inst.Arguments.ElementAtOrDefault(1);
-				second.AcceptVisitor(this);
-				Formatter.Append(".get_Ticks())");
-				return (true);
-			}
-			if (inst.Method.Name == "op_Addition" || inst.Method.Name == "op_Subtraction")
-			{
-				var second = inst.Arguments.ElementAtOrDefault(1);
-				IType type = GetTypeForInstruction(second, null);
-				if (type == null || type.Name != "TimeSpan")
-					return (false);
-				Formatter.Append("DateTime::");
-				Formatter.Append(inst.Method.Name);
-				Formatter.Append("(");
-				arg.AcceptVisitor(this);
-				Formatter.Append(",");
-				second.AcceptVisitor(this);
-				Formatter.Append(".get_Ticks())");
-				return (true);
-			}
 			return (false);
 		}
 

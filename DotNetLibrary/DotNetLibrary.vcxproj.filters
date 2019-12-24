@@ -28,8 +28,6 @@
     <ClInclude Include="include\DotnetTypes.h" />
     <ClInclude Include="include\PointerType.h" />
     <ClInclude Include="include\ValueType.h" />
-    <ClInclude Include="include\DateTime.h" />
-    <ClInclude Include="include\TimeSpan.h" />
     <ClInclude Include="include\BoxTypeRaw.h" />
     <ClInclude Include="include\Operators.h" />
     <ClInclude Include="include\Object.h" />
@@ -52,5 +50,7 @@
     <ClInclude Include="include\Encoding.h" />
     <ClInclude Include="include\CharValue.h" />
     <ClInclude Include="include\CharEnumerator.h" />
+    <ClInclude Include="include\DateTimeValue.h" />
+    <ClInclude Include="include\TimeSpanValue.h" />
   </ItemGroup>
 </Project>

@@ -176,7 +176,7 @@
     <ClInclude Include="include\ByteValue.h" />
     <ClInclude Include="include\CharEnumerator.h" />
     <ClInclude Include="include\CharValue.h" />
-    <ClInclude Include="include\DateTime.h" />
+    <ClInclude Include="include\DateTimeValue.h" />
     <ClInclude Include="include\DotnetTypes.h" />
     <ClInclude Include="include\DoubleValue.h" />
     <ClInclude Include="include\Encoding.h" />
@@ -192,7 +192,7 @@
     <ClInclude Include="include\SingleValue.h" />
     <ClInclude Include="include\StringDotNet.h" />
     <ClInclude Include="include\StringBuilder.h" />
-    <ClInclude Include="include\TimeSpan.h" />
+    <ClInclude Include="include\TimeSpanValue.h" />
     <ClInclude Include="include\UInt16Value.h" />
     <ClInclude Include="include\UInt32Value.h" />
     <ClInclude Include="include\UInt64Value.h" />

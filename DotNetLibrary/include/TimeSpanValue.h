@@ -3,15 +3,15 @@
 
 namespace DotnetLibrary
 {
-	class DLL_EXPORT TimeSpan : public ValueType {
+	class DLL_EXPORT TimeSpanValue : public ValueType {
 		UInt64	value;
 	public:
-		TimeSpan() { value = 0; }
-		TimeSpan(const UInt64 value2) { value = value2; };
-		TimeSpan(const TimeSpan& value2) { value = value2.value; };
-		TimeSpan(Int32 hours, Int32 minutes, Int32 seconds) { value = 0; }
-		TimeSpan(Int32 days, Int32 hours, Int32 minutes, Int32 seconds) { value = 0; }
-		TimeSpan(Int32 days, Int32 hours, Int32 minutes, Int32 seconds, Int32 milliseconds) { value = 0; }
+		TimeSpanValue() { value = 0; }
+		TimeSpanValue(const UInt64 value2) { value = value2; };
+		TimeSpanValue(const TimeSpan& value2) { value = value2.value; };
+		TimeSpanValue(Int32 hours, Int32 minutes, Int32 seconds) { value = 0; }
+		TimeSpanValue(Int32 days, Int32 hours, Int32 minutes, Int32 seconds) { value = 0; }
+		TimeSpanValue(Int32 days, Int32 hours, Int32 minutes, Int32 seconds, Int32 milliseconds) { value = 0; }
 
 		bool	Equals(const TimeSpan& valueToCOmpare) {
 			return(valueToCOmpare.value == value);
@@ -66,10 +66,8 @@ namespace DotnetLibrary
 		static Boolean			op_GreaterThanOrEqual(const TimeSpan& ts1, const TimeSpan& ts2) { return(false); }
 		static Boolean			op_LessThan(const TimeSpan& ts1, const TimeSpan& ts2) { return(false); }
 		static Boolean			op_LessThanOrEqual(const TimeSpan& ts1, const TimeSpan& ts2) { return(false); }
-
 		static TimeSpan	MaxValue;
 		static TimeSpan	MinValue;
 		static TimeSpan	Zero;
 	};
-	typedef TimeSpan TimeSpanValue;
 }

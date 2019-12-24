@@ -31,6 +31,22 @@ typedef	double		Double;
 // forward references
 namespace DotnetLibrary
 {
+	struct DLL_EXPORT DateTime {
+		UInt64	value;
+		DateTime(UInt64 ticks) { value = ticks; }
+		DateTime() { value = 0; }
+		DateTime(const DateTime& val) { value = val.value; }
+		DateTime(Int32 year, Int32 month, Int32 day, Int32 hour = -1, Int32 minute = -1, Int32 second = -1, Int32 millisecond = -1) { value = 0; }
+	};
+	struct DLL_EXPORT TimeSpan {
+		UInt64	value;
+		TimeSpan() { value = 0; }
+		TimeSpan(const UInt64 value2) { value = value2; };
+		TimeSpan(const TimeSpan& value2) { value = value2.value; };
+		TimeSpan(Int32 hours, Int32 minutes, Int32 seconds) { value = 0; }
+		TimeSpan(Int32 days, Int32 hours, Int32 minutes, Int32 seconds) { value = 0; }
+		TimeSpan(Int32 days, Int32 hours, Int32 minutes, Int32 seconds, Int32 milliseconds) { value = 0; }
+	};
 	class String;
 
 	typedef	enum DataType
@@ -77,8 +93,8 @@ namespace DotnetLibrary
 #include "UInt64Value.h"
 #include "SingleValue.h"
 #include "DoubleValue.h"
-#include "DateTime.h"
-#include "TimeSpan.h"
+#include "DateTimeValue.h"
+#include "TimeSpanValue.h"
 #include "Encoding.h"
 #include "CharEnumerator.h"
 //#include "BoxTypeRaw.h"
