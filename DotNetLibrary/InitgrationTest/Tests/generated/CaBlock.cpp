@@ -2162,6 +2162,8 @@ IL_0000:
 		x_uInt64Test->Test();
 		EncodingTest* x_encodingTest = (new EncodingTest(this));
 		x_encodingTest->Test();
+		TryCatchTest* x_tryCatchTest = (new TryCatchTest());
+		x_tryCatchTest->Test();
 		return;
 	}
 	void CABlock::TestFailed(String* x_reason)
@@ -4976,6 +4978,132 @@ IL_0020:
 leaveBlock2:
 
 		return((Int32)x_result);
+	}
+	TestException::TestException() : Exception ((new String(L"Test Exception")))
+	{
+IL_0000:
+		
+		return;
+	}
+	TestException::TestException(String* x_msg) : Exception (x_msg)
+	{
+IL_0000:
+		
+		return;
+	}
+	TestException::TestException(String* x_msg,Exception* x_baseException) : Exception (x_msg,x_baseException)
+	{
+IL_0000:
+		
+		return;
+	}
+	void TryCatchTest::Test()
+	{
+IL_0000:
+		this->DoSimpleTryCatch();
+		this->DoComplexTryCatch();
+		return;
+	}
+	void TryCatchTest::DoSimpleTryCatch()
+	{
+IL_0000:
+		try
+		{
+IL_0001:
+			Exception* x_baseException = (new TestException((new String(L"Test1"))));
+			throw ((new TestException((new String(L"Test2")), x_baseException)));
+		}
+		catch (TestException* x_ex)
+		{
+IL_0019:
+			if ((x_ex == nullptr))
+			{
+				this->ExceptionTestFailed();
+			}
+
+			if (String::op_Inequality((new String(L"Test2")), x_ex->get_Message()))
+			{
+				this->ExceptionTestFailed();
+			}
+
+			if (String::op_Inequality((new String(L"Test1")), x_ex->get_InnerException()->get_Message()))
+			{
+				this->ExceptionTestFailed();
+			}
+
+			if ((String::op_Inequality((new String(L"Test1")), x_ex->GetBaseException()->get_Message()) == 0))
+			{
+				return;
+			}
+
+			this->ExceptionTestFailed();
+			goto leaveBlock2;
+		}
+leaveBlock2:;
+
+		this->ExceptionTestFailed();
+		return;
+	}
+	void TryCatchTest::DoComplexTryCatch()
+	{
+IL_0000:
+		Int32 x_num = 0;
+		try
+		{
+IL_0003:
+			try
+			{
+IL_0004:
+				++x_num;
+				throw ((new TestException()));
+			}
+			catch (TestException* x_ex)
+			{
+IL_000f:
+				++x_num;
+				throw;
+			}
+leaveBlock4:;
+
+		}
+		catch (TestException* x_ex2)
+		{
+IL_0017:
+			++x_num;
+			goto leaveBlock2;
+		}
+		catch (Exception* x_ex3)
+		{
+IL_0020:
+			++x_num;
+			goto leaveBlock2;
+		}
+leaveBlock2:;
+
+		if ((x_num != 3))
+		{
+			this->ExceptionTestFailed();
+		}
+
+		return;
+	}
+	void TryCatchTest::ExceptionTestFailed()
+	{
+IL_0000:
+		throw ((new Exception((new String(L"Exception TestFailed")))));
+	}
+	void TryCatchTest::CxAssert(Boolean x_x)
+	{
+IL_0000:
+		if ((x_x == 0))
+		{
+			this->ExceptionTestFailed();
+		}
+
+		return;
+	}
+	TryCatchTest::TryCatchTest()
+	{
 	}
 	UInt16Test::UInt16Test(CABlock* x_caBlock)
 	{

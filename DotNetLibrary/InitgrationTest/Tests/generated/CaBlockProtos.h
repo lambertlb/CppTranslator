@@ -65,6 +65,8 @@ namespace CABlock_NS
 	class StringTest;
 	class TimeTest;
 	class TimingTest;
+	class TestException;
+	class TryCatchTest;
 	class UInt16Test;
 	class UInt32Test;
 	class UInt64Test;

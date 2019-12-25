@@ -308,6 +308,7 @@ namespace CppTranslator
 
 		public void VisitIdentifierExpression(IdentifierExpression identifierExpression)
 		{
+			Formatter.AppendName(identifierExpression.Identifier);
 		}
 
 		public void VisitIfElseStatement(IfElseStatement ifElseStatement)

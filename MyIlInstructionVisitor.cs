@@ -999,6 +999,7 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitRethrow(Rethrow inst)
 		{
+			Formatter.Append("throw");
 			return base.VisitRethrow(inst);
 		}
 
@@ -1205,11 +1206,37 @@ namespace CppTranslator
 
 		protected override ILInstruction VisitThrow(Throw inst)
 		{
+			Formatter.Append("throw (");
+			inst.Argument.AcceptVisitor(this);
+			Formatter.Append(")");
 			return base.VisitThrow(inst);
 		}
 
 		protected override ILInstruction VisitTryCatch(TryCatch inst)
 		{
+			NewLeaveBlock();
+			Formatter.Append("try");
+			inst.TryBlock.AcceptVisitor(this);
+			foreach (TryCatchHandler handler in inst.Handlers )
+			{
+				Formatter.AppendIndented("catch (");
+				FormatTypeDelaration(handler.Variable.Type);
+				Formatter.Append(" ");
+				Formatter.AppendName(handler.Variable.Name);
+				Formatter.Append(")");
+				BlockContainer bc = handler.Body as BlockContainer;
+				if (bc == null)
+					handler.Body.AcceptVisitor(this);
+				else
+				{
+					Formatter.AddOpenBrace();
+					bc.Blocks.FirstOrDefault().AcceptVisitor(this);
+					Formatter.AddCloseBrace();
+				}
+			}
+			Formatter.Append(CurrentLeaveBlock());
+			Formatter.AppendLine(":;");
+			ExitLeaveBLock();
 			return base.VisitTryCatch(inst);
 		}
 

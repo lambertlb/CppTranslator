@@ -52,5 +52,6 @@
     <ClInclude Include="include\CharEnumerator.h" />
     <ClInclude Include="include\DateTimeValue.h" />
     <ClInclude Include="include\TimeSpanValue.h" />
+    <ClInclude Include="include\Exception.h" />
   </ItemGroup>
 </Project>

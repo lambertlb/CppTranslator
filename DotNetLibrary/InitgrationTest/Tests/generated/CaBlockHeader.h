@@ -377,6 +377,23 @@ namespace CABlock_NS
 		TimingTest();
 		static Int32 DoTimingTest(Int32 x_a,Int32 x_b,Int32 x_c);
 	};
+	class TestException : public Exception
+	{
+		public:
+		TestException();
+		TestException(String* x_msg);
+		TestException(String* x_msg,Exception* x_baseException);
+	};
+	class TryCatchTest : public Object
+	{
+		public:
+		void Test();
+		void DoSimpleTryCatch();
+		void DoComplexTryCatch();
+		void ExceptionTestFailed();
+		void CxAssert(Boolean x_x);
+		TryCatchTest();
+	};
 	class UInt16Test : public Object
 	{
 		public:

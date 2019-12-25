@@ -3,6 +3,7 @@
 #pragma warning( disable : 4244 )
 #pragma warning( disable : 4018 )
 #pragma warning( disable : 4102 )
+#pragma warning( disable : 4101 )
 #ifdef	DOTNETLIBRARY_EXPORTS
 #define	DLL_EXPORT	__declspec( dllexport )
 #else
@@ -97,6 +98,7 @@ namespace DotnetLibrary
 #include "TimeSpanValue.h"
 #include "Encoding.h"
 #include "CharEnumerator.h"
+#include "Exception.h"
 //#include "BoxTypeRaw.h"
 //#include "Operators.h"
 //#include "PointerType.h"

@@ -180,6 +180,7 @@
     <ClInclude Include="include\DotnetTypes.h" />
     <ClInclude Include="include\DoubleValue.h" />
     <ClInclude Include="include\Encoding.h" />
+    <ClInclude Include="include\Exception.h" />
     <ClInclude Include="include\Int16Value.h" />
     <ClInclude Include="include\Int32Value.h" />
     <ClInclude Include="include\Int64Value.h" />
