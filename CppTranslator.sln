@@ -9,11 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICSharpCode.Decompiler", ".
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DotNetLibrary", "DotNetLibrary\DotNetLibrary.vcxproj", "{D95A4356-95F2-4626-A1CB-26373284FD98}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DotnetLibraryTests", "DotNetLibrary\DotnetLibraryTests\DotnetLibraryTests.vcxproj", "{3954D021-8C25-4D64-854B-BCE84B14B972}"
-	ProjectSection(ProjectDependencies) = postProject
-		{D95A4356-95F2-4626-A1CB-26373284FD98} = {D95A4356-95F2-4626-A1CB-26373284FD98}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InitgrationTest", "DotNetLibrary\InitgrationTest\InitgrationTest.vcxproj", "{10973A24-DA70-4CDD-9089-A3BBDEF067C6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D95A4356-95F2-4626-A1CB-26373284FD98} = {D95A4356-95F2-4626-A1CB-26373284FD98}
@@ -64,17 +59,6 @@ Global
 		{D95A4356-95F2-4626-A1CB-26373284FD98}.Release|x64.Build.0 = Release|x64
 		{D95A4356-95F2-4626-A1CB-26373284FD98}.Release|x86.ActiveCfg = Release|Win32
 		{D95A4356-95F2-4626-A1CB-26373284FD98}.Release|x86.Build.0 = Release|Win32
-		{3954D021-8C25-4D64-854B-BCE84B14B972}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{3954D021-8C25-4D64-854B-BCE84B14B972}.Debug|Any CPU.Build.0 = Debug|Win32
-		{3954D021-8C25-4D64-854B-BCE84B14B972}.Debug|x64.ActiveCfg = Debug|x64
-		{3954D021-8C25-4D64-854B-BCE84B14B972}.Debug|x64.Build.0 = Debug|x64
-		{3954D021-8C25-4D64-854B-BCE84B14B972}.Debug|x86.ActiveCfg = Debug|Win32
-		{3954D021-8C25-4D64-854B-BCE84B14B972}.Debug|x86.Build.0 = Debug|Win32
-		{3954D021-8C25-4D64-854B-BCE84B14B972}.Release|Any CPU.ActiveCfg = Release|Win32
-		{3954D021-8C25-4D64-854B-BCE84B14B972}.Release|x64.ActiveCfg = Release|x64
-		{3954D021-8C25-4D64-854B-BCE84B14B972}.Release|x64.Build.0 = Release|x64
-		{3954D021-8C25-4D64-854B-BCE84B14B972}.Release|x86.ActiveCfg = Release|Win32
-		{3954D021-8C25-4D64-854B-BCE84B14B972}.Release|x86.Build.0 = Release|Win32
 		{10973A24-DA70-4CDD-9089-A3BBDEF067C6}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{10973A24-DA70-4CDD-9089-A3BBDEF067C6}.Debug|x64.ActiveCfg = Debug|x64
 		{10973A24-DA70-4CDD-9089-A3BBDEF067C6}.Debug|x64.Build.0 = Debug|x64

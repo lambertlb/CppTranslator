@@ -158,9 +158,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="include\Operators.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="include\TypeData.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -171,7 +168,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BooleanValue.h" />
-    <ClInclude Include="include\BoxTypeRaw.h" />
     <ClInclude Include="include\Buffer.h" />
     <ClInclude Include="include\ByteValue.h" />
     <ClInclude Include="include\CharEnumerator.h" />
@@ -184,8 +180,7 @@
     <ClInclude Include="include\Int16Value.h" />
     <ClInclude Include="include\Int32Value.h" />
     <ClInclude Include="include\Int64Value.h" />
-    <ClInclude Include="include\Math.h" />
-    <ClInclude Include="include\Operators.h" />
+    <ClInclude Include="include\DotNetMath.h" />
     <ClInclude Include="include\PointerType.h" />
     <ClInclude Include="include\Array.h" />
     <ClInclude Include="include\Object.h" />
