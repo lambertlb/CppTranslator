@@ -1,15 +1,12 @@
 ﻿using ICSharpCode.Decompiler.IL;
-using ICSharpCode.Decompiler.IL.Patterns;
 using ICSharpCode.Decompiler.TypeSystem;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace CppTranslator
 {
 	class MyIlInstructionVisitor : ILVisitor<ILInstruction>
 	{
-
 		private Stack<Dictionary<String, String>> localVariable = new Stack<Dictionary<String, String>>();
 		public Stack<String> leaveBlocks = new Stack<String>();
 		public Dictionary<String, String> CurrentVariables { get; set; }
@@ -23,6 +20,10 @@ namespace CppTranslator
 		internal BlockContainer currentReturnContainer;
 		internal BlockContainer mainContainer;
 		internal int blockIndex;
+		/// <summary>
+		/// visitor used for type definition
+		/// </summary>
+		public CppTypeVisitor TypeVisitor { get; set; }
 
 		public MyIlInstructionVisitor(Formatter formatter)
 		{
@@ -96,71 +97,11 @@ namespace CppTranslator
 					return (false);
 			}
 		}
-		internal bool IsPointerType(IType type)
-		{
-			if (type.Kind == TypeKind.ByReference)
-			{
-				return (true);
-			}
-			return (type.Kind == TypeKind.Class || type.Kind == TypeKind.Array);
-		}
-		public void FormatTypeDelaration(IType type)
-		{
-			FormatType(type);
-			if (IsPointerType(type))
-			{
-				Formatter.Append("*");
-			}
-		}
-		public void FormatType(IType type)
-		{
-			String name = type.Name;
-			if (type.Kind == TypeKind.ByReference)
-			{
-				name = name.Substring(0, name.Length - 1);
-			}
-			if (type.Kind == TypeKind.Array)
-			{
-				name = "Array";
-			}
-			Formatter.AppendName(name);
-		}
-		private void FormatMethodAccessType(IMethod method, IType type, String methodName)
-		{
-			if (method.IsStatic)
-				Formatter.Append("::");
-			else
-				FormatTypeAccess(type);
-			Formatter.Append(methodName);
-		}
-		public void FormatTypeAccess(IType type)
-		{
-			if (type == null || IsPointerType(type))
-				Formatter.Append("->");
-			else
-				Formatter.Append(".");
-		}
-		IType GetTypeForInstruction(ILInstruction inst, IType defaultType)
-		{
-			if (inst is LdLoc)
-				return (((LdLoc)inst).Variable.Type);
-			else if (inst is LdLoca)
-				return (((LdLoca)inst).Variable.Type);
-			else if (inst is LdObj)
-				return (((LdObj)inst).Type);
-			else if (inst is LdFlda)
-				return (((LdFlda)inst).Field.Type);
-			else if (inst is LdElema)
-				return (((LdElema)inst).Type);
-			else if (inst is AddressOf)
-				return (((AddressOf)inst).Type);
-			return (defaultType);
-		}
 		private void HandleFieldAccess(ILInstruction target)
 		{
 			target.AcceptVisitor(this);
-			IType type = GetTypeForInstruction(target, null);
-			FormatTypeAccess(type);
+			IType type = TypeVisitor.GetTypeForInstruction(target, null);
+			TypeVisitor.FormatTypeAccess(type);
 		}
 		private void BoxExpression(IType type, ILInstruction inst)
 		{
@@ -172,7 +113,7 @@ namespace CppTranslator
 
 		private void WrapTypeIfNeeded(IType type)
 		{
-			FormatType(type);
+			TypeVisitor.FormatType(type);
 			if (IsPrimative(type))
 				Formatter.Append("Value");
 		}
@@ -368,7 +309,7 @@ namespace CppTranslator
 			{
 				if (inst.Method.IsStatic)
 					WrapTypeIfNeeded(inst.Method.DeclaringType);
-				FormatMethodAccessType(inst.Method, inst.Method.DeclaringType, methodName);
+				TypeVisitor.FormatMethodAccessType(inst.Method, inst.Method.DeclaringType, methodName);
 			}
 			AddCallParameters(inst.Arguments, inst.Method, skipFirstParameter);
 		}
@@ -424,7 +365,7 @@ namespace CppTranslator
 
 		private void FormatCallInstance(ILInstruction arg)
 		{
-			IType type = GetTypeForInstruction(arg, null);
+			IType type = TypeVisitor.GetTypeForInstruction(arg, null);
 			if (type != null && IsPrimative(type))
 			{
 				BoxExpression(type, arg);
@@ -440,8 +381,8 @@ namespace CppTranslator
 
 		private void FormatMethodAccessType(IMethod method, ILInstruction inst, String methodName)
 		{
-			IType type = GetTypeForInstruction(inst, null);
-			FormatMethodAccessType(method, type, methodName);
+			IType type = TypeVisitor.GetTypeForInstruction(inst, null);
+			TypeVisitor.FormatMethodAccessType(method, type, methodName);
 		}
 		private string GetMethodName(String methodName)
 		{
@@ -478,7 +419,7 @@ namespace CppTranslator
 			if (parameter.Type.Kind != TypeKind.Enum)
 				return;
 			Formatter.Append("(");
-			FormatTypeDelaration(parameter.Type);
+			TypeVisitor.FormatTypeDelaration(parameter.Type);
 			Formatter.Append(")");
 		}
 
@@ -527,7 +468,7 @@ namespace CppTranslator
 		{
 			if (inst.Type.Kind == TypeKind.Class)
 				Formatter.Append("new ");
-			FormatType(inst.Type);
+			TypeVisitor.FormatType(inst.Type);
 			Formatter.Append("()");
 			return base.VisitDefaultValue(inst);
 		}
@@ -757,7 +698,7 @@ namespace CppTranslator
 		protected override ILInstruction VisitLdElema(LdElema inst)
 		{
 			Formatter.Append("(*((");
-			FormatTypeDelaration(inst.Type);
+			TypeVisitor.FormatTypeDelaration(inst.Type);
 			Formatter.Append("*)");
 			inst.Array.AcceptVisitor(this);
 			Formatter.Append("->Address(");
@@ -880,7 +821,7 @@ namespace CppTranslator
 				{
 					Formatter.Append("(");
 					Formatter.Append("(");
-					FormatTypeDelaration(GetTypeForInstruction(inst.Value, MethodReturnType));
+					TypeVisitor.FormatTypeDelaration(TypeVisitor.GetTypeForInstruction(inst.Value, MethodReturnType));
 					Formatter.Append(")");
 					inst.Value.AcceptVisitor(this);
 					Formatter.Append(")");
@@ -920,7 +861,7 @@ namespace CppTranslator
 		protected override ILInstruction VisitNewArr(NewArr inst)
 		{
 			Formatter.Append("new Array(");
-			FormatType(inst.Type);
+			TypeVisitor.FormatType(inst.Type);
 			Formatter.Append("Type,");
 			WriteCommaSeparatedList(inst.Indices);
 			Formatter.Append(")");
@@ -1026,7 +967,7 @@ namespace CppTranslator
 			if (type.Kind == TypeKind.Enum)
 			{
 				Formatter.Append("(");
-				FormatTypeDelaration(type);
+				TypeVisitor.FormatTypeDelaration(type);
 				Formatter.Append(")");
 			}
 			inst.AcceptVisitor(this);
@@ -1060,7 +1001,7 @@ namespace CppTranslator
 			if (CurrentVariables.ContainsKey(variable.Name))
 				return (false);
 			CurrentVariables.Add(variable.Name, variable.Name);
-			FormatTypeDelaration(variable.Type);
+			TypeVisitor.FormatTypeDelaration(variable.Type);
 			Formatter.Append(" ");
 			return (true);
 		}
@@ -1220,7 +1161,7 @@ namespace CppTranslator
 			foreach (TryCatchHandler handler in inst.Handlers )
 			{
 				Formatter.AppendIndented("catch (");
-				FormatTypeDelaration(handler.Variable.Type);
+				TypeVisitor.FormatTypeDelaration(handler.Variable.Type);
 				Formatter.Append(" ");
 				Formatter.AppendName(handler.Variable.Name);
 				Formatter.Append(")");
@@ -1264,12 +1205,12 @@ namespace CppTranslator
 		{
 			if (inst.Type.Name == "DateTime" || inst.Type.Name == "TimeSpan")
 			{
-				FormatType(inst.Type);
+				TypeVisitor.FormatType(inst.Type);
 				Formatter.Append("(");
 			}
 			inst.Argument.AcceptVisitor(this);
 			Formatter.Append("->get_As");
-			FormatType(inst.Type);
+			TypeVisitor.FormatType(inst.Type);
 			Formatter.Append("()");
 			if (inst.Type.Name == "DateTime" || inst.Type.Name == "TimeSpan")
 			{
@@ -1282,8 +1223,8 @@ namespace CppTranslator
 		{
 			inst.Target.AcceptVisitor(this);
 			Formatter.Append(" = ");
-			FormatType(inst.Method.DeclaringType);
-			FormatMethodAccessType(inst.Method, inst.Method.DeclaringType, inst.Method.Name);
+			TypeVisitor.FormatType(inst.Method.DeclaringType);
+			TypeVisitor.FormatMethodAccessType(inst.Method, inst.Method.DeclaringType, inst.Method.Name);
 			Formatter.Append("(");
 			inst.Target.AcceptVisitor(this);
 			Formatter.Append(",");

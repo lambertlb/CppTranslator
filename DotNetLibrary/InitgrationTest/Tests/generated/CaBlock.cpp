@@ -12,22 +12,13 @@ IL_0000:
 		this->x_friend = (TestNameEnu)x_value;
 		return;
 	}
-	Typedef::Typedef()
-	{
-	}
 	TestNameEnu Typedef1::x_friend()
 	{
 		return((TestNameEnu)0);
 	}
-	Typedef1::Typedef1()
-	{
-	}
 }
 namespace CABlock_Extra_NS
 {
-	TestNamespaceClass::TestNamespaceClass()
-	{
-	}
 }
 namespace CABlock_NS
 {
@@ -290,9 +281,6 @@ IL_0000:
 		}
 
 		return;
-	}
-	ArrayTest::ArrayTest()
-	{
 	}
 	BasicTest::BasicTest(CABlock* x_caBlock)
 	{
@@ -562,9 +550,6 @@ IL_0000:
 		this->CxAssert((x_typedef->get_Friend() == 0));
 		return;
 	}
-	BasicTest::BasicTest()
-	{
-	}
 	TestAbstract::TestAbstract() : Abstract (1,2)
 	{
 IL_0000:
@@ -615,15 +600,6 @@ IL_0000:
 		x_ts.x_data--;
 		return((TestStruct)x_ts);
 	}
-	TestStruct::TestStruct()
-	{
-	}
-	TestStruct2::TestStruct2()
-	{
-	}
-	TestStruct3::TestStruct3()
-	{
-	}
 	Abstract::Abstract(Int32 x_i,Int32 x_j)
 	{
 IL_0000:
@@ -635,9 +611,6 @@ IL_0000:
 	Int32 Abstract::DidImplement()
 	{
 		return((Int32)this->x_data1);
-	}
-	Abstract::Abstract()
-	{
 	}
 	BooleanTest::BooleanTest(CABlock* x_caBlock)
 	{
@@ -721,9 +694,6 @@ IL_0000:
 
 		return;
 	}
-	BooleanTest::BooleanTest()
-	{
-	}
 	BufferTest::BufferTest(CABlock* x_caBlock)
 	{
 IL_0000:
@@ -793,9 +763,6 @@ IL_0000:
 		}
 
 		return;
-	}
-	BufferTest::BufferTest()
-	{
 	}
 	ByteTest::ByteTest(CABlock* x_caBlock)
 	{
@@ -1277,9 +1244,6 @@ IL_0000:
 
 		return;
 	}
-	ByteTest::ByteTest()
-	{
-	}
 	CharTest::CharTest(CABlock* x_caBlock)
 	{
 IL_0000:
@@ -1529,9 +1493,6 @@ IL_0000:
 		}
 
 		return;
-	}
-	CharTest::CharTest()
-	{
 	}
 	DoubleTest::DoubleTest(CABlock* x_caBlock)
 	{
@@ -1913,9 +1874,6 @@ IL_0000:
 		this->x_caBlock->TestFailed((new String(L"Double TestFailed")));
 		return;
 	}
-	DoubleTest::DoubleTest()
-	{
-	}
 	EncodingTest::EncodingTest(CABlock* x_caBlock)
 	{
 IL_0000:
@@ -2001,9 +1959,6 @@ IL_0000:
 
 		return;
 	}
-	EncodingTest::EncodingTest()
-	{
-	}
 	EnumTest::EnumTest(CABlock* x_caBlock)
 	{
 IL_0000:
@@ -2088,9 +2043,6 @@ IL_0000:
 IL_0000:
 		this->x_caBlock->TestFailed((new String(L"Enum TestFailed")));
 		return;
-	}
-	EnumTest::EnumTest()
-	{
 	}
 	Int32 CABlock::x_intConstant = 8;
 	CABlock::CABlock()
@@ -2540,9 +2492,6 @@ IL_0000:
 
 		return;
 	}
-	Int16Test::Int16Test()
-	{
-	}
 	Int32Test::Int32Test(CABlock* x_caBlock)
 	{
 IL_0000:
@@ -2847,9 +2796,6 @@ IL_0000:
 
 		return;
 	}
-	Int32Test::Int32Test()
-	{
-	}
 	Int64Test::Int64Test(CABlock* x_caBlock)
 	{
 IL_0000:
@@ -3148,9 +3094,6 @@ IL_0000:
 
 		return;
 	}
-	Int64Test::Int64Test()
-	{
-	}
 	MathTest::MathTest(CABlock* x_caBlock)
 	{
 IL_0000:
@@ -3255,9 +3198,6 @@ IL_0000:
 		}
 
 		return;
-	}
-	MathTest::MathTest()
-	{
 	}
 	SByteTest::SByteTest(CABlock* x_caBlock)
 	{
@@ -3626,9 +3566,6 @@ IL_0000:
 		}
 
 		return;
-	}
-	SByteTest::SByteTest()
-	{
 	}
 	SingleTest::SingleTest(CABlock* x_caBlock)
 	{
@@ -4009,9 +3946,6 @@ IL_0000:
 		this->x_caBlock->TestFailed((new String(L"Single TestFailed")));
 		return;
 	}
-	SingleTest::SingleTest()
-	{
-	}
 	StringBuilderTest::StringBuilderTest(CABlock* x_caBlock)
 	{
 IL_0000:
@@ -4249,9 +4183,6 @@ IL_0000:
 		}
 
 		return;
-	}
-	StringBuilderTest::StringBuilderTest()
-	{
 	}
 	StringTest::StringTest(CABlock* x_caBlock)
 	{
@@ -4557,9 +4488,6 @@ IL_0000:
 		}
 
 		return;
-	}
-	StringTest::StringTest()
-	{
 	}
 	TimeTest::TimeTest(CABlock* x_caBlock)
 	{
@@ -4913,9 +4841,6 @@ IL_0000:
 		this->x_caBlock->TestFailed((new String(L"Time TestFailed")));
 		return;
 	}
-	TimeTest::TimeTest()
-	{
-	}
 	TimingTest::TimingTest()
 	{
 IL_0000:
@@ -5101,9 +5026,6 @@ IL_0000:
 		}
 
 		return;
-	}
-	TryCatchTest::TryCatchTest()
-	{
 	}
 	UInt16Test::UInt16Test(CABlock* x_caBlock)
 	{
@@ -5393,9 +5315,6 @@ IL_0000:
 
 		return;
 	}
-	UInt16Test::UInt16Test()
-	{
-	}
 	UInt32Test::UInt32Test(CABlock* x_caBlock)
 	{
 IL_0000:
@@ -5681,9 +5600,6 @@ IL_0000:
 		}
 
 		return;
-	}
-	UInt32Test::UInt32Test()
-	{
 	}
 	UInt64Test::UInt64Test(CABlock* x_caBlock)
 	{
@@ -6063,8 +5979,5 @@ IL_0000:
 		}
 
 		return;
-	}
-	UInt64Test::UInt64Test()
-	{
 	}
 }

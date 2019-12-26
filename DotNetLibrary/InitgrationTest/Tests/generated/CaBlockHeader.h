@@ -10,17 +10,14 @@ namespace CABlock_NS
 		TestStruct(Int32 x_i);
 		static TestStruct op_Addition(TestStruct x_ts,Int32 x_newData);
 		static TestStruct op_BitwiseAnd(TestStruct x_ts,Int32 x_newData);
-		TestStruct();
 	};
 	struct TestStruct2 : public Object
 	{
 		Int32 x_data;
-		TestStruct2();
 	};
 	struct TestStruct3 : public Object
 	{
 		TestStruct2 x_ts;
-		TestStruct3();
 	};
 }
 namespace UNNAMED
@@ -31,13 +28,11 @@ namespace UNNAMED
 		TestNameEnu x_friend;
 		TestNameEnu get_Friend();
 		void set_Friend(TestNameEnu x_value );
-		Typedef();
 	};
 	class Typedef1 : public Object
 	{
 		public:
 		TestNameEnu x_friend();
-		Typedef1();
 	};
 }
 namespace CABlock_Extra_NS
@@ -45,7 +40,6 @@ namespace CABlock_Extra_NS
 	class TestNamespaceClass : public Object
 	{
 		public:
-		TestNamespaceClass();
 	};
 }
 namespace CABlock_NS
@@ -73,7 +67,6 @@ namespace CABlock_NS
 		void MiscTest();
 		void ArrayMethodTests();
 		void CxAssert(Boolean x_x);
-		ArrayTest();
 	};
 	class BasicTest : public Object
 	{
@@ -100,7 +93,6 @@ namespace CABlock_NS
 		void ComplexConditions();
 		Boolean TestThis(Int32 x_a,Int32 x_b);
 		void TestNames();
-		BasicTest();
 	};
 	class Abstract : public Object
 	{
@@ -112,7 +104,6 @@ namespace CABlock_NS
 		virtual Int32 MustImplement(Int32 x_i) = 0;
 		virtual Int32 MustImplement(Int64 x_i) = 0;
 		Int32 DidImplement();
-		Abstract();
 	};
 	class TestAbstract : public Abstract
 	{
@@ -134,7 +125,6 @@ namespace CABlock_NS
 		void BoolOperators();
 		void CxAssert(Boolean x_x,Boolean x_y);
 		void CxAssert(Boolean x_x);
-		BooleanTest();
 	};
 	class BufferTest : public Object
 	{
@@ -145,7 +135,6 @@ namespace CABlock_NS
 		BufferTest(CABlock* x_caBlock);
 		void Test();
 		void CxAssert(Boolean x_x);
-		BufferTest();
 	};
 	class ByteTest : public Object
 	{
@@ -160,7 +149,6 @@ namespace CABlock_NS
 		void ByteMiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
-		ByteTest();
 	};
 	class CharTest : public Object
 	{
@@ -174,7 +162,6 @@ namespace CABlock_NS
 		void CharMiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
-		CharTest();
 	};
 	class DoubleTest : public Object
 	{
@@ -193,7 +180,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
 		void DoubleTestFailed();
-		DoubleTest();
 	};
 	class EncodingTest : public Object
 	{
@@ -204,7 +190,6 @@ namespace CABlock_NS
 		void EncodingMethodsTest();
 		Boolean CompareBytes(Array* x_bytes,Array* x_myCharsAsBytes);
 		void CxAssert(Boolean x_x);
-		EncodingTest();
 	};
 	class EnumTest : public Object
 	{
@@ -215,7 +200,6 @@ namespace CABlock_NS
 		void Test1(TestEnum x_testEnum);
 		void Test1(TestEnum2 x_testEnum);
 		void EnumTestFailed();
-		EnumTest();
 	};
 	class CABlock : public BlockBase
 	{
@@ -242,7 +226,6 @@ namespace CABlock_NS
 		void Int16MiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
-		Int16Test();
 	};
 	class Int32Test : public Object
 	{
@@ -258,7 +241,6 @@ namespace CABlock_NS
 		void Int32MiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
-		Int32Test();
 	};
 	class Int64Test : public Object
 	{
@@ -273,7 +255,6 @@ namespace CABlock_NS
 		void Int64MiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
-		Int64Test();
 	};
 	class MathTest : public Object
 	{
@@ -285,7 +266,6 @@ namespace CABlock_NS
 		void DoubleCompare(Double x_n1,Double x_n2,Double x_resolution);
 		void CxAssert(Double x_x,Double x_y);
 		void CxAssert(Boolean x_x);
-		MathTest();
 	};
 	class SByteTest : public Object
 	{
@@ -300,7 +280,6 @@ namespace CABlock_NS
 		void SByteMiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
-		SByteTest();
 	};
 	class SingleTest : public Object
 	{
@@ -319,7 +298,6 @@ namespace CABlock_NS
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
 		void SingleTestFailed();
-		SingleTest();
 	};
 	class StringBuilderTest : public Object
 	{
@@ -336,7 +314,6 @@ namespace CABlock_NS
 		void DoSBReplaceTest();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
-		StringBuilderTest();
 	};
 	class StringTest : public Object
 	{
@@ -351,7 +328,6 @@ namespace CABlock_NS
 		void DoParsingTest();
 		void DoConcatTest();
 		void CxAssert(Boolean x_x);
-		StringTest();
 	};
 	class TimeTest : public Object
 	{
@@ -369,7 +345,6 @@ namespace CABlock_NS
 		void CxAssert(Double x_x,Double x_y);
 		void CxAssert(Boolean x_x);
 		void TimeTestFailed();
-		TimeTest();
 	};
 	class TimingTest : public Object
 	{
@@ -392,7 +367,6 @@ namespace CABlock_NS
 		void DoComplexTryCatch();
 		void ExceptionTestFailed();
 		void CxAssert(Boolean x_x);
-		TryCatchTest();
 	};
 	class UInt16Test : public Object
 	{
@@ -407,7 +381,6 @@ namespace CABlock_NS
 		void UInt16MiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
-		UInt16Test();
 	};
 	class UInt32Test : public Object
 	{
@@ -422,7 +395,6 @@ namespace CABlock_NS
 		void UInt32MiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
-		UInt32Test();
 	};
 	class UInt64Test : public Object
 	{
@@ -437,7 +409,6 @@ namespace CABlock_NS
 		void UInt64MiscTests();
 		void CxAssert(Boolean x_x);
 		void CxAssert(Boolean x_x,Boolean x_y);
-		UInt64Test();
 	};
 using namespace CABlock_NS;
 using namespace UNNAMED;

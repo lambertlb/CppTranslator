@@ -1,99 +1,105 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
 namespace CppTranslator
 {
-	public class Formatter
+	/// <summary>
+	/// Worker for formatting output
+	/// </summary>
+	public class Formatter : IDisposable
 	{
-		private Dictionary<String, String> types = new Dictionary<String, String>();
 		private StringBuilder stringBuilder = new StringBuilder(2048);
-		int indentLevel;
-		String nl = Environment.NewLine;
-		String tabs = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
-		bool openBraceOnNewline = true;
+		private int indentLevel;
+		private String nl = Environment.NewLine;
+		private String tabs = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
+		private bool openBraceOnNewline = true;
 		private bool onNewline;
-		public bool IsOnNewline { get { return (onNewline); } }
+		/// <summary>
+		/// Is formatter at start of new line
+		/// </summary>
+		public bool IsOnNewline
+		{
+			get { return (onNewline); }
+		}
+		/// <summary>
+		/// Were any characters added to the current line
+		/// </summary>
 		public bool CharactersAddedToLine { get; set; }
-		private bool emitToConsole;
+		/// <summary>
+		/// Is text to be emitted to the console
+		/// </summary>
+		public bool EmitToConsole { get; set; }
 		private StreamWriter outputFiler;
 		private String outputName;
+		/// <summary>
+		/// File name of output
+		/// </summary>
 		public String OutputName
 		{
-			get { return outputName; }
+			get
+			{
+				return outputName;
+			}
 			set
 			{
 				outputName = value;
 				NewOutputFile();
 			}
 		}
-		private String name_space;
-		public string Name_space
+		private String nameSpace;
+		/// <summary>
+		/// Name space we are currently in
+		/// </summary>
+		public string NameSpace
 		{
-			get { return name_space; }
+			get { return nameSpace; }
 			set { SetNamespace(value); }
 		}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Formatter"/> class.
+		/// Constructor
+		/// </summary>
 		public Formatter()
 		{
-			types.Add("bool", "Boolean");
-			types.Add("byte", "Byte");
-			types.Add("sbyte", "SByte");
-			types.Add("char", "Char");
-			types.Add("double", "Double");
-			types.Add("float", "Float");
-			types.Add("int", "Int32");
-			types.Add("uint", "UInt32");
-			types.Add("long", "Int64");
-			types.Add("ulong", "UInt64");
-			types.Add("object", "Object");
-			types.Add("short", "Int16");
-			types.Add("ushort", "UInt16");
-			types.Add("string", "String");
 		}
 
 		private void SetNamespace(string value)
 		{
 			String newNamespace;
-			if (value == "")
+			if (String.IsNullOrEmpty(value))
 			{
 				newNamespace = "UNNAMED";
-			} else
+			}
+			else
 			{
 				newNamespace = value + "_NS";
 			}
-			if (name_space != null && newNamespace != name_space)
+			if (nameSpace != null && newNamespace != nameSpace)
 			{
 				CloseNamespace();
-			} else if (name_space != null)
+			}
+			else if (nameSpace != null)
 			{
 				return;
 			}
-			name_space = newNamespace;
+			nameSpace = newNamespace;
 			Append("namespace ");
-			AppendLine(name_space);
+			AppendLine(nameSpace);
 			AddOpenBrace();
 		}
-
+		/// <summary>
+		/// Close current namespace
+		/// </summary>
 		public void CloseNamespace()
 		{
-			if (name_space != null)
+			if (nameSpace != null)
 			{
 				AddCloseBrace();
-				name_space = null;
+				nameSpace = null;
 			}
 		}
-
-		/// <summary>
-		/// Is text to be emitted to the console
-		/// </summary>
-		public bool EmitToConsole
-		{
-			get { return (emitToConsole); }
-			set { emitToConsole = value; }
-		}
-
-
 		/// <summary>
 		/// Reset formatter
 		/// </summary>
@@ -130,10 +136,13 @@ namespace CppTranslator
 		/// <summary>
 		/// Decrease indentation
 		/// </summary>
-		void DownIndent()
+		public void DownIndent()
 		{
 			--indentLevel;
 		}
+		/// <summary>
+		/// Prefix for lower class names to avoid collision woth c++ keywords
+		/// </summary>
 		private String Prefix
 		{
 			get { return ("x_"); }
@@ -147,7 +156,7 @@ namespace CppTranslator
 		/// <summary>
 		/// Append name and prefix it if needed
 		/// </summary>
-		/// <param name="name"></param>
+		/// <param name="name">name to prefix</param>
 		public void AppendName(String name)
 		{
 			String nm = PrefixName(name);
@@ -158,7 +167,7 @@ namespace CppTranslator
 		/// <summary>
 		/// Append name and prefix it if needed
 		/// </summary>
-		/// <param name="name"></param>
+		/// <param name="name">name to add</param>
 		public void AppendIndentedName(String name)
 		{
 			AppendIndented(PrefixName(name));
@@ -173,7 +182,7 @@ namespace CppTranslator
 			stringBuilder.Append(data);
 			if (!String.IsNullOrEmpty(data))
 				CharactersAddedToLine = true;
-			if (emitToConsole)
+			if (EmitToConsole)
 				System.Console.Out.Write(data);
 		}
 		/// <summary>
@@ -185,7 +194,7 @@ namespace CppTranslator
 			onNewline = false;
 			CharactersAddedToLine = true;
 			stringBuilder.Append(character);
-			if (emitToConsole)
+			if (EmitToConsole)
 				System.Console.Out.Write(character);
 		}
 		/// <summary>
@@ -226,19 +235,21 @@ namespace CppTranslator
 				default:
 					{
 						if (!Char.IsControl(chr) && chr >= ' ' && chr <= '~')
+						{
 							Append(chr);
+						}
 						else
 						{
 							// add as Unicode character code.
 							Append("\\u");
 							int ichr = Convert.ToInt32(chr);
-							String num = String.Format("{0000:x}", ichr);
+							String num = String.Format(CultureInfo.InvariantCulture, "{0000:x}", ichr);
 							Append("0000".Substring(0, 4 - num.Length));
 							Append(num);
 						}
 					}
 					break;
-			};
+			}
 			if (!forString)
 				Append("'");
 		}
@@ -291,7 +302,9 @@ namespace CppTranslator
 				AppendIndentedLine("{");
 			}
 			else
+			{
 				AppendIndentedLine("{");
+			}
 			UpIndent();
 		}
 		/// <summary>
@@ -302,6 +315,10 @@ namespace CppTranslator
 		{
 			AddCloseBrace(false);
 		}
+		/// <summary>
+		/// Add close brace with semicolon if needed
+		/// </summary>
+		/// <param name="needSemicolon">add semi-colon</param>
 		public void AddCloseBrace(bool needSemicolon)
 		{
 			if (!onNewline)
@@ -314,7 +331,9 @@ namespace CppTranslator
 			}
 			Newline();
 		}
-
+		/// <summary>
+		/// Close up formatter
+		/// </summary>
 		public void Close()
 		{
 			if (outputFiler != null)
@@ -330,7 +349,6 @@ namespace CppTranslator
 			Close();
 			outputFiler = new StreamWriter(outputName);
 		}
-
 		/// <summary>
 		/// Stringify everything
 		/// </summary>
@@ -339,15 +357,21 @@ namespace CppTranslator
 		{
 			return (stringBuilder.ToString());
 		}
-
-		public void AppendType(String type)
+		/// <summary>
+		/// Dispose
+		/// </summary>
+		/// <param name="dispose">dispose</param>
+		protected virtual void Dispose(bool dispose)
 		{
-			if (types.ContainsKey(type))
-			{
-				Append(types[type]);
-				return;
-			}
-			Append(type);
+			Close();
+		}
+		/// <summary>
+		/// Dispose
+		/// </summary>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 	}
 }

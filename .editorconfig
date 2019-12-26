@@ -1,0 +1,55 @@
+﻿[*.cs]
+
+# SA1027: Use tabs correctly
+dotnet_diagnostic.SA1027.severity = none
+
+# SA1200: Using directives should be placed correctly
+dotnet_diagnostic.SA1200.severity = none
+
+# SA1623: Property summary documentation should match accessors
+dotnet_diagnostic.SA1623.severity = none
+
+# SA1202: Elements should be ordered by access
+dotnet_diagnostic.SA1202.severity = none
+
+# SA1121: Use built-in type alias
+dotnet_diagnostic.SA1121.severity = none
+
+# IDE0044: Add readonly modifier
+dotnet_style_readonly_field = true:none
+
+# SA1201: Elements should appear in the correct order
+dotnet_diagnostic.SA1201.severity = none
+
+# SA1514: Element documentation header should be preceded by blank line
+dotnet_diagnostic.SA1514.severity = none
+
+# SA1101: Prefix local calls with this
+dotnet_diagnostic.SA1101.severity = none
+
+# CA1062: Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = none
+
+# SA1629: Documentation text should end with a period
+dotnet_diagnostic.SA1629.severity = none
+
+# SA1513: Closing brace should be followed by blank line
+dotnet_diagnostic.SA1513.severity = none
+
+# IDE0047: Remove unnecessary parentheses
+dotnet_diagnostic.IDE0047.severity = none
+
+# SA1119: Statement should not use unnecessary parenthesis
+dotnet_diagnostic.SA1119.severity = none
+
+# SA1204: Static elements should appear before instance elements
+dotnet_diagnostic.SA1204.severity = none
+
+# SA1503: Braces should not be omitted
+dotnet_diagnostic.SA1503.severity = none
+
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = none
+
+# SA1516: Elements should be separated by blank line
+dotnet_diagnostic.SA1516.severity = none

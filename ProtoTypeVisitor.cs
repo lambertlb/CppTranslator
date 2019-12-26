@@ -24,7 +24,7 @@ namespace CppTranslator
 		public override void VisitTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
 			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
-			Formatter.Name_space = type.Namespace;
+			Formatter.NameSpace = type.Namespace;
 			bool isClass = type.Kind == TypeKind.Class;
 			switch (typeDeclaration.ClassType)
 			{
@@ -41,7 +41,7 @@ namespace CppTranslator
 					Formatter.AppendIndented("class ");
 					break;
 			}
-			FormatType(type);
+			TypeVisitor.FormatType(type);
 			if (typeDeclaration.ClassType == ClassType.Enum)
 			{
 				OutputEnumValues(typeDeclaration);

@@ -94,10 +94,9 @@ namespace CppTranslator
 		protected override void HeaderTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
 			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
-			Formatter.Name_space = type.Namespace;
+			Formatter.NameSpace = type.Namespace;
 			if (!namespaces.ContainsKey(type.Namespace))
 				namespaces.Add(type.Namespace, type.Namespace);
-			HadConstructor = false;
 			var sym = typeDeclaration.GetSymbol();
 			switch (typeDeclaration.ClassType)
 			{
@@ -111,7 +110,7 @@ namespace CppTranslator
 					Formatter.AppendIndented("class ");
 					break;
 			}
-			FormatType(type);
+			TypeVisitor.FormatType(type);
 			if (typeDeclaration.BaseTypes.Any())
 			{
 				Formatter.Append(" : public ");
@@ -130,10 +129,6 @@ namespace CppTranslator
 			{
 				member.AcceptVisitor(this);
 			}
-			if ((type.Kind == TypeKind.Class || type.Kind == TypeKind.Struct) && !HadConstructor)
-			{
-				CreateDefaultConstructor(typeDeclaration);
-			}
 			Formatter.AddCloseBrace(true);
 		}
 		protected void WriteBaseClasses(IEnumerable<AstNode> nodes)
@@ -150,15 +145,6 @@ namespace CppTranslator
 				isFirst = false;
 			}
 		}
-
-		public override void CreateDefaultConstructor(TypeDeclaration typeDeclaration)
-		{
-			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
-			Formatter.AppendIndented("");
-			FormatType(type);
-			Formatter.Append("();");
-		}
-
 		public override void VisitConstructorDeclaration(ConstructorDeclaration constructorDeclaration)
 		{
 			TypeDeclaration type = constructorDeclaration.Parent as TypeDeclaration;
@@ -169,8 +155,6 @@ namespace CppTranslator
 				name = constructorDeclaration.NameToken.Name;
 			Formatter.AppendIndented("");
 			IType type2 = constructorDeclaration.GetResolveResult().Type;
-			if (constructorDeclaration.Parameters.Count == 0)
-				HadConstructor = true;
 			WriteMethodHeader(name, constructorDeclaration.Parameters);
 			Formatter.AppendLine(";");
 		}
@@ -179,7 +163,7 @@ namespace CppTranslator
 			Formatter.AppendIndented("");
 			WriteModifiers(methodDeclaration.ModifierTokens);
 			IType type = methodDeclaration.ReturnType.GetResolveResult().Type;
-			FormatTypeDelaration(type);
+			TypeVisitor.FormatTypeDelaration(type);
 			Formatter.Append(" ");
 			WriteMethodHeader(methodDeclaration.NameToken.Name, methodDeclaration.Parameters);
 			if (methodDeclaration.Body.IsNull)
@@ -203,7 +187,7 @@ namespace CppTranslator
 				Formatter.Append("static ");
 			}
 			IType type = fieldDeclaration.ReturnType.GetResolveResult().Type;
-			FormatTypeDelaration(type);
+			TypeVisitor.FormatTypeDelaration(type);
 			Formatter.Append(" ");
 			WriteCommaSeparatedList(fieldDeclaration.Variables);
 			Formatter.AppendLine(";");
@@ -218,7 +202,7 @@ namespace CppTranslator
 			if (propertyDeclaration.Getter != null)
 			{
 				Formatter.AppendIndented("");
-				FormatTypeDelaration(type);
+				TypeVisitor.FormatTypeDelaration(type);
 				Formatter.Append(" get_");
 				Formatter.Append(propertyDeclaration.NameToken.Name);
 				Formatter.AppendLine("();");
@@ -228,7 +212,7 @@ namespace CppTranslator
 				Formatter.AppendIndented("void set_");
 				Formatter.Append(propertyDeclaration.NameToken.Name);
 				Formatter.Append("(");
-				FormatTypeDelaration(type);
+				TypeVisitor.FormatTypeDelaration(type);
 				Formatter.AppendLine(" x_value );");
 			}
 			ICSharpCode.Decompiler.IL.ILFunction inst = propertyDeclaration.Getter.Annotation<ICSharpCode.Decompiler.IL.ILFunction>();
@@ -236,7 +220,7 @@ namespace CppTranslator
 			if (!String.IsNullOrEmpty(hiddenName))
 			{
 				Formatter.AppendIndented("");
-				FormatTypeDelaration(type);
+				TypeVisitor.FormatTypeDelaration(type);
 				Formatter.Append(" ");
 				Formatter.Append(hiddenName);
 				Formatter.AppendLine(";");
@@ -247,7 +231,7 @@ namespace CppTranslator
 			Formatter.AppendIndented("static ");
 			operatorDeclaration.ReturnType.AcceptVisitor(this);
 			Formatter.Append(" ");
-			Formatter.Append(operators[operatorDeclaration.OperatorType]);
+			Formatter.Append(Operators[operatorDeclaration.OperatorType]);
 			WriteCommaSeparatedListInParenthesis(operatorDeclaration.Parameters);
 			Formatter.AppendLine(";");
 		}
