@@ -147,6 +147,7 @@ namespace CppTranslator
 		}
 		public override void VisitConstructorDeclaration(ConstructorDeclaration constructorDeclaration)
 		{
+			bool isStatic = (constructorDeclaration.Modifiers & Modifiers.Static) != 0;
 			TypeDeclaration type = constructorDeclaration.Parent as TypeDeclaration;
 			String name = null;
 			if (type != null && type.Name != constructorDeclaration.Name)
@@ -154,9 +155,20 @@ namespace CppTranslator
 			else
 				name = constructorDeclaration.NameToken.Name;
 			Formatter.AppendIndented("");
-			IType type2 = constructorDeclaration.GetResolveResult().Type;
-			WriteMethodHeader(name, constructorDeclaration.Parameters);
-			Formatter.AppendLine(";");
+			if (!isStatic)
+			{
+				IType type2 = constructorDeclaration.GetResolveResult().Type;
+				WriteMethodHeader(name, constructorDeclaration.Parameters);
+				Formatter.AppendLine(";");
+			} else
+			{
+				Formatter.Append("static Boolean ");
+				Formatter.AppendName(name);
+				Formatter.AppendLine("_Static();");
+				Formatter.AppendIndented("static Boolean ");
+				Formatter.AppendName(name);
+				Formatter.AppendLine("_Initilized;");
+			}
 		}
 		public override void VisitMethodDeclaration(MethodDeclaration methodDeclaration)
 		{
@@ -172,9 +184,9 @@ namespace CppTranslator
 			}
 			Formatter.AppendLine(";");
 		}
-		protected override void WriteMethodHeader(String medodName, AstNodeCollection<ParameterDeclaration> parameters)
+		protected override void WriteMethodHeader(String methodName, AstNodeCollection<ParameterDeclaration> parameters)
 		{
-			Formatter.AppendName(medodName);
+			Formatter.AppendName(methodName);
 			WriteCommaSeparatedListInParenthesis(parameters);
 		}
 		public override void VisitFieldDeclaration(FieldDeclaration fieldDeclaration)

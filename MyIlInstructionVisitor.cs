@@ -20,6 +20,7 @@ namespace CppTranslator
 		internal BlockContainer currentReturnContainer;
 		internal BlockContainer mainContainer;
 		internal int blockIndex;
+		public String Injection { get; set; }
 		/// <summary>
 		/// visitor used for type definition
 		/// </summary>
@@ -193,8 +194,9 @@ namespace CppTranslator
 		{
 			leaveBlocks.Pop();
 		}
-		internal void StartMainBlock(BlockContainer container)
+		internal void StartMainBlock(BlockContainer container, String injection)
 		{
+			Injection = injection;
 			mainContainer = container;
 			InitilizeLocalVariableNames(container.Parent as ILFunction);
 			variableTranslation.Clear();
@@ -220,6 +222,8 @@ namespace CppTranslator
 			{
 				Formatter.AddOpenBrace();
 				WriteBlock(block);
+				if (Injection != null && currentReturnContainer == mainContainer)
+					Formatter.AppendIndentedLine(Injection);
 				Formatter.AddCloseBrace();
 			}
 			if (container != mainContainer && container.LeaveCount > 0)
@@ -241,13 +245,16 @@ namespace CppTranslator
 			}
 			foreach (ILInstruction inst in block.Instructions)
 			{
-				if (Formatter.IsOnNewline)
-					Formatter.AppendIndented("");
-				String st = inst.ToString();
-				inst.AcceptVisitor(this);
-				if (Formatter.CharactersAddedToLine)
-					Formatter.Append(";");
-				Formatter.AppendLine("");
+				Leave leave = inst as Leave;
+				if (String.IsNullOrEmpty(Injection) || leave == null || block.Instructions.Last() != inst || leave.TargetLabel != "IL_0000" || !leave.Value.MatchNop())
+				{
+					if (Formatter.IsOnNewline)
+						Formatter.AppendIndented("");
+					inst.AcceptVisitor(this);
+					if (Formatter.CharactersAddedToLine)
+						Formatter.Append(";");
+					Formatter.AppendLine("");
+				}
 			}
 		}
 
@@ -785,7 +792,7 @@ namespace CppTranslator
 		{
 			WrapTypeIfNeeded(inst.Field.DeclaringType);
 			Formatter.Append("::");
-			Formatter.Append(inst.Field.Name);
+			Formatter.AppendName(inst.Field.Name);
 			return base.VisitLdsFlda(inst);
 		}
 
@@ -1158,7 +1165,7 @@ namespace CppTranslator
 			NewLeaveBlock();
 			Formatter.Append("try");
 			inst.TryBlock.AcceptVisitor(this);
-			foreach (TryCatchHandler handler in inst.Handlers )
+			foreach (TryCatchHandler handler in inst.Handlers)
 			{
 				Formatter.AppendIndented("catch (");
 				TypeVisitor.FormatTypeDelaration(handler.Variable.Type);

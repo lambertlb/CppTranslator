@@ -10,6 +10,7 @@ namespace CppTranslator
 {
 	/// <summary>
 	/// Visitor for everything non-code related in in .Cpp file
+	/// The main function is to is to create the .h file to support the .cpp file.
 	/// </summary>
 	public class CppVisitorBase : IAstVisitor
 	{
@@ -71,7 +72,7 @@ namespace CppTranslator
 		public void VisitAccessor(Accessor accessor)
 		{
 			ICSharpCode.Decompiler.IL.BlockContainer inst = accessor.Body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
-			WriteBlock(inst);
+			MyIlVisitor.StartMainBlock(inst, null);
 		}
 		/// <summary>
 		/// Add standard header to output file
@@ -86,6 +87,184 @@ namespace CppTranslator
 		/// </summary>
 		public virtual void CreateHeaders()
 		{
+		}
+		/// <summary>
+		/// Ouput a comma separated list surrounded by parens
+		/// </summary>
+		/// <param name="nodes">list to output</param>
+		protected void WriteCommaSeparatedListInParenthesis(IEnumerable<AstNode> nodes)
+		{
+			Formatter.Append("(");
+			WriteCommaSeparatedList(nodes);
+			Formatter.Append(")");
+		}
+		/// <summary>
+		/// Output a comma separated list
+		/// </summary>
+		/// <param name="nodes">list to output</param>
+		protected void WriteCommaSeparatedList(IEnumerable<AstNode> nodes)
+		{
+			bool isFirst = true;
+			foreach (AstNode node in nodes)
+			{
+				if (!isFirst)
+				{
+					Formatter.Append(",");
+				}
+				node.AcceptVisitor(this);
+				isFirst = false;
+			}
+		}
+		/// <summary>
+		/// Outout method header
+		/// </summary>
+		/// <param name="methodName">method name</param>
+		/// <param name="parameters">parameter collection</param>
+		protected virtual void WriteMethodHeader(String methodName, AstNodeCollection<ParameterDeclaration> parameters)
+		{
+			TypeVisitor.FormatType(CurrentClass);
+			Formatter.Append("::");
+			Formatter.AppendName(methodName);
+			WriteCommaSeparatedListInParenthesis(parameters);
+		}
+		/// <summary>
+		/// Ouput this method
+		/// </summary>
+		/// <param name="methodName">method name</param>
+		/// <param name="parameters">parameter collection</param>
+		/// <param name="body">of method</param>
+		protected virtual void WriteMethod(String methodName, AstNodeCollection<ParameterDeclaration> parameters, BlockStatement body)
+		{
+			CurrentMethodName = methodName;
+			WriteMethodHeader(methodName, parameters);
+			ICSharpCode.Decompiler.IL.BlockContainer inst = body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
+			MyIlVisitor.StartMainBlock(inst, null);
+		}
+		/// <summary>
+		/// Is this a property
+		/// </summary>
+		/// <param name="memberReferenceExpression">item to test</param>
+		/// <returns>true if is property</returns>
+		private bool IsProperty(MemberReferenceExpression memberReferenceExpression)
+		{
+			return (IsGetProperty(memberReferenceExpression) || IsSetProperty(memberReferenceExpression));
+		}
+		/// <summary>
+		/// Is this a setter
+		/// </summary>
+		/// <param name="memberReferenceExpression">item to test</param>
+		/// <returns>true if setter</returns>
+		private static bool IsSetProperty(MemberReferenceExpression memberReferenceExpression)
+		{
+			var sym = memberReferenceExpression.GetSymbol();
+			return (sym != null && sym.SymbolKind == SymbolKind.Property);
+		}
+		/// <summary>
+		/// Is this a getter
+		/// </summary>
+		/// <param name="memberReferenceExpression">item to test</param>
+		/// <returns>true if setter</returns>
+		private static bool IsGetProperty(MemberReferenceExpression memberReferenceExpression)
+		{
+			ICSharpCode.Decompiler.IL.ILInstruction inst = memberReferenceExpression.Annotation<ICSharpCode.Decompiler.IL.ILInstruction>();
+			if (inst == null || !(inst is ICSharpCode.Decompiler.IL.CallInstruction))
+			{
+				return (false);
+			}
+			ICSharpCode.Decompiler.IL.CallInstruction call = inst as ICSharpCode.Decompiler.IL.CallInstruction;
+			return (call.Method.Name.StartsWith("get_", StringComparison.InvariantCulture));
+		}
+		/// <summary>
+		/// output method modifiers
+		/// </summary>
+		/// <param name="modifierTokens">collection of modifiers</param>
+		protected virtual void WriteModifiers(IEnumerable<CSharpModifierToken> modifierTokens)
+		{
+			foreach (CSharpModifierToken modifier in modifierTokens)
+			{
+				if (modifier.Modifier == Modifiers.Static)
+				{
+					Formatter.Append("static ");
+				}
+				if (modifier.Modifier == Modifiers.Abstract)
+				{
+					Formatter.Append("virtual ");
+				}
+				if (modifier.Modifier == Modifiers.Virtual)
+				{
+					Formatter.Append("virtual ");
+				}
+			}
+		}
+		/// <summary>
+		/// Output parameter modifiers
+		/// </summary>
+		/// <param name="parameterDeclaration">parameter Declaration</param>
+		protected void AddParameterModifiers(ParameterDeclaration parameterDeclaration)
+		{
+			switch (parameterDeclaration.ParameterModifier)
+			{
+				case ParameterModifier.Ref:
+					Formatter.Append("& ");
+					break;
+				case ParameterModifier.Out:
+					Formatter.Append("* ");
+					break;
+				case ParameterModifier.Params:
+					break;
+				case ParameterModifier.In:
+					break;
+			}
+		}
+		/// <summary>
+		/// Header type declaration
+		/// </summary>
+		/// <param name="typeDeclaration">type declaration</param>
+		protected virtual void HeaderTypeDeclaration(TypeDeclaration typeDeclaration)
+		{
+			CurrentClass = typeDeclaration.GetResolveResult().Type;
+			Formatter.NameSpace = CurrentClass.Namespace;
+			Fields = typeDeclaration.Members;
+			foreach (var member in typeDeclaration.Members)
+			{
+				member.AcceptVisitor(this);
+			}
+			Fields = null;
+		}
+		/// <summary>
+		/// Output method body
+		/// </summary>
+		/// <param name="body">to output</param>
+		protected virtual void WriteMethodBody(BlockStatement body, String injection)
+		{
+			if (body.IsNull)
+			{
+				Formatter.Append(";");
+			}
+			else
+			{
+				ICSharpCode.Decompiler.IL.BlockContainer inst = body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
+				MyIlVisitor.StartMainBlock(inst, injection);
+			}
+		}
+		/// <summary>
+		/// Output static field declarations
+		/// </summary>
+		/// <param name="fieldDeclaration">field to declare</param>
+		private void FormatStaticFieldDeclaration(FieldDeclaration fieldDeclaration)
+		{
+			VariableInitializer variable = fieldDeclaration.Variables.First<VariableInitializer>();
+			var sym = fieldDeclaration.GetSymbol() as IEntity;
+			if (sym.IsStatic)
+			{
+				Formatter.AppendIndented(String.Empty);
+				fieldDeclaration.ReturnType.GetResolveResult().Type.AcceptVisitor(TypeVisitor);
+				Formatter.Append(" ");
+				TypeVisitor.FormatType(CurrentClass);
+				Formatter.Append("::");
+				WriteCommaSeparatedList(fieldDeclaration.Variables);
+				Formatter.AppendLine(";");
+			}
 		}
 		/// <inheritdoc/>
 		public void VisitAnonymousMethodExpression(AnonymousMethodExpression anonymousMethodExpression)
@@ -187,39 +366,6 @@ namespace CppTranslator
 		{
 			throw new NotImplementedException();
 		}
-		/// <summary>
-		/// Outout method header
-		/// </summary>
-		/// <param name="methodName">method name</param>
-		/// <param name="parameters">parameter collection</param>
-		protected virtual void WriteMethodHeader(String methodName, AstNodeCollection<ParameterDeclaration> parameters)
-		{
-			TypeVisitor.FormatType(CurrentClass);
-			Formatter.Append("::");
-			Formatter.AppendName(methodName);
-			WriteCommaSeparatedListInParenthesis(parameters);
-		}
-		/// <summary>
-		/// Ouput this method
-		/// </summary>
-		/// <param name="methodName">method name</param>
-		/// <param name="parameters">parameter collection</param>
-		/// <param name="body">of method</param>
-		protected virtual void WriteMethod(String methodName, AstNodeCollection<ParameterDeclaration> parameters, BlockStatement body)
-		{
-			CurrentMethodName = methodName;
-			WriteMethodHeader(methodName, parameters);
-			ICSharpCode.Decompiler.IL.BlockContainer inst = body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
-			WriteBlock(inst);
-		}
-		/// <summary>
-		/// Output the IlInstructions for the method
-		/// </summary>
-		/// <param name="inst">block with instructions</param>
-		private void WriteBlock(ICSharpCode.Decompiler.IL.BlockContainer inst)
-		{
-			MyIlVisitor.StartMainBlock(inst);
-		}
 		/// <inheritdoc/>
 		public void VisitConstructorInitializer(ConstructorInitializer constructorInitializer)
 		{
@@ -310,6 +456,9 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		public virtual void VisitFieldDeclaration(FieldDeclaration fieldDeclaration)
 		{
+			if ((fieldDeclaration.Modifiers & Modifiers.Static) != 0)
+				FormatStaticFieldDeclaration(fieldDeclaration);
+
 		}
 		/// <inheritdoc/>
 		public void VisitFixedFieldDeclaration(FixedFieldDeclaration fixedFieldDeclaration)
@@ -391,33 +540,6 @@ namespace CppTranslator
 		public void VisitInvocationExpression(InvocationExpression invocationExpression)
 		{
 		}
-		/// <summary>
-		/// Ouput a comma separated list surrounded by parens
-		/// </summary>
-		/// <param name="nodes">list to output</param>
-		protected void WriteCommaSeparatedListInParenthesis(IEnumerable<AstNode> nodes)
-		{
-			Formatter.Append("(");
-			WriteCommaSeparatedList(nodes);
-			Formatter.Append(")");
-		}
-		/// <summary>
-		/// Output a comma separated list
-		/// </summary>
-		/// <param name="nodes">list to output</param>
-		protected void WriteCommaSeparatedList(IEnumerable<AstNode> nodes)
-		{
-			bool isFirst = true;
-			foreach (AstNode node in nodes)
-			{
-				if (!isFirst)
-				{
-					Formatter.Append(",");
-				}
-				node.AcceptVisitor(this);
-				isFirst = false;
-			}
-		}
 		/// <inheritdoc/>
 		public void VisitIsExpression(IsExpression isExpression)
 		{
@@ -447,40 +569,6 @@ namespace CppTranslator
 		public void VisitMemberReferenceExpression(MemberReferenceExpression memberReferenceExpression)
 		{
 		}
-		/// <summary>
-		/// Is this a property
-		/// </summary>
-		/// <param name="memberReferenceExpression">item to test</param>
-		/// <returns>true if is property</returns>
-		private bool IsProperty(MemberReferenceExpression memberReferenceExpression)
-		{
-			return (IsGetProperty(memberReferenceExpression) || IsSetProperty(memberReferenceExpression));
-		}
-		/// <summary>
-		/// Is this a setter
-		/// </summary>
-		/// <param name="memberReferenceExpression">item to test</param>
-		/// <returns>true if setter</returns>
-		private static bool IsSetProperty(MemberReferenceExpression memberReferenceExpression)
-		{
-			var sym = memberReferenceExpression.GetSymbol();
-			return (sym != null && sym.SymbolKind == SymbolKind.Property);
-		}
-		/// <summary>
-		/// Is this a getter
-		/// </summary>
-		/// <param name="memberReferenceExpression">item to test</param>
-		/// <returns>true if setter</returns>
-		private static bool IsGetProperty(MemberReferenceExpression memberReferenceExpression)
-		{
-			ICSharpCode.Decompiler.IL.ILInstruction inst = memberReferenceExpression.Annotation<ICSharpCode.Decompiler.IL.ILInstruction>();
-			if (inst == null || !(inst is ICSharpCode.Decompiler.IL.CallInstruction))
-			{
-				return (false);
-			}
-			ICSharpCode.Decompiler.IL.CallInstruction call = inst as ICSharpCode.Decompiler.IL.CallInstruction;
-			return (call.Method.Name.StartsWith("get_", StringComparison.InvariantCulture));
-		}
 		/// <inheritdoc/>
 		public void VisitMemberType(MemberType memberType)
 		{
@@ -499,28 +587,6 @@ namespace CppTranslator
 			TypeVisitor.FormatTypeDelaration(type);
 			Formatter.Append(" ");
 			WriteMethod(methodDeclaration.NameToken.Name, methodDeclaration.Parameters, methodDeclaration.Body);
-		}
-		/// <summary>
-		/// output method modifiers
-		/// </summary>
-		/// <param name="modifierTokens">collection of modifiers</param>
-		protected virtual void WriteModifiers(IEnumerable<CSharpModifierToken> modifierTokens)
-		{
-			foreach (CSharpModifierToken modifier in modifierTokens)
-			{
-				if (modifier.Modifier == Modifiers.Static)
-				{
-					Formatter.Append("static ");
-				}
-				if (modifier.Modifier == Modifiers.Abstract)
-				{
-					Formatter.Append("virtual ");
-				}
-				if (modifier.Modifier == Modifiers.Virtual)
-				{
-					Formatter.Append("virtual ");
-				}
-			}
 		}
 		/// <inheritdoc/>
 		public void VisitNamedArgumentExpression(NamedArgumentExpression namedArgumentExpression)
@@ -568,7 +634,7 @@ namespace CppTranslator
 			Formatter.Append(Operators[operatorDeclaration.OperatorType]);
 			WriteCommaSeparatedListInParenthesis(operatorDeclaration.Parameters);
 			ICSharpCode.Decompiler.IL.BlockContainer inst = operatorDeclaration.Body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
-			WriteBlock(inst);
+			MyIlVisitor.StartMainBlock(inst, null);
 		}
 		/// <inheritdoc/>
 		public void VisitOutVarDeclarationExpression(OutVarDeclarationExpression outVarDeclarationExpression)
@@ -583,26 +649,6 @@ namespace CppTranslator
 			AddParameterModifiers(parameterDeclaration);
 			Formatter.Append(" ");
 			Formatter.AppendName(parameterDeclaration.NameToken.Name);
-		}
-		/// <summary>
-		/// Output parameter modifiers
-		/// </summary>
-		/// <param name="parameterDeclaration">parameter Declaration</param>
-		protected void AddParameterModifiers(ParameterDeclaration parameterDeclaration)
-		{
-			switch (parameterDeclaration.ParameterModifier)
-			{
-				case ParameterModifier.Ref:
-					Formatter.Append("& ");
-					break;
-				case ParameterModifier.Out:
-					Formatter.Append("* ");
-					break;
-				case ParameterModifier.Params:
-					break;
-				case ParameterModifier.In:
-					break;
-			}
 		}
 		/// <inheritdoc/>
 		public void VisitParenthesizedExpression(ParenthesizedExpression parenthesizedExpression)
@@ -696,7 +742,7 @@ namespace CppTranslator
 				Formatter.Append(propertyDeclaration.NameToken.Name);
 				Formatter.AppendLine("()");
 				ICSharpCode.Decompiler.IL.ILFunction inst = propertyDeclaration.Getter.Annotation<ICSharpCode.Decompiler.IL.ILFunction>();
-				WriteBlock(inst.Body as ICSharpCode.Decompiler.IL.BlockContainer);
+				MyIlVisitor.StartMainBlock(inst.Body as ICSharpCode.Decompiler.IL.BlockContainer, null);
 			}
 			if (propertyDeclaration.Setter != null)
 			{
@@ -709,7 +755,7 @@ namespace CppTranslator
 				TypeVisitor.FormatTypeDelaration(type);
 				Formatter.AppendLine(" x_value )");
 				ICSharpCode.Decompiler.IL.ILFunction inst = propertyDeclaration.Setter.Annotation<ICSharpCode.Decompiler.IL.ILFunction>();
-				WriteBlock(inst.Body as ICSharpCode.Decompiler.IL.BlockContainer);
+				MyIlVisitor.StartMainBlock(inst.Body as ICSharpCode.Decompiler.IL.BlockContainer, null);
 			}
 		}
 		/// <inheritdoc/>
@@ -848,42 +894,10 @@ namespace CppTranslator
 				HeaderTypeDeclaration(typeDeclaration);
 			}
 		}
-		/// <summary>
-		/// Header type declaration
-		/// </summary>
-		/// <param name="typeDeclaration">type declaration</param>
-		protected virtual void HeaderTypeDeclaration(TypeDeclaration typeDeclaration)
-		{
-			CurrentClass = typeDeclaration.GetResolveResult().Type;
-			Formatter.NameSpace = CurrentClass.Namespace;
-			Fields = typeDeclaration.Members;
-			CreateStaticVariables();
-			foreach (var member in typeDeclaration.Members)
-			{
-				member.AcceptVisitor(this);
-			}
-			Fields = null;
-		}
-		/// <summary>
-		/// Add any static field storage to cpp file
-		/// </summary>
-		private void CreateStaticVariables()
-		{
-			if (Fields == null)
-			{
-				return;
-			}
-			foreach (var member in Fields)
-			{
-				if (member is FieldDeclaration)
-				{
-					FormatStaticFieldDeclaration((FieldDeclaration)member);
-				}
-			}
-		}
 		/// <inheritdoc/>
 		public virtual void VisitConstructorDeclaration(ConstructorDeclaration constructorDeclaration)
 		{
+			bool isStatic = (constructorDeclaration.Modifiers & Modifiers.Static) != 0;
 			DoingConstructor = true;
 			TypeDeclaration type = constructorDeclaration.Parent as TypeDeclaration;
 			String name = null;
@@ -893,56 +907,49 @@ namespace CppTranslator
 				name = constructorDeclaration.NameToken.Name;
 			Formatter.AppendIndented(String.Empty);
 			CurrentMethodName = name;
-			WriteMethodHeader(name, constructorDeclaration.Parameters);
-			if (!constructorDeclaration.Initializer.IsNull)
+			String injection = null;
+			if (!isStatic)
 			{
-				Formatter.Append(" ");
-				constructorDeclaration.Initializer.AcceptVisitor(this);
-			}
-			WriteMethodBody(constructorDeclaration.Body);
-			DoingConstructor = false;
-		}
-		/// <summary>
-		/// Output method body
-		/// </summary>
-		/// <param name="body">to output</param>
-		protected virtual void WriteMethodBody(BlockStatement body)
-		{
-			if (body.IsNull)
-			{
-				Formatter.Append(";");
+				WriteMethodHeader(name, constructorDeclaration.Parameters);
+				if (!constructorDeclaration.Initializer.IsNull)
+				{
+					Formatter.Append(" ");
+					constructorDeclaration.Initializer.AcceptVisitor(this);
+				}
 			}
 			else
 			{
-				ICSharpCode.Decompiler.IL.BlockContainer inst = body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
-				WriteBlock(inst);
-			}
-		}
-		/// <summary>
-		/// Output static field declarations
-		/// </summary>
-		/// <param name="fieldDeclaration">field to declare</param>
-		private void FormatStaticFieldDeclaration(FieldDeclaration fieldDeclaration)
-		{
-			VariableInitializer variable = fieldDeclaration.Variables.First<VariableInitializer>();
-			var sym = fieldDeclaration.GetSymbol() as IEntity;
-			if (sym.IsStatic)
-			{
-				Formatter.AppendIndented(String.Empty);
-				fieldDeclaration.ReturnType.GetResolveResult().Type.AcceptVisitor(TypeVisitor);
-				Formatter.Append(" ");
+				Formatter.Append("Boolean ");
 				TypeVisitor.FormatType(CurrentClass);
 				Formatter.Append("::");
-				WriteCommaSeparatedList(fieldDeclaration.Variables);
-				Formatter.AppendLine(";");
+				Formatter.AppendName(name);
+				Formatter.AppendLine("_Static()");
+				injection = "return (true);";
+			}
+			WriteMethodBody(constructorDeclaration.Body, injection);
+			DoingConstructor = false;
+			if (isStatic)
+			{
+				Formatter.AppendIndented("Boolean ");
+				TypeVisitor.FormatType(CurrentClass);
+				Formatter.Append("::");
+				Formatter.AppendName(name);
+				Formatter.Append("_Initilized = ");
+				TypeVisitor.FormatType(CurrentClass);
+				Formatter.Append("::");
+				Formatter.AppendName(name);
+				Formatter.AppendLine("_Static();");
 			}
 		}
 		/// <inheritdoc/>
 		public virtual void VisitVariableInitializer(VariableInitializer variableInitializer)
 		{
 			Formatter.AppendName(variableInitializer.Name);
-			Formatter.Append(" = ");
-			variableInitializer.Initializer.AcceptVisitor(this);
+			if (!variableInitializer.Initializer.IsNull)
+			{
+				Formatter.Append(" = ");
+				variableInitializer.Initializer.AcceptVisitor(this);
+			}
 		}
 		/// <inheritdoc/>
 		public void VisitTypeOfExpression(TypeOfExpression typeOfExpression)
