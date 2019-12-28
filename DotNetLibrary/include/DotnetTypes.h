@@ -4,6 +4,8 @@
 #pragma warning( disable : 4018 )
 #pragma warning( disable : 4102 )
 #pragma warning( disable : 4101 )
+#pragma warning( disable : 26812 )
+#pragma warning( disable : 26495 )
 #ifdef	DOTNETLIBRARY_EXPORTS
 #define	DLL_EXPORT	__declspec( dllexport )
 #else

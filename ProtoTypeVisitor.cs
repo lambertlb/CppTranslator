@@ -1,26 +1,52 @@
-﻿using ICSharpCode.Decompiler.CSharp.Syntax;
+﻿// Copyright (c) 2019 LLambert
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this
+// software and associated documentation files (the "Software"), to deal in the Software
+// without restriction, including without limitation the rights to use, copy, modify, merge,
+// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
+// to whom the Software is furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all copies or
+// substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+// DEALINGS IN THE SOFTWARE.
+using ICSharpCode.Decompiler.CSharp.Syntax;
 using ICSharpCode.Decompiler.Semantics;
 using ICSharpCode.Decompiler.TypeSystem;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CppTranslator
 {
-	class ProtoTypeVisitor : CppVisitorBase
+	/// <summary>
+	/// Worker for handling functional prototypes
+	/// </summary>
+	public class ProtoTypeVisitor : CppVisitorBase
 	{
 		private String EnumName { get; set; }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ProtoTypeVisitor"/> class.
+		/// Constructor
+		/// </summary>
+		/// <param name="formatter">for output</param>
 		public ProtoTypeVisitor(Formatter formatter) : base(formatter)
 		{
 		}
+		/// <summary>
+		/// Add headers to output
+		/// </summary>
 		public override void AddHeaders()
 		{
 			Formatter.AppendLine("#pragma once");
 			Formatter.AppendLine("#include \"DotnetTypes.h\"");
 			Formatter.AppendLine("using namespace DotnetLibrary;");
-			Formatter.AppendLine("");
+			Formatter.AppendLine(String.Empty);
 		}
-
+		/// <inheritdoc/>
 		public override void VisitTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
 			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
@@ -50,7 +76,7 @@ namespace CppTranslator
 			{
 				Formatter.Append(";");
 			}
-			Formatter.AppendLine("");
+			Formatter.AppendLine(String.Empty);
 		}
 		private void OutputEnumValues(TypeDeclaration typeDeclaration)
 		{
@@ -68,6 +94,7 @@ namespace CppTranslator
 			}
 			Formatter.AddCloseBrace(true);
 		}
+		/// <inheritdoc/>
 		public override void VisitEnumMemberDeclaration(EnumMemberDeclaration enumMemberDeclaration)
 		{
 			Formatter.AppendIndentedName(enumMemberDeclaration.NameToken.Name);

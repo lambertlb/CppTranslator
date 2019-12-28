@@ -53,3 +53,39 @@ dotnet_diagnostic.CA1822.severity = none
 
 # SA1516: Elements should be separated by blank line
 dotnet_diagnostic.SA1516.severity = none
+
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = none
+
+# SA1128: Put constructor initializers on their own line
+dotnet_diagnostic.SA1128.severity = none
+
+# CA1305: Specify IFormatProvider
+dotnet_diagnostic.CA1305.severity = none
+
+# SA1515: Single-line comment should be preceded by blank line
+dotnet_diagnostic.SA1515.severity = none
+
+# IDE0019: Use pattern matching
+csharp_style_pattern_matching_over_as_with_null_check = true:none
+
+# IDE0020: Use pattern matching
+csharp_style_pattern_matching_over_is_with_cast_check = true:none
+
+# IDE0059: Unnecessary assignment of a value
+csharp_style_unused_value_assignment_preference = discard_variable:none
+
+# IDE0018: Inline variable declaration
+csharp_style_inlined_variable_declaration = true:none
+
+# IDE0017: Simplify object initialization
+dotnet_style_object_initializer = true:none
+
+# SA1508: Closing braces should not be preceded by blank line
+dotnet_diagnostic.SA1508.severity = none
+
+# SA0001: XML comment analysis is disabled due to project configuration
+dotnet_diagnostic.SA0001.severity = none
+
+# SA1520: Use braces consistently
+dotnet_diagnostic.SA1520.severity = none

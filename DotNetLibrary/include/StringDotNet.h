@@ -8,20 +8,32 @@ namespace DotnetLibrary
 
 	class DLL_EXPORT String : public Object
 	{
+	private:
+		Char* characterData;
+		size_t	length = 0;
 	public:
 		String(const Char* string) {
 			characterData = (Char*)string;
+			length = 0;
 		}
 		String(const char* string, const Int32 startIndex = -1, const Int32 toUse = -1) {
-			size_t length = strlen(string);
+			length = strlen(string);
 			characterData = new Char[DataTypeSize[ByteType] * length];
 			for (size_t i = 0; i < length; ++i) {
 				characterData[i] = string[i];
 			}
 		}
-		String(const Char chr, const Int32 amount) {}
+		String(const Char chr, const Int32 amount)
+		{
+			characterData = nullptr;
+			length = 0;
+		}
 
-		String(Array* chrs, const Int32 startIndex = -1, const Int32 toUse = -1) {}
+		String(Array* chrs, const Int32 startIndex = -1, const Int32 toUse = -1)
+		{
+			characterData = nullptr;
+			length = 0;
+		}
 
 		virtual Boolean StartsWith(String* what) {
 			return(false);
@@ -96,8 +108,5 @@ namespace DotnetLibrary
 		CharEnumerator* GetEnumerator() { return(nullptr); }
 		String operator+=(Object* obj) { return(*this); }
 		static String* Empty;
-	private:
-		Char* characterData;
-		Int32	length;
 	};
 }

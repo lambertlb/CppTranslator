@@ -1,10 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿// Copyright (c) 2019 LLambert
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this
+// software and associated documentation files (the "Software"), to deal in the Software
+// without restriction, including without limitation the rights to use, copy, modify, merge,
+// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
+// to whom the Software is furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all copies or
+// substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+// FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+// DEALINGS IN THE SOFTWARE.
+
 using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.CSharp.Syntax;
 using ICSharpCode.Decompiler.CSharp.Syntax.PatternMatching;
 using ICSharpCode.Decompiler.TypeSystem;
+using System;
+using System.Collections.Generic;
 
 namespace CppTranslator
 {
@@ -19,14 +36,6 @@ namespace CppTranslator
 		/// </summary>
 		public IType CurrentClass { get; set; }
 		/// <summary>
-		/// Current method is a constructor
-		/// </summary>
-		public bool DoingConstructor { get; set; }
-		/// <summary>
-		/// Collection of fields for current class
-		/// </summary>
-		public AstNodeCollection<EntityDeclaration> Fields { get; private set; }
-		/// <summary>
 		/// visitor used for type definition
 		/// </summary>
 		public CppTypeVisitor TypeVisitor { get; set; }
@@ -38,10 +47,6 @@ namespace CppTranslator
 		/// Used for formatting output
 		/// </summary>
 		public Formatter Formatter { get; set; }
-		/// <summary>
-		/// Name of current method
-		/// </summary>
-		public String CurrentMethodName { get; set; }
 		/// <summary>
 		/// Operator mapping to names
 		/// </summary>
@@ -135,44 +140,9 @@ namespace CppTranslator
 		/// <param name="body">of method</param>
 		protected virtual void WriteMethod(String methodName, AstNodeCollection<ParameterDeclaration> parameters, BlockStatement body)
 		{
-			CurrentMethodName = methodName;
 			WriteMethodHeader(methodName, parameters);
 			ICSharpCode.Decompiler.IL.BlockContainer inst = body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
 			MyIlVisitor.StartMainBlock(inst, null);
-		}
-		/// <summary>
-		/// Is this a property
-		/// </summary>
-		/// <param name="memberReferenceExpression">item to test</param>
-		/// <returns>true if is property</returns>
-		private bool IsProperty(MemberReferenceExpression memberReferenceExpression)
-		{
-			return (IsGetProperty(memberReferenceExpression) || IsSetProperty(memberReferenceExpression));
-		}
-		/// <summary>
-		/// Is this a setter
-		/// </summary>
-		/// <param name="memberReferenceExpression">item to test</param>
-		/// <returns>true if setter</returns>
-		private static bool IsSetProperty(MemberReferenceExpression memberReferenceExpression)
-		{
-			var sym = memberReferenceExpression.GetSymbol();
-			return (sym != null && sym.SymbolKind == SymbolKind.Property);
-		}
-		/// <summary>
-		/// Is this a getter
-		/// </summary>
-		/// <param name="memberReferenceExpression">item to test</param>
-		/// <returns>true if setter</returns>
-		private static bool IsGetProperty(MemberReferenceExpression memberReferenceExpression)
-		{
-			ICSharpCode.Decompiler.IL.ILInstruction inst = memberReferenceExpression.Annotation<ICSharpCode.Decompiler.IL.ILInstruction>();
-			if (inst == null || !(inst is ICSharpCode.Decompiler.IL.CallInstruction))
-			{
-				return (false);
-			}
-			ICSharpCode.Decompiler.IL.CallInstruction call = inst as ICSharpCode.Decompiler.IL.CallInstruction;
-			return (call.Method.Name.StartsWith("get_", StringComparison.InvariantCulture));
 		}
 		/// <summary>
 		/// output method modifiers
@@ -182,15 +152,15 @@ namespace CppTranslator
 		{
 			foreach (CSharpModifierToken modifier in modifierTokens)
 			{
-				if (modifier.Modifier == Modifiers.Static)
+				if ((modifier.Modifier & Modifiers.Static) != 0)
 				{
 					Formatter.Append("static ");
 				}
-				if (modifier.Modifier == Modifiers.Abstract)
+				if ((modifier.Modifier & Modifiers.Abstract) != 0)
 				{
 					Formatter.Append("virtual ");
 				}
-				if (modifier.Modifier == Modifiers.Virtual)
+				if ((modifier.Modifier & Modifiers.Virtual) != 0)
 				{
 					Formatter.Append("virtual ");
 				}
@@ -224,17 +194,16 @@ namespace CppTranslator
 		{
 			CurrentClass = typeDeclaration.GetResolveResult().Type;
 			Formatter.NameSpace = CurrentClass.Namespace;
-			Fields = typeDeclaration.Members;
 			foreach (var member in typeDeclaration.Members)
 			{
 				member.AcceptVisitor(this);
 			}
-			Fields = null;
 		}
 		/// <summary>
 		/// Output method body
 		/// </summary>
 		/// <param name="body">to output</param>
+		/// <param name="injection">statements to inject</param>
 		protected virtual void WriteMethodBody(BlockStatement body, String injection)
 		{
 			if (body.IsNull)
@@ -253,18 +222,13 @@ namespace CppTranslator
 		/// <param name="fieldDeclaration">field to declare</param>
 		private void FormatStaticFieldDeclaration(FieldDeclaration fieldDeclaration)
 		{
-			VariableInitializer variable = fieldDeclaration.Variables.First<VariableInitializer>();
-			var sym = fieldDeclaration.GetSymbol() as IEntity;
-			if (sym.IsStatic)
-			{
-				Formatter.AppendIndented(String.Empty);
-				fieldDeclaration.ReturnType.GetResolveResult().Type.AcceptVisitor(TypeVisitor);
-				Formatter.Append(" ");
-				TypeVisitor.FormatType(CurrentClass);
-				Formatter.Append("::");
-				WriteCommaSeparatedList(fieldDeclaration.Variables);
-				Formatter.AppendLine(";");
-			}
+			Formatter.AppendIndented(String.Empty);
+			fieldDeclaration.ReturnType.GetResolveResult().Type.AcceptVisitor(TypeVisitor);
+			Formatter.Append(" ");
+			TypeVisitor.FormatType(CurrentClass);
+			Formatter.Append("::");
+			WriteCommaSeparatedList(fieldDeclaration.Variables);
+			Formatter.AppendLine(";");
 		}
 		/// <inheritdoc/>
 		public void VisitAnonymousMethodExpression(AnonymousMethodExpression anonymousMethodExpression)
@@ -458,7 +422,6 @@ namespace CppTranslator
 		{
 			if ((fieldDeclaration.Modifiers & Modifiers.Static) != 0)
 				FormatStaticFieldDeclaration(fieldDeclaration);
-
 		}
 		/// <inheritdoc/>
 		public void VisitFixedFieldDeclaration(FixedFieldDeclaration fixedFieldDeclaration)
@@ -577,16 +540,15 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		public virtual void VisitMethodDeclaration(MethodDeclaration methodDeclaration)
 		{
-			if (methodDeclaration.Body.IsNull)
+			if (!methodDeclaration.Body.IsNull)
 			{
-				return;
+				Formatter.AppendIndented(String.Empty);
+				IType type = methodDeclaration.ReturnType.GetResolveResult().Type;
+				MyIlVisitor.MethodReturnType = type;
+				TypeVisitor.FormatTypeDelaration(type);
+				Formatter.Append(" ");
+				WriteMethod(methodDeclaration.NameToken.Name, methodDeclaration.Parameters, methodDeclaration.Body);
 			}
-			Formatter.AppendIndented(String.Empty);
-			IType type = methodDeclaration.ReturnType.GetResolveResult().Type;
-			MyIlVisitor.MethodReturnType = type;
-			TypeVisitor.FormatTypeDelaration(type);
-			Formatter.Append(" ");
-			WriteMethod(methodDeclaration.NameToken.Name, methodDeclaration.Parameters, methodDeclaration.Body);
 		}
 		/// <inheritdoc/>
 		public void VisitNamedArgumentExpression(NamedArgumentExpression namedArgumentExpression)
@@ -596,9 +558,7 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		public void VisitNamedExpression(NamedExpression namedExpression)
 		{
-			Formatter.AppendName(namedExpression.NameToken.Name);
-			Formatter.Append(" = ");
-			namedExpression.Expression.AcceptVisitor(this);
+			throw new NotImplementedException();
 		}
 		/// <inheritdoc/>
 		public void VisitNamespaceDeclaration(NamespaceDeclaration namespaceDeclaration)
@@ -613,6 +573,7 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		public void VisitNullNode(AstNode nullNode)
 		{
+			throw new NotImplementedException();
 		}
 		/// <inheritdoc/>
 		public void VisitNullReferenceExpression(NullReferenceExpression nullReferenceExpression)
@@ -622,6 +583,7 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		public void VisitObjectCreateExpression(ObjectCreateExpression objectCreateExpression)
 		{
+			throw new NotImplementedException();
 		}
 		/// <inheritdoc/>
 		public virtual void VisitOperatorDeclaration(OperatorDeclaration operatorDeclaration)
@@ -653,9 +615,7 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		public void VisitParenthesizedExpression(ParenthesizedExpression parenthesizedExpression)
 		{
-			Formatter.Append("( ");
-			parenthesizedExpression.Expression.AcceptVisitor(this);
-			Formatter.Append(" )");
+			throw new NotImplementedException();
 		}
 		/// <inheritdoc/>
 		public void VisitPatternPlaceholder(AstNode placeholder, Pattern pattern)
@@ -692,21 +652,9 @@ namespace CppTranslator
 				Formatter.Append("Value(");
 			}
 			if (primitiveExpression.Value is Boolean)
-			{
-				if ((Boolean)(primitiveExpression.Value))
-				{
-					Formatter.Append("true");
-				}
-				else
-				{
-					Formatter.Append("false");
-				}
-			}
+				Formatter.Append((Boolean)primitiveExpression.Value ? "true" : "false");
 			else if (primitiveExpression.Value is Char)
-			{
-				Char v = (Char)primitiveExpression.Value;
-				Formatter.AppendCharWithControls(v, false);
-			}
+				Formatter.AppendCharWithControls((Char)primitiveExpression.Value, false);
 			else if (type.Name == "Single")
 			{
 				Formatter.Append("((Single)");
@@ -714,18 +662,14 @@ namespace CppTranslator
 				Formatter.Append(")");
 			}
 			else
-			{
 				Formatter.Append(primitiveExpression.Value.ToString());
-			}
 			if (box != null)
-			{
 				Formatter.Append(")");
-			}
 		}
 		/// <inheritdoc/>
 		public void VisitPrimitiveType(PrimitiveType primitiveType)
 		{
-			TypeVisitor.AppendType(primitiveType.Keyword);
+			throw new NotImplementedException();
 		}
 		/// <inheritdoc/>
 		public virtual void VisitPropertyDeclaration(PropertyDeclaration propertyDeclaration)
@@ -898,58 +842,48 @@ namespace CppTranslator
 		public virtual void VisitConstructorDeclaration(ConstructorDeclaration constructorDeclaration)
 		{
 			bool isStatic = (constructorDeclaration.Modifiers & Modifiers.Static) != 0;
-			DoingConstructor = true;
 			TypeDeclaration type = constructorDeclaration.Parent as TypeDeclaration;
-			String name = null;
+			String name;
 			if (type != null && type.Name != constructorDeclaration.Name)
 				name = type.NameToken.Name;
 			else
 				name = constructorDeclaration.NameToken.Name;
 			Formatter.AppendIndented(String.Empty);
-			CurrentMethodName = name;
-			String injection = null;
-			if (!isStatic)
-			{
-				WriteMethodHeader(name, constructorDeclaration.Parameters);
-				if (!constructorDeclaration.Initializer.IsNull)
-				{
-					Formatter.Append(" ");
-					constructorDeclaration.Initializer.AcceptVisitor(this);
-				}
-			}
-			else
-			{
-				Formatter.Append("Boolean ");
-				TypeVisitor.FormatType(CurrentClass);
-				Formatter.Append("::");
-				Formatter.AppendName(name);
-				Formatter.AppendLine("_Static()");
-				injection = "return (true);";
-			}
-			WriteMethodBody(constructorDeclaration.Body, injection);
-			DoingConstructor = false;
 			if (isStatic)
 			{
-				Formatter.AppendIndented("Boolean ");
-				TypeVisitor.FormatType(CurrentClass);
-				Formatter.Append("::");
-				Formatter.AppendName(name);
-				Formatter.Append("_Initilized = ");
-				TypeVisitor.FormatType(CurrentClass);
-				Formatter.Append("::");
-				Formatter.AppendName(name);
-				Formatter.AppendLine("_Static();");
+				WriteStaticConstructor(constructorDeclaration, name);
+				return;
 			}
+			WriteMethodHeader(name, constructorDeclaration.Parameters);
+			if (!constructorDeclaration.Initializer.IsNull)
+			{
+				Formatter.Append(" ");
+				constructorDeclaration.Initializer.AcceptVisitor(this);
+			}
+			WriteMethodBody(constructorDeclaration.Body, null);
+		}
+		private void WriteStaticConstructor(ConstructorDeclaration constructorDeclaration, string name)
+		{
+			Formatter.Append("Boolean ");
+			TypeVisitor.FormatType(CurrentClass);
+			Formatter.Append("::");
+			Formatter.AppendName(name);
+			Formatter.AppendLine("_Static()");
+			WriteMethodBody(constructorDeclaration.Body, "return (true);");
+			Formatter.AppendIndented("Boolean ");
+			TypeVisitor.FormatType(CurrentClass);
+			Formatter.Append("::");
+			Formatter.AppendName(name);
+			Formatter.Append("_Initilized = ");
+			TypeVisitor.FormatType(CurrentClass);
+			Formatter.Append("::");
+			Formatter.AppendName(name);
+			Formatter.AppendLine("_Static();");
 		}
 		/// <inheritdoc/>
 		public virtual void VisitVariableInitializer(VariableInitializer variableInitializer)
 		{
-			Formatter.AppendName(variableInitializer.Name);
-			if (!variableInitializer.Initializer.IsNull)
-			{
-				Formatter.Append(" = ");
-				variableInitializer.Initializer.AcceptVisitor(this);
-			}
+			throw new NotImplementedException();
 		}
 		/// <inheritdoc/>
 		public void VisitTypeOfExpression(TypeOfExpression typeOfExpression)
@@ -1007,16 +941,12 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		public void VisitVariableDeclarationStatement(VariableDeclarationStatement variableDeclarationStatement)
 		{
-			IType variableType = variableDeclarationStatement.Type.GetResolveResult().Type;
-			TypeVisitor.FormatTypeDelaration(variableType);
-			Formatter.Append(" ");
-			WriteCommaSeparatedList(variableDeclarationStatement.Variables);
-			if (!(variableDeclarationStatement.Parent is ForStatement))
-				Formatter.Append(";");
+			throw new NotImplementedException();
 		}
 		/// <inheritdoc/>
 		public void VisitWhileStatement(WhileStatement whileStatement)
 		{
+			throw new NotImplementedException();
 		}
 		/// <inheritdoc/>
 		public void VisitWhitespace(WhitespaceNode whitespaceNode)
