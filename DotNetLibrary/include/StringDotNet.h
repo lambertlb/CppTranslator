@@ -12,21 +12,12 @@ namespace DotnetLibrary
 		Char* characterData;
 		size_t	length = 0;
 	public:
-		String(const Char* string) {
-			characterData = (Char*)string;
-			length = 0;
-		}
-		String(const char* string, const Int32 startIndex = -1, const Int32 toUse = -1) {
-			length = strlen(string);
-			characterData = new Char[DataTypeSize[ByteType] * length];
-			for (size_t i = 0; i < length; ++i) {
+		String(const Char* string, const Int32 startIndex = -1, const Int32 toUse = -1) {
+			length = wcslen(string);
+			characterData = new Char[(DataTypeSize[ByteType] * length) + 1];
+			for (size_t i = 0; i <= length; ++i) {
 				characterData[i] = string[i];
 			}
-		}
-		String(const Char chr, const Int32 amount)
-		{
-			characterData = nullptr;
-			length = 0;
 		}
 
 		String(Array* chrs, const Int32 startIndex = -1, const Int32 toUse = -1)
@@ -44,7 +35,7 @@ namespace DotnetLibrary
 		virtual String* Combine(String* v) { return(nullptr); }
 		Int32				get_Length() { return(0); }
 		Char* Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1) {
-			return(nullptr);
+			return(&characterData[index1]);
 		}
 		void CopyTo(Int32 sourceIndex, Array* destination, Int32 destinationIndex, Int32 count) {}
 		Int32	GetLength(Int32 rank) {

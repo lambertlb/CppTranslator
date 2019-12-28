@@ -1,8 +1,9 @@
 #include "CaBlockHeader.h"
 
-//using namespace MiniTest_NS;
+using namespace MiniTest_NS;
 
 int main()
 {
-	//Program* pr = new Program();
+	Program* pr = new Program();
+	pr->Run();
 }

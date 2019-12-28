@@ -1,5 +1,4 @@
 #pragma once
-#include "pch.h"
 #include "DotnetTypes.h"
 
 namespace DotnetLibrary
@@ -69,7 +68,7 @@ namespace DotnetLibrary
 	DLL_EXPORT UInt32	UInt32Value::MinValue = 0;
 	DLL_EXPORT Double	Math::PI = 3.14159265358979;
 	DLL_EXPORT Double	Math::E = 2.71828182845905;
-	DLL_EXPORT String* String::Empty = new String("");
+	DLL_EXPORT String* String::Empty = new String(L"");
 
 
 	DLL_EXPORT String* BooleanValue::TrueString = nullptr;

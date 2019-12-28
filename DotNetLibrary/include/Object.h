@@ -12,8 +12,7 @@ namespace DotnetLibrary
 		static	Boolean		Equals(Object* obj1, Object* obj2) { return(true); }
 		virtual Boolean		Equals(Object* object) { return(true); }
 		virtual	String*		ToString() { return(nullptr); }
-		virtual void		Send(String* message) {
-		}
+		virtual void		Send(String* message);
 		virtual Boolean		get_AsBoolean() {
 			return(true);
 		}

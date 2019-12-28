@@ -90,6 +90,7 @@ namespace CppTranslator
 		/// </summary>
 		private void WriteUsingNamespaces()
 		{
+			Formatter.CloseNamespace();
 			foreach (String ns in namespaces.Values)
 			{
 				Formatter.Append("using namespace ");
