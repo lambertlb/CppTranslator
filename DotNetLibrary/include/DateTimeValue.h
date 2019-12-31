@@ -28,7 +28,7 @@ namespace DotnetLibrary
 		DateTimeValue() { value = 0; }
 		DateTimeValue(DateTime val) { value = val; }
 		static DateTime	Now() { return(DateTime(0)); }
-		// .Net functions
+		virtual DataType GetRawDataType() { return(DateTimeType); };
 		virtual bool	Equals(Object* valueToCompare) { return(false); }
 		Int32					CompareTo(const DateTime& ts1) { return(0); }
 		Int32					CompareTo(Object* obj) { return(0); }

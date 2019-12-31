@@ -17,6 +17,7 @@ namespace DotnetLibrary
 		Char* Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1) {
 			return(nullptr);
 		}
+		virtual DataType GetRawDataType() { return(ObjectType); };
 		Int32 get_Length() { return(0); }
 		void set_Length(Int32 newLength) {}
 		Int32 get_Capacity() { return(0); }

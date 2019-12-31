@@ -54,24 +54,24 @@ namespace DotnetLibrary
 
 	typedef	enum DataType
 	{
-		NullType = 0,
-		ObjectType = 1,
-		BooleanType = 3,
-		CharType = 4,
-		SByteType = 5,
-		ByteType = 6,
-		Int16Type = 7,
-		UInt16Type = 8,
-		Int32Type = 9,
-		UInt32Type = 10,
-		Int64Type = 11,
-		UInt64Type = 12,
-		SingleType = 13,
-		DoubleType = 14,
-		DecimalType = 15,
-		DateTimeType = 16,
-		TimeSpanType = 17,
-		StringType = 18
+		NullType,
+		ObjectType,
+		BooleanType,
+		CharType,
+		SByteType,
+		ByteType,
+		Int16Type,
+		UInt16Type,
+		Int32Type,
+		UInt32Type,
+		Int64Type,
+		UInt64Type,
+		SingleType,
+		DoubleType,
+		DecimalType,
+		DateTimeType,
+		TimeSpanType,
+		StringType
 	} DataType;
 #define FloatType SingleType
 	DLL_EXPORT Int32	DataTypeSize[];

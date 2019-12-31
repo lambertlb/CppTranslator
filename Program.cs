@@ -15,13 +15,13 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-using ICSharpCode.Decompiler.CSharp;
-using ICSharpCode.Decompiler.CSharp.Syntax;
-using ICSharpCode.Decompiler.TypeSystem;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection.Metadata;
+using ICSharpCode.Decompiler.CSharp;
+using ICSharpCode.Decompiler.CSharp.Syntax;
+using ICSharpCode.Decompiler.TypeSystem;
 
 namespace CppTranslator
 {

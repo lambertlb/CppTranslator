@@ -25,6 +25,7 @@ namespace DotnetLibrary
 			characterData = nullptr;
 			length = 0;
 		}
+		virtual DataType GetRawDataType() { return(StringType); };
 
 		virtual Boolean StartsWith(String* what) {
 			return(false);

@@ -10,7 +10,8 @@ namespace DotnetLibrary
 		{
 			value = v;
 		}
-		// .Net functions
+		virtual DataType GetRawDataType() { return(UInt32Type); };
+		virtual Double		get_AsDouble();
 		virtual bool	Equals(Object* valueToCompare) {
 			return(false);
 		}

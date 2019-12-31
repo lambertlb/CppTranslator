@@ -13,44 +13,21 @@ namespace DotnetLibrary
 		virtual Boolean		Equals(Object* object) { return(true); }
 		virtual	String*		ToString() { return(nullptr); }
 		virtual void		Send(String* message);
-		virtual Boolean		get_AsBoolean() {
-			return(true);
-		}
-		virtual Char		get_AsChar() {
-			return(0);
-		}
-		virtual Byte		get_AsByte() {
-			return(0);
-		}
-		virtual SByte		get_AsSByte() {
-			return(0);
-		}
-		virtual Int16		get_AsInt16() {
-			return(0);
-		}
-		virtual UInt16		get_AsUInt16() {
-			return(0);
-		}
-		virtual Int32		get_AsInt32() {
-			return(0);
-		}
-		virtual UInt32		get_AsUInt32() {
-			return(0);
-		}
-		virtual Int64		get_AsInt64() {
-			return(0);
-		}
-		virtual UInt64		get_AsUInt64() {
-			return(0);
-		}
-		virtual Single		get_AsSingle() {
-			return(0);
-		}
-		virtual Double		get_AsDouble() {
-			return(0);
-		}
-		virtual TimeSpan		get_AsTimeSpan() { return(0); }
-		virtual DateTime		get_AsDateTime() { return(0); }
+		virtual DataType	GetRawDataType() { return(ObjectType); }
+		virtual Boolean		get_AsBoolean();
+		virtual Char		get_AsChar();
+		virtual Byte		get_AsByte();
+		virtual SByte		get_AsSByte();
+		virtual Int16		get_AsInt16();
+		virtual UInt16		get_AsUInt16();
+		virtual Int32		get_AsInt32();
+		virtual UInt32		get_AsUInt32();
+		virtual Int64		get_AsInt64();
+		virtual UInt64		get_AsUInt64();
+		virtual Single		get_AsSingle();
+		virtual Double		get_AsDouble();
+		virtual TimeSpan	get_AsTimeSpan();
+		virtual DateTime	get_AsDateTime();
 		virtual Boolean		Equals(Boolean v) {
 			return(true);
 		}

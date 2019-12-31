@@ -12,6 +12,7 @@ namespace DotnetLibrary
 		TimeSpanValue(Int32 hours, Int32 minutes, Int32 seconds) { value = 0; }
 		TimeSpanValue(Int32 days, Int32 hours, Int32 minutes, Int32 seconds) { value = 0; }
 		TimeSpanValue(Int32 days, Int32 hours, Int32 minutes, Int32 seconds, Int32 milliseconds) { value = 0; }
+		virtual TimeSpan	get_AsTimeSpan();
 
 		bool	Equals(const TimeSpan& valueToCOmpare) {
 			return(valueToCOmpare.value == value);
@@ -19,7 +20,7 @@ namespace DotnetLibrary
 		static bool	Equals(const TimeSpan& valueToCOmpare, const TimeSpan& valueToCOmpare2) {
 			return(false);
 		}
-		// .Net functions
+		virtual DataType GetRawDataType() { return(TimeSpanType); };
 		virtual bool	Equals(Object* valueToCompare) {
 			return(false);
 		}

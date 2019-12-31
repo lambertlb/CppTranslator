@@ -73,6 +73,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -93,6 +94,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>C:\MsWorkspace\CppTranslator\DotNetLibrary\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -159,8 +161,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="include\Array.cpp" />
+    <ClCompile Include="include\Int32Value.cpp" />
     <ClCompile Include="include\Object.cpp" />
+    <ClCompile Include="include\TimeSpanValue.cpp" />
     <ClCompile Include="include\TypeData.cpp" />
+    <ClCompile Include="include\UInt32Value.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BooleanValue.h" />
