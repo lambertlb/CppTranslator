@@ -36,10 +36,10 @@ namespace DotnetLibrary
 {
 	struct DLL_EXPORT DateTime {
 		UInt64	value;
-		DateTime(UInt64 ticks) { value = ticks; }
-		DateTime() { value = 0; }
-		DateTime(const DateTime& val) { value = val.value; }
-		DateTime(Int32 year, Int32 month, Int32 day, Int32 hour = -1, Int32 minute = -1, Int32 second = -1, Int32 millisecond = -1) { value = 0; }
+		DateTime(UInt64 ticks);
+		DateTime();
+		DateTime(const DateTime& val);
+		DateTime(Int32 year, Int32 month, Int32 day, Int32 hour = 0, Int32 minute = 0, Int32 second = 0, Int32 millisecond = 0);
 	};
 	struct DLL_EXPORT TimeSpan {
 		UInt64	value;

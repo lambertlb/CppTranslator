@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="include\Array.cpp" />
+    <ClCompile Include="include\DateTimeValue.cpp" />
     <ClCompile Include="include\Int32Value.cpp" />
     <ClCompile Include="include\Object.cpp" />
     <ClCompile Include="include\TimeSpanValue.cpp" />
