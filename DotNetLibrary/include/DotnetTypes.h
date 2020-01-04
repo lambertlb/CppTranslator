@@ -46,9 +46,8 @@ namespace DotnetLibrary
 		TimeSpan() { value = 0; }
 		TimeSpan(const UInt64 value2) { value = value2; };
 		TimeSpan(const TimeSpan& value2) { value = value2.value; };
-		TimeSpan(Int32 hours, Int32 minutes, Int32 seconds) { value = 0; }
-		TimeSpan(Int32 days, Int32 hours, Int32 minutes, Int32 seconds) { value = 0; }
-		TimeSpan(Int32 days, Int32 hours, Int32 minutes, Int32 seconds, Int32 milliseconds) { value = 0; }
+		TimeSpan(Int32 hours, Int32 minutes, Int32 seconds);
+		TimeSpan(Int32 days, Int32 hours, Int32 minutes, Int32 seconds, Int32 milliseconds = 0);
 	};
 	class String;
 

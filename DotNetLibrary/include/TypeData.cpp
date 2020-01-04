@@ -26,8 +26,8 @@ namespace DotnetLibrary
 	};
 	DLL_EXPORT DateTime	DateTimeValue::MaxValue = DateTime(MaxTicks);
 	DLL_EXPORT DateTime	DateTimeValue::MinValue = DateTime(MinTicks);
-	DLL_EXPORT TimeSpan	TimeSpanValue::MaxValue = TimeSpan();
-	DLL_EXPORT TimeSpan	TimeSpanValue::MinValue = TimeSpan();
+	DLL_EXPORT TimeSpan	TimeSpanValue::MaxValue = TimeSpan(UInt64Value::MaxValue);
+	DLL_EXPORT TimeSpan	TimeSpanValue::MinValue = TimeSpan(UInt64Value::MinValue);
 	DLL_EXPORT TimeSpan	TimeSpanValue::Zero = TimeSpan(0);
 
 	DLL_EXPORT Byte	ByteValue::MaxValue = 255;
@@ -71,6 +71,6 @@ namespace DotnetLibrary
 	DLL_EXPORT String* String::Empty = new String(L"");
 
 
-	DLL_EXPORT String* BooleanValue::TrueString = nullptr;
-	DLL_EXPORT String* BooleanValue::FalseString = nullptr;
+	DLL_EXPORT String* BooleanValue::TrueString = new String(L"true");
+	DLL_EXPORT String* BooleanValue::FalseString = new String(L"false");
 }

@@ -99,13 +99,235 @@ namespace DotnetLibrary
 	{
 		return GetDatePart(DatePartYear);
 	}
+	DateTime DateTimeValue::Add(const TimeSpan ts)
+	{
+		return AddTicks(ts.value);
+	}
+	DateTime DateTimeValue::Add(Double value, Int32 scale)
+	{
+		Double millis_double = value * (Double)scale + (value >= 0 ? 0.5 : -0.5);
+
+		if (millis_double <= (Double)-MaxMillis || millis_double >= (Double)MaxMillis)
+			throw new ArgumentOutOfRangeException();
+
+		return AddTicks((Int64)millis_double * TicksPerMillisecond);
+	}
+	DateTime DateTimeValue::AddDays(const Double delta)
+	{
+		return Add(delta, MillisPerDay);
+	}
+	DateTime DateTimeValue::AddHours(const Double delta)
+	{
+		return Add(delta, MillisPerHour);
+	}
+	DateTime DateTimeValue::AddMilliseconds(const Double delta)
+	{
+		return Add(delta, 1);
+	}
+	DateTime DateTimeValue::AddMinutes(const Double delta)
+	{
+		return Add(delta, MillisPerMinute);
+	}
+	void DateTimeValue::GetDatePart(Int32& year, Int32& month, Int32& day)
+	{
+		Int64 ticks = value.value;
+		// n = number of days since 1/1/0001
+		Int32 n = (Int32)(ticks / TicksPerDay);
+		// y400 = number of whole 400-year periods since 1/1/0001
+		Int32 y400 = n / DaysPer400Years;
+		// n = day number within 400-year period
+		n -= y400 * DaysPer400Years;
+		// y100 = number of whole 100-year periods within 400-year period
+		Int32 y100 = n / DaysPer100Years;
+		// Last 100-year period has an extra day, so decrement result if 4
+		if (y100 == 4) y100 = 3;
+		// n = day number within 100-year period
+		n -= y100 * DaysPer100Years;
+		// y4 = number of whole 4-year periods within 100-year period
+		Int32 y4 = n / DaysPer4Years;
+		// n = day number within 4-year period
+		n -= y4 * DaysPer4Years;
+		// y1 = number of whole years within 4-year period
+		Int32 y1 = n / DaysPerYear;
+		// Last year has an extra day, so decrement result if 4
+		if (y1 == 4) y1 = 3;
+		// compute year
+		year = y400 * 400 + y100 * 100 + y4 * 4 + y1 + 1;
+		// n = day number within year
+		n -= y1 * DaysPerYear;
+		// dayOfYear = n + 1;
+		// Leap year calculation looks different from IsLeapYear since y1, y4,
+		// and y100 are relative to year 1, not year 0
+		Boolean leapYear = y1 == 3 && (y4 != 24 || y100 == 3);
+		Int32* days = leapYear ? daysToMonth366 : daysToMonth365;
+		// All months have less than 32 days, so n >> 5 is a good conservative
+		// estimate for the month
+		Int32 m = (n >> 5) + 1;
+		// m = 1-based month number
+		while (n >= days[m]) m++;
+		// compute month and day
+		month = m;
+		day = n - days[m - 1] + 1;
+	}
+	DateTime DateTimeValue::AddMonths(const Int32 months)
+	{
+		if (months < -120000 || months > 120000)
+			throw new ArgumentOutOfRangeException();
+		Int32	year;
+		Int32	month;
+		Int32	day;
+		GetDatePart(year, month, day);
+		Int32 i = month - 1 + months;
+		if (i >= 0)
+		{
+			month = i % 12 + 1;
+			year += i / 12;
+		}
+		else
+		{
+			month = 12 + (i + 1) % 12;
+			year += (i - 11) / 12;
+		}
+		if (year < 1 || year > 9999)
+		{
+			throw new ArgumentOutOfRangeException();
+		}
+		Int32 days = DaysInMonth(year, month);
+		if (day > days) day = days;
+		return DateTime((UInt64)(DateToTicks(year, month, day) + value.value % TicksPerDay));
+	}
+	DateTime DateTimeValue::AddSeconds(const Double delta)
+	{
+		return Add(delta, MillisPerSecond);
+	}
+	DateTime DateTimeValue::AddTicks(const Int64 delta)
+	{
+		Int64 ticks = value.value;
+		if (delta > MaxTicks - ticks || delta < MinTicks - ticks) {
+			throw new ArgumentOutOfRangeException();
+		}
+		return DateTime((UInt64)(ticks + delta));
+	}
+	DateTime DateTimeValue::AddYears(const Int32 delta)
+	{
+		if (delta < -10000 || delta > 10000)
+		{
+			throw new ArgumentOutOfRangeException();
+		}
+		return AddMonths(delta * 12);
+	}
+	Int32 DateTimeValue::DaysInMonth(Int32 year, Int32 month)
+	{
+		if (month < 1 || month > 12)
+			throw new ArgumentOutOfRangeException();
+		// IsLeapYear checks the year argument
+		Int32* days = IsLeapYear(year) ? daysToMonth366 : daysToMonth365;
+		return days[month] - days[month - 1];
+	}
+	Boolean DateTimeValue::IsLeapYear(Int32 year)
+	{
+		if (year < 1 || year > 9999)
+		{
+			throw new ArgumentOutOfRangeException();
+		}
+		return (year & 3) == 0 && ((year & 15) == 0 || (year % 25) != 0);
+	}
+	TimeSpan DateTimeValue::Subtract(const DateTime& date1)
+	{
+		return TimeSpan(value.value - date1.value);
+	}
+	DateTime DateTimeValue::Subtract(const TimeSpan ts)
+	{
+		Int64 ticks = value.value;
+		Int64 valueTicks = ts.value;
+		if (ticks - MinTicks < valueTicks || ticks - MaxTicks > valueTicks)
+		{
+			throw new ArgumentOutOfRangeException();
+		}
+		return DateTime((UInt64)(ticks - valueTicks));
+	}
+	DateTime DateTimeValue::ToLocalTime()
+	{
+		return ToLocalTime(false);
+	}
+	DateTime DateTimeValue::ToLocalTime(Boolean throwOnOverflow)
+	{
+		FILETIME ft;
+		FILETIME st;
+		LARGE_INTEGER li;
+		li.QuadPart = value.value - FileTimeOffset;
+		ft.dwLowDateTime = li.LowPart;
+		ft.dwHighDateTime = li.HighPart;
+		FileTimeToLocalFileTime(&ft, &st);
+		li.LowPart = st.dwLowDateTime;
+		li.HighPart = st.dwHighDateTime;
+		UInt64 tick = li.QuadPart + FileTimeOffset;
+
+		if (tick > MaxTicks)
+		{
+			if (throwOnOverflow)
+				throw new ArgumentOutOfRangeException();
+			else
+				return DateTime(MaxTicks);
+		}
+		if (tick < MinTicks)
+		{
+			if (throwOnOverflow)
+				throw new ArgumentOutOfRangeException();
+			else
+				return DateTime(MinTicks);
+		}
+		return DateTime(tick);
+	}
+	DateTime DateTimeValue::ToUniversalTime()
+	{
+		FILETIME ft;
+		FILETIME st;
+		LARGE_INTEGER li;
+		li.QuadPart = value.value - FileTimeOffset;
+		ft.dwLowDateTime = li.LowPart;
+		ft.dwHighDateTime = li.HighPart;
+		LocalFileTimeToFileTime(&ft, &st);
+		li.LowPart = st.dwLowDateTime;
+		li.HighPart = st.dwHighDateTime;
+		UInt64 tick = li.QuadPart + FileTimeOffset;
+		return DateTime(tick);
+	}
+	DateTime DateTimeValue::op_Addition(const DateTime& ts1, const TimeSpan ts2)
+	{
+		return(DateTimeValue(ts1).Add(ts2));
+	}
+	TimeSpan DateTimeValue::op_Subtraction(const DateTime& ts1, const DateTime& ts2)
+	{
+		return(DateTimeValue(ts1).Subtract(ts2));
+	}
+	DateTime DateTimeValue::op_Subtraction(const DateTime& ts1, const TimeSpan ts2)
+	{
+		return(DateTimeValue(ts1).Subtract(ts2));
+	}
+	Boolean DateTimeValue::op_GreaterThan(const DateTime& ts1, const DateTime& ts2)
+	{
+		return ts1.value > ts2.value;
+	}
+	Boolean DateTimeValue::op_GreaterThanOrEqual(const DateTime& ts1, const DateTime& ts2)
+	{
+		return ts1.value >= ts2.value;
+	}
+	Boolean DateTimeValue::op_LessThan(const DateTime& ts1, const DateTime& ts2)
+	{
+		return ts1.value < ts2.value;
+	}
+	Boolean DateTimeValue::op_LessThanOrEqual(const DateTime& ts1, const DateTime& ts2)
+	{
+		return ts1.value <= ts2.value;
+	}
 	DateTime DateTimeValue::get_Now()
 	{
 		FILETIME ft;
 		FILETIME st;
 		LARGE_INTEGER li;
 		GetSystemTimeAsFileTime(&ft);
-		FileTimeToLocalFileTime(&ft,&st);
+		FileTimeToLocalFileTime(&ft, &st);
 		li.LowPart = st.dwLowDateTime;
 		li.HighPart = st.dwHighDateTime;
 		UInt64 tick = li.QuadPart + FileTimeOffset;
@@ -131,6 +353,64 @@ namespace DotnetLibrary
 	{
 		DateTime rtn = (DateTimeValue(get_Now())).get_Date();
 		return	rtn;
+	}
+	Int32 DateTimeValue::CompareTo(const DateTime& dataTime)
+	{
+		return Compare(value, dataTime);
+	}
+	Int32 DateTimeValue::Compare(const DateTime& date1, const DateTime& date2)
+	{
+		Int64 ticks1 = date1.value;
+		Int64 ticks2 = date2.value;
+		if (ticks1 > ticks2) return 1;
+		if (ticks1 < ticks2) return -1;
+		return 0;
+	}
+	bool DateTimeValue::Equals(const DateTime& valueToCOmpare)
+	{
+		return value.value == valueToCOmpare.value;
+	}
+	bool DateTimeValue::Equals(const DateTime& valueToCOmpare, const DateTime& valueToCOmpare2)
+	{
+		return valueToCOmpare.value == valueToCOmpare2.value;
+	}
+	String* DateTimeValue::ToString()
+	{
+		StringBuilder stringBuilder;
+		Int32	month = this->get_Month();
+		Int32	day = this->get_Day();
+		Int32	year = this->get_Year();
+		Int32	hour = this->get_Hour();
+		Int32	minute = this->get_Minute();
+		Int32	second = this->get_Second();
+		Boolean	isPm = false;
+		if (hour > 12)
+		{
+			hour -= 12;
+			isPm = true;
+		}
+		stringBuilder.Append(month);
+		stringBuilder.Append(((Char)'/'));
+		stringBuilder.Append(day);
+		stringBuilder.Append(((Char)'/'));
+		stringBuilder.Append(year);
+		stringBuilder.Append(((Char)' '));
+		stringBuilder.Append(hour);
+		stringBuilder.Append(((Char)':'));
+		if (minute < 10)
+			stringBuilder.Append(((Char)'0'));
+		stringBuilder.Append(minute);
+		stringBuilder.Append(((Char)':'));
+		if (second < 10)
+			stringBuilder.Append(((Char)'0'));
+		stringBuilder.Append(second);
+		stringBuilder.Append(((Char)' '));
+		if (isPm)
+			stringBuilder.Append(((Char)'P'));
+		else
+			stringBuilder.Append(((Char)'A'));
+		stringBuilder.Append(((Char)'M'));
+		return(stringBuilder.ToString());
 	}
 	DateTime	DateTimeValue::get_Date() {
 		UInt64 ticks = value.value;

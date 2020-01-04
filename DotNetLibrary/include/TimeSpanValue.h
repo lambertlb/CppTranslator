@@ -4,17 +4,16 @@
 namespace DotnetLibrary
 {
 	class DLL_EXPORT TimeSpanValue : public ValueType {
-		UInt64	value;
+		TimeSpan	value;
 	public:
 		TimeSpanValue() { value = 0; }
 		TimeSpanValue(const UInt64 value2) { value = value2; };
-		TimeSpanValue(Int32 hours, Int32 minutes, Int32 seconds) { value = 0; }
-		TimeSpanValue(Int32 days, Int32 hours, Int32 minutes, Int32 seconds, Int32 milliseconds = 0) { value = 0; }
+		TimeSpanValue(const TimeSpan value2) { value = value2.value; };
 		virtual DataType	GetRawDataType() { return(TimeSpanType); };
 		virtual TimeSpan	get_AsTimeSpan();
 
 		bool	Equals(const TimeSpan& valueToCOmpare) {
-			return(valueToCOmpare.value == value);
+			return(valueToCOmpare.value == value.value);
 		}
 		static bool	Equals(const TimeSpan& valueToCOmpare, const TimeSpan& valueToCOmpare2) {
 			return(false);
@@ -49,7 +48,7 @@ namespace DotnetLibrary
 		Int32					get_Milliseconds() { return(0); }
 		Int32					get_Minutes() { return(0); }
 		Int32					get_Seconds() { return(0); }
-		Int64					get_Ticks() { return(0); }
+		Int64					get_Ticks() { return(value.value); }
 		Double					get_TotalDays() { return(0); }
 		Double					get_TotalHours() { return(0); }
 		Double					get_TotalMilliseconds() { return(0); }
