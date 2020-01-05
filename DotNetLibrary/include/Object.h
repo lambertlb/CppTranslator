@@ -1,9 +1,11 @@
 #pragma once
 #include "DotnetTypes.h"
 
+void*	operator	new (size_t size);
+void	operator	delete(void*);
+void*	operator	new(size_t size, void* ptr);
 namespace DotnetLibrary
 {
-
 	class DLL_EXPORT Object
 	{
 	public:

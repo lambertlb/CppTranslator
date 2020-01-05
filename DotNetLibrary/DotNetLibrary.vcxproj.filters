@@ -35,6 +35,9 @@
     <ClCompile Include="include\DateTimeValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\StringBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DotnetTypes.h" />

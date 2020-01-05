@@ -7,22 +7,21 @@ namespace CABlock_NS
 		public:
 		void TestFailed(String* x_v);
 	};
-	class TimeTest : public Object
+	class StringBuilderTest : public Object
 	{
 		public:
 		CABlock* x_caBlock;
-		DateTime x_dat1;
-		TimeTest(CABlock* x_caBlock);
+		StringBuilder* x_sb;
+		StringBuilderTest(CABlock* x_caBlock);
 		void Test();
-		void TestTimeSpan();
-		void TestDateTime();
-		void DateTimeMethodTests();
-		void TimeArrayTests();
-		void DateTimeArrayTests();
-		void TimeSpanArrayTests();
-		void CxAssert(Double x_x,Double x_y);
+		void DoSBConstructTest();
+		void DoSBPropertyTest();
+		void DoSBAppendTest();
+		void DoSBMiscTest();
+		void DoSBInsertTest();
+		void DoSBReplaceTest();
 		void CxAssert(Boolean x_x);
-		void TimeTestFailed();
+		void CxAssert(Boolean x_x,Boolean x_y);
 	};
 }
 namespace MiniTest_NS

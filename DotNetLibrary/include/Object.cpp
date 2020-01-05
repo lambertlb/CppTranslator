@@ -1,7 +1,25 @@
 #pragma once
 #include "DotnetTypes.h"
+#include <cstdlib>
 #include <cstdio>
 
+void* operator new(size_t size)
+{
+	void* memory = malloc(size);
+	if (memory != nullptr)
+		memset(memory, 0, size);
+	return(memory);
+}
+void operator delete(void* memory)
+{
+	if (memory != nullptr)
+		free(memory);
+}
+void* operator new(size_t size, void* memory)
+{
+	memset(memory, 0, size);
+	return memory;
+}
 namespace DotnetLibrary
 {
 	void		Object::Send(String* message) {

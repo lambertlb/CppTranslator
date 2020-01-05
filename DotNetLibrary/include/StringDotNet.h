@@ -34,7 +34,7 @@ namespace DotnetLibrary
 			return(false);
 		}
 		virtual String* Combine(String* v) { return(nullptr); }
-		Int32				get_Length() { return(0); }
+		Int32				get_Length() { return(length); }
 		Char* Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1) {
 			return(&characterData[index1]);
 		}
