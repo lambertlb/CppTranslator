@@ -162,10 +162,19 @@
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="include\Array.cpp" />
+    <ClCompile Include="include\BooleanValue.cpp" />
+    <ClCompile Include="include\ByteValue.cpp" />
+    <ClCompile Include="include\CharValue.cpp" />
     <ClCompile Include="include\DateTimeValue.cpp" />
+    <ClCompile Include="include\DoubleValue.cpp" />
+    <ClCompile Include="include\Int16Value.cpp" />
     <ClCompile Include="include\Int32Value.cpp" />
+    <ClCompile Include="include\Int64Value.cpp" />
     <ClCompile Include="include\Object.cpp" />
+    <ClCompile Include="include\SByteValue.cpp" />
+    <ClCompile Include="include\SingleValue.cpp" />
     <ClCompile Include="include\StringBuilder.cpp" />
+    <ClCompile Include="include\StringDotNet.cpp" />
     <ClCompile Include="include\TimeSpanValue.cpp" />
     <ClCompile Include="include\TypeData.cpp" />
     <ClCompile Include="include\UInt32Value.cpp" />

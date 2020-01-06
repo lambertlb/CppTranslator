@@ -8,6 +8,5 @@ namespace DotnetLibrary
 		ValueType(){}
 		// .Net functions
 		virtual bool	Equals(Object* valueToCOmpare) = 0;
-		String* ToString() = 0;
 	};
 }

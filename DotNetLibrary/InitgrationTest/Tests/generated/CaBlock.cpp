@@ -50,24 +50,6 @@ IL_0000:
 		this->CxAssert((String::Equals(this->x_sb->ToString(), (new String(L"est1"))) && (this->x_sb->get_Capacity() == 20)));
 		String* x_a = (new StringBuilder((new String(L"Test"))))->ToString();
 		this->CxAssert(String::Equals(x_a, (new String(L"Test"))));
-		String* x_b = (new String(L"AB\a\b\t\r\v\f\n\"'\u00c2"));
-		Array* x_value = new Array(CharType,12);
-		(*((Char*)x_value->Address(0))) = 65;
-		(*((Char*)x_value->Address(1))) = 66;
-		(*((Char*)x_value->Address(2))) = 7;
-		(*((Char*)x_value->Address(3))) = 8;
-		(*((Char*)x_value->Address(4))) = 9;
-		(*((Char*)x_value->Address(5))) = 13;
-		(*((Char*)x_value->Address(6))) = 11;
-		(*((Char*)x_value->Address(7))) = 12;
-		(*((Char*)x_value->Address(8))) = 10;
-		(*((Char*)x_value->Address(9))) = 34;
-		(*((Char*)x_value->Address(10))) = 39;
-		(*((Char*)x_value->Address(11))) = 194;
-		this->x_sb = (new StringBuilder());
-		this->x_sb->Append(x_value);
-		String* x_text = this->x_sb->ToString();
-		this->CxAssert(String::Equals(this->x_sb->ToString(), x_b));
 		return;
 	}
 	void StringBuilderTest::DoSBPropertyTest()
@@ -139,6 +121,24 @@ IL_0000:
 		Object* x_value6 = (new String(L"Test string as Object"));
 		this->x_sb->set_Length(0);
 		this->CxAssert(String::Equals(this->x_sb->Append(x_value6)->ToString(), (new String(L"Test string as Object"))));
+		String* x_b = (new String(L"AB\a\b\t\r\v\f\n\"'\u00c2"));
+		Array* x_value7 = new Array(CharType,12);
+		(*((Char*)x_value7->Address(0))) = 65;
+		(*((Char*)x_value7->Address(1))) = 66;
+		(*((Char*)x_value7->Address(2))) = 7;
+		(*((Char*)x_value7->Address(3))) = 8;
+		(*((Char*)x_value7->Address(4))) = 9;
+		(*((Char*)x_value7->Address(5))) = 13;
+		(*((Char*)x_value7->Address(6))) = 11;
+		(*((Char*)x_value7->Address(7))) = 12;
+		(*((Char*)x_value7->Address(8))) = 10;
+		(*((Char*)x_value7->Address(9))) = 34;
+		(*((Char*)x_value7->Address(10))) = 39;
+		(*((Char*)x_value7->Address(11))) = 194;
+		this->x_sb = (new StringBuilder());
+		this->x_sb->Append(x_value7);
+		String* x_text = this->x_sb->ToString();
+		this->CxAssert(String::Equals(this->x_sb->ToString(), x_b));
 		return;
 	}
 	void StringBuilderTest::DoSBMiscTest()

@@ -15,6 +15,7 @@
 #define	DLL_EXPORT	
 #endif
 #include <stdint.h>
+#include <cstdio>
 
 // alias .Net types
 typedef	bool		Boolean;

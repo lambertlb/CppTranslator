@@ -374,7 +374,7 @@ namespace DotnetLibrary
 	{
 		return valueToCOmpare.value == valueToCOmpare2.value;
 	}
-	String* DateTimeValue::ToString()
+	Int32 DateTimeValue::FormatString(Char* where, const Int32 whereSize)
 	{
 		StringBuilder stringBuilder;
 		Int32	month = this->get_Month();
@@ -389,28 +389,14 @@ namespace DotnetLibrary
 			hour -= 12;
 			isPm = true;
 		}
-		stringBuilder.Append(month);
-		stringBuilder.Append(((Char)'/'));
-		stringBuilder.Append(day);
-		stringBuilder.Append(((Char)'/'));
-		stringBuilder.Append(year);
-		stringBuilder.Append(((Char)' '));
-		stringBuilder.Append(hour);
-		stringBuilder.Append(((Char)':'));
-		if (minute < 10)
-			stringBuilder.Append(((Char)'0'));
-		stringBuilder.Append(minute);
-		stringBuilder.Append(((Char)':'));
-		if (second < 10)
-			stringBuilder.Append(((Char)'0'));
-		stringBuilder.Append(second);
-		stringBuilder.Append(((Char)' '));
+		Char	dateTime[128];
+		Int32 length = swprintf(dateTime, 128, L"%d/%d/%d %d:%02d:%02d ", month, day, year, hour, minute, second);
+		stringBuilder.Append(dateTime, length);
 		if (isPm)
-			stringBuilder.Append(((Char)'P'));
+			stringBuilder.Append(L"PM",2);
 		else
-			stringBuilder.Append(((Char)'A'));
-		stringBuilder.Append(((Char)'M'));
-		return(stringBuilder.ToString());
+			stringBuilder.Append(L"AM", 2);
+		return(stringBuilder.FormatString(where, whereSize));
 	}
 	DateTime	DateTimeValue::get_Date() {
 		UInt64 ticks = value.value;

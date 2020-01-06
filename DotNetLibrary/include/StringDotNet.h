@@ -8,23 +8,14 @@ namespace DotnetLibrary
 
 	class DLL_EXPORT String : public Object
 	{
-	private:
-		Char* characterData;
-		size_t	length = 0;
 	public:
-		String(const Char* string, const Int32 startIndex = -1, const Int32 toUse = -1) {
-			length = wcslen(string);
-			characterData = new Char[(DataTypeSize[ByteType] * length) + 1];
-			for (size_t i = 0; i <= length; ++i) {
-				characterData[i] = string[i];
-			}
-		}
-
-		String(Array* chrs, const Int32 startIndex = -1, const Int32 toUse = -1)
-		{
-			characterData = nullptr;
-			length = 0;
-		}
+		Char* characterData;
+		size_t	length;
+		Boolean allocate;
+		String(const Char* string);
+		String(const Char* string, const Int32 startIndex, Int32 length = -1);
+		String(Array* chrs, const Int32 startIndex = 0, const Int32 length = -1);
+		virtual ~String();
 		virtual DataType GetRawDataType() { return(StringType); };
 
 		virtual Boolean StartsWith(String* what) {
@@ -51,6 +42,8 @@ namespace DotnetLibrary
 		Array* Split(Array* separator, const Int32 count) { return(nullptr); }
 		String* Substring(const Int32 startIndex) { return(nullptr); }
 		String* Substring(const Int32 startIndex, const Int32 length) { return(nullptr); }
+		virtual String* ToString();
+		virtual	Int32	FormatString(Char* where, const Int32 whereSize);
 		String* Trim() { return(nullptr); }
 		String* Trim(Array* separator) { return(nullptr); }
 		String* TrimEnd(Array* separator) { return(nullptr); }

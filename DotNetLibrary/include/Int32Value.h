@@ -28,9 +28,7 @@ namespace DotnetLibrary
 		static Int32 Parse(String* stringToParse) {
 			return(0);
 		}
-		String* ToString() {
-			return(nullptr);
-		}
+		virtual	Int32	FormatString(Char* where, const Int32 whereSize);
 		static Int32	MaxValue;
 		static Int32	MinValue;
 	};

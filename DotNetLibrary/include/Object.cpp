@@ -22,6 +22,18 @@ void* operator new(size_t size, void* memory)
 }
 namespace DotnetLibrary
 {
+	String* Object::ToString()
+	{
+		Char	chars[128];
+		Int32 length = FormatString(chars, 128);
+		chars[length] = 0;
+		return(new String(chars, 0, length));
+	}
+	Int32 Object::FormatString(Char* where, const Int32 whereSize)
+	{
+		wcscpy_s(where, whereSize, L"Object");
+		return(wcslen(L"Object"));
+	}
 	void		Object::Send(String* message) {
 		printf("%ls\n", message->Address(0));
 	}

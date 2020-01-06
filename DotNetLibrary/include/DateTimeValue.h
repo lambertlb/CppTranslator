@@ -70,7 +70,7 @@ namespace DotnetLibrary
 		bool				Equals(const DateTime& valueToCOmpare);
 		static bool			Equals(const DateTime& valueToCOmpare, const DateTime& valueToCOmpare2);
 		virtual bool		Equals(Object* valueToCompare) { return(false); }
-		virtual	String*		ToString();
+		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
 		DateTime			get_Date();
 		Int32				get_Day();
 		Int32				GetDatePart(Int32 part);

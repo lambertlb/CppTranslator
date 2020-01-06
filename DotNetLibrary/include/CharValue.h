@@ -29,9 +29,7 @@ namespace DotnetLibrary
 		virtual Int32	CompareTo(Object* valueToCompare) {
 			return(0);
 		}
-		String* ToString() {
-			return(nullptr);
-		}
+		virtual	Int32	FormatString(Char* where, const Int32 whereSize);
 		static Byte Parse(String* stringToParse) {
 			return(0);
 		}

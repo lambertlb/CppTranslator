@@ -13,7 +13,8 @@ namespace DotnetLibrary
 		virtual				~Object() {};
 		static	Boolean		Equals(Object* obj1, Object* obj2) { return(true); }
 		virtual Boolean		Equals(Object* object) { return(true); }
-		virtual	String*		ToString() { return(nullptr); }
+		virtual	String*		ToString();
+		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
 		virtual void		Send(String* message);
 		virtual DataType	GetRawDataType() { return(ObjectType); }
 		virtual Boolean		get_AsBoolean();

@@ -38,9 +38,7 @@ namespace DotnetLibrary
 		TimeSpan				Negate() { return(0); }
 		TimeSpan				Subtract(const TimeSpan& ts1) { return(0); }
 		static TimeSpan			Parse(String* val) { return(0); }
-		String* ToString() {
-			return(nullptr);
-		}
+		virtual	Int32			FormatString(Char* where, const Int32 whereSize);
 		TimeSpan				Add(const TimeSpan& ts) { return(TimeSpan(0)); }
 		static	Int32			Compare(const TimeSpan& ts1, const TimeSpan& ts2) { return(0); }
 		Int32					get_Days() { return(0); }

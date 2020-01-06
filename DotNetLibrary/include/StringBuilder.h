@@ -3,31 +3,35 @@
 
 namespace DotnetLibrary
 {
-#define DefaultCapacity 255
+#define DefaultCapacity 128
 	class DLL_EXPORT StringBuilder : public Object
 	{
-	private:
-		Char* chunkChars;	// array of characters
-		Int32 chunkLength;	// total size of the array
-		Int32 chunkOffset;	// current offset into array for next insters
-		Int32 maxCapacity;	// max capacity for this builder
+		Char	internalMemory[DefaultCapacity]; // default memory to prevent allocations
+		Char*	chunkChars;		// array of characters
+		Int32	chunkLength;	// total size of the array
+		Int32	chunkOffset;	// current offset into array for next insters
+		Int32	maxCapacity;	// max capacity for this builder
 	public:
 		StringBuilder();
 		StringBuilder(Int32 capacity);
 		StringBuilder(String* value, Int32 capacity = DefaultCapacity);
 		StringBuilder(String* value, Int32 startIndex, Int32 length, Int32 capacity);
 		StringBuilder(Int32 capacity, Int32 maxCapacity);
+		void				Initialize();
 		virtual				~StringBuilder();
-		Char*				Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1) {return(nullptr);}
+		Char*				Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1);
 		virtual DataType	GetRawDataType() { return(ObjectType); };
 		Int32				get_Length();
 		void				set_Length(Int32 newLength);
 		Int32				get_Capacity();
 		void				set_Capacity(Int32 capacity);
 		Int32				get_MaxCapacity();
-		Char				get_Chars(Int32 index) { return (0); }
-		void				set_Chars(Int32 index, Char newChar) {}
-		String*				ToString(Int32 startIndex = -1, Int32 length = -1) { return(nullptr); }
+		Char				get_Chars(Int32 index);
+		void				set_Chars(Int32 index, Char newChar);
+		virtual String*		ToString();
+		virtual String*		ToString(Int32 startIndex = -1, Int32 length = -1);
+		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
+		StringBuilder*		Append(const Char* values, Int32 charCount = -1) { return(this); }
 		StringBuilder*		Append(Array* values, Int32 startIndex = -1, Int32 charCount = -1) { return(this); }
 		StringBuilder*		Append(Boolean value) { return(this); }
 		StringBuilder*		Append(Byte value) { return(this); }
