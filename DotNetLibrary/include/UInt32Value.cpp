@@ -8,4 +8,8 @@ namespace DotnetLibrary
 	{
 		return value;
 	}
+	Int32 UInt32Value::FormatString(Char* where, const Int32 whereSize)
+	{
+		return(swprintf(where, whereSize, L"%d", value));
+	}
 }

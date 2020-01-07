@@ -177,7 +177,9 @@
     <ClCompile Include="include\StringDotNet.cpp" />
     <ClCompile Include="include\TimeSpanValue.cpp" />
     <ClCompile Include="include\TypeData.cpp" />
+    <ClCompile Include="include\UInt16Value.cpp" />
     <ClCompile Include="include\UInt32Value.cpp" />
+    <ClCompile Include="include\UInt64Value.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BooleanValue.h" />

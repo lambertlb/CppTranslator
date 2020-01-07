@@ -78,12 +78,12 @@ namespace DotnetLibrary
 }
 
 #include "Object.h"
+#include "ValueType.h"
 #include "Array.h"
 #include "StringDotNet.h"
 #include "StringBuilder.h"
 #include "DotNetMath.h"
 #include "Buffer.h"
-#include "ValueType.h"
 #include "BooleanValue.h"
 #include "ByteValue.h"
 #include "CharValue.h"

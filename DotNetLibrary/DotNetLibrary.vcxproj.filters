@@ -65,6 +65,12 @@
     <ClCompile Include="include\SingleValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\UInt16Value.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\UInt64Value.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DotnetTypes.h" />

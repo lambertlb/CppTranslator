@@ -6,6 +6,10 @@ namespace DotnetLibrary
 	class DLL_EXPORT Array : public Object
 	{
 	private:
+
+		Int32			ComputeIndex(Int32 index1, Int32 index2 = -1, Int32 index3 = -1);
+		static void		VerifyIndexWithinRangeOfArray(Array* array, Int32 startingIndex, Int32 amountOfElements);
+	public:
 		DataType	dataType;				// type of data in array
 		int32_t		dimension1Size;			// size of dimension 1
 		int32_t		dimension2Size;			// size of dimension 2
@@ -13,10 +17,6 @@ namespace DotnetLibrary
 		int32_t		dimensionCount;			// amount of dimensions
 		int32_t		totalElementCount;		// total elements in the array
 		char*		data;					// point to data storage for array
-
-		Int32			ComputeIndex(Int32 index1, Int32 index2 = -1, Int32 index3 = -1);
-		static void		VerifyIndexWithinRangeOfArray(Array* array, Int32 startingIndex, Int32 amountOfElements);
-	public:
 						Array(DataType dataType, Int32 dimension1Size, Int32 dimension2Size = -1, Int32 dimension3Size = -1);
 		virtual			~Array();
 		void*			Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1);

@@ -26,9 +26,7 @@ namespace DotnetLibrary
 		static UInt16 Parse(String* stringToParse) {
 			return(0);
 		}
-		String* ToString() {
-			return(nullptr);
-		}
+		virtual	Int32	FormatString(Char* where, const Int32 whereSize);
 		static UInt16	MaxValue;
 		static UInt16	MinValue;
 	};
