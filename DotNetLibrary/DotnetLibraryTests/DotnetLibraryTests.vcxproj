@@ -34,6 +34,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClCompile Include="StringBuilderTests.cpp" />
+    <ClCompile Include="StringTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

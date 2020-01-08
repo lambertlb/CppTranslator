@@ -13,8 +13,8 @@ namespace DotnetLibrary
 		size_t	length;
 		Boolean allocate;
 		String(const Char* string);
-		String(const Char* string, const Int32 startIndex, Int32 length = -1);
-		String(Array* chrs, const Int32 startIndex = 0, const Int32 length = -1);
+		String(const Char* string, Int32 startIndex, Int32 length = -1);
+		String(Array* chrs,  Int32 startIndex = 0, Int32 length = -1);
 		virtual ~String();
 		virtual DataType GetRawDataType() { return(StringType); };
 

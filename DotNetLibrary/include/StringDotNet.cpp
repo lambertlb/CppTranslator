@@ -11,18 +11,46 @@ namespace DotnetLibrary
 	}
 	DotnetLibrary::String::String(const Char* string, const Int32 startIndex, Int32 length)
 	{
-		allocate = true;
+		if (string == nullptr)
+			throw new ArgumentOutOfRangeException();
 		if (length < 0)
 			length = wcslen(string);
+		if (startIndex < 0 || startIndex > wcslen(string))
+			throw new ArgumentOutOfRangeException();
+
+		allocate = true;
 		this->length = length;
-		characterData = new Char[(DataTypeSize[ByteType] * length) + 1];
+		characterData = new Char[length + 1];
 		for (size_t i = 0; i < length; ++i) {
-			characterData[i] = string[i];
+			characterData[i] = string[i + startIndex];
 		}
 	}
-	String::String(Array* chrs, const Int32 startIndex, const Int32 length)
+	String::String(Array* values, Int32 startIndex, Int32 length)
 	{
-		allocate = false;
+		allocate = true;
+		if (length < 0) {
+			length = values->get_Length();
+		}
+		if (values == nullptr || length == 0) {
+			this->length = 0;
+			characterData = new Char[1];
+			return;
+		}
+		if (startIndex < 0) {
+			startIndex = 0;
+		}
+		if (length > values->get_Length() - startIndex) {
+			throw new ArgumentOutOfRangeException();
+		}
+		if (values->dataType != CharType) {
+			throw new ArgumentOutOfRangeException();
+		}
+		values->EnsureSingleDimension();
+		this->length = length;
+		characterData = new Char[length + 1];
+		for (size_t i = 0; i < length; ++i) {
+			characterData[i] = *(Char*)values->Address(i + startIndex);
+		}
 	}
 	String::~String()
 	{
