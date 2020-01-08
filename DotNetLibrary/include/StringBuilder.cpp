@@ -1,5 +1,6 @@
 #pragma once
 #include "DotnetTypes.h"
+#include <string>
 
 namespace DotnetLibrary
 {
@@ -88,7 +89,7 @@ namespace DotnetLibrary
 			memset(chunkChars, 0, chunkLength * sizeof(Char));
 			return;
 		}
-		EnsureCapacity(newLength);
+		EnsureCapacity(newLength + 1);
 		int delta = newLength - chunkOffset;
 		if (delta == 0) {
 			return;
@@ -174,7 +175,7 @@ namespace DotnetLibrary
 		}
 		EnsureCapacity(chunkOffset + charCount + 1);
 		if (where != chunkOffset) {
-			memmove(&chunkChars[where + charCount] , &chunkChars[where], (chunkOffset - where) * sizeof(Char));
+			memmove(&chunkChars[where + charCount], &chunkChars[where], (chunkOffset - where) * sizeof(Char));
 		}
 		memcpy(&chunkChars[where], values, charCount * sizeof(Char));
 		chunkOffset += charCount;
@@ -254,7 +255,7 @@ namespace DotnetLibrary
 		if (repeatCount < 0) {
 			throw new ArgumentOutOfRangeException();
 		}
-		EnsureCapacity(chunkOffset + repeatCount);
+		EnsureCapacity(chunkOffset + repeatCount + 1);
 		for (int i = 0; i < repeatCount; ++i) {
 			chunkChars[chunkOffset++] = value;
 		}
@@ -434,5 +435,69 @@ namespace DotnetLibrary
 	{
 		UInt64Value data(value);
 		return(Append(data, index));
+	}
+	StringBuilder* StringBuilder::Replace(const Char oldChar, const Char newChar)
+	{
+		return Replace(oldChar, newChar, 0, chunkOffset);
+	}
+	StringBuilder* StringBuilder::Replace(String* search, String* replace)
+	{
+		return Replace(search, replace, 0, chunkOffset);
+	}
+	StringBuilder* StringBuilder::Replace(const Char oldChar, const Char newChar, const Int32 startIndex, const Int32 count)
+	{
+		int currentLength = chunkOffset;
+		if ((UInt32)startIndex > (UInt32)currentLength) {
+			throw new ArgumentOutOfRangeException();
+		}
+		if (count < 0 || startIndex > currentLength - count) {
+			throw new ArgumentOutOfRangeException();
+		}
+		int endIndex = startIndex + count;
+		for (int i = startIndex; i < endIndex; ++i) {
+			if (chunkChars[i] == oldChar) {
+				chunkChars[i] = newChar;
+			}
+		}
+		return this;
+	}
+	StringBuilder* StringBuilder::Replace(String* search, String* replace, const Int32 startIndex, const Int32 count)
+	{
+		int currentLength = chunkOffset;
+		if ((UInt32)startIndex > (UInt32)currentLength) {
+			throw new ArgumentOutOfRangeException();
+		}
+		if (count < 0 || startIndex > currentLength - count) {
+			throw new ArgumentOutOfRangeException();
+		}
+		if (search == nullptr) {
+			throw new ArgumentOutOfRangeException();
+		}
+		if (search->length == 0) {
+			throw new ArgumentOutOfRangeException();
+		}
+		if (replace == nullptr) {
+			replace = String::Empty;
+		}
+		Int32	endIndex = (startIndex - 1) + count;
+		Int32	delta = replace->length - search->length;
+		std::wstring	builder(chunkChars);
+		std::wstring	toSearch(search->characterData);
+		std::wstring	replaceStr(replace->characterData);
+		size_t pos = builder.find(toSearch);
+
+		while (pos != std::string::npos) {
+			if (pos >= endIndex)
+				break;
+			if (pos >= startIndex) {
+				builder.replace(pos, toSearch.size(), replaceStr);
+				endIndex += delta;
+			}
+			pos = builder.find(toSearch, pos + replaceStr.size());
+		}
+		EnsureCapacity(builder.length() + 1);
+		memcpy(chunkChars, builder.c_str(), builder.length() * sizeof(Char));
+		chunkOffset = builder.length();
+		return this;
 	}
 }

@@ -15,11 +15,6 @@ void operator delete(void* memory)
 	if (memory != nullptr)
 		free(memory);
 }
-void* operator new(size_t size, void* memory)
-{
-	memset(memory, 0, size);
-	return memory;
-}
 namespace DotnetLibrary
 {
 	String* Object::ToString()

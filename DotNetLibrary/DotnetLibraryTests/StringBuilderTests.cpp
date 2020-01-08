@@ -352,3 +352,31 @@ TEST(StringbuilderTests, InsertUInt64Test) {
 	stringBuilder.Insert(7, (UInt64)11);
 	ASSERT_TRUE(wcscmp(stringBuilder.chunkChars, L"TESTING111234") == 0);
 }
+TEST(StringbuilderTests, ReplaceStringTest) {
+	String str(L"The quick brown dog jumps over the lazy dog");
+	String dog(L"dog");
+	String cat(L"kitten");
+	StringBuilder	stringBuilder(&str);
+	stringBuilder.Replace(&dog,&cat);
+	ASSERT_TRUE(wcscmp(stringBuilder.chunkChars, L"The quick brown kitten jumps over the lazy kitten") == 0);
+}
+TEST(StringbuilderTests, ReplaceString2Test) {
+	String str(L"The dog brown dog jumps over the lazy dog");
+	String dog(L"dog");
+	String cat(L"kitten");
+	StringBuilder	stringBuilder(&str);
+	stringBuilder.Replace(&dog, &cat, 10 ,10);
+	ASSERT_TRUE(wcscmp(stringBuilder.chunkChars, L"The dog brown kitten jumps over the lazy dog") == 0);
+}
+TEST(StringbuilderTests, ReplaceCharsTest) {
+	String str(L"The quick #brown dog jumps over the lazy #dog#");
+	StringBuilder	stringBuilder(&str);
+	stringBuilder.Replace(L'#', L'-');
+	ASSERT_TRUE(wcscmp(stringBuilder.chunkChars, L"The quick -brown dog jumps over the lazy -dog-") == 0);
+}
+TEST(StringbuilderTests, ReplaceChars2Test) {
+	String str(L"The quick #brown dog jumps over the #lazy #dog#");
+	StringBuilder	stringBuilder(&str);
+	stringBuilder.Replace(L'#', L'-', 5, 15);
+	ASSERT_TRUE(wcscmp(stringBuilder.chunkChars, L"The quick -brown dog jumps over the #lazy #dog#") == 0);
+}
