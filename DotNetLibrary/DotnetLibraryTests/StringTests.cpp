@@ -33,3 +33,13 @@ TEST(StringTests, Constructor4Test) {
 	ASSERT_TRUE(string.get_Length() == 3);
 	ASSERT_TRUE(wcscmp(string.get_Buffer(), L"DEF") == 0);
 }
+TEST(StringTests, Constructor5Test) {
+	String	string(L'C', 6);
+	ASSERT_TRUE(string.IsAllocated());
+	ASSERT_TRUE(string.get_Length() == 6);
+	ASSERT_TRUE(wcscmp(string.get_Buffer(), L"CCCCCC") == 0);
+}
+TEST(StringTests, AddressTest) {
+	String	string(L"Test String");
+	ASSERT_TRUE(*string.Address(0) == L'T');
+}

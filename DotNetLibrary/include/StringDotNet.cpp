@@ -52,11 +52,28 @@ namespace DotnetLibrary
 			characterData[i] = *(Char*)values->Address(i + startIndex);
 		}
 	}
+	String::String(const Char chr, const Int32 amount)
+	{
+		if (amount < 0) {
+			throw new ArgumentOutOfRangeException();
+		}
+		this->length = amount;
+		characterData = new Char[length + 1];
+		for (size_t i = 0; i < amount; ++i) {
+			characterData[i] = chr;
+		}
+	}
 	String::~String()
 	{
 		if (allocate && characterData != nullptr)
 			delete characterData;
 		characterData = nullptr;
+	}
+	Char* String::Address(Int32 index1, Int32 index2, Int32 index3)
+	{
+		if (index1 < 0 || index1 >= length)
+			throw new IndexOutOfRangeException();
+		return(&characterData[index1]);
 	}
 	String* String::ToString()
 	{

@@ -33,6 +33,9 @@ namespace DotnetLibrary
 		static Byte Parse(String* stringToParse) {
 			return(0);
 		}
+		virtual	String* ToString() {
+			return(Object::ToString());
+		}
 		static String* ToString(Char v) {
 			return(nullptr);
 		}

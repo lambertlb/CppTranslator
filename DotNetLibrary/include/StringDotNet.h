@@ -15,10 +15,12 @@ namespace DotnetLibrary
 		String(const Char* string);
 		String(const Char* string, Int32 startIndex, Int32 length = -1);
 		String(Array* chrs,  Int32 startIndex = 0, Int32 length = -1);
-		virtual ~String();
-		virtual DataType GetRawDataType() { return(StringType); };
-		Char* get_Buffer() { return(characterData); }
-		Boolean	IsAllocated() { return(allocate); }
+		String(const Char chr, const Int32 amount);
+		virtual				~String();
+		Char*				Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1);
+		virtual DataType	GetRawDataType() { return(StringType); };
+		Char*				get_Buffer() { return(characterData); }
+		Boolean				IsAllocated() { return(allocate); }
 
 		virtual Boolean StartsWith(String* what) {
 			return(false);
@@ -28,9 +30,6 @@ namespace DotnetLibrary
 		}
 		virtual String* Combine(String* v) { return(nullptr); }
 		Int32				get_Length() { return(length); }
-		Char* Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1) {
-			return(&characterData[index1]);
-		}
 		void CopyTo(Int32 sourceIndex, Array* destination, Int32 destinationIndex, Int32 count) {}
 		Int32	GetLength(Int32 rank) {
 			return(length);
@@ -93,7 +92,7 @@ namespace DotnetLibrary
 		static	String* Join(String* separator, Array* values, const Int32 startIndex, const Int32 count) { return(nullptr); }
 
 		CharEnumerator* GetEnumerator() { return(nullptr); }
-		String operator+=(Object* obj) { return(*this); }
+//		String operator+=(Object* obj) { return(*this); }
 		static String* Empty;
 	};
 }
