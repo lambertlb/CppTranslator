@@ -1,13 +1,12 @@
 #pragma once
 #include "DotnetTypes.h"
-#include <string>
 
 namespace DotnetLibrary
 {
-	StringBuilder::StringBuilder() : StringBuilder(DefaultCapacity, Int32Value::MaxValue)
+	StringBuilder::StringBuilder() : StringBuilder(DefaultCapacity, MaximumCapacity)
 	{
 	}
-	StringBuilder::StringBuilder(Int32 capacity) : StringBuilder(capacity, Int32Value::MaxValue)
+	StringBuilder::StringBuilder(Int32 capacity) : StringBuilder(capacity, MaximumCapacity)
 	{
 	}
 	StringBuilder::StringBuilder(Int32 capacity, Int32 maxCapacity)
@@ -26,6 +25,10 @@ namespace DotnetLibrary
 		if (capacity == 0) {
 			capacity = Math::Min(DefaultCapacity, maxCapacity);
 		}
+		Int32	partial = maxCapacity % DefaultCapacity;
+		maxCapacity = (maxCapacity / DefaultCapacity) * DefaultCapacity;
+		if (partial > 0)
+			maxCapacity += DefaultCapacity;
 		this->maxCapacity = maxCapacity;
 		set_Capacity(capacity);
 	}
@@ -53,10 +56,10 @@ namespace DotnetLibrary
 		if (capacity == 0) {
 			capacity = DefaultCapacity;
 		}
-		set_Capacity(Math::Max(capacity, length + 1));
+		set_Capacity(Math::Max(capacity, length));
 		Char* sourcePtr = value->Address(startIndex);
 		memcpy(chunkChars, sourcePtr, length * sizeof(Char));
-		chunkOffset = length;
+		currentLength = length;
 	}
 	StringBuilder::~StringBuilder()
 	{
@@ -66,15 +69,15 @@ namespace DotnetLibrary
 	}
 	void StringBuilder::Initialize()
 	{
-		maxCapacity = Int32Value::MaxValue;
+		maxCapacity = MaximumCapacity;
 		chunkChars = internalMemory;
-		chunkOffset = 0;
-		chunkLength = DefaultCapacity;
+		currentLength = 0;
+		currentCapacity = DefaultCapacity;
 		memset(internalMemory, 0, sizeof(internalMemory));
 	}
 	Int32 StringBuilder::get_Length()
 	{
-		return chunkOffset;
+		return currentLength;
 	}
 	void StringBuilder::set_Length(Int32 newLength)
 	{
@@ -85,47 +88,51 @@ namespace DotnetLibrary
 			throw new ArgumentOutOfRangeException();
 		}
 		if (newLength == 0) {
-			chunkOffset = 0;
-			memset(chunkChars, 0, chunkLength * sizeof(Char));
+			currentLength = 0;
+			memset(chunkChars, 0, currentCapacity * sizeof(Char));
 			return;
 		}
-		EnsureCapacity(newLength + 1);
-		int delta = newLength - chunkOffset;
+		EnsureCapacity(newLength);
+		int delta = newLength - currentLength;
 		if (delta == 0) {
 			return;
 		}
 		if (delta < 0) {
-			memset(chunkChars + (chunkOffset + delta), 0, -delta * sizeof(Char));
+			memset(chunkChars + (currentLength + delta), 0, -delta * sizeof(Char));
 		}
-		chunkOffset = newLength;
+		currentLength = newLength;
 	}
 	Int32 StringBuilder::get_Capacity()
 	{
-		return chunkLength;
+		return currentCapacity;
 	}
 	void StringBuilder::set_Capacity(Int32 capacity)
 	{
 		if (capacity < 0) {
 			throw new ArgumentOutOfRangeException();
 		}
+		Int32	partial = capacity % DefaultCapacity;
+		capacity = (capacity / DefaultCapacity) * DefaultCapacity;
+		if (partial > 0)
+			capacity += DefaultCapacity;
 		if (capacity > maxCapacity) {
 			throw new ArgumentOutOfRangeException();
 		}
-		if (chunkChars != internalMemory && capacity < chunkLength) {
+		if (chunkChars != internalMemory && capacity < currentCapacity) {
 			throw new ArgumentOutOfRangeException();
 		}
-		if (chunkLength >= capacity) {
-			chunkLength = capacity;
+		if (currentCapacity >= capacity) {
+			currentCapacity = capacity;
 			return;
 		}
 		Char* newArray = internalMemory;
 		if (capacity > DefaultCapacity) {
-			newArray = new Char[capacity];
-			memcpy(newArray, chunkChars, chunkOffset * sizeof(Char));
+			newArray = new Char[capacity + 1];
+			memcpy(newArray, chunkChars, currentLength * sizeof(Char));
 			if (chunkChars != internalMemory)
 				delete chunkChars;
 		}
-		chunkLength = capacity;
+		currentCapacity = capacity;
 		chunkChars = newArray;
 	}
 	Int32 StringBuilder::get_MaxCapacity()
@@ -134,9 +141,26 @@ namespace DotnetLibrary
 	}
 	Char* StringBuilder::Address(Int32 index1, Int32 index2, Int32 index3)
 	{
-		if (index1 < 0 || index1 >= chunkOffset)
+		if (index1 < 0 || index1 >= currentLength)
 			throw new IndexOutOfRangeException();
 		return(&chunkChars[index1]);
+	}
+	Int32 StringBuilder::CountSubStrings(String* subString, Int32 startIndex, Int32 length)
+	{
+		Int32	amount = 0;
+		Int32	bytesToCompare = subString->get_Length() * sizeof(Char);
+		length += startIndex - 1;
+		for (int i = startIndex; i < length;)
+		{
+			if (0 == memcmp(chunkChars + i, subString->get_Buffer(), bytesToCompare))
+			{
+				++amount;
+				i += subString->get_Length();
+			}
+			else
+				++i;
+		}
+		return(amount);
 	}
 	Char StringBuilder::get_Chars(Int32 index)
 	{
@@ -148,38 +172,38 @@ namespace DotnetLibrary
 	}
 	String* StringBuilder::ToString()
 	{
-		return(new String(chunkChars, 0, chunkOffset));
+		return(new String(chunkChars, 0, currentLength));
 	}
 	String* StringBuilder::ToString(Int32 startIndex, Int32 length)
 	{
-		if (startIndex < 0 || startIndex >= chunkOffset)
+		if (startIndex < 0 || startIndex >= currentLength)
 			throw new IndexOutOfRangeException();
-		if (startIndex + length > chunkOffset)
+		if (startIndex + length > currentLength)
 			throw new IndexOutOfRangeException();
 		return(new String(&chunkChars[startIndex], 0, length));
 	}
 	Int32 StringBuilder::FormatString(Char* where, const Int32 whereSize)
 	{
-		if (whereSize < chunkOffset)
+		if (whereSize < currentLength)
 			throw new IndexOutOfRangeException();
 		wcscpy_s(where, whereSize, chunkChars);
-		return chunkOffset;
+		return currentLength;
 	}
 	StringBuilder* StringBuilder::Append(const Char* values, Int32 charCount, Int32 where)
 	{
 		if (where == -1) {
-			where = chunkOffset;
+			where = currentLength;
 		}
-		if (where > chunkOffset) {
+		if (where > currentLength) {
 			throw new IndexOutOfRangeException();
 		}
-		EnsureCapacity(chunkOffset + charCount + 1);
-		if (where != chunkOffset) {
-			memmove(&chunkChars[where + charCount], &chunkChars[where], (chunkOffset - where) * sizeof(Char));
+		EnsureRoomFor(charCount);
+		if (where != currentLength) {
+			memmove(&chunkChars[where + charCount], &chunkChars[where], (currentLength - where) * sizeof(Char));
 		}
 		memcpy(&chunkChars[where], values, charCount * sizeof(Char));
-		chunkOffset += charCount;
-		chunkChars[chunkOffset] = 0;
+		currentLength += charCount;
+		chunkChars[currentLength] = 0;
 		return(this);
 	}
 	StringBuilder* StringBuilder::Append(Array* values, Int32 startIndex, Int32 charCount)
@@ -255,24 +279,24 @@ namespace DotnetLibrary
 		if (repeatCount < 0) {
 			throw new ArgumentOutOfRangeException();
 		}
-		EnsureCapacity(chunkOffset + repeatCount + 1);
+		EnsureCapacity(repeatCount);
 		for (int i = 0; i < repeatCount; ++i) {
-			chunkChars[chunkOffset++] = value;
+			chunkChars[currentLength++] = value;
 		}
-		chunkChars[chunkOffset] = 0;
+		chunkChars[currentLength] = 0;
 		return(this);
 	}
 	StringBuilder* StringBuilder::Append(String* value, Int32 startIndex, Int32 charCount)
 	{
 		if (charCount < 0)
-			charCount = value->length;
+			charCount = value->get_Length();
 		if (startIndex < 0) {
 			throw new ArgumentOutOfRangeException();
 		}
 		if (startIndex > value->get_Length() - charCount) {
 			throw new ArgumentOutOfRangeException();
 		}
-		return(Append(&value->characterData[startIndex], charCount));
+		return(Append(&(value->get_Buffer()[startIndex]), charCount));
 	}
 	StringBuilder* StringBuilder::Append(SByte value)
 	{
@@ -315,6 +339,10 @@ namespace DotnetLibrary
 	{
 		throw new NotImplementedException();
 	}
+	void StringBuilder::EnsureRoomFor(Int32 amount)
+	{
+		EnsureCapacity(currentLength + amount);
+	}
 	Int32 StringBuilder::EnsureCapacity(Int32 capacity)
 	{
 		if (capacity < 0) {
@@ -333,12 +361,12 @@ namespace DotnetLibrary
 		if (startIndex < 0) {
 			throw new ArgumentOutOfRangeException();
 		}
-		if (length > this->chunkOffset - startIndex) {
+		if (length > this->currentLength - startIndex) {
 			throw new ArgumentOutOfRangeException();
 		}
-		memcpy(&chunkChars[startIndex], &chunkChars[startIndex + length], (chunkOffset - length) * sizeof(char));
-		chunkOffset -= length;
-		chunkChars[chunkOffset] = 0;
+		memcpy(&chunkChars[startIndex], &chunkChars[startIndex + length], (currentLength - length) * sizeof(char));
+		currentLength -= length;
+		chunkChars[currentLength] = 0;
 		return this;
 	}
 	StringBuilder* StringBuilder::Insert(const Int32 index, const Boolean value)
@@ -438,19 +466,19 @@ namespace DotnetLibrary
 	}
 	StringBuilder* StringBuilder::Replace(const Char oldChar, const Char newChar)
 	{
-		return Replace(oldChar, newChar, 0, chunkOffset);
+		return Replace(oldChar, newChar, 0, currentLength);
 	}
 	StringBuilder* StringBuilder::Replace(String* search, String* replace)
 	{
-		return Replace(search, replace, 0, chunkOffset);
+		return Replace(search, replace, 0, currentLength);
 	}
 	StringBuilder* StringBuilder::Replace(const Char oldChar, const Char newChar, const Int32 startIndex, const Int32 count)
 	{
-		int currentLength = chunkOffset;
-		if ((UInt32)startIndex > (UInt32)currentLength) {
+		int length = currentLength;
+		if ((UInt32)startIndex > (UInt32)length) {
 			throw new ArgumentOutOfRangeException();
 		}
-		if (count < 0 || startIndex > currentLength - count) {
+		if (count < 0 || startIndex > length - count) {
 			throw new ArgumentOutOfRangeException();
 		}
 		int endIndex = startIndex + count;
@@ -463,41 +491,52 @@ namespace DotnetLibrary
 	}
 	StringBuilder* StringBuilder::Replace(String* search, String* replace, const Int32 startIndex, const Int32 count)
 	{
-		int currentLength = chunkOffset;
+		int length = currentLength;
 		if ((UInt32)startIndex > (UInt32)currentLength) {
 			throw new ArgumentOutOfRangeException();
 		}
-		if (count < 0 || startIndex > currentLength - count) {
+		if (count < 0 || startIndex > length - count) {
 			throw new ArgumentOutOfRangeException();
 		}
 		if (search == nullptr) {
 			throw new ArgumentOutOfRangeException();
 		}
-		if (search->length == 0) {
+		if (search->get_Length() == 0) {
 			throw new ArgumentOutOfRangeException();
 		}
 		if (replace == nullptr) {
 			replace = String::Empty;
 		}
-		Int32	endIndex = (startIndex - 1) + count;
-		Int32	delta = replace->length - search->length;
-		std::wstring	builder(chunkChars);
-		std::wstring	toSearch(search->characterData);
-		std::wstring	replaceStr(replace->characterData);
-		size_t pos = builder.find(toSearch);
-
-		while (pos != std::string::npos) {
-			if (pos >= endIndex)
-				break;
-			if (pos >= startIndex) {
-				builder.replace(pos, toSearch.size(), replaceStr);
-				endIndex += delta;
-			}
-			pos = builder.find(toSearch, pos + replaceStr.size());
+		Int32 howMany = CountSubStrings(search, startIndex, count);
+		if (howMany == 0) {
+			return this;
 		}
-		EnsureCapacity(builder.length() + 1);
-		memcpy(chunkChars, builder.c_str(), builder.length() * sizeof(Char));
-		chunkOffset = builder.length();
+		Int32	delta = replace->get_Length() - search->get_Length();
+		if (delta > 0) {
+			EnsureRoomFor(delta * howMany);
+		}
+		ReplaceSubString(search, replace, startIndex, count);
 		return this;
+	}
+	void StringBuilder::ReplaceSubString(String* search, String* replace, const Int32 startIndex, const Int32 count)
+	{
+		Int32	endIndex = (startIndex - 1) + count;
+		Int32	delta = replace->get_Length() - search->get_Length();
+		Int32	bytesToCompare = search->get_Length() * sizeof(Char);
+		for (int i = startIndex; i < endIndex;)
+		{
+			if (0 == memcmp(chunkChars + i, search->get_Buffer(), bytesToCompare))
+			{
+				Int32 howMuchToMove = currentLength - i - search->get_Length() ;
+				memmove(&chunkChars[i + replace->get_Length()], &chunkChars[i + search->get_Length()], howMuchToMove * sizeof(Char));
+				currentLength += delta;
+				chunkChars[currentLength] = 0;
+				endIndex += delta;
+				memcpy(&chunkChars[i], replace->get_Buffer(), replace->get_Length() * sizeof(Char));
+				i += replace->get_Length();
+			}
+			else
+				++i;
+		}
 	}
 }

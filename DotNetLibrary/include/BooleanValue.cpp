@@ -7,12 +7,12 @@ namespace DotnetLibrary
 	{
 		Int32 rtn;
 		if (value) {
-			wcscpy_s(where, whereSize, TrueString->characterData);
-			rtn = TrueString->length;
+			wcscpy_s(where, whereSize, TrueString->get_Buffer());
+			rtn = TrueString->get_Length();
 		}
 		else {
-			wcscpy_s(where, whereSize, FalseString->characterData);
-			rtn = FalseString->length;
+			wcscpy_s(where, whereSize, FalseString->get_Buffer());
+			rtn = FalseString->get_Length();
 		}
 		return rtn;
 	}

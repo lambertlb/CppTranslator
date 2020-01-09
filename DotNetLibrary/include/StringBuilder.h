@@ -3,23 +3,28 @@
 
 namespace DotnetLibrary
 {
-#define DefaultCapacity 128
+#define DefaultCapacity 128 // default internal buffer size
+#define MaximumCapacity 1024// Maximum string builder capacity
 	class DLL_EXPORT StringBuilder : public Object
 	{
-	public:
-		Char	internalMemory[DefaultCapacity]; // default memory to prevent allocations
+	private:
+		Char	internalMemory[DefaultCapacity + 1]; // default memory to prevent allocations
 		Char*	chunkChars;		// array of characters
-		Int32	chunkLength;	// total size of the array
-		Int32	chunkOffset;	// current offset into array for next insters
+		Int32	currentCapacity;	// total size of the array
+		Int32	currentLength;	// current offset into array for next insters
 		Int32	maxCapacity;	// max capacity for this builder
+	public:
 		StringBuilder();
 		StringBuilder(Int32 capacity);
 		StringBuilder(Int32 capacity, Int32 maxCapacity);
 		StringBuilder(String* value, Int32 capacity = DefaultCapacity);
 		StringBuilder(String* value, Int32 startIndex, Int32 length, Int32 capacity);
-		void				Initialize();
 		virtual				~StringBuilder();
+		Boolean				IsInternal() { return(chunkChars == internalMemory); }
+		Char*				get_Buffer() { return(chunkChars); }
+		void				Initialize();
 		Char*				Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1);
+		Int32				CountSubStrings(String* subString, Int32 startIndex, Int32 length);
 		virtual DataType	GetRawDataType() { return(ObjectType); };
 		Int32				get_Length();
 		void				set_Length(Int32 newLength);
@@ -53,6 +58,7 @@ namespace DotnetLibrary
 		StringBuilder*		AppendFormat(String* format, Array* args);
 		StringBuilder*		AppendFormat(String* format, Object* arg0, Object* arg1);
 		StringBuilder*		AppendFormat(String* format, Object* arg0, Object* arg1, Object* arg2);
+		void				EnsureRoomFor(Int32 amount);
 		Int32				EnsureCapacity(Int32 capacity);
 		StringBuilder*		Remove(Int32 startIndex, Int32 length);
 		StringBuilder*		Insert(const Int32 index, const Boolean value);
@@ -74,5 +80,6 @@ namespace DotnetLibrary
 		StringBuilder*		Replace(String* search, String* replace);
 		StringBuilder*		Replace(const Char oldChar, const Char newChar, const Int32 startIndex, const Int32 count);
 		StringBuilder*		Replace(String* search, String* replace, const Int32 startIndex, const Int32 count);
+		void				ReplaceSubString(String* search, String* replace, const Int32 startIndex, const Int32 count);
 	};
 }

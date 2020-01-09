@@ -8,15 +8,17 @@ namespace DotnetLibrary
 
 	class DLL_EXPORT String : public Object
 	{
-	public:
 		Char* characterData;
 		size_t	length;
 		Boolean allocate;
+	public:
 		String(const Char* string);
 		String(const Char* string, Int32 startIndex, Int32 length = -1);
 		String(Array* chrs,  Int32 startIndex = 0, Int32 length = -1);
 		virtual ~String();
 		virtual DataType GetRawDataType() { return(StringType); };
+		Char* get_Buffer() { return(characterData); }
+		Boolean	IsAllocated() { return(allocate); }
 
 		virtual Boolean StartsWith(String* what) {
 			return(false);
