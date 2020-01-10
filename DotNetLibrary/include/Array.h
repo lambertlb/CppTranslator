@@ -26,6 +26,7 @@ namespace DotnetLibrary
 		void			CopyTo(Array* array, Int32 index);
 		void			EnsureSingleDimension();
 		virtual DataType GetRawDataType() { return(ObjectType); };
+		virtual DataType GetElementType() { return(dataType); };
 		Int32			GetLength(Int32 rank);
 		Int32			GetLowerBound(Int32 rank);
 		Int32			GetUpperBound(Int32 rank);
