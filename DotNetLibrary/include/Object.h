@@ -10,8 +10,8 @@ namespace DotnetLibrary
 	public:
 		Object() {}
 		virtual				~Object() {};
-		static	Boolean		Equals(Object* obj1, Object* obj2) { return(true); }
-		virtual Boolean		Equals(Object* object) { return(true); }
+		static	Boolean		Equals(Object* obj1, Object* obj2);
+		virtual Boolean		Equals(Object* object);
 		virtual	String*		ToString();
 		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
 		virtual void		Send(String* message);
@@ -30,39 +30,6 @@ namespace DotnetLibrary
 		virtual Double		get_AsDouble();
 		virtual TimeSpan	get_AsTimeSpan();
 		virtual DateTime	get_AsDateTime();
-		virtual Boolean		Equals(Boolean v) {
-			return(true);
-		}
-		virtual Boolean		Equals(Char v) {
-			return(true);
-		}
-		virtual Boolean		Equals(Byte v) {
-			return(true);
-		}
-		//virtual Boolean		Equals(Int16 v) {
-		//	return(true);
-		//}
-		virtual Boolean		Equals(UInt16 v) {
-			return(true);
-		}
-		virtual Boolean		Equals(Int32 v) {
-			return(true);
-		}
-		virtual Boolean		Equals(UInt32 v) {
-			return(true);
-		}
-		virtual Boolean		Equals(Int64 v) {
-			return(true);
-		}
-		virtual Boolean		Equals(UInt64 v) {
-			return(true);
-		}
-		virtual Boolean		Equals(Single v) {
-			return(true);
-		}
-		virtual Boolean		Equals(Double v) {
-			return(true);
-		}
 	};
 	class BlockBase : public Object
 	{

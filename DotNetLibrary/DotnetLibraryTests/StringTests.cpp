@@ -164,3 +164,149 @@ TEST(StringTests, CopyToTest) {
 	Char* x = (Char*)array.Address(0);
 	ASSERT_TRUE(wcsncmp((Char*)array.Address(0), L"AB456F", 6) == 0);
 }
+TEST(StringTests, EndsWithTest) {
+	String	string(L"ABCDEFGHI");
+	String	string1(L"GHI");
+	ASSERT_TRUE(string.EndsWith(&string1));
+}
+TEST(StringTests, EndsWith2Test) {
+	String	string(L"ABCDEFGHI");
+	String	string1(L"ABCDEFGHI");
+	ASSERT_TRUE(string.EndsWith(&string1));
+}
+TEST(StringTests, EndsWith3Test) {
+	String	string(L"ABCDEFGHI");
+	ASSERT_TRUE(string.EndsWith(L'I'));
+}
+TEST(StringTests, EndsWith4Test) {
+	String	string(L"");
+	ASSERT_TRUE(!string.EndsWith(L'I'));
+}
+TEST(StringTests, EqualsTest) {
+	String	string(L"ABCDEFGHI");
+	ASSERT_TRUE(string.Equals(&string));
+}
+TEST(StringTests, Equals2Test) {
+	String	string(L"ABCDEFGHI");
+	String	string2(L"ABCDEFGHI");
+	ASSERT_TRUE(string.Equals(&string2));
+}
+TEST(StringTests, Equals3Test) {
+	String	string(L"ABCDEFGHI");
+	String	string2(L"ABCDEFGHI");
+	ASSERT_TRUE(string.Equals((Object*)&string2));
+}
+TEST(StringTests, Equals4Test) {
+	String	string(L"ABCDEFGHI");
+	String	string2(L"ABCDEFGHI");
+	ASSERT_TRUE(((Object*)&string)->Equals((Object*)&string2));
+}
+TEST(StringTests, Equals5Test) {
+	String	string(L"ABCDEFGHI");
+	String	string2(L"ABCDEFGHI");
+	ASSERT_TRUE(Object::Equals((Object*)&string, (Object*)&string2));
+}
+TEST(StringTests, Equals6Test) {
+	String	string(L"ABCDEFGHI");
+	String	string2(L"ABCDEFGHI");
+	ASSERT_TRUE(String::Equals(&string, (Object*)&string2));
+}
+TEST(StringTests, GetEnumeratorTest) {
+	Char* chars = L"ABCDEFGHI";
+	String	string(chars);
+	CharEnumerator* iter = string.GetEnumerator();
+	Int32 i = 0;
+	while (iter->MoveNext()) {
+		ASSERT_TRUE(iter->get_Current() == chars[i++]);
+	}
+	i = 0;
+	iter->Reset();
+	while (iter->MoveNext()) {
+		ASSERT_TRUE(iter->get_Current() == chars[i++]);
+	}
+}
+TEST(StringTests, IndexOfTest) {
+	String	string(L"ABCDEFGHI");
+	ASSERT_TRUE(string.IndexOf(L'A') == 0);
+}
+TEST(StringTests, IndexOf2Test) {
+	String	string(L"ABCDEFGHI");
+	ASSERT_TRUE(string.IndexOf(L'I') == 8);
+}
+TEST(StringTests, IndexOf3Test) {
+	String	string(L"ABCDEFGHI");
+	ASSERT_TRUE(string.IndexOf(L'C', 2) == 2);
+}
+TEST(StringTests, IndexOf4Test) {
+	String	string(L"ABCDEFGHI");
+	ASSERT_TRUE(string.IndexOf(L'C', 2, 3) == 2);
+}
+TEST(StringTests, IndexOf5Test) {
+	String	string(L"ABCDEFGHI");
+	ASSERT_TRUE(string.IndexOf(L'1') == -1);
+}
+TEST(StringTests, IndexOfStringTest) {
+	String	string(L"ABCDEFGHI");
+	String	string2(L"BCD");
+	ASSERT_TRUE(string.IndexOf(&string2) == 1);
+}
+TEST(StringTests, IndexOfString2Test) {
+	String	string(L"ABCDEFGHI");
+	String	string2(L"I");
+	ASSERT_TRUE(string.IndexOf(&string2, 4) == 8);
+}
+TEST(StringTests, IndexOfString3Test) {
+	String	string(L"ABCDEFGHI");
+	String	string2(L"EFG");
+	ASSERT_TRUE(string.IndexOf(&string2, 2, 6) == 4);
+}
+TEST(StringTests, IndexOfString4Test) {
+	String	string(L"ABCDEFGHI");
+	String	string2(L"123");
+	ASSERT_TRUE(string.IndexOf(&string2) == -1);
+}
+TEST(StringTests, IndexOfString5Test) {
+	String	string(L"ABCDEFGHI");
+	String	string2(L"ABC");
+	ASSERT_TRUE(string.IndexOf(&string2, 2) == -1);
+}
+TEST(StringTests, IndexOfAnyTest) {
+	String	string(L"12 34 56");
+	Array array(CharType, 2);
+	Char	data[] = { '3','4'};
+	array.Initialize(data);
+	ASSERT_TRUE(string.IndexOfAny(&array) == 3);
+}
+TEST(StringTests, IndexOfAny2Test) {
+	String	string(L"12 34 56");
+	Array array(CharType, 2);
+	Char	data[] = { '3','4' };
+	array.Initialize(data);
+	ASSERT_TRUE(string.IndexOfAny(&array, 3) == 3);
+}
+TEST(StringTests, IndexOfAny3Test) {
+	String	string(L"12 34 56");
+	Array array(CharType, 2);
+	Char	data[] = { 'X','3' };
+	array.Initialize(data);
+	ASSERT_TRUE(string.IndexOfAny(&array, 3, 2) == 3);
+}
+TEST(StringTests, IndexOfAny4Test) {
+	String	string(L"12 34 56");
+	Array array(CharType, 2);
+	Char	data[] = { 'X','Y' };
+	array.Initialize(data);
+	ASSERT_TRUE(string.IndexOfAny(&array) == -1);
+}
+TEST(StringTests, InsertTest) {
+	String	string(L"ABCDEFGHI");
+	String	string2(L"123");
+	String* newStr = string.Insert(3, &string2);
+	ASSERT_TRUE(wcscmp(newStr->get_Buffer(), L"ABC123DEFGHI") == 0);
+}
+TEST(StringTests, Insert2Test) {
+	String	string(L"ABCDEFGHI");
+	String	string2(L"123");
+	String* newStr = string.Insert(string.get_Length(), &string2);
+	ASSERT_TRUE(wcscmp(newStr->get_Buffer(), L"ABCDEFGHI123") == 0);
+}

@@ -197,6 +197,146 @@ namespace DotnetLibrary
 			*dest++ = *source++;
 		}
 	}
+	Boolean String::EndsWith(String* what)
+	{
+		if (what == nullptr) {
+			throw new ArgumentNullException();
+		}
+		if (this == what) {
+			return true;
+		}
+		if (what->length == 0) {
+			return true;
+		}
+		StringBuilder sb(this);
+		return(sb.CountSubStrings(what, length - what->get_Length(), what->get_Length()) != 0);
+	}
+	Boolean String::EndsWith(Char what)
+	{
+		int lastPos = get_Length() - 1;
+		if (lastPos < 0)
+			return(false);
+		return (characterData[lastPos] == what);
+	}
+	Boolean String::op_Inequality(String* str, String* str2)
+	{
+		if (str == str2) {
+			return true;
+		}
+		if (str == nullptr || str2 == nullptr || str->get_Length() != str2->get_Length()) {
+			return false;
+		}
+		return wcscmp(str->get_Buffer(), str2->get_Buffer()) == 0;
+	}
+	Boolean String::Equals(Object* object)
+	{
+		if (object == nullptr || object->GetRawDataType() != StringType)
+			return(false);
+		return op_Inequality(this, (String*)object);
+	}
+	Boolean String::Equals(String* object)
+	{
+		return op_Inequality(this, object);
+	}
+	Boolean String::Equals(String* object, Object* object2)
+	{
+		if (object2 == nullptr || object2->GetRawDataType() != StringType)
+			return(false);
+		return op_Inequality(object, (String*)object2);
+	}
+	CharEnumerator* String::GetEnumerator()
+	{
+		return(new CharEnumerator(this));
+	}
+	Int32 String::IndexOf(const Char value)
+	{
+		return IndexOf(value, 0, length);
+	}
+	Int32 String::IndexOf(const Char value, const Int32 startIndex)
+	{
+		return IndexOf(value, startIndex, length - startIndex);
+	}
+	Int32 String::IndexOf(const Char value, const Int32 startIndex, const Int32 count)
+	{
+		if (count > length - startIndex)
+			throw new ArgumentNullException();
+		Int32 endIndex = startIndex + count;
+		for (Int32 index = startIndex; index < endIndex; ++index) {
+			if (get_Chars(index) == value)
+				return(index);
+		}
+		return(-1);
+	}
+	Int32 String::IndexOf(String* value)
+	{
+		if (value == nullptr)
+			throw new ArgumentNullException();
+		return IndexOf(value, 0, value->length);
+	}
+	Int32 String::IndexOf(String* value, const Int32 startIndex)
+	{
+		if (value == nullptr)
+			throw new ArgumentNullException();
+		return IndexOf(value, startIndex, length - startIndex);
+	}
+	Int32 String::IndexOf(String* value, const Int32 startIndex, const Int32 count)
+	{
+		if (value == nullptr)
+			throw new ArgumentNullException();
+		if (startIndex < 0 || count < 0)
+			throw new ArgumentNullException();
+		if (count > length - startIndex)
+			throw new ArgumentNullException();
+		Char* found = wcsstr(get_Buffer() + startIndex, value->get_Buffer());
+		if (found == nullptr)
+			return(-1);
+		Int32 delta = found - get_Buffer();
+		return(delta);
+	}
+	Int32 String::IndexOfAny(Array* arr)
+	{
+		if (arr == nullptr)
+			throw new ArgumentNullException();
+		return IndexOfAny(arr, 0 , get_Length());
+	}
+	Int32 String::IndexOfAny(Array* arr, const Int32 startIndex)
+	{
+		if (arr == nullptr)
+			throw new ArgumentNullException();
+		return IndexOfAny(arr, startIndex, get_Length() - startIndex);
+	}
+	Int32 String::IndexOfAny(Array* arr, const Int32 startIndex, const Int32 count)
+	{
+		if (arr == nullptr)
+			throw new ArgumentNullException();
+		if (startIndex < 0 || count < 0)
+			throw new ArgumentNullException();
+		if (count > length - startIndex)
+			throw new ArgumentNullException();
+		arr->EnsureSingleDimension();
+		if (arr->GetElementType() != CharType)
+			throw new ArgumentNullException();
+		Int32 endIndex = startIndex + count;
+		for (Int32 index = startIndex; index < endIndex; ++index) {
+			for (Int32 arrayIndex = 0; arrayIndex < arr->get_Length(); ++arrayIndex) {
+				Char* xx = (Char*)arr->Address(arrayIndex);
+				if (*xx == get_Chars(index)) {
+					return(index);
+				}
+			}
+		}
+		return(-1);
+	}
+	String* String::Insert(const Int32 startIndex, String* value)
+	{
+		if (value == nullptr)
+			throw new ArgumentNullException();
+		if (startIndex < 0 || startIndex > length)
+			throw new ArgumentOutOfRangeException();
+		StringBuilder	sb(this);
+		sb.Insert(startIndex, value);
+		return(sb.ToString());
+	}
 	String* String::ToString()
 	{
 		return this;

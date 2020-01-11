@@ -6,11 +6,13 @@ namespace DotnetLibrary
 
 	class DLL_EXPORT CharEnumerator : public Object
 	{
+		Int32	index;
+		String* string;
+		Char	currentElement;
 	public:
-		CharEnumerator(String* str) {}
-		Object*		Clone() { return(nullptr); }
-		Char		get_Current() { return('a'); }
-		Boolean		MoveNext() { return(false); }
-		void		Reset() {}
+		CharEnumerator(String* str);
+		Char		get_Current();
+		Boolean		MoveNext();
+		void		Reset();
 	};
 }

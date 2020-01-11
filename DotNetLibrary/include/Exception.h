@@ -54,5 +54,9 @@ namespace DotnetLibrary
 	public:
 		InvalidCastException() : Exception(new String(L"Invalid Cast")) {}
 	};
-	
+	struct DLL_EXPORT InvalidOperationException : public  Exception
+	{
+	public:
+		InvalidOperationException() : Exception(new String(L"Invalid Operation")) {}
+	};
 }

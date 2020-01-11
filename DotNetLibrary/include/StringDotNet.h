@@ -35,9 +35,25 @@ namespace DotnetLibrary
 		Boolean				Contains(String* substring);
 		static	String*		Copy(String* str);
 		void				CopyTo(Int32 sourceIndex, Array* destination, Int32 destinationIndex, Int32 count);
+		virtual Boolean		EndsWith(String* what);
+		virtual Boolean		EndsWith(Char what);
+		static Boolean		op_Inequality(String* str, String* str2);
+		virtual Boolean		Equals(Object* object);
+		virtual Boolean		Equals(String* object);
+		static Boolean		Equals(String* object, Object* object2);
+		CharEnumerator*		GetEnumerator();
+		Int32				IndexOf(const Char value);
+		Int32				IndexOf(String* value);
+		Int32				IndexOf(const Char value, const Int32 startIndex);
+		Int32				IndexOf(String* value, const Int32 startIndex);
+		Int32				IndexOf(const Char value, const Int32 startIndex, const Int32 count);
+		Int32				IndexOf(String* value, const Int32 startIndex, const Int32 count);
+		Int32				IndexOfAny(Array* arr);
+		Int32				IndexOfAny(Array* arr, const Int32 startIndex);
+		Int32				IndexOfAny(Array* arr, const Int32 startIndex, const Int32 count);
+		String*				Insert(const Int32 startIndex, String* value);
 
 		virtual Boolean		StartsWith(String* what) {return(false);}
-		virtual Boolean		EndsWith(String* what) {return(false);}
 		virtual String*		Combine(String* v) { return(nullptr); }
 		Array*				ToCharArray() { return(nullptr); }
 		Array*				ToCharArray(const Int32 startIndex, const Int32 length) { return(nullptr); }
@@ -51,15 +67,6 @@ namespace DotnetLibrary
 		String*				Trim(Array* separator) { return(nullptr); }
 		String*				TrimEnd(Array* separator) { return(nullptr); }
 		String*				TrimStart(Array* separator) { return(nullptr); }
-		Int32				IndexOf(const Char value) { return(0); }
-		Int32				IndexOf(String* value) { return(0); }
-		Int32				IndexOf(const Char value, const Int32 startIndex) { return(0); }
-		Int32				IndexOf(String* value, const Int32 startIndex) { return(0); }
-		Int32				IndexOf(const Char value, const Int32 startIndex, const Int32 count) { return(0); }
-		Int32				IndexOf(String* value, const Int32 startIndex, const Int32 count) { return(0); }
-		Int32				IndexOfAny(Array* arr) { return(0); }
-		Int32				IndexOfAny(Array* arr, const Int32 startIndex) { return(0); }
-		Int32				IndexOfAny(Array* arr, const Int32 startIndex, const Int32 count) { return(0); }
 		Int32				LastIndexOf(const Char value) { return(0); }
 		Int32				LastIndexOf(String* value) { return(0); }
 		Int32				LastIndexOf(const Char value, const Int32  startIndex) { return(0); }
@@ -78,13 +85,10 @@ namespace DotnetLibrary
 		String*				Replace(String* oldValue, String* newValue) { return(nullptr); }
 		String*				ToLower() { return(nullptr); }
 		String*				ToUpper() { return(nullptr); }
-		String*				Insert(const Int32 startIndex, String* value) { return(nullptr); }
 		static	String*		Format(String* format, Array* args) { return(nullptr); }
 		static	String*		Format(String* format, Object* arg1, Object* arg2 = nullptr, Object* arg3 = nullptr) { return(nullptr); }
-		static Boolean		op_Inequality(String* str, String* str2) { return(false); }
 		static	String*		Join(String* separator, Array* values) { return(nullptr); }
 		static	String*		Join(String* separator, Array* values, const Int32 startIndex, const Int32 count) { return(nullptr); }
-		CharEnumerator*		GetEnumerator() { return(nullptr); }
 		static String*		Empty;
 	};
 }

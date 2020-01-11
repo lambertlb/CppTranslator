@@ -17,6 +17,18 @@ void operator delete(void* memory)
 }
 namespace DotnetLibrary
 {
+	Boolean Object::Equals(Object* obj1, Object* obj2)
+	{
+		if (obj1 == obj2)
+			return true;
+		if (obj1 == nullptr || obj2 == nullptr)
+			return false;
+		return obj1->Equals(obj2);
+	}
+	Boolean Object::Equals(Object* object)
+	{
+		return(this == object);
+	}
 	String* Object::ToString()
 	{
 		Char	chars[128];
