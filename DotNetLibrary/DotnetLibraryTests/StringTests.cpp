@@ -241,6 +241,10 @@ TEST(StringTests, IndexOf4Test) {
 	String	string(L"ABCDEFGHI");
 	ASSERT_TRUE(string.IndexOf(L'C', 2, 3) == 2);
 }
+TEST(StringTests, IndexOf10Test) {
+	String	string(L"ABCDEFGHI");
+	ASSERT_TRUE(string.IndexOf(L'C', 0, 2) == -1);
+}
 TEST(StringTests, IndexOf5Test) {
 	String	string(L"ABCDEFGHI");
 	ASSERT_TRUE(string.IndexOf(L'1') == -1);
@@ -309,4 +313,154 @@ TEST(StringTests, Insert2Test) {
 	String	string2(L"123");
 	String* newStr = string.Insert(string.get_Length(), &string2);
 	ASSERT_TRUE(wcscmp(newStr->get_Buffer(), L"ABCDEFGHI123") == 0);
+}
+TEST(StringTests, IsNullOrEmptyTest) {
+	ASSERT_TRUE(String::IsNullOrEmpty(String::Empty));
+	ASSERT_TRUE(String::IsNullOrEmpty(nullptr));
+	String	string2(L"123");
+	ASSERT_TRUE(!String::IsNullOrEmpty(&string2));
+}
+TEST(StringTests, IsNullOrWhiteSpaceTest) {
+	ASSERT_TRUE(String::IsNullOrWhiteSpace(String::Empty));
+	ASSERT_TRUE(String::IsNullOrWhiteSpace(nullptr));
+	String	string2(L" 2 ");
+	ASSERT_TRUE(!String::IsNullOrWhiteSpace(&string2));
+	String	string3(L" \t ");
+	ASSERT_TRUE(String::IsNullOrWhiteSpace(&string3));
+}
+TEST(StringTests, JoinTest) {
+	Array	array(StringType, 4);
+	String	string(L"ABC");
+	String	string2(L"DEF");
+	String	string3(L"GHI");
+	String	string4(L"JKL");
+	Object* list[4] = { &string, &string2, &string3, &string4 };
+	array.Initialize(list);
+	String separator(L",");
+	String* s2 = String::Join(&separator, &array);
+	ASSERT_TRUE(wcscmp(s2->get_Buffer(), L"ABC,DEF,GHI,JKL") == 0);
+}
+TEST(StringTests, Join2Test) {
+	Array	array(StringType, 4);
+	String	string(L"ABC");
+	String	string2(L"DEF");
+	String	string3(L"GHI");
+	String	string4(L"JKL");
+	Object* list[4] = { &string, &string2, &string3, &string4 };
+	array.Initialize(list);
+	String* s2 = String::Join(String::Empty, &array);
+	ASSERT_TRUE(wcscmp(s2->get_Buffer(), L"ABCDEFGHIJKL") == 0);
+}
+TEST(StringTests, Join3Test) {
+	Array	array(StringType, 4);
+	String	string(L"ABC");
+	String	string2(L"DEF");
+	String	string3(L"GHI");
+	String	string4(L"JKL");
+	Object* list[4] = { &string, &string2, &string3, &string4 };
+	array.Initialize(list);
+	String separator(L",");
+	String* s2 = String::Join(&separator, &array, 1);
+	ASSERT_TRUE(wcscmp(s2->get_Buffer(), L"DEF,GHI,JKL") == 0);
+}
+TEST(StringTests, Join4Test) {
+	Array	array(StringType, 4);
+	String	string(L"ABC");
+	String	string2(L"DEF");
+	String	string3(L"GHI");
+	String	string4(L"JKL");
+	Object* list[4] = { &string, &string2, &string3, &string4 };
+	array.Initialize(list);
+	String separator(L",");
+	String* s2 = String::Join(&separator, &array, 1, 2);
+	ASSERT_TRUE(wcscmp(s2->get_Buffer(), L"DEF,GHI") == 0);
+}
+TEST(StringTests, LastIndexOfTest) {
+	String	string(L"11223311");
+	String subString(L"11");
+	ASSERT_TRUE(string.LastIndexOf(&subString) == 6);
+	ASSERT_TRUE(string.LastIndexOf(&subString, 4) == 0);
+	ASSERT_TRUE(string.LastIndexOf(&subString, 4, 5) == 0);
+	String subString2(L"1");
+	ASSERT_TRUE(string.LastIndexOf(&subString2) == 7);
+}
+TEST(StringTests, LastIndexOfCharTest) {
+	String	string(L"11223311");
+	ASSERT_TRUE(string.LastIndexOf(L'1') == 7);
+	ASSERT_TRUE(string.LastIndexOf(L'1', 4) == 1);
+	ASSERT_TRUE(string.LastIndexOf(L'1', 4, 4) == 1);
+}
+TEST(StringTests, LastIndexOfAnyTest) {
+	String	string(L"11223311");
+	Array array(CharType, 2);
+	Char	data[] = { '1','2' };
+	array.Initialize(data);
+	ASSERT_TRUE(string.LastIndexOfAny(&array) == 7);
+	ASSERT_TRUE(string.LastIndexOfAny(&array, 4) == 3);
+	ASSERT_TRUE(string.LastIndexOfAny(&array, 4, 4) == 3);
+}
+TEST(StringTests, PadLeftTest) {
+	String	string(L"11223311");
+	String* rtn = string.PadLeft(5);
+	ASSERT_TRUE(wcscmp(rtn->get_Buffer(), L"     11223311") == 0);
+	String* rtn2 = string.PadLeft(5, L'-');
+	ASSERT_TRUE(wcscmp(rtn2->get_Buffer(), L"-----11223311") == 0);
+}
+TEST(StringTests, PadRightTest) {
+	String	string(L"11223311");
+	String* rtn = string.PadRight(5);
+	ASSERT_TRUE(wcscmp(rtn->get_Buffer(), L"11223311     ") == 0);
+	String* rtn2 = string.PadRight(5, L'-');
+	ASSERT_TRUE(wcscmp(rtn2->get_Buffer(), L"11223311-----") == 0);
+}
+TEST(StringTests, RemoveTest) {
+	String	string(L"11223311");
+	String* rtn = string.Remove(2,2);
+	ASSERT_TRUE(wcscmp(rtn->get_Buffer(), L"113311") == 0);
+	String* rtn2 = string.Remove(6, 2);
+	ASSERT_TRUE(wcscmp(rtn2->get_Buffer(), L"112233") == 0);
+	String* rtn3 = string.Remove(0, 2);
+	ASSERT_TRUE(wcscmp(rtn3->get_Buffer(), L"223311") == 0);
+}
+TEST(StringTests, ReplaceCharTest) {
+	String	string(L"11223311");
+	String* rtn = string.Replace(L'1', L'A');
+	ASSERT_TRUE(wcscmp(rtn->get_Buffer(), L"AA2233AA") == 0);
+}
+TEST(StringTests, ReplaceStringTest) {
+	String	string(L"11223311");
+	String	search(L"11");
+	String	replacement(L"ZZ");
+	String* rtn = string.Replace(&search, &replacement);
+	ASSERT_TRUE(wcscmp(rtn->get_Buffer(), L"ZZ2233ZZ") == 0);
+}
+TEST(StringTests, StartWithTest) {
+	String	string(L"11223311");
+	String	search(L"11");
+	ASSERT_TRUE(string.StartsWith(&search));
+	String	search2(L"22");
+	ASSERT_TRUE(!string.StartsWith(&search2));
+}
+TEST(StringTests, SubStringTest) {
+	String	string(L"11223311");
+	String* str1 = string.Substring(2);
+	ASSERT_TRUE(wcscmp(str1->get_Buffer(), L"223311") == 0);
+	String* str2 = string.Substring(6,2);
+	ASSERT_TRUE(wcscmp(str2->get_Buffer(), L"11") == 0);
+}
+TEST(StringTests, ToCharArrayTest) {
+	String	string(L"11223311");
+	Array* array = string.ToCharArray();
+	ASSERT_TRUE(array != nullptr);
+	ASSERT_TRUE(array->get_Length() == string.get_Length());
+	ASSERT_TRUE(*(Char*)array->Address(1) == string.get_Chars(1));
+	ASSERT_TRUE(*(Char*)array->Address(7) == string.get_Chars(7));
+}
+TEST(StringTests, ToCharArray2Test) {
+	String	string(L"11223311");
+	Array* array = string.ToCharArray(4, 2);
+	ASSERT_TRUE(array != nullptr);
+	ASSERT_TRUE(array->get_Length() == 2);
+	ASSERT_TRUE(*(Char*)array->Address(0) == L'3');
+	ASSERT_TRUE(*(Char*)array->Address(1) == L'3');
 }

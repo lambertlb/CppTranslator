@@ -52,43 +52,33 @@ namespace DotnetLibrary
 		Int32				IndexOfAny(Array* arr, const Int32 startIndex);
 		Int32				IndexOfAny(Array* arr, const Int32 startIndex, const Int32 count);
 		String*				Insert(const Int32 startIndex, String* value);
+		static Boolean		IsNullOrEmpty(String* value);
+		static Boolean		IsNullOrWhiteSpace(String* value);
+		static	String*		Join(String* separator, Array* values, const Int32 startIndex = 0, Int32 count = -1);
+		Int32				LastIndexOf(const Char value, Int32 startIndex = -1, Int32 count = -1);
+		Int32				LastIndexOf(String* value, Int32 startIndex = -1, Int32 count = -1);
+		Int32				LastIndexOfAny(Array* arr, Int32 startIndex = -1, Int32 count = -1);
+		String*				PadLeft(const Int32 width, const Char chr = L' ');
+		String*				PadRight(const Int32 width, const Char chr = L' ');
+		String*				Remove(const Int32 startIndex, Int32 count = -1);
+		String*				Replace(const Char oldChar, const Char newChar);
+		String*				Replace(String* oldValue, String* newValue);
+		Array*				Split(Array* separator, const Int32 count = -1);
+		virtual Boolean		StartsWith(String* what);
+		String*				Substring(const Int32 startIndex, Int32 length = -1);
+		Array*				ToCharArray(Int32 startIndex = 0, Int32 length = -1);
 
-		virtual Boolean		StartsWith(String* what) {return(false);}
 		virtual String*		Combine(String* v) { return(nullptr); }
-		Array*				ToCharArray() { return(nullptr); }
-		Array*				ToCharArray(const Int32 startIndex, const Int32 length) { return(nullptr); }
-		Array*				Split(Array* separator) { return(nullptr); }
-		Array*				Split(Array* separator, const Int32 count) { return(nullptr); }
-		String*				Substring(const Int32 startIndex) { return(nullptr); }
-		String*				Substring(const Int32 startIndex, const Int32 length) { return(nullptr); }
 		virtual				String* ToString();
 		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
 		String*				Trim() { return(nullptr); }
 		String*				Trim(Array* separator) { return(nullptr); }
 		String*				TrimEnd(Array* separator) { return(nullptr); }
 		String*				TrimStart(Array* separator) { return(nullptr); }
-		Int32				LastIndexOf(const Char value) { return(0); }
-		Int32				LastIndexOf(String* value) { return(0); }
-		Int32				LastIndexOf(const Char value, const Int32  startIndex) { return(0); }
-		Int32				LastIndexOf(String* value, const Int32 startIndex) { return(0); }
-		Int32				LastIndexOf(const Char value, const Int32 startIndex, const Int32 count) { return(0); }
-		Int32				LastIndexOf(String* value, const Int32 startIndex, const Int32 count) { return(0); }
-		Int32				LastIndexOfAny(Array* arr) { return(0); }
-		Int32				LastIndexOfAny(Array* arr, const Int32 startIndex) { return(0); }
-		Int32				LastIndexOfAny(Array* arr, const Int32 startIndex, const Int32 count) { return(0); }
-		String*				PadLeft(const Int32 width) { return(nullptr); }
-		String*				PadLeft(const Int32 width, const Char chr) { return(nullptr); }
-		String*				PadRight(const Int32 width) { return(nullptr); }
-		String*				PadRight(const Int32 width, const Char chr) { return(nullptr); }
-		String*				Remove(const Int32 startIndex, const Int32 count) { return(nullptr); }
-		String*				Replace(const Char oldChar, const Char newChar) { return(nullptr); }
-		String*				Replace(String* oldValue, String* newValue) { return(nullptr); }
 		String*				ToLower() { return(nullptr); }
 		String*				ToUpper() { return(nullptr); }
 		static	String*		Format(String* format, Array* args) { return(nullptr); }
 		static	String*		Format(String* format, Object* arg1, Object* arg2 = nullptr, Object* arg3 = nullptr) { return(nullptr); }
-		static	String*		Join(String* separator, Array* values) { return(nullptr); }
-		static	String*		Join(String* separator, Array* values, const Int32 startIndex, const Int32 count) { return(nullptr); }
 		static String*		Empty;
 	};
 }

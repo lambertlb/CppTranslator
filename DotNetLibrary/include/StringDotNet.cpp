@@ -291,13 +291,14 @@ namespace DotnetLibrary
 		if (found == nullptr)
 			return(-1);
 		Int32 delta = found - get_Buffer();
-		return(delta);
+		Int32 endIndex = startIndex + count;
+		return(delta > endIndex ? -1 : delta);
 	}
 	Int32 String::IndexOfAny(Array* arr)
 	{
 		if (arr == nullptr)
 			throw new ArgumentNullException();
-		return IndexOfAny(arr, 0 , get_Length());
+		return IndexOfAny(arr, 0, get_Length());
 	}
 	Int32 String::IndexOfAny(Array* arr, const Int32 startIndex)
 	{
@@ -336,6 +337,195 @@ namespace DotnetLibrary
 		StringBuilder	sb(this);
 		sb.Insert(startIndex, value);
 		return(sb.ToString());
+	}
+	Boolean String::IsNullOrEmpty(String* value)
+	{
+		return(value == nullptr || value->get_Length() == 0);
+	}
+	Boolean String::IsNullOrWhiteSpace(String* value)
+	{
+		if (IsNullOrEmpty(value))
+			return(true);
+		for (Int32 i = 0; i < value->length; ++i) {
+			if (!iswspace(value->characterData[i]))
+				return(false);
+		}
+		return(true);
+	}
+	String* String::Join(String* separator, Array* values, const Int32 startIndex, Int32 count)
+	{
+		if (values == nullptr) {
+			throw new ArgumentNullException();
+		}
+		if (values->get_Length() == 0) {
+			return String::Empty;
+		}
+		values->EnsureSingleDimension();
+		if (values->GetRawDataType() != ObjectType && values->GetRawDataType() != StringType)
+			throw new ArgumentNullException();
+		if (startIndex < 0)
+			throw new ArgumentNullException();
+		if (count < 0)
+			count = values->get_Length() - startIndex;
+		if (count > values->get_Length() - startIndex)
+			throw new ArgumentNullException();
+		Int32 endIndex = count + startIndex;
+		StringBuilder sb;
+		Boolean isFirst = true;
+		for (int i = startIndex; i < endIndex; ++i) {
+			if (!isFirst)
+				sb.Append(separator);
+			isFirst = false;
+			sb.Append(*(Object**)values->Address(i));
+		}
+		return(sb.ToString());
+	}
+	Int32 String::LastIndexOf(const Char value, Int32 startIndex, Int32 count)
+	{
+		if (startIndex < 0)
+			startIndex = length - 1;
+		if (count < 0)
+			count = startIndex + 1;
+		Int32 endIndex = startIndex - count;
+		for (Int32 index = startIndex; index > endIndex; --index) {
+			if (get_Chars(index) == value)
+				return(index);
+		}
+		return(-1);
+	}
+	Int32 String::LastIndexOf(String* value, Int32 startIndex, Int32 count)
+	{
+		if (value == nullptr)
+			throw new ArgumentNullException();
+		if (startIndex < 0)
+			startIndex = length - 1;
+		if (count < 0)
+			count = startIndex + 1;
+		Int32 endIndex = startIndex - count;
+		for (Int32 i = startIndex; i > endIndex; --i) {
+			Char* found = wcsstr(get_Buffer() + i, value->get_Buffer());
+			if (found != nullptr) {
+				Int32 delta = found - get_Buffer();
+				if (delta <= startIndex)
+					return(delta);
+			}
+		}
+		return -1;
+	}
+	Int32 String::LastIndexOfAny(Array* arr, Int32 startIndex, Int32 count)
+	{
+		if (arr == nullptr)
+			throw new ArgumentNullException();
+		if (startIndex < 0)
+			startIndex = length - 1;
+		if (count < 0)
+			count = startIndex + 1;
+		arr->EnsureSingleDimension();
+		if (arr->GetElementType() != CharType)
+			throw new ArgumentNullException();
+		Int32 endIndex = startIndex - count;
+		for (Int32 index = startIndex; index > endIndex; --index) {
+			for (Int32 arrayIndex = 0; arrayIndex < arr->get_Length(); ++arrayIndex) {
+				Char* xx = (Char*)arr->Address(arrayIndex);
+				if (*xx == get_Chars(index)) {
+					return(index);
+				}
+			}
+		}
+		return(-1);
+	}
+	String* String::PadLeft(const Int32 width, const Char chr)
+	{
+		StringBuilder	sb(length + width);
+		sb.Append(chr, width);
+		sb.Append(this);
+		return(sb.ToString());
+	}
+	String* String::PadRight(const Int32 width, const Char chr)
+	{
+		StringBuilder	sb(length + width);
+		sb.Append(this);
+		sb.Append(chr, width);
+		return(sb.ToString());
+	}
+	String* String::Remove(const Int32 startIndex, Int32 count)
+	{
+		StringBuilder	sb(this);
+		if (count < 0)
+			count = length - startIndex;
+		sb.Remove(startIndex, count);
+		return(sb.ToString());
+	}
+	String* String::Replace(const Char oldChar, const Char newChar)
+	{
+		StringBuilder	sb(this);
+		sb.Replace(oldChar, newChar);
+		return(sb.ToString());
+	}
+	String* String::Replace(String* oldValue, String* newValue)
+	{
+		StringBuilder	sb(this);
+		sb.Replace(oldValue, newValue);
+		return(sb.ToString());
+	}
+	Array* String::Split(Array* separator, const Int32 count)
+	{
+		throw new NotImplementedException();
+	}
+	Boolean String::StartsWith(String* what)
+	{
+		if (what == nullptr) {
+			throw new ArgumentNullException();
+		}
+		if (this == what) {
+			return true;
+		}
+		if (what->length == 0) {
+			return true;
+		}
+		StringBuilder sb(this);
+		return(sb.CountSubStrings(what, 0, what->get_Length()) != 0);
+	}
+	String* String::Substring(const Int32 startIndex, Int32 length)
+	{
+		if (startIndex < 0) {
+			throw new ArgumentOutOfRangeException();
+		}
+		if (startIndex > get_Length()) {
+			throw new ArgumentOutOfRangeException();
+		}
+		if (length < 0) {
+			length = get_Length() - startIndex;
+		}
+		if (startIndex > get_Length() - length) {
+			throw new ArgumentOutOfRangeException();
+		}
+		if (length == 0) {
+			return String::Empty;
+		}
+		if (startIndex == 0 && length == get_Length()) {
+			return this;
+		}
+		return(new String(this->characterData, startIndex, length));
+	}
+	Array* String::ToCharArray(Int32 startIndex, Int32 length)
+	{
+		if (startIndex < 0) {
+			throw new ArgumentOutOfRangeException();
+		}
+		if (length < 0) {
+			length = get_Length() - startIndex;
+		}
+		if (startIndex > get_Length() - length) {
+			throw new ArgumentOutOfRangeException();
+		}
+		Int32 endIndex = startIndex + length;
+		Array* array = new Array(CharType, length);
+		Int32 arrayIndex = 0;
+		for (Int32 i = startIndex; i < endIndex; ++i) {
+			*(Char*)array->Address(arrayIndex++) = get_Chars(i);
+		}
+		return(array);
 	}
 	String* String::ToString()
 	{

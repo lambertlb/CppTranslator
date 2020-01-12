@@ -364,7 +364,8 @@ namespace DotnetLibrary
 		if (length > this->currentLength - startIndex) {
 			throw new ArgumentOutOfRangeException();
 		}
-		memcpy(&chunkChars[startIndex], &chunkChars[startIndex + length], (currentLength - length) * sizeof(char));
+		Int32 howmany = currentLength - startIndex - length;
+		memcpy(&chunkChars[startIndex], &chunkChars[startIndex + length], howmany * sizeof(Char));
 		currentLength -= length;
 		chunkChars[currentLength] = 0;
 		return this;
