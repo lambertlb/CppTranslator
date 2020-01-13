@@ -99,9 +99,7 @@ namespace DotnetLibrary
 		static Boolean	IsUpper(String* v, Int32 index) {
 			return(false);
 		}
-		static Boolean	IsWhiteSpace(Char v) {
-			return(false);
-		}
+		static Boolean	IsWhiteSpace(Char v);
 		static Boolean	IsWhiteSpace(String* v, Int32 index) {
 			return(false);
 		}

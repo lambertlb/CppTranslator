@@ -464,3 +464,82 @@ TEST(StringTests, ToCharArray2Test) {
 	ASSERT_TRUE(*(Char*)array->Address(0) == L'3');
 	ASSERT_TRUE(*(Char*)array->Address(1) == L'3');
 }
+TEST(StringTests, ToLowerTest) {
+	String	string(L"ABCDEFGHI");
+	String* string2 = string.ToLower();
+	ASSERT_TRUE(wcscmp(string2->get_Buffer(), L"abcdefghi") == 0);
+}
+TEST(StringTests, ToUpperTest) {
+	String	string(L"abcdefghi");
+	String* string2 = string.ToUpper();
+	ASSERT_TRUE(wcscmp(string2->get_Buffer(), L"ABCDEFGHI") == 0);
+}
+TEST(StringTests, TrimTest) {
+	String	string(L" \tABCDEFGHI\n\r");
+	String* string2 = string.Trim();
+	ASSERT_TRUE(wcscmp(string2->get_Buffer(), L"ABCDEFGHI") == 0);
+}
+TEST(StringTests, Trim2Test) {
+	String	string(L" \tABCDEFGHI\n\r");
+	Array array(CharType, 2);
+	Char	data[] = { ' ','\t' };
+	array.Initialize(data);
+	String* string2 = string.Trim(&array);
+	ASSERT_TRUE(wcscmp(string2->get_Buffer(), L"ABCDEFGHI\n\r") == 0);
+}
+TEST(StringTests, Trim3Test) {
+	String	string(L" \tABCDEFGHI\n\r");
+	Array array(CharType, 2);
+	Char	data[] = { ' ','\t' };
+	array.Initialize(data);
+	String* string2 = string.Trim(nullptr);
+	ASSERT_TRUE(wcscmp(string2->get_Buffer(), L"ABCDEFGHI") == 0);
+}
+TEST(StringTests, TrimEndTest) {
+	String	string(L" \tABCDEFGHI\n\r");
+	Array array(CharType, 2);
+	Char	data[] = { ' ','\t' };
+	array.Initialize(data);
+	String* string2 = string.TrimEnd(nullptr);
+	ASSERT_TRUE(wcscmp(string2->get_Buffer(), L" \tABCDEFGHI") == 0);
+}
+TEST(StringTests, TrimEnd2Test) {
+	String	string(L" \tABCDEFGHI\n\r");
+	Array array(CharType, 2);
+	Char	data[] = { ' ','\t' };
+	array.Initialize(data);
+	String* string2 = string.TrimEnd(&array);
+	ASSERT_TRUE(wcscmp(string2->get_Buffer(), L" \tABCDEFGHI\n\r") == 0);
+}
+TEST(StringTests, TrimEnd3Test) {
+	String	string(L" \tABCDEFGHI\n\r\t");
+	Array array(CharType, 2);
+	Char	data[] = { ' ','\t' };
+	array.Initialize(data);
+	String* string2 = string.TrimEnd(&array);
+	ASSERT_TRUE(wcscmp(string2->get_Buffer(), L" \tABCDEFGHI\n\r") == 0);
+}
+TEST(StringTests, TrimStartTest) {
+	String	string(L" \tABCDEFGHI\n\r");
+	Array array(CharType, 2);
+	Char	data[] = { ' ','\t' };
+	array.Initialize(data);
+	String* string2 = string.TrimStart(nullptr);
+	ASSERT_TRUE(wcscmp(string2->get_Buffer(), L"ABCDEFGHI\n\r") == 0);
+}
+TEST(StringTests, TrimStart2Test) {
+	String	string(L" \tABCDEFGHI\n\r");
+	Array array(CharType, 2);
+	Char	data[] = { '\n','\r' };
+	array.Initialize(data);
+	String* string2 = string.TrimStart(&array);
+	ASSERT_TRUE(wcscmp(string2->get_Buffer(), L" \tABCDEFGHI\n\r") == 0);
+}
+TEST(StringTests, TrimStart3Test) {
+	String	string(L"\r \tABCDEFGHI\n\r");
+	Array array(CharType, 2);
+	Char	data[] = { '\n','\r' };
+	array.Initialize(data);
+	String* string2 = string.TrimStart(&array);
+	ASSERT_TRUE(wcscmp(string2->get_Buffer(), L" \tABCDEFGHI\n\r") == 0);
+}

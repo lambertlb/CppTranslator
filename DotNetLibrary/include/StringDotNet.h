@@ -21,8 +21,6 @@ namespace DotnetLibrary
 		Char				get_Chars(const Int32 index);
 		Int32				get_Length() { return(length); };
 		Char*				Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1);
-		virtual DataType	GetRawDataType() { return(StringType); };
-		Boolean				IsAllocated() { return(allocate); }
 		static	Int32		Compare(Char* s1, Int32 s1Index, Char* s2, Int32 s2Index, Int32 length, Boolean ignoreCase);
 		static	Int32		Compare(String* s1, String* s2, Boolean ignoreCase = false);
 		static	Int32		Compare(String* s1, const Int32 index1, String* s2, const Int32 index2, const Int32 length, Boolean ignoreCase = false);
@@ -41,7 +39,11 @@ namespace DotnetLibrary
 		virtual Boolean		Equals(Object* object);
 		virtual Boolean		Equals(String* object);
 		static Boolean		Equals(String* object, Object* object2);
+		static	String*		Format(String* format, Array* args);
+		static	String*		Format(String* format, Object* arg1, Object* arg2 = nullptr, Object* arg3 = nullptr);
+		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
 		CharEnumerator*		GetEnumerator();
+		virtual DataType	GetRawDataType() { return(StringType); };
 		Int32				IndexOf(const Char value);
 		Int32				IndexOf(String* value);
 		Int32				IndexOf(const Char value, const Int32 startIndex);
@@ -52,8 +54,10 @@ namespace DotnetLibrary
 		Int32				IndexOfAny(Array* arr, const Int32 startIndex);
 		Int32				IndexOfAny(Array* arr, const Int32 startIndex, const Int32 count);
 		String*				Insert(const Int32 startIndex, String* value);
+		Boolean				IsAllocated() { return(allocate); }
 		static Boolean		IsNullOrEmpty(String* value);
 		static Boolean		IsNullOrWhiteSpace(String* value);
+		static Boolean		IsWhiteSpace(Char value, Char* separators, Int32 separatorSize);
 		static	String*		Join(String* separator, Array* values, const Int32 startIndex = 0, Int32 count = -1);
 		Int32				LastIndexOf(const Char value, Int32 startIndex = -1, Int32 count = -1);
 		Int32				LastIndexOf(String* value, Int32 startIndex = -1, Int32 count = -1);
@@ -67,18 +71,17 @@ namespace DotnetLibrary
 		virtual Boolean		StartsWith(String* what);
 		String*				Substring(const Int32 startIndex, Int32 length = -1);
 		Array*				ToCharArray(Int32 startIndex = 0, Int32 length = -1);
-
-		virtual String*		Combine(String* v) { return(nullptr); }
-		virtual				String* ToString();
-		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
-		String*				Trim() { return(nullptr); }
-		String*				Trim(Array* separator) { return(nullptr); }
-		String*				TrimEnd(Array* separator) { return(nullptr); }
-		String*				TrimStart(Array* separator) { return(nullptr); }
-		String*				ToLower() { return(nullptr); }
-		String*				ToUpper() { return(nullptr); }
-		static	String*		Format(String* format, Array* args) { return(nullptr); }
-		static	String*		Format(String* format, Object* arg1, Object* arg2 = nullptr, Object* arg3 = nullptr) { return(nullptr); }
+		String*				ToLower();
+		String*				ToLowerInvariant();
+		virtual	String*		ToString();
+		String*				ToUpper();
+		String*				ToUpperInvariant();
+		String*				Trim();
+		String*				Trim(Array* separator);
+		String*				TrimHelper(Array* separator, Boolean trimStart, Boolean trimEnd);
+		String*				TrimHelper(Char* separator, Int32 separaterSize, Boolean trimStart, Boolean trimEnd);
+		String*				TrimEnd(Array* separator);
+		String*				TrimStart(Array* separator);
 		static String*		Empty;
 	};
 }

@@ -4,6 +4,14 @@
 
 namespace DotnetLibrary
 {
+	// all possible whitespace characters
+	Char	WhiteSpaceChars[] =
+	{ (Char)0x9, (Char)0xA, (Char)0xB, (Char)0xC,
+	(Char)0xD, (Char)0x20, (Char)0xA0, (Char)0x2000,
+	(Char)0x2001, (Char)0x2002, (Char)0x2003, (Char)0x2004,
+	(Char)0x2005,(Char)0x2006, (Char)0x2007, (Char)0x2008,
+	(Char)0x2009, (Char)0x200A, (Char)0x200B, (Char)0x3000, (Char)0xFEFF };
+
 	String::String(const Char* string)
 	{
 		this->length = wcslen(string);
@@ -60,6 +68,8 @@ namespace DotnetLibrary
 		}
 		this->length = amount;
 		characterData = new Char[length + 1];
+		if (chr == 0)
+			return;
 		for (size_t i = 0; i < amount; ++i) {
 			characterData[i] = chr;
 		}
@@ -243,6 +253,14 @@ namespace DotnetLibrary
 		if (object2 == nullptr || object2->GetRawDataType() != StringType)
 			return(false);
 		return op_Inequality(object, (String*)object2);
+	}
+	String* String::Format(String* format, Array* args)
+	{
+		throw new NotImplementedException();
+	}
+	String* String::Format(String* format, Object* arg1, Object* arg2, Object* arg3)
+	{
+		throw new NotImplementedException();
 	}
 	CharEnumerator* String::GetEnumerator()
 	{
@@ -527,9 +545,106 @@ namespace DotnetLibrary
 		}
 		return(array);
 	}
+	String* String::ToLower()
+	{
+		Char* str1 = characterData;
+		Int32 size = length;
+		String* lower = new String((Char)0, size);
+		Char* str2 = lower->characterData;
+		for (Int32 i = 0; i < size; ++i) {
+			*str2++ = towlower(*str1++);
+		}
+		return(lower);
+	}
+	String* String::ToLowerInvariant()
+	{
+		return ToLower();
+	}
 	String* String::ToString()
 	{
 		return this;
+	}
+	String* String::ToUpper()
+	{
+		Char* str1 = characterData;
+		Int32 size = length;
+		String* upper = new String((Char)0, size);
+		Char* str2 = upper->characterData;
+		for (Int32 i = 0; i < size; ++i) {
+			*str2++ = towupper(*str1++);
+		}
+		return(upper);
+	}
+	String* String::ToUpperInvariant()
+	{
+		return ToUpper();
+	}
+	String* String::Trim()
+	{
+		return(TrimHelper(WhiteSpaceChars, sizeof(WhiteSpaceChars) / sizeof(char), true, true));
+	}
+	String* String::Trim(Array* separator)
+	{
+		return(TrimHelper(separator, true, true));
+	}
+	String* String::TrimHelper(Array* separator, Boolean trimStart, Boolean trimEnd)
+	{
+		if (separator == nullptr || separator->get_Length() == 0)
+			return(TrimHelper(WhiteSpaceChars, sizeof(WhiteSpaceChars) / sizeof(char), trimStart, trimEnd));
+		if (separator->dataType != CharType) {
+			throw new ArgumentOutOfRangeException();
+		}
+		separator->EnsureSingleDimension();
+		return(TrimHelper((Char*)separator->Address(0), separator->get_Length(), trimStart, trimEnd));
+	}
+	String* String::TrimEnd(Array* separator)
+	{
+		if (separator == nullptr || separator->get_Length() == 0)
+			return(TrimHelper(WhiteSpaceChars, sizeof(WhiteSpaceChars) / sizeof(char), false, true));
+		if (separator->dataType != CharType) {
+			throw new ArgumentOutOfRangeException();
+		}
+		separator->EnsureSingleDimension();
+		return(TrimHelper((Char*)separator->Address(0), separator->get_Length(), false, true));
+	}
+	String* String::TrimStart(Array* separator)
+	{
+		if (separator == nullptr || separator->get_Length() == 0)
+			return(TrimHelper(WhiteSpaceChars, sizeof(WhiteSpaceChars) / sizeof(char), true, false));
+		if (separator->dataType != CharType) {
+			throw new ArgumentOutOfRangeException();
+		}
+		separator->EnsureSingleDimension();
+		return(TrimHelper((Char*)separator->Address(0), separator->get_Length(), true, false));
+	}
+	String* String::TrimHelper(Char* separator, Int32 separaterSize, Boolean trimStart, Boolean trimEnd)
+	{
+
+		Int32 end = length - 1;
+		Int32 start = 0;
+		if (trimStart) {
+			for (start = 0; start < length; start++) {
+				if (!IsWhiteSpace(get_Chars(start), separator, separaterSize)) {
+					break;
+				}
+			}
+		}
+		if (trimEnd) {
+			for (end = length - 1; end >= start; end--) {
+				if (!IsWhiteSpace(get_Chars(end), separator, separaterSize)) {
+					break;
+				}
+			}
+		}
+		return (new String(get_Buffer(), start, (end - start) + 1));
+	}
+	Boolean String::IsWhiteSpace(Char value, Char* separators, Int32 separatorSize)
+	{
+		for (Int32 i = 0; i < separatorSize; ++i) {
+			if (value == *separators++)
+				return(true);
+		}
+		return(false);
 	}
 	Int32 String::FormatString(Char* where, const Int32 whereSize)
 	{

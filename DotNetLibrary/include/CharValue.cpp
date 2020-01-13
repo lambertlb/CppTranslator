@@ -1,5 +1,6 @@
 #pragma once
 #include "DotnetTypes.h"
+#include <wctype.h>
 
 namespace DotnetLibrary
 {
@@ -9,5 +10,9 @@ namespace DotnetLibrary
 			throw new IndexOutOfRangeException();
 		*where = value;
 		return 1;
+	}
+	Boolean CharValue::IsWhiteSpace(Char v)
+	{
+		return(iswspace(v));
 	}
 }
