@@ -40,6 +40,10 @@ namespace DotnetLibrary
 		VerifyIndexWithinRangeOfArray(array, startingIndex, amount);
 		memset((char*)array->data + (startingIndex * elementSize), 0, (amount * elementSize));
 	}
+	void Array::ConstrainedCopy(Array* sourceArray, int sourceIndex, Array* destinationArray, int destinationIndex, int length)
+	{
+		Copy(sourceArray, sourceIndex, destinationArray, destinationIndex,length);
+	}
 	void Array::Copy(Array* sourceArray, Array* destinationArray, Int32 length)
 	{
 		Copy(sourceArray, 0, destinationArray, 0, length);
@@ -126,6 +130,8 @@ namespace DotnetLibrary
 	}
 	Int32 Array::GetUpperBound(Int32 rank)
 	{
+		if (rank > dimensionCount)
+			throw new IndexOutOfRangeException();
 		return(GetLength(rank) - 1);
 	}
 	Object* Array::GetValue(Array* indexes)
@@ -188,6 +194,36 @@ namespace DotnetLibrary
 		}
 		return(nullptr);
 	}
+	Int32 Array::IndexOf(Array* array, Object* value, Int32 startIndex, Int32 count)
+	{
+		if (array == nullptr)
+			throw new ArgumentNullException();
+		if (array->get_Rank() != 1)
+			throw new RankException();
+		if (count < 0) {
+			count = array->get_Length() - startIndex;
+		}
+		Int32 lb = array->GetLowerBound(0);
+		if (startIndex < lb || startIndex > array->get_Length() + lb)
+			throw new ArgumentOutOfRangeException();
+		if (count < 0 || count > array->get_Length() - startIndex + lb)
+			throw new ArgumentOutOfRangeException();
+		if (array->GetElementType() != ObjectType && array->GetElementType() != StringType)
+			throw new NotImplementedException();
+		Int32 endIndex = startIndex + count;
+		for (int i = startIndex; i < endIndex; i++) {
+			Object* obj = array->GetValue(i);
+			if (obj == nullptr) {
+				if (value == nullptr)
+					return i;
+			}
+			else {
+				if (obj->Equals(value))
+					return i;
+			}
+		}
+		return (lb - 1);
+	}
 	Int32 Array::get_Length()
 	{
 		return(totalElementCount);
@@ -210,6 +246,9 @@ namespace DotnetLibrary
 		switch (dataType)
 		{
 		case ObjectType:
+			*((Object**)addr) = value;
+			break;
+		case StringType:
 			*((Object**)addr) = value;
 			break;
 		case BooleanType:

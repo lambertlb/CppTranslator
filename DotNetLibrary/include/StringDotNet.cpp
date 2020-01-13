@@ -51,7 +51,7 @@ namespace DotnetLibrary
 		if (length > values->get_Length() - startIndex) {
 			throw new ArgumentOutOfRangeException();
 		}
-		if (values->dataType != CharType) {
+		if (values->GetElementType() != CharType) {
 			throw new ArgumentOutOfRangeException();
 		}
 		values->EnsureSingleDimension();
@@ -591,7 +591,7 @@ namespace DotnetLibrary
 	{
 		if (separator == nullptr || separator->get_Length() == 0)
 			return(TrimHelper(WhiteSpaceChars, sizeof(WhiteSpaceChars) / sizeof(char), trimStart, trimEnd));
-		if (separator->dataType != CharType) {
+		if (separator->GetElementType() != CharType) {
 			throw new ArgumentOutOfRangeException();
 		}
 		separator->EnsureSingleDimension();
@@ -601,7 +601,7 @@ namespace DotnetLibrary
 	{
 		if (separator == nullptr || separator->get_Length() == 0)
 			return(TrimHelper(WhiteSpaceChars, sizeof(WhiteSpaceChars) / sizeof(char), false, true));
-		if (separator->dataType != CharType) {
+		if (separator->GetElementType() != CharType) {
 			throw new ArgumentOutOfRangeException();
 		}
 		separator->EnsureSingleDimension();
@@ -611,7 +611,7 @@ namespace DotnetLibrary
 	{
 		if (separator == nullptr || separator->get_Length() == 0)
 			return(TrimHelper(WhiteSpaceChars, sizeof(WhiteSpaceChars) / sizeof(char), true, false));
-		if (separator->dataType != CharType) {
+		if (separator->GetElementType() != CharType) {
 			throw new ArgumentOutOfRangeException();
 		}
 		separator->EnsureSingleDimension();

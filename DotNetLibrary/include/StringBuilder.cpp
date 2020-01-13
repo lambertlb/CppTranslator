@@ -224,7 +224,7 @@ namespace DotnetLibrary
 		{
 			throw new ArgumentOutOfRangeException();
 		}
-		if (values->dataType != CharType) {
+		if (values->GetElementType() != CharType) {
 			throw new ArgumentOutOfRangeException();
 		}
 		values->EnsureSingleDimension();
@@ -403,7 +403,7 @@ namespace DotnetLibrary
 		{
 			throw new ArgumentOutOfRangeException();
 		}
-		if (values->dataType != CharType) {
+		if (values->GetElementType() != CharType) {
 			throw new ArgumentOutOfRangeException();
 		}
 		values->EnsureSingleDimension();
