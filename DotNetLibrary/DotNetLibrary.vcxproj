@@ -163,6 +163,7 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="include\Array.cpp" />
     <ClCompile Include="include\BooleanValue.cpp" />
+    <ClCompile Include="include\Buffer.cpp" />
     <ClCompile Include="include\ByteValue.cpp" />
     <ClCompile Include="include\CharEnumerator.cpp" />
     <ClCompile Include="include\CharValue.cpp" />

@@ -29,6 +29,10 @@ namespace DotnetLibrary
 	{
 		return(this == object);
 	}
+	Boolean Object::IsPrimativeType(DataType type)
+	{
+		return(type != ObjectType && type != StringType && type != NullType);
+	}
 	String* Object::ToString()
 	{
 		Char	chars[128];

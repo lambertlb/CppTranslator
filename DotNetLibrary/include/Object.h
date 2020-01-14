@@ -12,6 +12,7 @@ namespace DotnetLibrary
 		virtual				~Object() {};
 		static	Boolean		Equals(Object* obj1, Object* obj2);
 		virtual Boolean		Equals(Object* object);
+		static Boolean		IsPrimativeType(DataType type);
 		virtual	String*		ToString();
 		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
 		virtual void		Send(String* message);
