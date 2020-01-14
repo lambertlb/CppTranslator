@@ -59,4 +59,10 @@ namespace DotnetLibrary
 	public:
 		InvalidOperationException() : Exception(new String(L"Invalid Operation")) {}
 	};
+	struct DLL_EXPORT FormatException : public  Exception
+	{
+	public:
+		FormatException() : Exception(new String(L"Bad Format")) {}
+	};
+	
 }
