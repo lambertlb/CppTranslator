@@ -242,4 +242,12 @@ namespace DotnetLibrary
 		*result = stringToParse->get_Chars(0);
 		return true;
 	}
+	String* CharValue::ToString()
+	{
+		return(Object::ToString());
+	}
+	String* CharValue::ToString(Char v)
+	{
+		return ((Object)CharValue(v)).ToString();
+	}
 }

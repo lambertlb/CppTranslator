@@ -50,6 +50,8 @@ namespace DotnetLibrary
 		static Char		ToLower(Char v);
 		static Char		ToUpper(Char v);
 		static Boolean	TryParse(String* s, Char* result);
+		String*			ToString();
+		static String*	ToString(Char v);
 		static Char		MaxValue;
 		static Char		MinValue;
 	};

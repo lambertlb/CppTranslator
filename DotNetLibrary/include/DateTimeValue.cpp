@@ -10,6 +10,8 @@
 
 namespace DotnetLibrary
 {
+	DLL_EXPORT DateTime	DateTimeValue::MaxValue = DateTime(MaxTicks);
+	DLL_EXPORT DateTime	DateTimeValue::MinValue = DateTime(MinTicks);
 	Int32	daysToMonth365[] =
 	{
 		0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365
@@ -305,6 +307,10 @@ namespace DotnetLibrary
 	{
 		return(DateTimeValue(ts1).Subtract(ts2));
 	}
+	Boolean DateTimeValue::op_Inequality(const DateTime& ts1, const DateTime& ts2)
+	{
+		return Boolean();
+	}
 	Boolean DateTimeValue::op_GreaterThan(const DateTime& ts1, const DateTime& ts2)
 	{
 		return ts1.value > ts2.value;
@@ -397,6 +403,10 @@ namespace DotnetLibrary
 		else
 			stringBuilder.Append(L"AM", 2);
 		return(stringBuilder.FormatString(where, whereSize));
+	}
+	DateTime DateTimeValue::getAsDateTime()
+	{
+		return value;
 	}
 	DateTime	DateTimeValue::get_Date() {
 		UInt64 ticks = value.value;

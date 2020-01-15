@@ -63,18 +63,9 @@ namespace DotnetLibrary
 	public:
 		DateTimeValue() { value = 0; }
 		DateTimeValue(DateTime val) { value.value = val.value; }
-		virtual DataType	GetRawDataType() { return(DateTimeType); };
-		Int32				CompareTo(const DateTime& ts1);
-		Int32				CompareTo(Object* obj) { return(0); }
-		static	Int32		Compare(const DateTime& date1, const DateTime& date2);
-		bool				Equals(const DateTime& valueToCOmpare);
-		static bool			Equals(const DateTime& valueToCOmpare, const DateTime& valueToCOmpare2);
-		virtual bool		Equals(Object* valueToCompare) { return(false); }
-		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
+		virtual DateTime	getAsDateTime();
 		DateTime			get_Date();
 		Int32				get_Day();
-		Int32				GetDatePart(Int32 part);
-		void				GetDatePart(Int32& year, Int32& month, Int32& day);
 		DayOfWeek			get_DayOfWeek();
 		Int32				get_DayOfYear();
 		Int32				get_Hour();
@@ -88,6 +79,16 @@ namespace DotnetLibrary
 		static	DateTime	get_Today();
 		static	DateTime	get_UtcNow();
 		Int32				get_Year();
+		virtual DataType	GetRawDataType() { return(DateTimeType); };
+		Int32				CompareTo(const DateTime& ts1);
+		Int32				CompareTo(Object* obj) { return(0); }
+		static	Int32		Compare(const DateTime& date1, const DateTime& date2);
+		bool				Equals(const DateTime& valueToCOmpare);
+		static bool			Equals(const DateTime& valueToCOmpare, const DateTime& valueToCOmpare2);
+		virtual bool		Equals(Object* valueToCompare) { return(false); }
+		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
+		Int32				GetDatePart(Int32 part);
+		void				GetDatePart(Int32& year, Int32& month, Int32& day);
 		DateTime			Add(Double value, Int32 scale);
 		DateTime			Add(const TimeSpan ts);
 		DateTime			AddDays(const Double delta);
@@ -109,10 +110,9 @@ namespace DotnetLibrary
 		static DateTime		op_Addition(const DateTime& ts1, const TimeSpan ts2);
 		static TimeSpan		op_Subtraction(const DateTime& ts1, const DateTime& ts2);
 		static DateTime		op_Subtraction(const DateTime& ts1, const TimeSpan ts2);
-		static DateTime			op_UnaryNegation(const DateTime& ts1) { return(0); }
-		static DateTime			op_UnaryPlus(const DateTime& ts1) { return(0); }
-
-		static Boolean			op_Inequality(const DateTime& ts1, const DateTime& ts2) { return(false); }
+		static DateTime		op_UnaryNegation(const DateTime& ts1) { return(0); }
+		static DateTime		op_UnaryPlus(const DateTime& ts1) { return(0); }
+		static Boolean		op_Inequality(const DateTime& ts1, const DateTime& ts2);
 		static Boolean		op_GreaterThan(const DateTime& ts1, const DateTime& ts2);
 		static Boolean		op_GreaterThanOrEqual(const DateTime& ts1, const DateTime& ts2);
 		static Boolean		op_LessThan(const DateTime& ts1, const DateTime& ts2);
