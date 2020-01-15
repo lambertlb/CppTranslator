@@ -3,6 +3,13 @@
 
 namespace DotnetLibrary
 {
+	enum DLL_EXPORT ParsingStatus
+	{
+		OK,
+		Failed,
+		Overflow
+	};
+
 	class DLL_EXPORT UInt64Value : public ValueType {
 	public:
 		UInt64 value;
@@ -29,6 +36,8 @@ namespace DotnetLibrary
 		static UInt64 Parse(String* stringToParse) {
 			return(0);
 		}
+		static Boolean	TryParseInternal(String* source, UInt64& result, Int32& sign);
+		static Boolean	TryParseInternal(Char* source, Int32 sourceLength, UInt64& result, Int32& sign);
 		virtual	Int32	FormatString(Char* where, const Int32 whereSize);
 		static UInt64	MaxValue;
 		static UInt64	MinValue;

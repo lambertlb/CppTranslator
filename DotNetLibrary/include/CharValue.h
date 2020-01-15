@@ -51,9 +51,7 @@ namespace DotnetLibrary
 		static Boolean	IsControl(String* v, Int32 index) {
 			return(false);
 		}
-		static Boolean	IsDigit(Char v) {
-			return(false);
-		}
+		static Boolean	IsDigit(Char v);
 		static Boolean	IsDigit(String* v, Int32 index) {
 			return(false);
 		}

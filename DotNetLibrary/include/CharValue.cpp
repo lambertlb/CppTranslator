@@ -11,6 +11,10 @@ namespace DotnetLibrary
 		*where = value;
 		return 1;
 	}
+	Boolean CharValue::IsDigit(Char v)
+	{
+		return(iswdigit(v));
+	}
 	Boolean CharValue::IsWhiteSpace(Char v)
 	{
 		return(iswspace(v));
