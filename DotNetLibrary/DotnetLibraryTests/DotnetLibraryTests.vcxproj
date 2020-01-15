@@ -37,6 +37,7 @@
     <ClCompile Include="BooleanTests.cpp" />
     <ClCompile Include="BufferTests.cpp" />
     <ClCompile Include="ByteTests.cpp" />
+    <ClCompile Include="CharTests.cpp" />
     <ClCompile Include="StringBuilderTests.cpp" />
     <ClCompile Include="StringTests.cpp" />
   </ItemGroup>

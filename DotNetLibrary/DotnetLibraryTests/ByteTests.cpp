@@ -67,3 +67,8 @@ TEST(ByteTests, getAsTest) {
 	ASSERT_TRUE(value1.get_AsBoolean());
 	ASSERT_TRUE(value1.get_AsInt32() == 11);
 }
+TEST(ByteTests, ToStringTest) {
+	ByteValue value(22);
+	String* str = value.ToString();
+	ASSERT_TRUE(wcscmp(str->get_Buffer(), L"22") == 0);
+}
