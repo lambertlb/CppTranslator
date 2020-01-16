@@ -180,18 +180,15 @@ namespace DotnetLibrary
 		Int32	day;
 		GetDatePart(year, month, day);
 		Int32 i = month - 1 + months;
-		if (i >= 0)
-		{
+		if (i >= 0) {
 			month = i % 12 + 1;
 			year += i / 12;
 		}
-		else
-		{
+		else {
 			month = 12 + (i + 1) % 12;
 			year += (i - 11) / 12;
 		}
-		if (year < 1 || year > 9999)
-		{
+		if (year < 1 || year > 9999) {
 			throw new ArgumentOutOfRangeException();
 		}
 		Int32 days = DaysInMonth(year, month);
@@ -212,11 +209,31 @@ namespace DotnetLibrary
 	}
 	DateTime DateTimeValue::AddYears(const Int32 delta)
 	{
-		if (delta < -10000 || delta > 10000)
-		{
+		if (delta < -10000 || delta > 10000) {
 			throw new ArgumentOutOfRangeException();
 		}
 		return AddMonths(delta * 12);
+	}
+	Int32 DateTimeValue::Compare(const DateTime& date1, const DateTime& date2)
+	{
+		Int64 ticks1 = date1.value;
+		Int64 ticks2 = date2.value;
+		if (ticks1 > ticks2) return 1;
+		if (ticks1 < ticks2) return -1;
+		return 0;
+	}
+	Int32 DateTimeValue::CompareTo(const DateTime& dataTime)
+	{
+		return Compare(value, dataTime);
+	}
+	Int32 DateTimeValue::CompareTo(Object* obj)
+	{
+		if (obj == nullptr)
+			return 1;
+		if (obj->GetRawDataType() != DateTimeType) {
+			throw new ArgumentException();
+		}
+		return Compare(value, obj->get_AsDateTime());
 	}
 	Int32 DateTimeValue::DaysInMonth(Int32 year, Int32 month)
 	{
@@ -226,13 +243,63 @@ namespace DotnetLibrary
 		Int32* days = IsLeapYear(year) ? daysToMonth366 : daysToMonth365;
 		return days[month] - days[month - 1];
 	}
+	bool DateTimeValue::Equals(const DateTime& valueToCOmpare)
+	{
+		return value.value == valueToCOmpare.value;
+	}
+	bool DateTimeValue::Equals(const DateTime& valueToCompare, const DateTime& valueToCompare2)
+	{
+		return valueToCompare.value == valueToCompare2.value;
+	}
+	bool DateTimeValue::Equals(Object* valueToCompare)
+	{
+		if (valueToCompare != nullptr && valueToCompare->GetRawDataType() == DateTimeType) {
+			return value.value == valueToCompare->get_AsDateTime().value;
+		}
+		return false;
+	}
+	Boolean DateTimeValue::IsDaylightSavingTime()
+	{
+		time_t rawtime;
+		struct tm timeinfo;
+		timeinfo.tm_hour = get_Hour();
+		timeinfo.tm_mday = get_Day();
+		timeinfo.tm_min = get_Minute();
+		timeinfo.tm_mon = get_Month() - 1;
+		timeinfo.tm_sec = get_Second();
+		timeinfo.tm_year = get_Year() - 1900;
+		rawtime = mktime(&timeinfo);
+		return(timeinfo.tm_isdst != 0);
+	}
 	Boolean DateTimeValue::IsLeapYear(Int32 year)
 	{
-		if (year < 1 || year > 9999)
-		{
+		if (year < 1 || year > 9999) {
 			throw new ArgumentOutOfRangeException();
 		}
 		return (year & 3) == 0 && ((year & 15) == 0 || (year % 25) != 0);
+	}
+	Int32 DateTimeValue::FormatString(Char* where, const Int32 whereSize)
+	{
+		StringBuilder stringBuilder;
+		Int32	month = this->get_Month();
+		Int32	day = this->get_Day();
+		Int32	year = this->get_Year();
+		Int32	hour = this->get_Hour();
+		Int32	minute = this->get_Minute();
+		Int32	second = this->get_Second();
+		Boolean	isPm = false;
+		if (hour > 12) {
+			hour -= 12;
+			isPm = true;
+		}
+		Char	dateTime[128];
+		Int32 length = swprintf(dateTime, 128, L"%d/%d/%d %d:%02d:%02d ", month, day, year, hour, minute, second);
+		stringBuilder.Append(dateTime, length);
+		if (isPm)
+			stringBuilder.Append(L"PM", 2);
+		else
+			stringBuilder.Append(L"AM", 2);
+		return(stringBuilder.FormatString(where, whereSize));
 	}
 	TimeSpan DateTimeValue::Subtract(const DateTime& date1)
 	{
@@ -242,8 +309,7 @@ namespace DotnetLibrary
 	{
 		Int64 ticks = value.value;
 		Int64 valueTicks = ts.value;
-		if (ticks - MinTicks < valueTicks || ticks - MaxTicks > valueTicks)
-		{
+		if (ticks - MinTicks < valueTicks || ticks - MaxTicks > valueTicks) {
 			throw new ArgumentOutOfRangeException();
 		}
 		return DateTime((UInt64)(ticks - valueTicks));
@@ -265,15 +331,13 @@ namespace DotnetLibrary
 		li.HighPart = st.dwHighDateTime;
 		UInt64 tick = li.QuadPart + FileTimeOffset;
 
-		if (tick > MaxTicks)
-		{
+		if (tick > MaxTicks) {
 			if (throwOnOverflow)
 				throw new ArgumentOutOfRangeException();
 			else
 				return DateTime(MaxTicks);
 		}
-		if (tick < MinTicks)
-		{
+		if (tick < MinTicks) {
 			if (throwOnOverflow)
 				throw new ArgumentOutOfRangeException();
 			else
@@ -295,38 +359,6 @@ namespace DotnetLibrary
 		UInt64 tick = li.QuadPart + FileTimeOffset;
 		return DateTime(tick);
 	}
-	DateTime DateTimeValue::op_Addition(const DateTime& ts1, const TimeSpan ts2)
-	{
-		return(DateTimeValue(ts1).Add(ts2));
-	}
-	TimeSpan DateTimeValue::op_Subtraction(const DateTime& ts1, const DateTime& ts2)
-	{
-		return(DateTimeValue(ts1).Subtract(ts2));
-	}
-	DateTime DateTimeValue::op_Subtraction(const DateTime& ts1, const TimeSpan ts2)
-	{
-		return(DateTimeValue(ts1).Subtract(ts2));
-	}
-	Boolean DateTimeValue::op_Inequality(const DateTime& ts1, const DateTime& ts2)
-	{
-		return Boolean();
-	}
-	Boolean DateTimeValue::op_GreaterThan(const DateTime& ts1, const DateTime& ts2)
-	{
-		return ts1.value > ts2.value;
-	}
-	Boolean DateTimeValue::op_GreaterThanOrEqual(const DateTime& ts1, const DateTime& ts2)
-	{
-		return ts1.value >= ts2.value;
-	}
-	Boolean DateTimeValue::op_LessThan(const DateTime& ts1, const DateTime& ts2)
-	{
-		return ts1.value < ts2.value;
-	}
-	Boolean DateTimeValue::op_LessThanOrEqual(const DateTime& ts1, const DateTime& ts2)
-	{
-		return ts1.value <= ts2.value;
-	}
 	DateTime DateTimeValue::get_Now()
 	{
 		FILETIME ft;
@@ -337,12 +369,10 @@ namespace DotnetLibrary
 		li.LowPart = st.dwLowDateTime;
 		li.HighPart = st.dwHighDateTime;
 		UInt64 tick = li.QuadPart + FileTimeOffset;
-		if (tick > MaxTicks)
-		{
+		if (tick > MaxTicks) {
 			return DateTime(MaxTicks);
 		}
-		if (tick < MinTicks)
-		{
+		if (tick < MinTicks) {
 			return DateTime(MinTicks);
 		}
 		return DateTime(tick);
@@ -360,51 +390,7 @@ namespace DotnetLibrary
 		DateTime rtn = (DateTimeValue(get_Now())).get_Date();
 		return	rtn;
 	}
-	Int32 DateTimeValue::CompareTo(const DateTime& dataTime)
-	{
-		return Compare(value, dataTime);
-	}
-	Int32 DateTimeValue::Compare(const DateTime& date1, const DateTime& date2)
-	{
-		Int64 ticks1 = date1.value;
-		Int64 ticks2 = date2.value;
-		if (ticks1 > ticks2) return 1;
-		if (ticks1 < ticks2) return -1;
-		return 0;
-	}
-	bool DateTimeValue::Equals(const DateTime& valueToCOmpare)
-	{
-		return value.value == valueToCOmpare.value;
-	}
-	bool DateTimeValue::Equals(const DateTime& valueToCOmpare, const DateTime& valueToCOmpare2)
-	{
-		return valueToCOmpare.value == valueToCOmpare2.value;
-	}
-	Int32 DateTimeValue::FormatString(Char* where, const Int32 whereSize)
-	{
-		StringBuilder stringBuilder;
-		Int32	month = this->get_Month();
-		Int32	day = this->get_Day();
-		Int32	year = this->get_Year();
-		Int32	hour = this->get_Hour();
-		Int32	minute = this->get_Minute();
-		Int32	second = this->get_Second();
-		Boolean	isPm = false;
-		if (hour > 12)
-		{
-			hour -= 12;
-			isPm = true;
-		}
-		Char	dateTime[128];
-		Int32 length = swprintf(dateTime, 128, L"%d/%d/%d %d:%02d:%02d ", month, day, year, hour, minute, second);
-		stringBuilder.Append(dateTime, length);
-		if (isPm)
-			stringBuilder.Append(L"PM",2);
-		else
-			stringBuilder.Append(L"AM", 2);
-		return(stringBuilder.FormatString(where, whereSize));
-	}
-	DateTime DateTimeValue::getAsDateTime()
+	DateTime DateTimeValue::get_AsDateTime()
 	{
 		return value;
 	}
@@ -440,8 +426,7 @@ namespace DotnetLibrary
 		// Last year has an extra day, so decrement result if 4
 		if (y1 == 4) y1 = 3;
 		// If year was requested, compute and return it
-		if (part == DatePartYear)
-		{
+		if (part == DatePartYear) {
 			return y400 * 400 + y100 * 100 + y4 * 4 + y1 + 1;
 		}
 		// n = day number within year
@@ -485,5 +470,41 @@ namespace DotnetLibrary
 	Int32 DateTimeValue::get_Month()
 	{
 		return GetDatePart(DatePartMonth);
+	}
+	DateTime DateTimeValue::op_Addition(const DateTime& ts1, const TimeSpan ts2)
+	{
+		return(DateTimeValue(ts1).Add(ts2));
+	}
+	Boolean DateTimeValue::op_Equality(const DateTime& ts1, const DateTime& ts2)
+	{
+		return DateTimeValue(ts1).Equals(ts2);
+	}
+	Boolean DateTimeValue::op_GreaterThan(const DateTime& ts1, const DateTime& ts2)
+	{
+		return ts1.value > ts2.value;
+	}
+	Boolean DateTimeValue::op_GreaterThanOrEqual(const DateTime& ts1, const DateTime& ts2)
+	{
+		return ts1.value >= ts2.value;
+	}
+	Boolean DateTimeValue::op_Inequality(const DateTime& ts1, const DateTime& ts2)
+	{
+		return !DateTimeValue(ts1).Equals(ts2);
+	}
+	Boolean DateTimeValue::op_LessThan(const DateTime& ts1, const DateTime& ts2)
+	{
+		return ts1.value < ts2.value;
+	}
+	Boolean DateTimeValue::op_LessThanOrEqual(const DateTime& ts1, const DateTime& ts2)
+	{
+		return ts1.value <= ts2.value;
+	}
+	TimeSpan DateTimeValue::op_Subtraction(const DateTime& ts1, const DateTime& ts2)
+	{
+		return(DateTimeValue(ts1).Subtract(ts2));
+	}
+	DateTime DateTimeValue::op_Subtraction(const DateTime& ts1, const TimeSpan ts2)
+	{
+		return(DateTimeValue(ts1).Subtract(ts2));
 	}
 }
