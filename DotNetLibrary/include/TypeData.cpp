@@ -30,12 +30,6 @@ namespace DotnetLibrary
 
 	DLL_EXPORT SByte	SByteValue::MaxValue = 100;
 	DLL_EXPORT SByte	SByteValue::MinValue = 0;
-	DLL_EXPORT Double	DoubleValue::MaxValue = 255;
-	DLL_EXPORT Double	DoubleValue::MinValue = 0;
-	DLL_EXPORT Double	DoubleValue::Epsilon = 0;
-	DLL_EXPORT Double	DoubleValue::NaN = 0;
-	DLL_EXPORT Double	DoubleValue::PositiveInfinity = 0;
-	DLL_EXPORT Double	DoubleValue::NegativeInfinity = 0;
 
 	DLL_EXPORT Single	SingleValue::MaxValue = 255;
 	DLL_EXPORT Single	SingleValue::MinValue = 0;
