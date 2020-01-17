@@ -13,6 +13,13 @@ namespace DotnetLibrary
 		static Double	PositiveInfinity;
 		static Double	NegativeInfinity;
 		DoubleValue(Double v) { value = v; }
+		virtual Int16		get_AsInt16();
+		virtual UInt16		get_AsUInt16();
+		virtual Int32		get_AsInt32();
+		virtual UInt32		get_AsUInt32();
+		virtual Int64		get_AsInt64();
+		virtual UInt64		get_AsUInt64();
+		virtual Single		get_AsSingle();
 		virtual Double		get_AsDouble();
 		virtual Int32		CompareTo(Double valueToCompare);
 		virtual Int32		CompareTo(Object* valueToCompare);
@@ -33,6 +40,7 @@ namespace DotnetLibrary
 		static Boolean		TryParse(String* s, Double* result);
 		static Boolean		TryParseInternal(String* source, Double& result);
 		static Boolean		TryParseInternal(Char* source, Int32 sourceLength, Double& result);
+		static Double		ToDouble(UInt64);
 		static UInt64		ToUInt64(Double);
 	};
 }

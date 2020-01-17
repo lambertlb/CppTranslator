@@ -168,6 +168,7 @@
     <ClCompile Include="include\CharEnumerator.cpp" />
     <ClCompile Include="include\CharValue.cpp" />
     <ClCompile Include="include\DateTimeValue.cpp" />
+    <ClCompile Include="include\DotNetMath.cpp" />
     <ClCompile Include="include\DoubleValue.cpp" />
     <ClCompile Include="include\Int16Value.cpp" />
     <ClCompile Include="include\Int32Value.cpp" />
@@ -192,7 +193,6 @@
     <ClInclude Include="include\DateTimeValue.h" />
     <ClInclude Include="include\DotnetTypes.h" />
     <ClInclude Include="include\DoubleValue.h" />
-    <ClInclude Include="include\Encoding.h" />
     <ClInclude Include="include\Exception.h" />
     <ClInclude Include="include\Int16Value.h" />
     <ClInclude Include="include\Int32Value.h" />

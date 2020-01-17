@@ -98,6 +98,5 @@ namespace DotnetLibrary
 #include "DoubleValue.h"
 #include "DateTimeValue.h"
 #include "TimeSpanValue.h"
-#include "Encoding.h"
 #include "CharEnumerator.h"
 #include "Exception.h"

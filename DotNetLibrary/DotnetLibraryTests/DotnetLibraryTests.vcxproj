@@ -40,6 +40,10 @@
     <ClCompile Include="CharTests.cpp" />
     <ClCompile Include="DateTimeTests.cpp" />
     <ClCompile Include="DoubleTests.cpp" />
+    <ClCompile Include="Int16Tests.cpp" />
+    <ClCompile Include="Int32Tests.cpp" />
+    <ClCompile Include="Int64Tests.cpp" />
+    <ClCompile Include="MathTests.cpp" />
     <ClCompile Include="StringBuilderTests.cpp" />
     <ClCompile Include="StringTests.cpp" />
   </ItemGroup>

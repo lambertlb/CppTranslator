@@ -44,19 +44,11 @@ namespace DotnetLibrary
 	DLL_EXPORT Single	FloatValue::NaN = 0;
 	DLL_EXPORT Single	FloatValue::PositiveInfinity = 0;
 	DLL_EXPORT Single	FloatValue::NegativeInfinity = 0;
-	DLL_EXPORT Int16	Int16Value::MaxValue = 255;
-	DLL_EXPORT Int16	Int16Value::MinValue = 0;
 	DLL_EXPORT UInt16	UInt16Value::MaxValue = 255;
 	DLL_EXPORT UInt16	UInt16Value::MinValue = 0;
-	DLL_EXPORT Int64	Int64Value::MaxValue = 255;
-	DLL_EXPORT Int64	Int64Value::MinValue = 0;
 	DLL_EXPORT UInt64	UInt64Value::MaxValue = 255;
 	DLL_EXPORT UInt64	UInt64Value::MinValue = 0;
-	DLL_EXPORT Int32	Int32Value::MaxValue = 2147483647;
-	DLL_EXPORT Int32	Int32Value::MinValue = -2147483648;
 	DLL_EXPORT UInt32	UInt32Value::MaxValue = 255;
 	DLL_EXPORT UInt32	UInt32Value::MinValue = 0;
-	DLL_EXPORT Double	Math::PI = 3.14159265358979;
-	DLL_EXPORT Double	Math::E = 2.71828182845905;
 	DLL_EXPORT String* String::Empty = new String(L"");
 }

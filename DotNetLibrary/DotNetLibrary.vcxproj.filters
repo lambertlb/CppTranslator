@@ -77,6 +77,9 @@
     <ClCompile Include="include\Buffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\DotNetMath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DotnetTypes.h" />
@@ -98,7 +101,6 @@
     <ClInclude Include="include\UInt64Value.h" />
     <ClInclude Include="include\SingleValue.h" />
     <ClInclude Include="include\DoubleValue.h" />
-    <ClInclude Include="include\Encoding.h" />
     <ClInclude Include="include\CharValue.h" />
     <ClInclude Include="include\CharEnumerator.h" />
     <ClInclude Include="include\DateTimeValue.h" />

@@ -12,7 +12,7 @@ namespace DotnetLibrary
 	Boolean UInt64Value::TryParseInternal(Char* source, Int32 sourceLength, UInt64& result, Int32& sign)
 	{
 		result = 0;
-		sign = 0;
+		sign = 1;
 		Boolean gotNumber = false;
 		while (*source != 0 && sourceLength > 0) {
 			if (!CharValue::IsWhiteSpace(*source))

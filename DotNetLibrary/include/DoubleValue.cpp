@@ -11,6 +11,34 @@ namespace DotnetLibrary
 	DLL_EXPORT Double	DoubleValue::NaN = NAN;
 	DLL_EXPORT Double	DoubleValue::PositiveInfinity = INFINITY;
 	DLL_EXPORT Double	DoubleValue::NegativeInfinity = -INFINITY;
+	Int16 DoubleValue::get_AsInt16()
+	{
+		return (Int16)value;
+	}
+	UInt16 DoubleValue::get_AsUInt16()
+	{
+		return (UInt16)value;
+	}
+	Int32 DoubleValue::get_AsInt32()
+	{
+		return (Int32)value;
+	}
+	UInt32 DoubleValue::get_AsUInt32()
+	{
+		return (UInt32)value;
+	}
+	Int64 DoubleValue::get_AsInt64()
+	{
+		return (Int64)value;
+	}
+	UInt64 DoubleValue::get_AsUInt64()
+	{
+		return (UInt64)value;
+	}
+	Single DoubleValue::get_AsSingle()
+	{
+		return (Single)value;
+	}
 	Double DoubleValue::get_AsDouble()
 	{
 		return value;
@@ -141,6 +169,16 @@ namespace DotnetLibrary
 		gotNumber = swscanf_s(source, L"%lG", &rtn) == 1;
 		result = rtn;
 		return(gotNumber);
+	}
+	Double DoubleValue::ToDouble(UInt64 v)
+	{
+		union
+		{
+			UInt64	uintData;
+			Double	doubleData;
+		}u;
+		u.uintData = v;
+		return(u.doubleData);
 	}
 	UInt64 DoubleValue::ToUInt64(Double v)
 	{
