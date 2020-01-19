@@ -69,5 +69,10 @@ namespace DotnetLibrary
 	public:
 		OverflowEception() : Exception(new String(L"Overflow")) {}
 	};
+	struct DLL_EXPORT ThrowMinMaxException : public  Exception
+	{
+	public:
+		ThrowMinMaxException() : Exception(new String(L"Overflow")) {}
+	};
 	
 }
