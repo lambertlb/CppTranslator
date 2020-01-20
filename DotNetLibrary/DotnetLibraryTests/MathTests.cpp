@@ -161,3 +161,71 @@ TEST(MathTests, Log10Test) {
 TEST(MathTests, Log2Test) {
 	AssertFloatEquals(Math::Log2(0.58019181037172444), -0.78539816339744831);
 }
+TEST(MathTests, MaxTest) {
+	ASSERT_TRUE(Math::Max((Byte)5, (Byte)3) == 5);
+	ASSERT_TRUE(Math::Max((Double)5, (Double)3) == 5);
+	ASSERT_TRUE(Math::Max((Int16)5, (Int16)3) == 5);
+	ASSERT_TRUE(Math::Max((Int32)5, (Int32)3) == 5);
+	ASSERT_TRUE(Math::Max((Int64)5, (Int64)3) == 5);
+	ASSERT_TRUE(Math::Max((SByte)5, (SByte)3) == 5);
+	ASSERT_TRUE(Math::Max((Single)5, (Single)3) == 5);
+	ASSERT_TRUE(Math::Max((UInt16)5, (UInt16)3) == 5);
+	ASSERT_TRUE(Math::Max((UInt32)5, (UInt32)3) == 5);
+	ASSERT_TRUE(Math::Max((UInt64)5, (UInt64)3) == 5);
+}
+TEST(MathTests, MinTest) {
+	ASSERT_TRUE(Math::Min((Byte)5, (Byte)3) == 3);
+	ASSERT_TRUE(Math::Min((Double)5, (Double)3) == 3);
+	ASSERT_TRUE(Math::Min((Int16)5, (Int16)3) == 3);
+	ASSERT_TRUE(Math::Min((Int32)5, (Int32)3) == 3);
+	ASSERT_TRUE(Math::Min((Int64)5, (Int64)3) == 3);
+	ASSERT_TRUE(Math::Min((SByte)5, (SByte)3) == 3);
+	ASSERT_TRUE(Math::Min((Single)5, (Single)3) == 3);
+	ASSERT_TRUE(Math::Min((UInt16)5, (UInt16)3) == 3);
+	ASSERT_TRUE(Math::Min((UInt32)5, (UInt32)3) == 3);
+	ASSERT_TRUE(Math::Min((UInt64)5, (UInt64)3) == 3);
+}
+TEST(MathTests, MaxMagnitudeTest) {
+	AssertFloatEquals(Math::MaxMagnitude(2.0, -3.0), -3.0);
+}
+TEST(MathTests, MinMagnitudeTest) {
+	AssertFloatEquals(Math::MinMagnitude(2.0, -3.0), 2.0);
+}
+TEST(MathTests, PowTest) {
+	AssertFloatEquals(Math::Pow(7.0, 3.0), 343.0);
+}
+TEST(MathTests, RoundTest) {
+	AssertFloatEquals(Math::Round(1.4), 1.0);
+	AssertFloatEquals(Math::Round(1.5), 2.0);
+	AssertFloatEquals(Math::Round(3.42156, 3, AwayFromZero), 3.422);
+}
+TEST(MathTests, ScaleBTest) {
+	AssertFloatEquals(Math::ScaleB(4.9334096679145963, 2), 19.733638671658387);
+}
+TEST(MathTests, SignTest) {
+	ASSERT_TRUE(Math::Sign(1.4) == 1);
+	ASSERT_TRUE(Math::Sign(-1.4) == -1);
+	ASSERT_TRUE(Math::Sign((Int16)2) == 1);
+	ASSERT_TRUE(Math::Sign((Int16)-2) == -1);
+	ASSERT_TRUE(Math::Sign((Int32)2) == 1);
+	ASSERT_TRUE(Math::Sign((Int32)-2) == -1);
+	ASSERT_TRUE(Math::Sign((Int64)2) == 1);
+	ASSERT_TRUE(Math::Sign((Int64)-2) == -1);
+	ASSERT_TRUE(Math::Sign((Single)1.4) == 1);
+	ASSERT_TRUE(Math::Sign((Single)-1.4) == -1);
+}
+TEST(MathTests, SinTest) {
+	AssertFloatEquals(Math::Sin(1.4426950408889634), 0.99180624439366372);
+}
+TEST(MathTests, SinhTest) {
+	AssertFloatEquals(Math::Sinh(-1.5707963267948966), -2.3012989023072949);
+}
+TEST(MathTests, SqrtTest) {
+	AssertFloatEquals(Math::Sqrt(0.31830988618379067), 0.56418958354775629);
+}
+TEST(MathTests, TanTest) {
+	AssertFloatEquals(Math::Tan(-2.3025850929940457), 1.1134071468135374);
+}
+TEST(MathTests, TruncateTest) {
+	AssertFloatEquals(Math::Truncate(3.14159), 3.0);
+}

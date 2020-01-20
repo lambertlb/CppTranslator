@@ -3,13 +3,19 @@
 
 namespace DotnetLibrary
 {
+	enum MidpointRounding
+	{
+		ToEven = 0,
+		AwayFromZero = 1,
+		ToZero = 2,
+		ToNegativeInfinity = 3,
+		ToPositiveInfinity = 4
+	};
 	class DLL_EXPORT Math {
 	public:
 		static Double	PI;
 		static Double	E;
 
-		static Byte	Max(Byte v1, Byte v2) { return(v1 > v2 ? v1 : v2); }
-		static Byte	Min(Byte v1, Byte v2) { return(v1 < v2 ? v1 : v2); }
 		static Double	Abs(Double v1);
 		static Double	Abs(Int16 v1);
 		static Double	Abs(Int32 v1);
@@ -44,6 +50,8 @@ namespace DotnetLibrary
 		static Int32	DivRem(Int32 a, Int32 b, Int32* result);
 		static Int64	DivRem(Int64 a, Int64 b, Int64* result);
 		static Double	Exp(Double v1);
+		static Int32	ExtractExponentFromBits(UInt64 bits);
+		static UInt64	ExtractSignificandFromBits(UInt64 bits);
 		static Double	Floor(Double v1);
 		static Double	FusedMultiplyAdd(Double x, Double y, Double z);
 		static Double	IEEERemainder(Double x, Double y);
@@ -52,15 +60,44 @@ namespace DotnetLibrary
 		static Double	Log(Double v1, Double v2);
 		static Double	Log10(Double v1);
 		static Double	Log2(double x);
-		static Double	Pow(Double v1, Double v2) { return(v1); }
-		static Double	Round(Double v1) { return(v1); }
-		static Double	Round(Double v1, Int32 v2) { return(v1); }
-		static Double	Sin(Double v1) { return(v1); }
-		static Double	Sign(Double v1) { return(v1); }
-		static Double	Sinh(Double v1) { return(v1); }
-		static Double	Sqrt(Double v1) { return(v1); }
-		static Double	Tan(Double v1) { return(v1); }
-		static Double	Tanh(Double v1) { return(v1); }
-		static Double	Truncate(Double v1) { return(v1); }
+		static Byte		Max(Byte val1, Byte val2);
+		static Double	Max(Double val1, Double val2);
+		static Int16	Max(Int16 val1, Int16 val2);
+		static Int32	Max(Int32 val1, Int32 val2);
+		static Int64	Max(Int64 val1, Int64 val2);
+		static SByte	Max(SByte val1, SByte val2);
+		static Single	Max(Single val1, Single val2);
+		static UInt16	Max(UInt16 val1, UInt16 val2);
+		static UInt32	Max(UInt32 val1, UInt32 val2);
+		static UInt64	Max(UInt64 val1, UInt64 val2);
+		static Double	MaxMagnitude(Double x, Double y);
+		static Byte		Min(Byte val1, Byte val2);
+		static Double	Min(Double val1, Double val2);
+		static Int16	Min(Int16 val1, Int16 val2);
+		static Int32	Min(Int32 val1, Int32 val2);
+		static Int64	Min(Int64 val1, Int64 val2);
+		static SByte	Min(SByte val1, SByte val2);
+		static Single	Min(Single val1, Single val2);
+		static UInt16	Min(UInt16 val1, UInt16 val2);
+		static UInt32	Min(UInt32 val1, UInt32 val2);
+		static UInt64	Min(UInt64 val1, UInt64 val2);
+		static Double	MinMagnitude(Double x, Double y);
+		static Double	Pow(Double x, Double y);
+		static Double	Round(Double v1);
+		static Double	Round(Double v1, Int32 v2);
+		static Double	Round(Double value, Int32 digits, MidpointRounding mode);
+		static Double	ScaleB(Double x, Int32 n);
+		static Int32	Sign(Double v1);
+		static Int32	Sign(Int16 v1);
+		static Int32	Sign(Int32 v1);
+		static Int32	Sign(Int64 v1);
+		static Int32	Sign(SByte v1);
+		static Int32	Sign(Single v1);
+		static Double	Sin(Double value);
+		static Double	Sinh(Double value);
+		static Double	Sqrt(Double value);
+		static Double	Tan(Double value);
+		static Double	Tanh(Double value);
+		static Double	Truncate(Double value);
 	};
 }
