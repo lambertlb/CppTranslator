@@ -45,6 +45,7 @@
     <ClCompile Include="Int64Tests.cpp" />
     <ClCompile Include="MathTests.cpp" />
     <ClCompile Include="SByteTests.cpp" />
+    <ClCompile Include="SingleTests.cpp" />
     <ClCompile Include="StringBuilderTests.cpp" />
     <ClCompile Include="StringTests.cpp" />
   </ItemGroup>

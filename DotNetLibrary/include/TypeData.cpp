@@ -28,19 +28,6 @@ namespace DotnetLibrary
 	DLL_EXPORT TimeSpan	TimeSpanValue::MinValue = TimeSpan(UInt64Value::MinValue);
 	DLL_EXPORT TimeSpan	TimeSpanValue::Zero = TimeSpan(0);
 
-	DLL_EXPORT Single	SingleValue::MaxValue = 255;
-	DLL_EXPORT Single	SingleValue::MinValue = 0;
-	DLL_EXPORT Single	SingleValue::Epsilon = 0;
-	DLL_EXPORT Single	SingleValue::NaN = 0;
-	DLL_EXPORT Single	SingleValue::PositiveInfinity = 0;
-	DLL_EXPORT Single	SingleValue::NegativeInfinity = 0;
-
-	DLL_EXPORT Single	FloatValue::MaxValue = 255;
-	DLL_EXPORT Single	FloatValue::MinValue = 0;
-	DLL_EXPORT Single	FloatValue::Epsilon = 0;
-	DLL_EXPORT Single	FloatValue::NaN = 0;
-	DLL_EXPORT Single	FloatValue::PositiveInfinity = 0;
-	DLL_EXPORT Single	FloatValue::NegativeInfinity = 0;
 	DLL_EXPORT UInt16	UInt16Value::MaxValue = 255;
 	DLL_EXPORT UInt16	UInt16Value::MinValue = 0;
 	DLL_EXPORT UInt64	UInt64Value::MaxValue = 255;
