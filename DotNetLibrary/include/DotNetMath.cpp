@@ -569,7 +569,7 @@ namespace DotnetLibrary
 
 	Double Math::ScaleB(Double x, Int32 n)
 	{
-		return scalbn(x,n);
+		return scalbn(x, n);
 	}
 
 	Int32 Math::Sign(Double value)
