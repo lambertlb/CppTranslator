@@ -4,6 +4,7 @@
 
 namespace DotnetLibrary
 {
+	DLL_EXPORT String* String::Empty = new String(L"");
 	// all possible whitespace characters
 	Char	WhiteSpaceChars[] =
 	{ (Char)0x9, (Char)0xA, (Char)0xB, (Char)0xC,

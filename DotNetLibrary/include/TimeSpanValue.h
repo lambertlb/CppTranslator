@@ -6,52 +6,55 @@ namespace DotnetLibrary
 	class DLL_EXPORT TimeSpanValue : public ValueType {
 		TimeSpan	value;
 	public:
+		static TimeSpan	MaxValue;
+		static TimeSpan	MinValue;
+		static Int64	TicksPerMillisecond;
+		static Int64	TicksPerSecond;
+		static Int64	TicksPerMinute;
+		static Int64	TicksPerHour;
+		static Int64	TicksPerDay;
+		static TimeSpan	Zero;
+
 		TimeSpanValue() { value = 0; }
 		TimeSpanValue(const UInt64 value2) { value = value2; };
 		TimeSpanValue(const TimeSpan value2) { value = value2.value; };
-		virtual DataType	GetRawDataType() { return(TimeSpanType); };
-		virtual TimeSpan	get_AsTimeSpan();
 
-		bool	Equals(const TimeSpan& valueToCOmpare) {
-			return(valueToCOmpare.value == value.value);
-		}
-		static bool	Equals(const TimeSpan& valueToCOmpare, const TimeSpan& valueToCOmpare2) {
-			return(false);
-		}
-		virtual bool	Equals(Object* valueToCompare) {
-			return(false);
-		}
-		virtual Int32	CompareTo(TimeSpan valueToCompare) {
-			return(0);
-		}
-		Int32					CompareTo(Object* obj) { return(0); }
-		TimeSpan				Duration() { return(0); }
-		bool	Equals(const DateTime& valueToCOmpare) {
-			return(false);
-		}
-		static	TimeSpan		FromDays(const Double data) { return(0); }
-		static	TimeSpan		FromHours(const Double data) { return(0); }
-		static	TimeSpan		FromMilliseconds(const Double data) { return(0); }
-		static	TimeSpan		FromMinutes(const Double data) { return(0); }
-		static	TimeSpan		FromSeconds(const Double data) { return(0); }
-		static	TimeSpan		FromTicks(const Int64 data) { return(0); }
-		TimeSpan				Negate() { return(0); }
-		TimeSpan				Subtract(const TimeSpan& ts1) { return(0); }
-		static TimeSpan			Parse(String* val) { return(0); }
-		virtual	Int32			FormatString(Char* where, const Int32 whereSize);
-		TimeSpan				Add(const TimeSpan& ts) { return(TimeSpan(0)); }
-		static	Int32			Compare(const TimeSpan& ts1, const TimeSpan& ts2) { return(0); }
-		Int32					get_Days() { return(0); }
-		Int32					get_Hours() { return(0); }
-		Int32					get_Milliseconds() { return(0); }
-		Int32					get_Minutes() { return(0); }
-		Int32					get_Seconds() { return(0); }
-		Int64					get_Ticks() { return(value.value); }
-		Double					get_TotalDays() { return(0); }
-		Double					get_TotalHours() { return(0); }
-		Double					get_TotalMilliseconds() { return(0); }
-		Double					get_TotalMinutes() { return(0); }
-		Double					get_TotalSeconds() { return(0); }
+		virtual TimeSpan	get_AsTimeSpan();
+		Int32				get_Days();
+		Int32				get_Hours();
+		Int32				get_Milliseconds();
+		Int32				get_Minutes();
+		Int32				get_Seconds();
+		Int64				get_Ticks();
+		Double				get_TotalDays();
+		Double				get_TotalHours();
+		Double				get_TotalMilliseconds();
+		Double				get_TotalMinutes();
+		Double				get_TotalSeconds();
+
+		TimeSpan			Add(const TimeSpan& ts);
+		static	Int32		Compare(const TimeSpan& ts1, const TimeSpan& ts2);
+		virtual Int32		CompareTo(TimeSpan valueToCompare);
+		Int32				CompareTo(Object* obj);
+		Double				Divide(TimeSpan ts);
+		TimeSpan			Divide(Double divisor);
+		TimeSpan			Duration();
+		Boolean				Equals(const TimeSpan& valueToCompare);
+		static Boolean		Equals(const TimeSpan& valueToCompare, const TimeSpan& valueToCompare2);
+		virtual Boolean		Equals(Object* valueToCompare);
+		static	TimeSpan	FromDays(const Double data);
+		static	TimeSpan	FromHours(const Double data);
+		static	TimeSpan	FromMilliseconds(const Double data);
+		static	TimeSpan	FromMinutes(const Double data);
+		static	TimeSpan	FromSeconds(const Double data);
+		static	TimeSpan	FromTicks(const Int64 data);
+		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
+		virtual DataType	GetRawDataType() { return(TimeSpanType); };
+		static TimeSpan		Interval(Double value, Double scale);
+		TimeSpan			Multiply(Double factor);
+		TimeSpan			Negate();
+		TimeSpan			Subtract(const TimeSpan& ts1);
+
 		static TimeSpan			op_Addition(const TimeSpan& ts1, const TimeSpan& ts2) { return(0); }
 		static TimeSpan			op_Subtraction(const TimeSpan& ts1, const TimeSpan& ts2) { return(0); }
 		static TimeSpan			op_UnaryNegation(const TimeSpan& ts1) { return(0); }
@@ -62,8 +65,5 @@ namespace DotnetLibrary
 		static Boolean			op_GreaterThanOrEqual(const TimeSpan& ts1, const TimeSpan& ts2) { return(false); }
 		static Boolean			op_LessThan(const TimeSpan& ts1, const TimeSpan& ts2) { return(false); }
 		static Boolean			op_LessThanOrEqual(const TimeSpan& ts1, const TimeSpan& ts2) { return(false); }
-		static TimeSpan	MaxValue;
-		static TimeSpan	MinValue;
-		static TimeSpan	Zero;
 	};
 }

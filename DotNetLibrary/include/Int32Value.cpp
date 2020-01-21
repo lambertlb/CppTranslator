@@ -90,7 +90,7 @@ namespace DotnetLibrary
 		if (!UInt64Value::TryParseInternal(stringToParse, value, sign))
 			throw new FormatException();
 		if (value > MaxValue)
-			throw new OverflowEception();
+			throw new OverflowException();
 		return((Int32)value * sign);
 	}
 	bool Int32Value::TryParse(String* stringToParse, Int32* result)

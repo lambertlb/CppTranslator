@@ -64,10 +64,10 @@ namespace DotnetLibrary
 	public:
 		FormatException() : Exception(new String(L"Bad Format")) {}
 	};
-	struct DLL_EXPORT OverflowEception : public  Exception
+	struct DLL_EXPORT OverflowException : public  Exception
 	{
 	public:
-		OverflowEception() : Exception(new String(L"Overflow")) {}
+		OverflowException() : Exception(new String(L"Overflow")) {}
 	};
 	struct DLL_EXPORT ThrowMinMaxException : public  Exception
 	{

@@ -48,6 +48,7 @@
     <ClCompile Include="SingleTests.cpp" />
     <ClCompile Include="StringBuilderTests.cpp" />
     <ClCompile Include="StringTests.cpp" />
+    <ClCompile Include="TimeSpanTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
