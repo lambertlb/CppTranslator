@@ -152,6 +152,35 @@ namespace DotnetLibrary
 		}
 		return false;
 	}
+	Int32 TimeSpanValue::FormatString(Char* where, const Int32 whereSize)
+	{
+		StringBuilder	stringBuilder;
+
+		Int32 day = (Int32)(value.value / TicksPerDay);
+		Int64 time = value.value % TicksPerDay;
+		if (value.value < 0) {
+			stringBuilder.Append(L'-');
+			day = -day;
+			time = -time;
+		}
+		if (day != 0) {
+			stringBuilder.Append(day);
+			stringBuilder.Append(L'.');
+		}
+		Int32	fractional = (Int32)(time % TicksPerSecond);
+		Char	date[32];
+		Int32 length = swprintf(date, 32, L"%d:%02d:%02d:%02d", get_Days(), get_Hours(), get_Minutes(), get_Seconds());
+		stringBuilder.Append(date, length);
+		if (fractional != 0) {
+			stringBuilder.Append((Char)'.');
+			Char	frac[32];
+			Int32Value factValue(fractional);
+			Int32 fracLength = factValue.FormatString(frac, 32);
+			stringBuilder.Append(frac, fracLength);
+			stringBuilder.Append(L'0', 7 - fracLength);
+		}
+		return(stringBuilder.FormatString(where, whereSize));
+	}
 	TimeSpan TimeSpanValue::FromDays(const Double data)
 	{
 		return Interval(data, TicksPerDay);
@@ -209,33 +238,62 @@ namespace DotnetLibrary
 			throw new OverflowException();
 		return TimeSpan(result);
 	}
-	Int32 TimeSpanValue::FormatString(Char* where, const Int32 whereSize)
+	TimeSpan TimeSpanValue::op_Addition(const TimeSpan& ts1, const TimeSpan& ts2)
 	{
-		StringBuilder	stringBuilder;
-
-		Int32 day = (Int32)(value.value / TicksPerDay);
-		Int64 time = value.value % TicksPerDay;
-		if (value.value < 0) {
-			stringBuilder.Append(L'-');
-			day = -day;
-			time = -time;
-		}
-		if (day != 0) {
-			stringBuilder.Append(day);
-			stringBuilder.Append(L'.');
-		}
-		Int32	fractional = (Int32)(time % TicksPerSecond);
-		Char	date[32];
-		Int32 length = swprintf(date, 32, L"%d:%02d:%02d:%02d", get_Days(), get_Hours(), get_Minutes(), get_Seconds());
-		stringBuilder.Append(date, length);
-		if (fractional != 0) {
-			stringBuilder.Append((Char)'.');
-			Char	frac[32];
-			Int32Value factValue(fractional);
-			Int32 fracLength = factValue.FormatString(frac, 32);
-			stringBuilder.Append(frac, fracLength);
-			stringBuilder.Append(L'0', 7 - fracLength);
-		}
-		return(stringBuilder.FormatString(where, whereSize));
+		return TimeSpanValue(ts1).Add(ts2);
+	}
+	Double TimeSpanValue::op_Division(const TimeSpan& ts1, const TimeSpan& ts2)
+	{
+		return TimeSpanValue(ts1).Divide(ts2);
+	}
+	TimeSpan TimeSpanValue::op_Division(const TimeSpan& ts1, const Double& divisor)
+	{
+		return TimeSpanValue(ts1).Divide(divisor);
+	}
+	Boolean TimeSpanValue::op_Equality(const TimeSpan& ts1, const TimeSpan& ts2)
+	{
+		return TimeSpanValue(ts1).Equals(ts2);
+	}
+	Boolean TimeSpanValue::op_GreaterThan(const TimeSpan& ts1, const TimeSpan& ts2)
+	{
+		return ts1.value > ts2.value;
+	}
+	Boolean TimeSpanValue::op_GreaterThanOrEqual(const TimeSpan& ts1, const TimeSpan& ts2)
+	{
+		return ts1.value >= ts2.value;
+	}
+	Boolean TimeSpanValue::op_Inequality(const TimeSpan& ts1, const TimeSpan& ts2)
+	{
+		return !TimeSpanValue(ts1).Equals(ts2);
+	}
+	Boolean TimeSpanValue::op_LessThan(const TimeSpan& ts1, const TimeSpan& ts2)
+	{
+		return ts1.value < ts2.value;
+	}
+	Boolean TimeSpanValue::op_LessThanOrEqual(const TimeSpan& ts1, const TimeSpan& ts2)
+	{
+		return ts1.value <= ts2.value;
+	}
+	TimeSpan TimeSpanValue::op_Multiply(const Double& factor, const TimeSpan& ts1)
+	{
+		return TimeSpanValue(ts1).Multiply(factor);
+	}
+	TimeSpan TimeSpanValue::op_Multiply(const TimeSpan& ts1, const Double& factor)
+	{
+		return TimeSpanValue(ts1).Multiply(factor);
+	}
+	TimeSpan TimeSpanValue::op_Subtraction(const TimeSpan& ts1, const TimeSpan& ts2)
+	{
+		return TimeSpanValue(ts1).Subtract(ts2);
+	}
+	TimeSpan TimeSpanValue::op_UnaryNegation(const TimeSpan& t1)
+	{
+		if (t1.value == TimeSpanValue::MinValue.value)
+			throw new OverflowException();
+		return TimeSpan(-((Int64)t1.value));
+	}
+	TimeSpan TimeSpanValue::op_UnaryPlus(const TimeSpan& t1)
+	{
+		return t1;
 	}
 }

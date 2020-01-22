@@ -54,16 +54,20 @@ namespace DotnetLibrary
 		TimeSpan			Multiply(Double factor);
 		TimeSpan			Negate();
 		TimeSpan			Subtract(const TimeSpan& ts1);
+		static TimeSpan		op_Addition(const TimeSpan& ts1, const TimeSpan& ts2);
+		static Double		op_Division(const TimeSpan& ts1, const TimeSpan& ts2);
+		static TimeSpan		op_Division(const TimeSpan& ts1, const Double& divisor);
+		static Boolean		op_Equality(const TimeSpan& ts1, const TimeSpan& ts2);
+		static Boolean		op_GreaterThan(const TimeSpan& ts1, const TimeSpan& ts2);
+		static Boolean		op_GreaterThanOrEqual(const TimeSpan& ts1, const TimeSpan& ts2);
+		static Boolean		op_Inequality(const TimeSpan& ts1, const TimeSpan& ts2);
+		static Boolean		op_LessThan(const TimeSpan& ts1, const TimeSpan& ts2);
+		static Boolean		op_LessThanOrEqual(const TimeSpan& ts1, const TimeSpan& ts2);
+		static TimeSpan		op_Multiply(const TimeSpan& ts1, const Double& factor);
+		static TimeSpan		op_Multiply(const Double& factor, const TimeSpan& ts1);
+		static TimeSpan		op_Subtraction(const TimeSpan& ts1, const TimeSpan& ts2);
+		static TimeSpan		op_UnaryNegation(const TimeSpan& ts1);
+		static TimeSpan		op_UnaryPlus(const TimeSpan& ts1);
 
-		static TimeSpan			op_Addition(const TimeSpan& ts1, const TimeSpan& ts2) { return(0); }
-		static TimeSpan			op_Subtraction(const TimeSpan& ts1, const TimeSpan& ts2) { return(0); }
-		static TimeSpan			op_UnaryNegation(const TimeSpan& ts1) { return(0); }
-		static TimeSpan			op_UnaryPlus(const TimeSpan& ts1) { return(0); }
-
-		static Boolean			op_Inequality(const TimeSpan& ts1, const TimeSpan& ts2) { return(false); }
-		static Boolean			op_GreaterThan(const TimeSpan& ts1, const TimeSpan& ts2) { return(false); }
-		static Boolean			op_GreaterThanOrEqual(const TimeSpan& ts1, const TimeSpan& ts2) { return(false); }
-		static Boolean			op_LessThan(const TimeSpan& ts1, const TimeSpan& ts2) { return(false); }
-		static Boolean			op_LessThanOrEqual(const TimeSpan& ts1, const TimeSpan& ts2) { return(false); }
 	};
 }

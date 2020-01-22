@@ -155,3 +155,80 @@ TEST(TimeSpanTests, ToStringTest) {
 	String* answer = TimeSpanValue(timeSpan).ToString();
 	ASSERT_TRUE(wcscmp(answer->get_Buffer(), L"0:23:59:59.9990000") == 0);
 }
+TEST(TimeSpanTests, op_AdditionTest) {
+	TimeSpan	timeSpan(1, 2, 3, 4, 5);
+	TimeSpan	timeSpan2(10, 12, 13, 14, 15);
+	TimeSpan	answer(11, 14, 16, 18, 20);
+	TimeSpan	result(TimeSpanValue::op_Addition(timeSpan, timeSpan2));
+	ASSERT_TRUE(TimeSpanValue(result).get_Ticks() == TimeSpanValue(answer).get_Ticks());
+}
+TEST(TimeSpanTests, op_DivisionTest) {
+	TimeSpan	timeSpan(2, 30, 0);
+	TimeSpan	anwser(TimeSpanValue::op_Division(timeSpan, (1.0 / 2.0)));
+	TimeSpan	result(TimeSpan(5, 0, 0));
+	ASSERT_TRUE(TimeSpanValue(result).get_Ticks() == TimeSpanValue(anwser).get_Ticks());
+}
+TEST(TimeSpanTests, op_Division2Test) {
+	TimeSpan	timeSpan(2, 30, 0);
+	TimeSpan	result(TimeSpan(5, 0, 0));
+	ASSERT_TRUE(TimeSpanValue::op_Division(result, timeSpan) == 2.0);
+}
+TEST(TimeSpanTests, op_EqualityTest) {
+	TimeSpan first(12345);
+	TimeSpan second(12346);
+	ASSERT_TRUE(TimeSpanValue::op_Equality(first,first));
+	ASSERT_TRUE(!TimeSpanValue::op_Equality(first,second));
+}
+TEST(TimeSpanTests, op_GreaterThanTest) {
+	TimeSpan first(12345);
+	TimeSpan second(12346);
+	ASSERT_TRUE(!TimeSpanValue::op_GreaterThan(first, second));
+	ASSERT_TRUE(TimeSpanValue::op_GreaterThan(second, first));
+}
+TEST(TimeSpanTests, op_GreaterThanOrEqualTest) {
+	TimeSpan first(12345);
+	TimeSpan second(12346);
+	ASSERT_TRUE(TimeSpanValue::op_GreaterThanOrEqual(first, first));
+	ASSERT_TRUE(TimeSpanValue::op_GreaterThanOrEqual(second, first));
+	ASSERT_TRUE(!TimeSpanValue::op_GreaterThanOrEqual(first, second));
+}
+TEST(TimeSpanTests, op_InequalityTest) {
+	TimeSpan first(12345);
+	TimeSpan second(12346);
+	ASSERT_TRUE(!TimeSpanValue::op_Inequality(first, first));
+	ASSERT_TRUE(TimeSpanValue::op_Inequality(first, second));
+}
+TEST(TimeSpanTests, op_LessThanTest) {
+	TimeSpan first(12345);
+	TimeSpan second(12346);
+	ASSERT_TRUE(TimeSpanValue::op_LessThan(first, second));
+	ASSERT_TRUE(!TimeSpanValue::op_LessThan(second, first));
+}
+TEST(TimeSpanTests, op_LessThanOrEqualTest) {
+	TimeSpan first(12345);
+	TimeSpan second(12346);
+	ASSERT_TRUE(TimeSpanValue::op_LessThanOrEqual(first, first));
+	ASSERT_TRUE(!TimeSpanValue::op_LessThanOrEqual(second, first));
+	ASSERT_TRUE(TimeSpanValue::op_LessThanOrEqual(first, second));
+}
+TEST(TimeSpanTests, op_MultiplyTest) {
+	TimeSpan	timeSpan(2, 30, 0);
+	TimeSpan	anwser(TimeSpanValue::op_Multiply(timeSpan,2.0));
+	TimeSpan	anwser2(TimeSpanValue::op_Multiply(2.0, timeSpan));
+	TimeSpan	result(TimeSpan(5, 0, 0));
+	ASSERT_TRUE(TimeSpanValue(result).get_Ticks() == TimeSpanValue(anwser).get_Ticks());
+	ASSERT_TRUE(TimeSpanValue(result).get_Ticks() == TimeSpanValue(anwser2).get_Ticks());
+}
+TEST(TimeSpanTests, op_SubtractionTest) {
+	TimeSpan	timeSpan(1, 2, 3, 4, 5);
+	TimeSpan	timeSpan2(1, 2, 3);
+	TimeSpan	answer(1, 1, 1, 1, 5);
+	TimeSpan	result(TimeSpanValue::op_Subtraction(timeSpan,timeSpan2));
+	ASSERT_TRUE(TimeSpanValue(result).get_Ticks() == TimeSpanValue(answer).get_Ticks());
+}
+TEST(TimeSpanTests, op_UnaryNegationTest) {
+	TimeSpan	timeSpan(1, 2, 3);
+	TimeSpan	answer(-1, -2, -3);
+	TimeSpan	result(TimeSpanValue::op_UnaryNegation(timeSpan));
+	ASSERT_TRUE(result.value == answer.value);
+}
