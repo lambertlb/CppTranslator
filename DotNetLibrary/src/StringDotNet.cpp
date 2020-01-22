@@ -232,36 +232,38 @@ namespace DotnetLibrary
 	Boolean String::op_Inequality(String* str, String* str2)
 	{
 		if (str == str2) {
-			return true;
-		}
-		if (str == nullptr || str2 == nullptr || str->get_Length() != str2->get_Length()) {
 			return false;
 		}
-		return wcscmp(str->get_Buffer(), str2->get_Buffer()) == 0;
+		if (str == nullptr || str2 == nullptr || str->get_Length() != str2->get_Length()) {
+			return true;
+		}
+		return wcscmp(str->get_Buffer(), str2->get_Buffer()) != 0;
 	}
 	Boolean String::Equals(Object* object)
 	{
 		if (object == nullptr || object->GetRawDataType() != StringType)
 			return(false);
-		return op_Inequality(this, (String*)object);
+		return !op_Inequality(this, (String*)object);
 	}
 	Boolean String::Equals(String* object)
 	{
-		return op_Inequality(this, object);
+		return !op_Inequality(this, object);
 	}
 	Boolean String::Equals(String* object, Object* object2)
 	{
 		if (object2 == nullptr || object2->GetRawDataType() != StringType)
 			return(false);
-		return op_Inequality(object, (String*)object2);
+		return !op_Inequality(object, (String*)object2);
 	}
 	String* String::Format(String* format, Array* args)
 	{
-		throw new NotImplementedException();
+//		throw new NotImplementedException();
+		return String::Empty;
 	}
 	String* String::Format(String* format, Object* arg1, Object* arg2, Object* arg3)
 	{
-		throw new NotImplementedException();
+//		throw new NotImplementedException();
+		return String::Empty;
 	}
 	CharEnumerator* String::GetEnumerator()
 	{
@@ -489,7 +491,8 @@ namespace DotnetLibrary
 	}
 	Array* String::Split(Array* separator, const Int32 count)
 	{
-		throw new NotImplementedException();
+//		throw new NotImplementedException();
+		return(new Array(StringType, 0));
 	}
 	Boolean String::StartsWith(String* what)
 	{

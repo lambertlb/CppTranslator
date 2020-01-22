@@ -14,73 +14,72 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\Object.cpp">
+    <ClCompile Include="src\Buffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\Array.cpp">
+    <ClCompile Include="src\Array.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\TimeSpanValue.cpp">
+    <ClCompile Include="src\BooleanValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\Int32Value.cpp">
+    <ClCompile Include="src\ByteValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\UInt32Value.cpp">
+    <ClCompile Include="src\CharEnumerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\DateTimeValue.cpp">
+    <ClCompile Include="src\CharValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\StringBuilder.cpp">
+    <ClCompile Include="src\DateTimeValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\StringDotNet.cpp">
+    <ClCompile Include="src\DotNetMath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\BooleanValue.cpp">
+    <ClCompile Include="src\DoubleValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\ByteValue.cpp">
+    <ClCompile Include="src\Int16Value.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\CharValue.cpp">
+    <ClCompile Include="src\Int32Value.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\DoubleValue.cpp">
+    <ClCompile Include="src\Int64Value.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\Int16Value.cpp">
+    <ClCompile Include="src\Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\Int64Value.cpp">
+    <ClCompile Include="src\SByteValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\SByteValue.cpp">
+    <ClCompile Include="src\SingleValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\SingleValue.cpp">
+    <ClCompile Include="src\StringBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\UInt16Value.cpp">
+    <ClCompile Include="src\StringDotNet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\UInt64Value.cpp">
+    <ClCompile Include="src\TimeSpanValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\CharEnumerator.cpp">
+    <ClCompile Include="src\UInt16Value.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\Buffer.cpp">
+    <ClCompile Include="src\UInt32Value.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\DotNetMath.cpp">
+    <ClCompile Include="src\UInt64Value.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DotnetTypes.h" />
-    <ClInclude Include="include\PointerType.h" />
     <ClInclude Include="include\ValueType.h" />
     <ClInclude Include="include\Object.h" />
     <ClInclude Include="include\Array.h" />

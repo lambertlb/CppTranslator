@@ -89,7 +89,9 @@ namespace DotnetLibrary
 		Int32	sign = 0;
 		if (!UInt64Value::TryParseInternal(stringToParse, value, sign))
 			throw new FormatException();
-		if (value > MaxValue)
+		if (sign > 0 && value > MaxValue)
+			throw new OverflowException();
+		if (sign < 0 && (Int64)value < MinValue)
 			throw new OverflowException();
 		return((Int16)value * sign);
 	}
@@ -100,7 +102,9 @@ namespace DotnetLibrary
 		Int32	sign = 0;
 		if (!UInt64Value::TryParseInternal(stringToParse, value, sign))
 			goodNumber = false;
-		if (value > MaxValue)
+		if (sign > 0 && value > MaxValue)
+			goodNumber = false;
+		if (sign < 0 && (Int64)value < MinValue)
 			goodNumber = false;
 		*result = (Int16)value * sign;
 		return(goodNumber);
