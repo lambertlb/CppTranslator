@@ -179,7 +179,6 @@
     <ClCompile Include="include\StringBuilder.cpp" />
     <ClCompile Include="include\StringDotNet.cpp" />
     <ClCompile Include="include\TimeSpanValue.cpp" />
-    <ClCompile Include="include\TypeData.cpp" />
     <ClCompile Include="include\UInt16Value.cpp" />
     <ClCompile Include="include\UInt32Value.cpp" />
     <ClCompile Include="include\UInt64Value.cpp" />

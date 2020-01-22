@@ -231,12 +231,66 @@ namespace DotnetLibrary
 			throw new OverflowException();
 		return -((Int64)value.value);
 	}
+	TimeSpan TimeSpanValue::Parse(String* s)
+	{
+		TimeSpan	results;
+		if (s == nullptr)
+			throw new ArgumentNullException();
+		Boolean good = TryParse(s, &results);
+		if (!good)
+			throw new FormatException();
+		return(results);
+	}
 	TimeSpan TimeSpanValue::Subtract(const TimeSpan& ts)
 	{
 		Int64 result = value.value - ts.value;
 		if ((value.value >> 63 == ts.value >> 63) && (value.value >> 63 != result >> 63))
 			throw new OverflowException();
 		return TimeSpan(result);
+	}
+	Boolean TimeSpanValue::TryParse(String* s, TimeSpan* result)
+	{
+		*result = 0;
+		Int64	numbers[10];
+		Int32	amount = 0;
+		UInt64	fractional = 0;
+		Char*	chars = s->get_Buffer();
+		Int32	length = s->get_Length();
+		Int32	sign;
+		while (length > 0) {
+			UInt64	number;
+			Int32 digits = 1;
+			if (!CharValue::IsDigit(*chars))
+				break;
+			if (length > 2 && chars[1] != L':' && chars[2] != L':' && chars[2] != L'.')
+				break;
+			if (CharValue::IsDigit(chars[1]))
+				digits = 2;
+			UInt64Value::TryParseInternal(chars, digits, number, sign);
+			numbers[amount++] = (Int64)number;
+			chars += digits + 1;
+			length -= digits + 1;
+		}
+		if (length > 0 && CharValue::IsDigit(*chars)) {
+			for (; length > 0; --length) {
+				if (chars[length - 1] != L'0')
+					break;
+			}
+			if (length > 0)
+				if (!UInt64Value::TryParseInternal(chars, length, fractional, sign))
+					return(false);
+		}
+		Int32 days = 0;
+		Int32 index = 0;
+		if (amount > 3)
+			days += numbers[index++];
+		Int32 hours = numbers[index++];
+		Int32 minutes = numbers[index++];
+		Int32 seconds = numbers[index++];
+
+		TimeSpan ts(days, hours, minutes, seconds, (Int32)fractional);
+		*result = ts;
+		return true;
 	}
 	TimeSpan TimeSpanValue::op_Addition(const TimeSpan& ts1, const TimeSpan& ts2)
 	{

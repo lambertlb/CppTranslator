@@ -143,6 +143,12 @@ TEST(TimeSpanTests, Negate2Test) {
 	TimeSpan	result(TimeSpanValue(timeSpan).Negate());
 	ASSERT_TRUE(result.value == answer.value);
 }
+TEST(TimeSpanTests, ParseTest) {
+	TimeSpan	timeSpan(0, 23, 59, 59, 999);
+	String		string(L"0:23:59:59.9990000");
+	TimeSpan	result = TimeSpanValue::Parse(&string);
+	ASSERT_TRUE(TimeSpanValue(result).get_Ticks() == TimeSpanValue(timeSpan).get_Ticks());
+}
 TEST(TimeSpanTests, SubtractTest) {
 	TimeSpan	timeSpan(1, 2, 3, 4, 5);
 	TimeSpan	timeSpan2(1, 2, 3);
@@ -154,6 +160,14 @@ TEST(TimeSpanTests, ToStringTest) {
 	TimeSpan	timeSpan(0, 23, 59, 59, 999);
 	String* answer = TimeSpanValue(timeSpan).ToString();
 	ASSERT_TRUE(wcscmp(answer->get_Buffer(), L"0:23:59:59.9990000") == 0);
+}
+TEST(TimeSpanTests, TryParseTest) {
+	TimeSpan	timeSpan(0, 23, 59, 59, 999);
+	String		string(L"0:23:59:59.9990000");
+	TimeSpan	result;
+	Boolean	parsed = TimeSpanValue::TryParse(&string, &result);
+	ASSERT_TRUE(parsed);
+	ASSERT_TRUE(TimeSpanValue(result).get_Ticks() == TimeSpanValue(timeSpan).get_Ticks());
 }
 TEST(TimeSpanTests, op_AdditionTest) {
 	TimeSpan	timeSpan(1, 2, 3, 4, 5);
@@ -176,8 +190,8 @@ TEST(TimeSpanTests, op_Division2Test) {
 TEST(TimeSpanTests, op_EqualityTest) {
 	TimeSpan first(12345);
 	TimeSpan second(12346);
-	ASSERT_TRUE(TimeSpanValue::op_Equality(first,first));
-	ASSERT_TRUE(!TimeSpanValue::op_Equality(first,second));
+	ASSERT_TRUE(TimeSpanValue::op_Equality(first, first));
+	ASSERT_TRUE(!TimeSpanValue::op_Equality(first, second));
 }
 TEST(TimeSpanTests, op_GreaterThanTest) {
 	TimeSpan first(12345);
@@ -213,7 +227,7 @@ TEST(TimeSpanTests, op_LessThanOrEqualTest) {
 }
 TEST(TimeSpanTests, op_MultiplyTest) {
 	TimeSpan	timeSpan(2, 30, 0);
-	TimeSpan	anwser(TimeSpanValue::op_Multiply(timeSpan,2.0));
+	TimeSpan	anwser(TimeSpanValue::op_Multiply(timeSpan, 2.0));
 	TimeSpan	anwser2(TimeSpanValue::op_Multiply(2.0, timeSpan));
 	TimeSpan	result(TimeSpan(5, 0, 0));
 	ASSERT_TRUE(TimeSpanValue(result).get_Ticks() == TimeSpanValue(anwser).get_Ticks());
@@ -223,7 +237,7 @@ TEST(TimeSpanTests, op_SubtractionTest) {
 	TimeSpan	timeSpan(1, 2, 3, 4, 5);
 	TimeSpan	timeSpan2(1, 2, 3);
 	TimeSpan	answer(1, 1, 1, 1, 5);
-	TimeSpan	result(TimeSpanValue::op_Subtraction(timeSpan,timeSpan2));
+	TimeSpan	result(TimeSpanValue::op_Subtraction(timeSpan, timeSpan2));
 	ASSERT_TRUE(TimeSpanValue(result).get_Ticks() == TimeSpanValue(answer).get_Ticks());
 }
 TEST(TimeSpanTests, op_UnaryNegationTest) {

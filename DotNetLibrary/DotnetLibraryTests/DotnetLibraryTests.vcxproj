@@ -49,6 +49,9 @@
     <ClCompile Include="StringBuilderTests.cpp" />
     <ClCompile Include="StringTests.cpp" />
     <ClCompile Include="TimeSpanTests.cpp" />
+    <ClCompile Include="UInt16Tests.cpp" />
+    <ClCompile Include="UInt32Tests.cpp" />
+    <ClCompile Include="UInt64Tests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

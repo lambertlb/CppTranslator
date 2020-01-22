@@ -14,9 +14,6 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\TypeData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="include\Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

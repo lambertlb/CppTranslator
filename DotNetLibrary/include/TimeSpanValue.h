@@ -53,7 +53,9 @@ namespace DotnetLibrary
 		static TimeSpan		Interval(Double value, Double scale);
 		TimeSpan			Multiply(Double factor);
 		TimeSpan			Negate();
+		static TimeSpan		Parse(String* s);
 		TimeSpan			Subtract(const TimeSpan& ts1);
+		static Boolean		TryParse(String* s, TimeSpan* result);
 		static TimeSpan		op_Addition(const TimeSpan& ts1, const TimeSpan& ts2);
 		static Double		op_Division(const TimeSpan& ts1, const TimeSpan& ts2);
 		static TimeSpan		op_Division(const TimeSpan& ts1, const Double& divisor);
