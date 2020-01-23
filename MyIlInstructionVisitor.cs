@@ -15,10 +15,10 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-using ICSharpCode.Decompiler.IL;
-using ICSharpCode.Decompiler.TypeSystem;
 using System;
 using System.Collections.Generic;
+using ICSharpCode.Decompiler.IL;
+using ICSharpCode.Decompiler.TypeSystem;
 
 namespace CppTranslator
 {
@@ -66,16 +66,16 @@ namespace CppTranslator
 			specialCallNames.Add(".ctor", String.Empty);
 			specialCallNames.Add("op_Equality", "Equals");
 
-			operatorSymbols.Add(BinaryNumericOperator.Add, " + ");
-			operatorSymbols.Add(BinaryNumericOperator.Sub, " - ");
-			operatorSymbols.Add(BinaryNumericOperator.Mul, " * ");
-			operatorSymbols.Add(BinaryNumericOperator.Div, " / ");
-			operatorSymbols.Add(BinaryNumericOperator.Rem, " % ");
-			operatorSymbols.Add(BinaryNumericOperator.BitAnd, " & ");
-			operatorSymbols.Add(BinaryNumericOperator.BitOr, " | ");
-			operatorSymbols.Add(BinaryNumericOperator.BitXor, " ^ ");
-			operatorSymbols.Add(BinaryNumericOperator.ShiftLeft, " << ");
-			operatorSymbols.Add(BinaryNumericOperator.ShiftRight, " >> ");
+			operatorSymbols.Add(BinaryNumericOperator.Add, "+");
+			operatorSymbols.Add(BinaryNumericOperator.Sub, "-");
+			operatorSymbols.Add(BinaryNumericOperator.Mul, "*");
+			operatorSymbols.Add(BinaryNumericOperator.Div, "/");
+			operatorSymbols.Add(BinaryNumericOperator.Rem, "%");
+			operatorSymbols.Add(BinaryNumericOperator.BitAnd, "&");
+			operatorSymbols.Add(BinaryNumericOperator.BitOr, "|");
+			operatorSymbols.Add(BinaryNumericOperator.BitXor, "^");
+			operatorSymbols.Add(BinaryNumericOperator.ShiftLeft, "<<");
+			operatorSymbols.Add(BinaryNumericOperator.ShiftRight, ">>");
 
 			comparisonSymbols.Add(ComparisonKind.Equality, " == ");
 			comparisonSymbols.Add(ComparisonKind.Inequality, " != ");
@@ -183,7 +183,9 @@ namespace CppTranslator
 				return base.VisitBinaryNumericInstruction(inst);
 			Formatter.Append("(");
 			inst.Left.AcceptVisitor(this);
+			Formatter.Append(" ");
 			Formatter.Append(operatorSymbols[inst.Operator]);
+			Formatter.Append(" ");
 			inst.Right.AcceptVisitor(this);
 			Formatter.Append(")");
 			return base.VisitBinaryNumericInstruction(inst);
@@ -441,19 +443,25 @@ namespace CppTranslator
 				if (!first)
 					Formatter.Append(", ");
 				ILInstruction inst = walker.Current;
-				DoCastOnCallParamterIfNeeded(method.Parameters[paramterIndex]);
+				bool didCast = DoCastOnCallParamterIfNeeded(method.Parameters[paramterIndex]);
+				if (didCast)
+					Formatter.Append("(");
 				inst.AcceptVisitor(this);
+				if (didCast)
+					Formatter.Append(")");
 				first = false;
 			}
 			Formatter.Append(")");
 		}
-		private void DoCastOnCallParamterIfNeeded(IParameter parameter)
+		private bool DoCastOnCallParamterIfNeeded(IParameter parameter)
 		{
-			if (parameter.Type.Kind != TypeKind.Enum)
-				return;
+			if (!IsPrimative(parameter.Type) && parameter.Type.Kind != TypeKind.Enum)
+				return (false);
+
 			Formatter.Append("(");
 			TypeVisitor.FormatTypeDelaration(parameter.Type);
 			Formatter.Append(")");
+			return (true);
 		}
 		/// <inheritdoc/>
 		protected override ILInstruction VisitCallIndirect(CallIndirect inst)
@@ -937,10 +945,25 @@ namespace CppTranslator
 		protected override ILInstruction VisitNumericCompoundAssign(NumericCompoundAssign inst)
 		{
 			inst.Target.AcceptVisitor(this);
-			if (inst.Operator == BinaryNumericOperator.Add)
-				Formatter.Append("++");
-			else
-				Formatter.Append("--");
+			if (inst.Operator == BinaryNumericOperator.Add || inst.Operator == BinaryNumericOperator.Sub)
+			{
+				if (IsConstant(inst.Value))
+				{
+					int constant = GetAsIntConstant(inst.Value);
+					if (constant == 1)
+					{
+						if (inst.Operator == BinaryNumericOperator.Add)
+							Formatter.Append("++");
+						else
+							Formatter.Append("--");
+						return base.VisitNumericCompoundAssign(inst);
+					}
+				}
+			}
+			Formatter.Append(" ");
+			Formatter.Append(operatorSymbols[inst.Operator]);
+			Formatter.Append("= ");
+			inst.Value.AcceptVisitor(this);
 			return base.VisitNumericCompoundAssign(inst);
 		}
 		/// <inheritdoc/>

@@ -144,6 +144,12 @@ TEST(TimeSpanTests, Negate2Test) {
 	ASSERT_TRUE(result.value == answer.value);
 }
 TEST(TimeSpanTests, ParseTest) {
+	TimeSpan	timeSpan(1, 0, 0, 0, 0);
+	String		string(L"1:00:00:00");
+	TimeSpan	result = TimeSpanValue::Parse(&string);
+	ASSERT_TRUE(TimeSpanValue(result).get_Ticks() == TimeSpanValue(timeSpan).get_Ticks());
+}
+TEST(TimeSpanTests, Parse2Test) {
 	TimeSpan	timeSpan(0, 23, 59, 59, 999);
 	String		string(L"0:23:59:59.9990000");
 	TimeSpan	result = TimeSpanValue::Parse(&string);
@@ -159,11 +165,25 @@ TEST(TimeSpanTests, SubtractTest) {
 TEST(TimeSpanTests, ToStringTest) {
 	TimeSpan	timeSpan(0, 23, 59, 59, 999);
 	String* answer = TimeSpanValue(timeSpan).ToString();
-	ASSERT_TRUE(wcscmp(answer->get_Buffer(), L"0:23:59:59.9990000") == 0);
+	ASSERT_TRUE(wcscmp(answer->get_Buffer(), L"0.23:59:59.9990000") == 0);
+}
+TEST(TimeSpanTests, ToString2Test) {
+	TimeSpan	timeSpan(-71, 3, 12, 13);
+	String* answer = TimeSpanValue(timeSpan).ToString();
+	ASSERT_TRUE(TimeSpanValue(timeSpan).get_Ticks() == -61228670000000);
+	ASSERT_TRUE(wcscmp(answer->get_Buffer(), L"-70.20:47:47") == 0);
 }
 TEST(TimeSpanTests, TryParseTest) {
 	TimeSpan	timeSpan(0, 23, 59, 59, 999);
 	String		string(L"0:23:59:59.9990000");
+	TimeSpan	result;
+	Boolean	parsed = TimeSpanValue::TryParse(&string, &result);
+	ASSERT_TRUE(parsed);
+	ASSERT_TRUE(TimeSpanValue(result).get_Ticks() == TimeSpanValue(timeSpan).get_Ticks());
+}
+TEST(TimeSpanTests, TryParse2Test) {
+	TimeSpan	timeSpan(-71, 3, 12, 13);
+	String		string(L"-70.20:47:47");
 	TimeSpan	result;
 	Boolean	parsed = TimeSpanValue::TryParse(&string, &result);
 	ASSERT_TRUE(parsed);

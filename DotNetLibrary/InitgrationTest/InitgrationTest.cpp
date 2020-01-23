@@ -1,11 +1,20 @@
 #include "CaBlockHeader.h"
 
-//using namespace MiniTest_NS;
+#define	DoMiniTest
+
+#ifdef DoMiniTest
+using namespace MiniTest_NS;
+#else
 using namespace CABlock_NS;
+#endif // DoMiniTest
+
 int main()
 {
+#ifdef DoMiniTest
+	Program* pr = new Program();
+	pr->Run();
+#else
 	CABlock	ca;
 	ca.Execute();
-//	Program* pr = new Program();
-//	pr->Run();
+#endif // DoMiniTest
 }

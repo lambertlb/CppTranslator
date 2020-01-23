@@ -25,10 +25,10 @@ namespace DotnetLibrary
 		if (capacity == 0) {
 			capacity = Math::Min(DefaultCapacity, maxCapacity);
 		}
-		Int32	partial = maxCapacity % DefaultCapacity;
-		maxCapacity = (maxCapacity / DefaultCapacity) * DefaultCapacity;
-		if (partial > 0)
-			maxCapacity += DefaultCapacity;
+		//Int32	partial = maxCapacity % DefaultCapacity;
+		//maxCapacity = (maxCapacity / DefaultCapacity) * DefaultCapacity;
+		//if (partial > 0)
+		//	maxCapacity += DefaultCapacity;
 		this->maxCapacity = maxCapacity;
 		set_Capacity(capacity);
 	}
@@ -111,10 +111,6 @@ namespace DotnetLibrary
 		if (capacity < 0) {
 			throw new ArgumentOutOfRangeException();
 		}
-		Int32	partial = capacity % DefaultCapacity;
-		capacity = (capacity / DefaultCapacity) * DefaultCapacity;
-		if (partial > 0)
-			capacity += DefaultCapacity;
 		if (capacity > maxCapacity) {
 			throw new ArgumentOutOfRangeException();
 		}
@@ -127,6 +123,10 @@ namespace DotnetLibrary
 		}
 		Char* newArray = internalMemory;
 		if (capacity > DefaultCapacity) {
+			Int32	partial = capacity % DefaultCapacity;
+			capacity = (capacity / DefaultCapacity) * DefaultCapacity;
+			if (partial > 0)
+				capacity += DefaultCapacity;
 			newArray = new Char[capacity + 1];
 			memcpy(newArray, chunkChars, currentLength * sizeof(Char));
 			if (chunkChars != internalMemory)
@@ -148,9 +148,9 @@ namespace DotnetLibrary
 	Int32 StringBuilder::CountSubStrings(String* subString, Int32 startIndex, Int32 length)
 	{
 		Int32	amount = 0;
+		Int32	endIndex = startIndex + 1 + length - subString->get_Length();
 		Int32	bytesToCompare = subString->get_Length() * sizeof(Char);
-		length += startIndex - 1;
-		for (int i = startIndex; i < length;)
+		for (int i = startIndex; i < endIndex;)
 		{
 			if (0 == memcmp(chunkChars + i, subString->get_Buffer(), bytesToCompare))
 			{
@@ -228,7 +228,7 @@ namespace DotnetLibrary
 			throw new ArgumentOutOfRangeException();
 		}
 		values->EnsureSingleDimension();
-		return(Append((Char*)values->Address(startIndex), charCount, 0));
+		return(Append((Char*)values->Address(startIndex), charCount, currentLength));
 	}
 	StringBuilder* StringBuilder::Append(ValueType& value, Int32 index)
 	{
@@ -352,6 +352,17 @@ namespace DotnetLibrary
 			set_Capacity(capacity);
 		}
 		return get_Capacity();
+	}
+	Boolean StringBuilder::Equals(Object* object)
+	{
+		StringBuilder* sb = dynamic_cast<StringBuilder*>(object);
+		return(Equals(sb));
+	}
+	Boolean StringBuilder::Equals(StringBuilder* sb)
+	{
+		if (sb == nullptr || sb->currentCapacity != currentCapacity || sb->maxCapacity != maxCapacity)
+			return(false);
+		return wcscmp(sb->chunkChars, chunkChars) == 0;
 	}
 	StringBuilder* StringBuilder::Remove(Int32 startIndex, Int32 length)
 	{
@@ -521,7 +532,7 @@ namespace DotnetLibrary
 	}
 	void StringBuilder::ReplaceSubString(String* search, String* replace, const Int32 startIndex, const Int32 count)
 	{
-		Int32	endIndex = (startIndex - 1) + count;
+		Int32	endIndex = startIndex + 1 + count - search->get_Length();
 		Int32	delta = replace->get_Length() - search->get_Length();
 		Int32	bytesToCompare = search->get_Length() * sizeof(Char);
 		for (int i = startIndex; i < endIndex;)

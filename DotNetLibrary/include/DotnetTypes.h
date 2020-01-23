@@ -43,9 +43,9 @@ namespace DotnetLibrary
 		DateTime(Int32 year, Int32 month, Int32 day, Int32 hour = 0, Int32 minute = 0, Int32 second = 0, Int32 millisecond = 0);
 	};
 	struct DLL_EXPORT TimeSpan {
-		UInt64	value;
+		Int64	value;
 		TimeSpan() { value = 0; }
-		TimeSpan(const UInt64 value2) { value = value2; };
+		TimeSpan(const Int64 value2) { value = value2; };
 		TimeSpan(const TimeSpan& value2) { value = value2.value; };
 		TimeSpan(Int32 hours, Int32 minutes, Int32 seconds);
 		TimeSpan(Int32 days, Int32 hours, Int32 minutes, Int32 seconds, Int32 milliseconds = 0);

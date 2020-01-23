@@ -14,7 +14,7 @@ TEST(StringbuilderTests, ConstructorTest) {
 TEST(StringbuilderTests, ConstructorTest2) {
 	StringBuilder	stringBuilder(50);
 	ASSERT_TRUE(stringBuilder.IsInternal());
-	ASSERT_TRUE(stringBuilder.get_Capacity() == DefaultCapacity);
+	ASSERT_TRUE(stringBuilder.get_Capacity() == 50);
 	ASSERT_TRUE(stringBuilder.get_Length() == 0);
 	ASSERT_TRUE(stringBuilder.get_MaxCapacity() == MaximumCapacity);
 }
@@ -22,15 +22,15 @@ TEST(StringbuilderTests, ConstructorTest2) {
 TEST(StringbuilderTests, ConstructorTest3) {
 	StringBuilder	stringBuilder(50, 100);
 	ASSERT_TRUE(stringBuilder.IsInternal());
-	ASSERT_TRUE(stringBuilder.get_Capacity() == DefaultCapacity);
+	ASSERT_TRUE(stringBuilder.get_Capacity() == 50);
 	ASSERT_TRUE(stringBuilder.get_Length() == 0);
-	ASSERT_TRUE(stringBuilder.get_MaxCapacity() == DefaultCapacity);
+	ASSERT_TRUE(stringBuilder.get_MaxCapacity() == 100);
 }
 
 TEST(StringbuilderTests, ConstructorTest4) {
 	StringBuilder	stringBuilder(256);
 	ASSERT_TRUE(!stringBuilder.IsInternal());
-	ASSERT_TRUE(stringBuilder.get_Capacity() == DefaultCapacity * 2);
+	ASSERT_TRUE(stringBuilder.get_Capacity() == 256);
 	ASSERT_TRUE(stringBuilder.get_Length() == 0);
 	ASSERT_TRUE(stringBuilder.get_MaxCapacity() == MaximumCapacity);
 }
@@ -48,7 +48,7 @@ TEST(StringbuilderTests, ConstructorTest6) {
 	String str(L"TESTING");
 	StringBuilder	stringBuilder(&str, 100);
 	ASSERT_TRUE(stringBuilder.IsInternal());
-	ASSERT_TRUE(stringBuilder.get_Capacity() == DefaultCapacity);
+	ASSERT_TRUE(stringBuilder.get_Capacity() == 100);
 	ASSERT_TRUE(stringBuilder.get_Length() == 7);
 	ASSERT_TRUE(stringBuilder.get_MaxCapacity() == MaximumCapacity);
 }
@@ -57,7 +57,7 @@ TEST(StringbuilderTests, ConstructorTest7) {
 	String str(L"TESTING");
 	StringBuilder	stringBuilder(&str, 1, 6, 100);
 	ASSERT_TRUE(stringBuilder.IsInternal());
-	ASSERT_TRUE(stringBuilder.get_Capacity() == DefaultCapacity);
+	ASSERT_TRUE(stringBuilder.get_Capacity() == 100);
 	ASSERT_TRUE(stringBuilder.get_Length() == 6);
 	ASSERT_TRUE(stringBuilder.get_MaxCapacity() == MaximumCapacity);
 	ASSERT_TRUE(*stringBuilder.Address(0) == 'E');
@@ -83,7 +83,7 @@ TEST(StringbuilderTests, SetPropertyTest) {
 	try {
 		ASSERT_TRUE(stringBuilder.get_Chars(7) == 'G');
 	}
-	catch (IndexOutOfRangeException* ex) {
+	catch (IndexOutOfRangeException * ex) {
 		hadException = true;
 	}
 	ASSERT_TRUE(hadException);
@@ -122,14 +122,21 @@ TEST(StringbuilderTests, EnsureCapacityTest) {
 	ASSERT_TRUE(stringBuilder.EnsureCapacity(100) == DefaultCapacity);
 	ASSERT_TRUE(stringBuilder.EnsureCapacity(200) == DefaultCapacity * 2);
 }
+TEST(StringbuilderTests, EqualsTest) {
+	String str(L"TESTING1234");
+	StringBuilder	stringBuilder(&str);
+	StringBuilder	stringBuilder2(&str);
+	ASSERT_TRUE(stringBuilder.Equals(&stringBuilder2));
+	ASSERT_TRUE(stringBuilder.Equals((Object*)&stringBuilder2));
+}
 TEST(StringbuilderTests, ToStringTest) {
 	String str(L"TESTING1234");
 	StringBuilder	stringBuilder(&str);
 	String* test1 = stringBuilder.ToString();
 	ASSERT_TRUE(test1 != nullptr);
 	ASSERT_TRUE(test1->get_Length() == 11);
-	ASSERT_TRUE(wcscmp(test1->get_Buffer(),L"TESTING1234") == 0);
-	String* test2 = stringBuilder.ToString(7,4);
+	ASSERT_TRUE(wcscmp(test1->get_Buffer(), L"TESTING1234") == 0);
+	String* test2 = stringBuilder.ToString(7, 4);
 	ASSERT_TRUE(test2 != nullptr);
 	ASSERT_TRUE(test2->get_Length() == 4);
 	ASSERT_TRUE(wcscmp(test2->get_Buffer(), L"1234") == 0);
@@ -143,10 +150,10 @@ TEST(StringbuilderTests, AppendArrayTest) {
 TEST(StringbuilderTests, AppendBooleanTest) {
 	StringBuilder	stringBuilder;
 	stringBuilder.Append(true);
-	ASSERT_TRUE(wcscmp(stringBuilder.get_Buffer(), L"true") == 0);
+	ASSERT_TRUE(wcscmp(stringBuilder.get_Buffer(), L"True") == 0);
 	stringBuilder.set_Length(0);
 	stringBuilder.Append(false);
-	ASSERT_TRUE(wcscmp(stringBuilder.get_Buffer(), L"false") == 0);
+	ASSERT_TRUE(wcscmp(stringBuilder.get_Buffer(), L"False") == 0);
 }
 TEST(StringbuilderTests, AppendByteTest) {
 	StringBuilder	stringBuilder;
@@ -223,7 +230,7 @@ TEST(StringbuilderTests, AppendCharsTest) {
 }
 TEST(StringbuilderTests, AppendFromArrayTest) {
 	Array array(CharType, 6);
-	Char	data[] = {'A','B', 'C', 'D', 'E', 'F'};
+	Char	data[] = { 'A','B', 'C', 'D', 'E', 'F' };
 	array.Initialize(data);
 	StringBuilder	stringBuilder;
 	stringBuilder.Append(&array);
@@ -235,7 +242,7 @@ TEST(StringbuilderTests, AppendFromArrayTest) {
 TEST(StringbuilderTests, RemoveTest) {
 	String str(L"TESTING1234");
 	StringBuilder	stringBuilder(&str);
-	stringBuilder.Remove(4,3);
+	stringBuilder.Remove(4, 3);
 	ASSERT_TRUE(wcscmp(stringBuilder.get_Buffer(), L"TEST1234") == 0);
 	stringBuilder.Remove(0, 8);
 	ASSERT_TRUE(wcscmp(stringBuilder.get_Buffer(), L"") == 0);
@@ -244,7 +251,7 @@ TEST(StringbuilderTests, InsertBooleanTest) {
 	String str(L"TESTING1234");
 	StringBuilder	stringBuilder(&str);
 	stringBuilder.Insert(7, true);
-	ASSERT_TRUE(wcscmp(stringBuilder.get_Buffer(), L"TESTINGtrue1234") == 0);
+	ASSERT_TRUE(wcscmp(stringBuilder.get_Buffer(), L"TESTINGTrue1234") == 0);
 }
 TEST(StringbuilderTests, InsertByteTest) {
 	String str(L"TESTING1234");
@@ -356,7 +363,7 @@ TEST(StringbuilderTests, ReplaceStringTest) {
 	String dog(L"dog");
 	String cat(L"kitten");
 	StringBuilder	stringBuilder(&str);
-	stringBuilder.Replace(&dog,&cat);
+	stringBuilder.Replace(&dog, &cat);
 	ASSERT_TRUE(wcscmp(stringBuilder.get_Buffer(), L"The quick brown kitten jumps over the lazy kitten") == 0);
 }
 TEST(StringbuilderTests, ReplaceString2Test) {
@@ -364,7 +371,7 @@ TEST(StringbuilderTests, ReplaceString2Test) {
 	String dog(L"dog");
 	String cat(L"kitten");
 	StringBuilder	stringBuilder(&str);
-	stringBuilder.Replace(&dog, &cat, 10 ,10);
+	stringBuilder.Replace(&dog, &cat, 10, 10);
 	ASSERT_TRUE(wcscmp(stringBuilder.get_Buffer(), L"The dog brown kitten jumps over the lazy dog") == 0);
 }
 TEST(StringbuilderTests, ReplaceString3Test) {
@@ -374,6 +381,14 @@ TEST(StringbuilderTests, ReplaceString3Test) {
 	StringBuilder	stringBuilder(&str);
 	stringBuilder.Replace(&dog, &cat);
 	ASSERT_TRUE(wcscmp(stringBuilder.get_Buffer(), L"The  brown  jumps over the lazy ") == 0);
+}
+TEST(StringbuilderTests, ReplaceString4Test) {
+	String str(L"BCCCCCCCBA");
+	String str2(L"CCC");
+	String str3(L"DDD");
+	StringBuilder	stringBuilder(&str);
+	stringBuilder.Replace(&str2, &str3, 2, 5);
+	ASSERT_TRUE(wcscmp(stringBuilder.get_Buffer(), L"BCDDDCCCBA") == 0);
 }
 TEST(StringbuilderTests, ReplaceCharsTest) {
 	String str(L"The quick #brown dog jumps over the lazy #dog#");

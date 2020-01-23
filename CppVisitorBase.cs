@@ -16,12 +16,12 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+using System;
+using System.Collections.Generic;
 using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.CSharp.Syntax;
 using ICSharpCode.Decompiler.CSharp.Syntax.PatternMatching;
 using ICSharpCode.Decompiler.TypeSystem;
-using System;
-using System.Collections.Generic;
 
 namespace CppTranslator
 {
@@ -142,6 +142,10 @@ namespace CppTranslator
 		{
 			WriteMethodHeader(methodName, parameters);
 			ICSharpCode.Decompiler.IL.BlockContainer inst = body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
+			//if (methodName == "BoolOperators")
+			//{
+			//	methodName = "BoolOperators";
+			//}
 			MyIlVisitor.StartMainBlock(inst, null);
 		}
 		/// <summary>

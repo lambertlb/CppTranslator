@@ -59,8 +59,8 @@ TEST(BooleanTests, FormatStringTest) {
 	Char	where[128];
 	BooleanValue value1(true);
 	value1.FormatString(where, 128);
-	ASSERT_TRUE(wcscmp(where, L"true") == 0);
+	ASSERT_TRUE(wcscmp(where, L"True") == 0);
 	BooleanValue value2(false);
 	value2.FormatString(where, 128);
-	ASSERT_TRUE(wcscmp(where, L"false") == 0);
+	ASSERT_TRUE(wcscmp(where, L"False") == 0);
 }

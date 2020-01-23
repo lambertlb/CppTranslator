@@ -163,13 +163,12 @@ namespace DotnetLibrary
 			day = -day;
 			time = -time;
 		}
-		if (day != 0) {
-			stringBuilder.Append(day);
-			stringBuilder.Append(L'.');
-		}
+		Int32	hours = (Int32)(time / TicksPerHour) % 24;
+		Int32	min = (Int32)(time / TicksPerMinute) % 60;
+		Int32	sec = (Int32)(time / TicksPerSecond) % 60;
 		Int32	fractional = (Int32)(time % TicksPerSecond);
 		Char	date[32];
-		Int32 length = swprintf(date, 32, L"%d:%02d:%02d:%02d", get_Days(), get_Hours(), get_Minutes(), get_Seconds());
+		Int32 length = swprintf(date, 32, L"%d.%02d:%02d:%02d", day, hours, min, sec);
 		stringBuilder.Append(date, length);
 		if (fractional != 0) {
 			stringBuilder.Append((Char)'.');
@@ -253,16 +252,22 @@ namespace DotnetLibrary
 		*result = 0;
 		Int64	numbers[10];
 		Int32	amount = 0;
-		UInt64	fractional = 0;
-		Char*	chars = s->get_Buffer();
+		Int64	fractional = 0;
+		Char* chars = s->get_Buffer();
 		Int32	length = s->get_Length();
 		Int32	sign;
+		Boolean	negate = false;
+		if (*chars == L'-') {
+			negate = true;
+			++chars;
+			--length;
+		}
 		while (length > 0) {
 			UInt64	number;
 			Int32 digits = 1;
 			if (!CharValue::IsDigit(*chars))
 				break;
-			if (length > 2 && chars[1] != L':' && chars[2] != L':' && chars[2] != L'.')
+			if (length > 2 && chars[1] != L':' && chars[2] != L':' && chars[2] != L'.' && chars[1] != L'.')
 				break;
 			if (CharValue::IsDigit(chars[1]))
 				digits = 2;
@@ -271,25 +276,32 @@ namespace DotnetLibrary
 			chars += digits + 1;
 			length -= digits + 1;
 		}
-		if (length > 0 && CharValue::IsDigit(*chars)) {
-			for (; length > 0; --length) {
-				if (chars[length - 1] != L'0')
-					break;
-			}
-			if (length > 0)
-				if (!UInt64Value::TryParseInternal(chars, length, fractional, sign))
-					return(false);
+		Int64 frac = TicksPerSecond;
+		while (frac > 1 && length > 0 && CharValue::IsDigit(*chars)) {
+			frac /= 10;
+			fractional += (Int64)(*chars - L'0') * frac;
+			++chars;
+			--length;
 		}
-		Int32 days = 0;
-		Int32 index = 0;
+		//for (; length > 0; --length) {
+		//	if (chars[length - 1] != L'0')
+		//		break;
+		//}
+		//if (length > 0)
+		//	if (!UInt64Value::TryParseInternal(chars, length, fractional, sign))
+		//		return(false);
+	//}
+		Int64 days = 0;
+		Int64 index = 0;
 		if (amount > 3)
-			days += numbers[index++];
-		Int32 hours = numbers[index++];
-		Int32 minutes = numbers[index++];
-		Int32 seconds = numbers[index++];
-
-		TimeSpan ts(days, hours, minutes, seconds, (Int32)fractional);
-		*result = ts;
+			days += numbers[index++] * TicksPerDay;
+		Int64 hours = numbers[index++] * TicksPerHour;
+		Int64 minutes = numbers[index++] * TicksPerMinute;
+		Int64 seconds = numbers[index++] * TicksPerSecond;
+		Int64 ticks = fractional + days + hours + minutes + seconds;
+		if (negate)
+			ticks = -ticks;
+		*result = ticks;
 		return true;
 	}
 	TimeSpan TimeSpanValue::op_Addition(const TimeSpan& ts1, const TimeSpan& ts2)

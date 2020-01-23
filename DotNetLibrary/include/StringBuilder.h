@@ -4,7 +4,7 @@
 namespace DotnetLibrary
 {
 #define DefaultCapacity 128 // default internal buffer size
-#define MaximumCapacity 1024// Maximum string builder capacity
+#define MaximumCapacity Int32Value::MaxValue// Maximum string builder capacity
 	class DLL_EXPORT StringBuilder : public Object
 	{
 	private:
@@ -60,6 +60,8 @@ namespace DotnetLibrary
 		StringBuilder*		AppendFormat(String* format, Object* arg0, Object* arg1, Object* arg2);
 		void				EnsureRoomFor(Int32 amount);
 		Int32				EnsureCapacity(Int32 capacity);
+		virtual Boolean		Equals(Object* object);
+		virtual Boolean		Equals(StringBuilder* object);
 		StringBuilder*		Remove(Int32 startIndex, Int32 length);
 		StringBuilder*		Insert(const Int32 index, const Boolean value);
 		StringBuilder*		Insert(const Int32 index, const Byte value);

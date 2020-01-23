@@ -3,8 +3,8 @@
 
 namespace DotnetLibrary
 {
-	DLL_EXPORT String* BooleanValue::TrueString = new String(L"true");
-	DLL_EXPORT String* BooleanValue::FalseString = new String(L"false");
+	DLL_EXPORT String* BooleanValue::TrueString = new String(L"True");
+	DLL_EXPORT String* BooleanValue::FalseString = new String(L"False");
 
 	Boolean BooleanValue::get_AsBoolean()
 	{
