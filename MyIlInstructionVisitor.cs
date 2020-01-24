@@ -105,6 +105,8 @@ namespace CppTranslator
 			constantConversions.Add("NaN", "DoubleValue::NaN");
 			constantConversions.Add(Double.PositiveInfinity.ToString(), "DoubleValue::PositiveInfinity");
 			constantConversions.Add(Double.NegativeInfinity.ToString(), "DoubleValue::NegativeInfinity");
+			constantConversions.Add(Double.Epsilon.ToString(), "DoubleValue::Epsilon");
+			constantConversions.Add(float.Epsilon.ToString(), "SingleValue::Epsilon");
 
 		}
 		/// <summary>
@@ -414,7 +416,21 @@ namespace CppTranslator
 		}
 		private bool IsConstant(ILInstruction value)
 		{
-			return (value is LdcF4 || value is LdcF8 || value is LdcI4 || value is LdcI8);
+			return (value is LdcF4 || value is LdcF8 || value is LdcI4 || value is LdcI8 || value is Conv);
+		}
+		private int GetAsIntConstant(ILInstruction inst)
+		{
+			if (inst is LdcI4)
+				return (((LdcI4)inst).Value);
+			if (inst is LdcI8)
+				return ((int)((LdcI4)inst).Value);
+			if (inst is LdcF8)
+				return ((int)((LdcF8)inst).Value);
+			if (inst is LdcF4)
+				return ((int)((LdcF4)inst).Value);
+			if (inst is Conv)
+				return (GetAsIntConstant(((Conv)inst).Argument));
+			return (-1);
 		}
 		private void FormatMethodAccessType(IMethod method, ILInstruction inst, String methodName)
 		{
@@ -481,8 +497,9 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		protected override ILInstruction VisitComp(Comp inst)
 		{
-			Formatter.Append("(");
+			Formatter.Append("((");
 			inst.Left.AcceptVisitor(this);
+			Formatter.Append(")");
 			Formatter.Append(comparisonSymbols[inst.Kind]);
 			inst.Right.AcceptVisitor(this);
 			Formatter.Append(")");
@@ -491,9 +508,50 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		protected override ILInstruction VisitConv(Conv inst)
 		{
-			inst.Argument.AcceptVisitor(this);
+			CastToPrimativeType(inst.TargetType, inst.Argument);
 			return base.VisitConv(inst);
 		}
+
+		private void CastToPrimativeType(PrimitiveType targetType, ILInstruction argument)
+		{
+			Formatter.Append("(");
+			switch (targetType)
+			{
+				case PrimitiveType.I1:
+					Formatter.Append("(SByte)");
+					break;
+				case PrimitiveType.I2:
+					Formatter.Append("(Int16)");
+					break;
+				case PrimitiveType.I4:
+					Formatter.Append("(Int32)");
+					break;
+				case PrimitiveType.I8:
+					Formatter.Append("(Int64)");
+					break;
+				case PrimitiveType.R4:
+					Formatter.Append("(Single)");
+					break;
+				case PrimitiveType.R8:
+					Formatter.Append("(Double)");
+					break;
+				case PrimitiveType.U1:
+					Formatter.Append("(Byte)");
+					break;
+				case PrimitiveType.U2:
+					Formatter.Append("(UInt16)");
+					break;
+				case PrimitiveType.U4:
+					Formatter.Append("(UInt32)");
+					break;
+				case PrimitiveType.U8:
+					Formatter.Append("(UInt64)");
+					break;
+			}
+			argument.AcceptVisitor(this);
+			Formatter.Append(")");
+		}
+
 		/// <inheritdoc/>
 		protected override ILInstruction VisitCpblk(Cpblk inst)
 		{
@@ -646,12 +704,6 @@ namespace CppTranslator
 				inst.FalseInst.AcceptVisitor(this);
 			}
 		}
-		private int GetAsIntConstant(ILInstruction inst)
-		{
-			if (inst is LdcI4)
-				return (((LdcI4)inst).Value);
-			return (-1);
-		}
 		private void WriteBlockWithBraces(ILInstruction trueInst)
 		{
 			Formatter.AddOpenBrace();
@@ -695,7 +747,17 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		protected override ILInstruction VisitLdcF4(LdcF4 inst)
 		{
-			String value = inst.Value.ToString();
+
+			String value; ;
+			if (inst.Value == float.Epsilon || inst.Value == float.MaxValue || inst.Value == float.MinValue)
+			{
+				value = inst.Value.ToString();
+			}
+			else
+			{
+				Double v = inst.Value;
+				value = v.ToString();
+			}
 			if (!ConvertConstants(value))
 			{
 				if (value.Contains(".", StringComparison.InvariantCulture))

@@ -7,7 +7,7 @@ namespace DotnetLibrary
 {
 	DLL_EXPORT Single	SingleValue::MaxValue = 3.40282346638528859e+38;
 	DLL_EXPORT Single	SingleValue::MinValue = -3.40282346638528859e+38;
-	DLL_EXPORT Single	SingleValue::Epsilon = FLT_EPSILON;
+	DLL_EXPORT Single	SingleValue::Epsilon = 1.401298E-45F;
 	DLL_EXPORT Single	SingleValue::NaN = NAN;
 	DLL_EXPORT Single	SingleValue::PositiveInfinity = INFINITY;
 	DLL_EXPORT Single	SingleValue::NegativeInfinity = -INFINITY;
@@ -138,7 +138,7 @@ namespace DotnetLibrary
 	}
 	Single SingleValue::Modulus(Single v1, Single v2)
 	{
-		return (Int64)v1 % (Int64)v2;
+		return fmod(v1, v2);
 	}
 	Single SingleValue::Parse(String* stringToParse)
 	{

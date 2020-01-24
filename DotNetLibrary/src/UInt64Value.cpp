@@ -81,7 +81,7 @@ namespace DotnetLibrary
 	}
 	Int32 UInt64Value::FormatString(Char* where, const Int32 whereSize)
 	{
-		return(swprintf(where, whereSize, L"%lld", value));
+		return(swprintf(where, whereSize, L"%llu", value));
 	}
 	UInt64 UInt64Value::Parse(String* stringToParse)
 	{

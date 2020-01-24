@@ -131,7 +131,7 @@ namespace DotnetLibrary
 	}
 	Double DoubleValue::Modulus(Double v1, Double v2)
 	{
-		return (Int64)v1 % (Int64)v2;
+		return fmod(v1, v2);
 	}
 	Double DoubleValue::Parse(String* stringToParse)
 	{

@@ -250,7 +250,7 @@ namespace DotnetLibrary
 	Boolean TimeSpanValue::TryParse(String* s, TimeSpan* result)
 	{
 		*result = 0;
-		Int64	numbers[10];
+		Int64	numbers[] = { 0,0,0,0 };
 		Int32	amount = 0;
 		Int64	fractional = 0;
 		Char* chars = s->get_Buffer();
@@ -293,7 +293,7 @@ namespace DotnetLibrary
 	//}
 		Int64 days = 0;
 		Int64 index = 0;
-		if (amount > 3)
+		if (amount > 3 || amount == 1)
 			days += numbers[index++] * TicksPerDay;
 		Int64 hours = numbers[index++] * TicksPerHour;
 		Int64 minutes = numbers[index++] * TicksPerMinute;

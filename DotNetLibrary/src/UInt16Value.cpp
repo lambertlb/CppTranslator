@@ -81,7 +81,7 @@ namespace DotnetLibrary
 	}
 	Int32 UInt16Value::FormatString(Char* where, const Int32 whereSize)
 	{
-		return(swprintf(where, whereSize, L"%d", value));
+		return(swprintf(where, whereSize, L"%u", value));
 	}
 	UInt16 UInt16Value::Parse(String* stringToParse)
 	{

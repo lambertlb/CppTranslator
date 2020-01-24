@@ -4,7 +4,7 @@
 namespace DotnetLibrary
 {
 	DLL_EXPORT Int64	Int64Value::MaxValue = 9223372036854775807;
-	DLL_EXPORT Int64	Int64Value::MinValue = -9223372036854775807;
+	DLL_EXPORT Int64	Int64Value::MinValue = 0x8000000000000000;
 
 	Boolean Int64Value::get_AsBoolean()
 	{

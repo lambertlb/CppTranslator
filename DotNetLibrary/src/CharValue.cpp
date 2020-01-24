@@ -248,6 +248,6 @@ namespace DotnetLibrary
 	}
 	String* CharValue::ToString(Char v)
 	{
-		return ((Object)CharValue(v)).ToString();
+		return CharValue(v).ToString();
 	}
 }

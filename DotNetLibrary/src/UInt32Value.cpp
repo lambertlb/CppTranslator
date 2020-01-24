@@ -3,7 +3,7 @@
 
 namespace DotnetLibrary
 {
-	DLL_EXPORT UInt32	UInt32Value::MaxValue = 65535;
+	DLL_EXPORT UInt32	UInt32Value::MaxValue = 4294967295;
 	DLL_EXPORT UInt32	UInt32Value::MinValue = 0;
 
 	Boolean UInt32Value::get_AsBoolean()
@@ -81,7 +81,7 @@ namespace DotnetLibrary
 	}
 	Int32 UInt32Value::FormatString(Char* where, const Int32 whereSize)
 	{
-		return(swprintf(where, whereSize, L"%d", value));
+		return(swprintf(where, whereSize, L"%u", value));
 	}
 	UInt32 UInt32Value::Parse(String* stringToParse)
 	{

@@ -45,7 +45,7 @@ TEST(UInt32Tests, TryParse3Test) {
 }
 TEST(UInt32Tests, TryParse4Test) {
 	UInt32	value = 0;
-	String	str(L"300000");
+	String	str(L"30000000000");
 	Boolean goodParse = UInt32Value::TryParse(&str, &value);
 	ASSERT_TRUE(!goodParse);
 }

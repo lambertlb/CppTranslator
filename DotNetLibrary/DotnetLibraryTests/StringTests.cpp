@@ -401,16 +401,16 @@ TEST(StringTests, LastIndexOfAnyTest) {
 }
 TEST(StringTests, PadLeftTest) {
 	String	string(L"11223311");
-	String* rtn = string.PadLeft(5);
+	String* rtn = string.PadLeft(13);
 	ASSERT_TRUE(wcscmp(rtn->get_Buffer(), L"     11223311") == 0);
-	String* rtn2 = string.PadLeft(5, L'-');
+	String* rtn2 = string.PadLeft(13, L'-');
 	ASSERT_TRUE(wcscmp(rtn2->get_Buffer(), L"-----11223311") == 0);
 }
 TEST(StringTests, PadRightTest) {
 	String	string(L"11223311");
-	String* rtn = string.PadRight(5);
+	String* rtn = string.PadRight(13);
 	ASSERT_TRUE(wcscmp(rtn->get_Buffer(), L"11223311     ") == 0);
-	String* rtn2 = string.PadRight(5, L'-');
+	String* rtn2 = string.PadRight(13, L'-');
 	ASSERT_TRUE(wcscmp(rtn2->get_Buffer(), L"11223311-----") == 0);
 }
 TEST(StringTests, RemoveTest) {

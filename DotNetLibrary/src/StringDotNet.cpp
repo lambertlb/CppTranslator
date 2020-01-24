@@ -292,7 +292,7 @@ namespace DotnetLibrary
 	{
 		if (value == nullptr)
 			throw new ArgumentNullException();
-		return IndexOf(value, 0, value->length);
+		return IndexOf(value, 0, length);
 	}
 	Int32 String::IndexOf(String* value, const Int32 startIndex)
 	{
@@ -457,16 +457,28 @@ namespace DotnetLibrary
 	}
 	String* String::PadLeft(const Int32 width, const Char chr)
 	{
+		if (width < 0)
+			throw new ArgumentOutOfRangeException();
+		int oldLength = length;
+		int count = width - oldLength;
+		if (count <= 0)
+			return this;
 		StringBuilder	sb(length + width);
-		sb.Append(chr, width);
+		sb.Append(chr, count);
 		sb.Append(this);
 		return(sb.ToString());
 	}
 	String* String::PadRight(const Int32 width, const Char chr)
 	{
+		if (width < 0)
+			throw new ArgumentOutOfRangeException();
+		int oldLength = length;
+		int count = width - oldLength;
+		if (count <= 0)
+			return this;
 		StringBuilder	sb(length + width);
 		sb.Append(this);
-		sb.Append(chr, width);
+		sb.Append(chr, count);
 		return(sb.ToString());
 	}
 	String* String::Remove(const Int32 startIndex, Int32 count)
