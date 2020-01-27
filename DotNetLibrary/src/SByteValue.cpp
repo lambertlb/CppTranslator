@@ -1,4 +1,3 @@
-#pragma once
 #include "DotnetTypes.h"
 
 namespace DotnetLibrary
@@ -81,7 +80,7 @@ namespace DotnetLibrary
 	}
 	Int32 SByteValue::FormatString(Char* where, const Int32 whereSize)
 	{
-		return(swprintf(where, whereSize, L"%d", value));
+		return(swprintf(where, L"%d", value));
 	}
 	SByte SByteValue::Parse(String* stringToParse)
 	{

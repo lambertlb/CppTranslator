@@ -84,4 +84,5 @@ namespace DotnetLibrary
 		String*				TrimStart(Array* separator);
 		static String*		Empty;
 	};
+	void CopyChars(Char* where, Int32 whereSize, Char* source, Int32 sourceSize);
 }

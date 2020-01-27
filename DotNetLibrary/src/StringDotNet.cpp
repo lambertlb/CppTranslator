@@ -1,4 +1,3 @@
-#pragma once
 #include "DotnetTypes.h"
 #include <wchar.h>
 
@@ -666,7 +665,14 @@ namespace DotnetLibrary
 	{
 		if (whereSize < this->length)
 			throw new IndexOutOfRangeException();
-		wcscpy_s(where, whereSize, this->characterData);
+		CopyChars(where, whereSize, this->characterData, length);
 		return this->length;
+	}
+	void CopyChars(Char* where, Int32 whereSize, Char* source, Int32 sourceSize)
+	{
+		if (sourceSize > whereSize)
+			sourceSize = whereSize - 1;
+		memcpy(where, source, sourceSize * sizeof(Char));
+		where[sourceSize] = 0;
 	}
 }

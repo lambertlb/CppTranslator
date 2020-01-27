@@ -1,4 +1,3 @@
-#pragma once
 #include "DotnetTypes.h"
 #include <math.h>
 #include <float.h>
@@ -127,7 +126,7 @@ namespace DotnetLibrary
 	}
 	Int32 DoubleValue::FormatString(Char* where, const Int32 whereSize)
 	{
-		return(swprintf(where, whereSize, L"%G", value));
+		return(swprintf(where, L"%G", value));
 	}
 	Double DoubleValue::Modulus(Double v1, Double v2)
 	{
@@ -136,7 +135,7 @@ namespace DotnetLibrary
 	Double DoubleValue::Parse(String* stringToParse)
 	{
 		Double   rtn;
-		swscanf_s(stringToParse->get_Buffer(), L"%lG", &rtn);
+		swscanf(stringToParse->get_Buffer(), L"%lG", &rtn);
 		return(rtn);
 	}
 	Boolean DoubleValue::TryParse(String* source, Double* result)
@@ -166,7 +165,7 @@ namespace DotnetLibrary
 			--sourceLength;
 		}
 		Double   rtn;
-		gotNumber = swscanf_s(source, L"%lG", &rtn) == 1;
+		gotNumber = swscanf(source, L"%lG", &rtn) == 1;
 		result = rtn;
 		return(gotNumber);
 	}

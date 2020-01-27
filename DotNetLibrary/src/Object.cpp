@@ -1,4 +1,3 @@
-#pragma once
 #include "DotnetTypes.h"
 #include <cstdlib>
 #include <cstdio>
@@ -42,7 +41,7 @@ namespace DotnetLibrary
 	}
 	Int32 Object::FormatString(Char* where, const Int32 whereSize)
 	{
-		wcscpy_s(where, whereSize, L"Object");
+		CopyChars(where, whereSize, (Char*)L"Object", 6);
 		return(wcslen(L"Object"));
 	}
 	void		Object::Send(String* message) {

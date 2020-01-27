@@ -1,4 +1,3 @@
-#pragma once
 #include "DotnetTypes.h"
 
 namespace DotnetLibrary
@@ -186,7 +185,7 @@ namespace DotnetLibrary
 	{
 		if (whereSize < currentLength)
 			throw new IndexOutOfRangeException();
-		wcscpy_s(where, whereSize, chunkChars);
+		CopyChars(where, whereSize, chunkChars, this->currentLength);
 		return currentLength;
 	}
 	StringBuilder* StringBuilder::Append(const Char* values, Int32 charCount, Int32 where)

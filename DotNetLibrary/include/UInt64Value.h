@@ -3,7 +3,7 @@
 
 namespace DotnetLibrary
 {
-	enum DLL_EXPORT ParsingStatus
+	enum ParsingStatus
 	{
 		OK,
 		Failed,

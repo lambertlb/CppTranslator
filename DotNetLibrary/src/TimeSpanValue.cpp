@@ -1,4 +1,3 @@
-#pragma once
 #include "DotnetTypes.h"
 
 namespace DotnetLibrary
@@ -168,7 +167,7 @@ namespace DotnetLibrary
 		Int32	sec = (Int32)(time / TicksPerSecond) % 60;
 		Int32	fractional = (Int32)(time % TicksPerSecond);
 		Char	date[32];
-		Int32 length = swprintf(date, 32, L"%d.%02d:%02d:%02d", day, hours, min, sec);
+		Int32 length = swprintf(date, L"%d.%02d:%02d:%02d", day, hours, min, sec);
 		stringBuilder.Append(date, length);
 		if (fractional != 0) {
 			stringBuilder.Append((Char)'.');

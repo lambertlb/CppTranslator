@@ -1,9 +1,8 @@
-#pragma once
 #include "DotnetTypes.h"
 
 namespace DotnetLibrary
 {
-	DLL_EXPORT UInt64	UInt64Value::MaxValue = 18446744073709551615;
+	DLL_EXPORT UInt64	UInt64Value::MaxValue = 0XFFFFFFFFFFFFFFFF;
 	DLL_EXPORT UInt64	UInt64Value::MinValue = 0;
 
 	Boolean UInt64Value::get_AsBoolean()
@@ -81,7 +80,7 @@ namespace DotnetLibrary
 	}
 	Int32 UInt64Value::FormatString(Char* where, const Int32 whereSize)
 	{
-		return(swprintf(where, whereSize, L"%llu", value));
+		return(swprintf(where, L"%llu", value));
 	}
 	UInt64 UInt64Value::Parse(String* stringToParse)
 	{

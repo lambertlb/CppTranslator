@@ -1,4 +1,3 @@
-#pragma once
 #include "DotnetTypes.h"
 #ifdef WIN32
 #include <Windows.h>
@@ -293,7 +292,7 @@ namespace DotnetLibrary
 			isPm = true;
 		}
 		Char	dateTime[128];
-		Int32 length = swprintf(dateTime, 128, L"%d/%d/%d %d:%02d:%02d ", month, day, year, hour, minute, second);
+		Int32 length = swprintf(dateTime, L"%d/%d/%d %d:%02d:%02d ", month, day, year, hour, minute, second);
 		stringBuilder.Append(dateTime, length);
 		if (isPm)
 			stringBuilder.Append(L"PM", 2);

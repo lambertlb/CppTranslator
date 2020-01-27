@@ -1,4 +1,3 @@
-#pragma once
 #include "DotnetTypes.h"
 
 namespace DotnetLibrary
@@ -87,16 +86,15 @@ namespace DotnetLibrary
 		return valueToCompare == value;
 	}
 
-
 	Int32 BooleanValue::FormatString(Char* where, const Int32 whereSize)
 	{
 		Int32 rtn;
 		if (value) {
-			wcscpy_s(where, whereSize, TrueString->get_Buffer());
+			CopyChars(where, whereSize, TrueString->get_Buffer(), TrueString->get_Length());
 			rtn = TrueString->get_Length();
 		}
 		else {
-			wcscpy_s(where, whereSize, FalseString->get_Buffer());
+			CopyChars(where, whereSize, FalseString->get_Buffer(), FalseString->get_Length());
 			rtn = FalseString->get_Length();
 		}
 		return rtn;

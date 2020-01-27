@@ -1,4 +1,3 @@
-#pragma once
 #include "DotnetTypes.h"
 #include <math.h>
 #include <float.h>
@@ -134,7 +133,7 @@ namespace DotnetLibrary
 	}
 	Int32 SingleValue::FormatString(Char* where, const Int32 whereSize)
 	{
-		return(swprintf(where, whereSize, L"%G", value));
+		return(swprintf(where, L"%G", value));
 	}
 	Single SingleValue::Modulus(Single v1, Single v2)
 	{
@@ -143,7 +142,7 @@ namespace DotnetLibrary
 	Single SingleValue::Parse(String* stringToParse)
 	{
 		Single   rtn;
-		swscanf_s(stringToParse->get_Buffer(), L"%G", &rtn);
+		swscanf(stringToParse->get_Buffer(), L"%G", &rtn);
 		return(rtn);
 	}
 	Boolean SingleValue::TryParse(String* source, Single* result)
@@ -173,7 +172,7 @@ namespace DotnetLibrary
 			--sourceLength;
 		}
 		Single   rtn;
-		gotNumber = swscanf_s(source, L"%G", &rtn) == 1;
+		gotNumber = swscanf(source, L"%G", &rtn) == 1;
 		result = rtn;
 		return(gotNumber);
 	}

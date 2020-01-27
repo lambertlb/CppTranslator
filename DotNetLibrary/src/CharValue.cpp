@@ -1,4 +1,3 @@
-#pragma once
 #include "DotnetTypes.h"
 #include <wctype.h>
 

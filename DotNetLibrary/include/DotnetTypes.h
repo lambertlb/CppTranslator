@@ -74,7 +74,7 @@ namespace DotnetLibrary
 		StringType
 	} DataType;
 #define FloatType SingleType
-	DLL_EXPORT Int32	DataTypeSize[];
+	DLL_EXPORT extern Int32	DataTypeSize[];
 }
 
 #include "Object.h"
