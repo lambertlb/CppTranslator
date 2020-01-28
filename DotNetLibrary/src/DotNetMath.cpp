@@ -181,6 +181,8 @@ namespace DotnetLibrary
 		 // including NaN, so we operate on the raw bits.
 
 		Int64 xbits = DoubleValue::ToUInt64(x);
+		if (DoubleValue::IsNaN(y))
+			y = -0.0;
 		Int64 ybits = DoubleValue::ToUInt64(y);
 
 		// If the sign bits of x and y are not the same,

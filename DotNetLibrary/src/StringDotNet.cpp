@@ -1,5 +1,6 @@
 #include "DotnetTypes.h"
-#include <wchar.h>
+#include <cwchar>
+#include <wctype.h>
 
 namespace DotnetLibrary
 {

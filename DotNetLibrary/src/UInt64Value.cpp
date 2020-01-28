@@ -1,4 +1,5 @@
 #include "DotnetTypes.h"
+#include <cwchar>
 
 namespace DotnetLibrary
 {
@@ -80,7 +81,7 @@ namespace DotnetLibrary
 	}
 	Int32 UInt64Value::FormatString(Char* where, const Int32 whereSize)
 	{
-		return(swprintf(where, L"%llu", value));
+		return(swprintf(where, whereSize, L"%llu", value));
 	}
 	UInt64 UInt64Value::Parse(String* stringToParse)
 	{

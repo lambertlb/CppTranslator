@@ -1,5 +1,5 @@
 #include "DotnetTypes.h"
-
+#include <cwchar>
 namespace DotnetLibrary
 {
 	Byte	ByteValue::MaxValue = 255;
@@ -79,8 +79,8 @@ namespace DotnetLibrary
 	}
 	Int32 ByteValue::FormatString(Char* where, const Int32 whereSize)
 	{
-//		return(swprintf(where, (size_t)whereSize, L"%u", value));
-		return(swprintf(where, L"%u", value));
+		return(swprintf(where, (size_t)whereSize, L"%u", value));
+//		return(swprintf(where, L"%u", value));
 	}
 	Byte ByteValue::Parse(String* stringToParse)
 	{

@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include <DotnetTypes.h>
-
+#include <time.h>
 using namespace DotnetLibrary;
 
 TEST(DateTimeTests, ConstructorTest) {
@@ -47,16 +47,16 @@ TEST(DateTimeTests, get_MonthTest) {
 TEST(DateTimeTests, get_NowTest) {
 	DateTimeValue	value(DateTimeValue::get_Now());
 	time_t rawtime;
-	struct tm timeinfo;
+	struct tm* timeinfo;
 
 	time(&rawtime);
-	localtime_s(&timeinfo, &rawtime);
-	ASSERT_TRUE(value.get_Month() == timeinfo.tm_mon + 1);
-	ASSERT_TRUE(value.get_Day() == timeinfo.tm_mday);
-	ASSERT_TRUE(value.get_Year() == timeinfo.tm_year + 1900);
-	ASSERT_TRUE(value.get_Hour() == timeinfo.tm_hour);
-	ASSERT_TRUE(value.get_Minute() == timeinfo.tm_min);
-	ASSERT_TRUE(value.get_Second() == timeinfo.tm_sec);
+	timeinfo = localtime(&rawtime);
+	ASSERT_TRUE(value.get_Month() == timeinfo->tm_mon + 1);
+	ASSERT_TRUE(value.get_Day() == timeinfo->tm_mday);
+	ASSERT_TRUE(value.get_Year() == timeinfo->tm_year + 1900);
+	ASSERT_TRUE(value.get_Hour() == timeinfo->tm_hour);
+	ASSERT_TRUE(value.get_Minute() == timeinfo->tm_min);
+	ASSERT_TRUE(value.get_Second() == timeinfo->tm_sec);
 }
 TEST(DateTimeTests, get_SecondTest) {
 	DateTimeValue	value(DateTime(2003, 7, 23, 12, 30, 30, 100));
@@ -70,13 +70,13 @@ TEST(DateTimeTests, get_TimeOfDayTest) {
 TEST(DateTimeTests, get_TodayTest) {
 	DateTimeValue	value(DateTimeValue::get_Today());
 	time_t rawtime;
-	struct tm timeinfo;
+	struct tm* timeinfo;
 
 	time(&rawtime);
-	localtime_s(&timeinfo, &rawtime);
-	ASSERT_TRUE(value.get_Month() == timeinfo.tm_mon + 1);
-	ASSERT_TRUE(value.get_Day() == timeinfo.tm_mday);
-	ASSERT_TRUE(value.get_Year() == timeinfo.tm_year + 1900);
+	timeinfo = localtime(&rawtime);
+	ASSERT_TRUE(value.get_Month() == timeinfo->tm_mon + 1);
+	ASSERT_TRUE(value.get_Day() == timeinfo->tm_mday);
+	ASSERT_TRUE(value.get_Year() == timeinfo->tm_year + 1900);
 	ASSERT_TRUE(value.get_Hour() == 0);
 	ASSERT_TRUE(value.get_Minute() == 0);
 	ASSERT_TRUE(value.get_Second() == 0);
@@ -84,16 +84,16 @@ TEST(DateTimeTests, get_TodayTest) {
 TEST(DateTimeTests, get_UtcNowTest) {
 	DateTimeValue	value(DateTimeValue::get_UtcNow());
 	time_t rawtime;
-	struct tm timeinfo;
+	struct tm* timeinfo;
 
 	time(&rawtime);
-	gmtime_s(&timeinfo, &rawtime);
-	ASSERT_TRUE(value.get_Month() == timeinfo.tm_mon + 1);
-	ASSERT_TRUE(value.get_Day() == timeinfo.tm_mday);
-	ASSERT_TRUE(value.get_Year() == timeinfo.tm_year + 1900);
-	ASSERT_TRUE(value.get_Hour() == timeinfo.tm_hour);
-	ASSERT_TRUE(value.get_Minute() == timeinfo.tm_min);
-	ASSERT_TRUE(value.get_Second() == timeinfo.tm_sec);
+	timeinfo = gmtime(&rawtime);
+	ASSERT_TRUE(value.get_Month() == timeinfo->tm_mon + 1);
+	ASSERT_TRUE(value.get_Day() == timeinfo->tm_mday);
+	ASSERT_TRUE(value.get_Year() == timeinfo->tm_year + 1900);
+	ASSERT_TRUE(value.get_Hour() == timeinfo->tm_hour);
+	ASSERT_TRUE(value.get_Minute() == timeinfo->tm_min);
+	ASSERT_TRUE(value.get_Second() == timeinfo->tm_sec);
 }
 TEST(DateTimeTests, get_YearTest) {
 	DateTimeValue	value(DateTime(2003, 7, 23, 12, 30, 30, 100));

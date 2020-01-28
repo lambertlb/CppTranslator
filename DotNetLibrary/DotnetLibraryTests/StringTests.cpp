@@ -212,7 +212,7 @@ TEST(StringTests, Equals6Test) {
 	ASSERT_TRUE(String::Equals(&string, (Object*)&string2));
 }
 TEST(StringTests, GetEnumeratorTest) {
-	Char* chars = L"ABCDEFGHI";
+	Char* chars = (Char*)L"ABCDEFGHI";
 	String	string(chars);
 	CharEnumerator* iter = string.GetEnumerator();
 	Int32 i = 0;

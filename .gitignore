@@ -1,4 +1,5 @@
 build/
+.settings/
 # User-specific files
 *.suo
 *.user

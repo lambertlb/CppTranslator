@@ -1,4 +1,5 @@
 #include "DotnetTypes.h"
+#include <cwchar>
 
 namespace DotnetLibrary
 {

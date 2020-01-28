@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.10)
 # set the project name
 project(DotNetLibraryTests)
 set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 find_package(GTest REQUIRED)
 
 include_directories(../include)
@@ -37,4 +40,5 @@ target_link_libraries(
 	GTest::Main
 )
 
-add_test(NAME DotNetLibraryTests COMMAND $<TARGET_FILE:DotNetLibraryTests>)
+# add_test(NAME DotNetLibraryTests COMMAND $<TARGET_FILE:DotNetLibraryTests>)
+add_test(NAME DotNetLibraryTests COMMAND DotNetLibraryTests)

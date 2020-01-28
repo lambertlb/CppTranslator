@@ -1,6 +1,7 @@
 #include "DotnetTypes.h"
 #include <cstdlib>
 #include <cstdio>
+#include <cwchar>
 
 void* operator new(size_t size)
 {
@@ -42,7 +43,7 @@ namespace DotnetLibrary
 	Int32 Object::FormatString(Char* where, const Int32 whereSize)
 	{
 		CopyChars(where, whereSize, (Char*)L"Object", 6);
-		return(wcslen(L"Object"));
+		return(wcslen((Char*)L"Object"));
 	}
 	void		Object::Send(String* message) {
 		printf("%ls\n", message->Address(0));

@@ -1,4 +1,5 @@
 #include "DotnetTypes.h"
+#include <cwchar>
 
 namespace DotnetLibrary
 {
@@ -80,7 +81,7 @@ namespace DotnetLibrary
 	}
 	Int32 Int32Value::FormatString(Char* where, const Int32 whereSize)
 	{
-		return(swprintf(where, L"%d", value));
+		return(swprintf(where, whereSize, L"%d", value));
 	}
 	Int32 Int32Value::Parse(String* stringToParse)
 	{

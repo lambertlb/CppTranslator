@@ -1,6 +1,7 @@
 #include "DotnetTypes.h"
 #include <math.h>
 #include <float.h>
+#include <cwchar>
 
 namespace DotnetLibrary
 {
@@ -126,7 +127,7 @@ namespace DotnetLibrary
 	}
 	Int32 DoubleValue::FormatString(Char* where, const Int32 whereSize)
 	{
-		return(swprintf(where, L"%G", value));
+		return(swprintf(where, whereSize, L"%G", value));
 	}
 	Double DoubleValue::Modulus(Double v1, Double v2)
 	{

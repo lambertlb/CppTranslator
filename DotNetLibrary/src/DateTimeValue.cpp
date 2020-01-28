@@ -6,7 +6,7 @@
 #include <sys/time.h>
 #include <ctime>
 #endif
-
+#include <cwchar>
 namespace DotnetLibrary
 {
 	DLL_EXPORT DateTime	DateTimeValue::MaxValue = DateTime(MaxTicks);
@@ -86,7 +86,7 @@ namespace DotnetLibrary
 
 		gettimeofday(&tv, NULL);
 
-		uint64 ret = tv.tv_usec;
+		UInt64 ret = tv.tv_usec;
 		/* Convert from micro seconds (10^-6) to milliseconds (10^-3) */
 		ret /= 1000;
 
@@ -292,7 +292,7 @@ namespace DotnetLibrary
 			isPm = true;
 		}
 		Char	dateTime[128];
-		Int32 length = swprintf(dateTime, L"%d/%d/%d %d:%02d:%02d ", month, day, year, hour, minute, second);
+		Int32 length = swprintf(dateTime, whereSize, L"%d/%d/%d %d:%02d:%02d ", month, day, year, hour, minute, second);
 		stringBuilder.Append(dateTime, length);
 		if (isPm)
 			stringBuilder.Append(L"PM", 2);
@@ -319,6 +319,7 @@ namespace DotnetLibrary
 	}
 	DateTime DateTimeValue::ToLocalTime(Boolean throwOnOverflow)
 	{
+#ifdef	WIN32
 		FILETIME ft;
 		FILETIME st;
 		LARGE_INTEGER li;
@@ -343,9 +344,13 @@ namespace DotnetLibrary
 				return DateTime(MinTicks);
 		}
 		return DateTime(tick);
+#else
+		return DateTime(0);
+#endif
 	}
 	DateTime DateTimeValue::ToUniversalTime()
 	{
+#ifdef	WIN32
 		FILETIME ft;
 		FILETIME st;
 		LARGE_INTEGER li;
@@ -357,9 +362,13 @@ namespace DotnetLibrary
 		li.HighPart = st.dwHighDateTime;
 		UInt64 tick = li.QuadPart + FileTimeOffset;
 		return DateTime(tick);
+#else
+		return DateTime(0);
+#endif
 	}
 	DateTime DateTimeValue::get_Now()
 	{
+#ifdef	WIN32
 		FILETIME ft;
 		FILETIME st;
 		LARGE_INTEGER li;
@@ -375,6 +384,9 @@ namespace DotnetLibrary
 			return DateTime(MinTicks);
 		}
 		return DateTime(tick);
+#else
+		return DateTime(0);
+#endif
 	}
 	Int32 DateTimeValue::get_Second()
 	{

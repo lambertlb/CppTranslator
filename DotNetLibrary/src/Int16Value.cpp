@@ -1,5 +1,5 @@
 #include "DotnetTypes.h"
-
+#include <cwchar>
 namespace DotnetLibrary
 {
 	DLL_EXPORT Int16	Int16Value::MaxValue = 32767;
@@ -80,7 +80,7 @@ namespace DotnetLibrary
 	}
 	Int32 Int16Value::FormatString(Char* where, const Int32 whereSize)
 	{
-		return(swprintf(where, L"%d", value));
+		return(swprintf(where, whereSize, L"%d", value));
 	}
 	Int16 Int16Value::Parse(String* stringToParse)
 	{
