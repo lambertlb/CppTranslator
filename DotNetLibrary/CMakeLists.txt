@@ -29,4 +29,9 @@ src/TimeSpanValue.cpp
 src/UInt16Value.cpp
 src/UInt32Value.cpp
 src/UInt64Value.cpp
+dllmain.cpp
 )
+
+enable_testing()
+add_subdirectory(./DotnetLibraryTests)
+
