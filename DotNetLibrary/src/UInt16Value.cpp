@@ -81,7 +81,11 @@ namespace DotnetLibrary
 	}
 	Int32 UInt16Value::FormatString(Char* where, const Int32 whereSize)
 	{
+#ifdef __MINGW32__
+		return(swprintf(where, L"%u", value));
+#else
 		return(swprintf(where, whereSize, L"%u", value));
+#endif
 	}
 	UInt16 UInt16Value::Parse(String* stringToParse)
 	{

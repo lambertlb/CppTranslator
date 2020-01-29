@@ -134,7 +134,11 @@ namespace DotnetLibrary
 	}
 	Int32 SingleValue::FormatString(Char* where, const Int32 whereSize)
 	{
+#ifdef __MINGW32__
+		return(swprintf(where, L"%G", value));
+#else
 		return(swprintf(where, whereSize, L"%G", value));
+#endif
 	}
 	Single SingleValue::Modulus(Single v1, Single v2)
 	{

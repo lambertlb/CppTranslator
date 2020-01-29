@@ -4,7 +4,7 @@
 namespace DotnetLibrary
 {
 	DLL_EXPORT Int32	Int32Value::MaxValue = 2147483647;
-	DLL_EXPORT Int32	Int32Value::MinValue = -2147483648;
+	DLL_EXPORT Int32	Int32Value::MinValue = 0X80000000;
 
 	Boolean Int32Value::get_AsBoolean()
 	{
@@ -81,7 +81,11 @@ namespace DotnetLibrary
 	}
 	Int32 Int32Value::FormatString(Char* where, const Int32 whereSize)
 	{
+#ifdef __MINGW32__
+		return(swprintf(where, L"%d", value));
+#else
 		return(swprintf(where, whereSize, L"%d", value));
+#endif
 	}
 	Int32 Int32Value::Parse(String* stringToParse)
 	{

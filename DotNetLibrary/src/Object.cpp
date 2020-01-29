@@ -43,7 +43,7 @@ namespace DotnetLibrary
 	Int32 Object::FormatString(Char* where, const Int32 whereSize)
 	{
 		CopyChars(where, whereSize, (Char*)L"Object", 6);
-		return(wcslen((Char*)L"Object"));
+		return((Int32)wcslen((Char*)L"Object"));
 	}
 	void		Object::Send(String* message) {
 		printf("%ls\n", message->Address(0));

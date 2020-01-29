@@ -168,7 +168,11 @@ namespace DotnetLibrary
 		Int32	sec = (Int32)(time / TicksPerSecond) % 60;
 		Int32	fractional = (Int32)(time % TicksPerSecond);
 		Char	date[32];
+#ifdef __MINGW32__
+		Int32 length = swprintf(date, L"%d.%02d:%02d:%02d", day, hours, min, sec);
+#else
 		Int32 length = swprintf(date, 32, L"%d.%02d:%02d:%02d", day, hours, min, sec);
+#endif
 		stringBuilder.Append(date, length);
 		if (fractional != 0) {
 			stringBuilder.Append((Char)'.');

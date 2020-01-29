@@ -287,7 +287,11 @@ namespace DotnetLibrary
 			isPm = true;
 		}
 		Char	dateTime[128];
+#ifdef __MINGW32__
+		Int32 length = swprintf(dateTime, L"%d/%d/%d %d:%02d:%02d ", month, day, year, hour, minute, second);
+#else
 		Int32 length = swprintf(dateTime, whereSize, L"%d/%d/%d %d:%02d:%02d ", month, day, year, hour, minute, second);
+#endif
 		stringBuilder.Append(dateTime, length);
 		if (isPm)
 			stringBuilder.Append(L"PM", 2);

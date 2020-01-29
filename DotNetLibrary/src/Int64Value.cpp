@@ -81,7 +81,11 @@ namespace DotnetLibrary
 	}
 	Int32 Int64Value::FormatString(Char* where, const Int32 whereSize)
 	{
+#ifdef __MINGW32__
+		return(swprintf(where, L"%lld", value));
+#else
 		return(swprintf(where, whereSize, L"%lld", value));
+#endif
 	}
 	Int64 Int64Value::Parse(String* stringToParse)
 	{

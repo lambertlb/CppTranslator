@@ -81,7 +81,11 @@ namespace DotnetLibrary
 	}
 	Int32 SByteValue::FormatString(Char* where, const Int32 whereSize)
 	{
+#ifdef __MINGW32__
+		return(swprintf(where, L"%d", value));
+#else
 		return(swprintf(where, whereSize, L"%d", value));
+#endif
 	}
 	SByte SByteValue::Parse(String* stringToParse)
 	{

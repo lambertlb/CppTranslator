@@ -15,7 +15,7 @@ namespace DotnetLibrary
 
 	String::String(const Char* string)
 	{
-		this->length = wcslen(string);
+		this->length = (Int32)wcslen(string);
 		characterData = (Char*)string;
 		allocate = false;
 	}
@@ -24,7 +24,7 @@ namespace DotnetLibrary
 		if (string == nullptr)
 			throw new ArgumentOutOfRangeException();
 		if (length < 0)
-			length = wcslen(string);
+			length = (Int32)wcslen(string);
 		if (startIndex < 0 || startIndex > wcslen(string))
 			throw new ArgumentOutOfRangeException();
 
@@ -59,7 +59,7 @@ namespace DotnetLibrary
 		this->length = length;
 		characterData = new Char[length + 1];
 		for (size_t i = 0; i < length; ++i) {
-			characterData[i] = *(Char*)values->Address(i + startIndex);
+			characterData[i] = *(Char*)values->Address((Int32)i + startIndex);
 		}
 	}
 	String::String(const Char chr, const Int32 amount)

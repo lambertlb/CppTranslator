@@ -79,8 +79,11 @@ namespace DotnetLibrary
 	}
 	Int32 ByteValue::FormatString(Char* where, const Int32 whereSize)
 	{
+#ifdef __MINGW32__
+		return(swprintf(where, L"%u", value));
+#else
 		return(swprintf(where, (size_t)whereSize, L"%u", value));
-//		return(swprintf(where, L"%u", value));
+#endif
 	}
 	Byte ByteValue::Parse(String* stringToParse)
 	{
