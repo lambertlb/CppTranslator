@@ -81,19 +81,14 @@ namespace DotnetLibrary
 		UInt64 ret = li.QuadPart + FileTimeOffset;
 		return ret;
 #else
-		/* Linux */
-		struct timeval tv;
+		tzset();
+		struct tm timeinfo;
+		struct timespec current;
+		clock_gettime(CLOCK_REALTIME, &current);
 
-		gettimeofday(&tv, NULL);
-
-		UInt64 ret = tv.tv_usec;
-		/* Convert from micro seconds (10^-6) to milliseconds (10^-3) */
-		ret /= 1000;
-
-		/* Adds the seconds (10^0) after converting them to milliseconds (10^-3) */
-		ret += (tv.tv_sec * 1000);
-
-		return ret;
+		gmtime_r(&current.tv_sec, &timeinfo);
+		DateTime rtn(timeinfo.tm_year + 1900,timeinfo.tm_mon + 1,timeinfo.tm_mday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec, current.tv_nsec / 1000000);
+		return(rtn.value);
 #endif
 	}
 	Int32 DateTimeValue::get_Year()
@@ -345,7 +340,15 @@ namespace DotnetLibrary
 		}
 		return DateTime(tick);
 #else
-		return DateTime(0);
+		tzset();
+		time_t rawTime = time(nullptr);
+		struct tm utcInfo;
+		struct tm localInfo;
+		localtime_r(&rawTime, &localInfo);
+		gmtime_r(&rawTime, &utcInfo);
+		TimeSpan	ts = TimeSpan(localInfo.tm_hour - utcInfo.tm_hour, 0,0);
+		DateTime rtn = Add(ts);
+		return(rtn.value);
 #endif
 	}
 	DateTime DateTimeValue::ToUniversalTime()
@@ -363,7 +366,15 @@ namespace DotnetLibrary
 		UInt64 tick = li.QuadPart + FileTimeOffset;
 		return DateTime(tick);
 #else
-		return DateTime(0);
+		tzset();
+		time_t rawTime = time(nullptr);
+		struct tm utcInfo;
+		struct tm localInfo;
+		localtime_r(&rawTime, &localInfo);
+		gmtime_r(&rawTime, &utcInfo);
+		TimeSpan	ts = TimeSpan(localInfo.tm_hour - utcInfo.tm_hour, 0,0);
+		DateTime rtn = Subtract(ts);
+		return(rtn.value);
 #endif
 	}
 	DateTime DateTimeValue::get_Now()
@@ -385,7 +396,14 @@ namespace DotnetLibrary
 		}
 		return DateTime(tick);
 #else
-		return DateTime(0);
+		tzset();
+		struct tm timeinfo;
+		struct timespec current;
+		clock_gettime(CLOCK_REALTIME, &current);
+
+		localtime_r(&current.tv_sec, &timeinfo);
+		DateTime rtn(timeinfo.tm_year + 1900,timeinfo.tm_mon + 1,timeinfo.tm_mday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec, current.tv_nsec / 1000000);
+		return(rtn.value);
 #endif
 	}
 	Int32 DateTimeValue::get_Second()
