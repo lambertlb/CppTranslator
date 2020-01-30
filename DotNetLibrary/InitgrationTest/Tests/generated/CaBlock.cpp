@@ -1,4 +1,3 @@
-#pragma once
 #include "CaBlockHeader.h"
 namespace UNNAMED
 {

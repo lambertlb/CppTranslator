@@ -34,6 +34,7 @@ namespace DotnetLibrary
 		for (size_t i = 0; i < length; ++i) {
 			characterData[i] = string[i + startIndex];
 		}
+		characterData[length] = 0;
 	}
 	String::String(Array* values, Int32 startIndex, Int32 length)
 	{
@@ -61,6 +62,7 @@ namespace DotnetLibrary
 		for (size_t i = 0; i < length; ++i) {
 			characterData[i] = *(Char*)values->Address((Int32)i + startIndex);
 		}
+		characterData[length] = 0;
 	}
 	String::String(const Char chr, const Int32 amount)
 	{
@@ -74,6 +76,7 @@ namespace DotnetLibrary
 		for (size_t i = 0; i < amount; ++i) {
 			characterData[i] = chr;
 		}
+		characterData[length] = 0;
 	}
 	String::~String()
 	{
@@ -570,6 +573,7 @@ namespace DotnetLibrary
 		for (Int32 i = 0; i < size; ++i) {
 			*str2++ = towlower(*str1++);
 		}
+		*str2 = 0;
 		return(lower);
 	}
 	String* String::ToLowerInvariant()
@@ -589,6 +593,7 @@ namespace DotnetLibrary
 		for (Int32 i = 0; i < size; ++i) {
 			*str2++ = towupper(*str1++);
 		}
+		*str2 = 0;
 		return(upper);
 	}
 	String* String::ToUpperInvariant()

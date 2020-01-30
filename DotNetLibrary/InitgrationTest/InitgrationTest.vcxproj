@@ -162,6 +162,9 @@
     <ClInclude Include="Tests\generated\CaBlockHeader.h" />
     <ClInclude Include="Tests\generated\CaBlockProtos.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

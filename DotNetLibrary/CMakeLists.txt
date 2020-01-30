@@ -36,6 +36,8 @@ src/UInt64Value.cpp
 dllmain.cpp
 )
 
+add_subdirectory(./InitgrationTest)
+
 enable_testing()
 add_subdirectory(./DotnetLibraryTests)
 
