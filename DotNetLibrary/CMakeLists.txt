@@ -7,7 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-add_definitions(-DDOTNETLIBRARY_EXPORTS -D_CRT_SECURE_NO_WARNINGS)
+IF(MSVC)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-D_USRDLL -DUNICODE -D_UNICODE)
+ENDIF()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # add the executable
@@ -35,6 +38,10 @@ src/UInt32Value.cpp
 src/UInt64Value.cpp
 dllmain.cpp
 )
+target_compile_definitions(DotNetLibrary PRIVATE DOTNETLIBRARY_EXPORTS)
+IF(MSVC)
+   SET_TARGET_PROPERTIES(DotNetLibrary PROPERTIES LINK_FLAGS "/MAP")
+ENDIF()
 
 add_subdirectory(./InitgrationTest)
 
