@@ -69,6 +69,7 @@ namespace DotnetLibrary
 		if (amount < 0) {
 			throw new ArgumentOutOfRangeException();
 		}
+		allocate = true;
 		this->length = amount;
 		characterData = new Char[length + 1];
 		if (chr == 0)
@@ -602,7 +603,7 @@ namespace DotnetLibrary
 	}
 	String* String::Trim()
 	{
-		return(TrimHelper(WhiteSpaceChars, sizeof(WhiteSpaceChars) / sizeof(char), true, true));
+		return(TrimHelper(WhiteSpaceChars, sizeof(WhiteSpaceChars) / sizeof(Char), true, true));
 	}
 	String* String::Trim(Array* separator)
 	{
@@ -611,7 +612,7 @@ namespace DotnetLibrary
 	String* String::TrimHelper(Array* separator, Boolean trimStart, Boolean trimEnd)
 	{
 		if (separator == nullptr || separator->get_Length() == 0)
-			return(TrimHelper(WhiteSpaceChars, sizeof(WhiteSpaceChars) / sizeof(char), trimStart, trimEnd));
+			return(TrimHelper(WhiteSpaceChars, sizeof(WhiteSpaceChars) / sizeof(Char), trimStart, trimEnd));
 		if (separator->GetElementType() != CharType) {
 			throw new ArgumentOutOfRangeException();
 		}
@@ -621,7 +622,7 @@ namespace DotnetLibrary
 	String* String::TrimEnd(Array* separator)
 	{
 		if (separator == nullptr || separator->get_Length() == 0)
-			return(TrimHelper(WhiteSpaceChars, sizeof(WhiteSpaceChars) / sizeof(char), false, true));
+			return(TrimHelper(WhiteSpaceChars, sizeof(WhiteSpaceChars) / sizeof(Char), false, true));
 		if (separator->GetElementType() != CharType) {
 			throw new ArgumentOutOfRangeException();
 		}
@@ -631,7 +632,7 @@ namespace DotnetLibrary
 	String* String::TrimStart(Array* separator)
 	{
 		if (separator == nullptr || separator->get_Length() == 0)
-			return(TrimHelper(WhiteSpaceChars, sizeof(WhiteSpaceChars) / sizeof(char), true, false));
+			return(TrimHelper(WhiteSpaceChars, sizeof(WhiteSpaceChars) / sizeof(Char), true, false));
 		if (separator->GetElementType() != CharType) {
 			throw new ArgumentOutOfRangeException();
 		}
