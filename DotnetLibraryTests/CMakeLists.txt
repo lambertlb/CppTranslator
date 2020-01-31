@@ -5,6 +5,10 @@ project(DotNetLibraryTests)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+IF(MSVC)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-D_USRDLL -DUNICODE -D_UNICODE)
+ENDIF()
 
 find_package(GTest REQUIRED)
 
