@@ -142,10 +142,6 @@ namespace CppTranslator
 		{
 			WriteMethodHeader(methodName, parameters);
 			ICSharpCode.Decompiler.IL.BlockContainer inst = body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
-			//if (methodName == "BoolOperators")
-			//{
-			//	methodName = "BoolOperators";
-			//}
 			MyIlVisitor.StartMainBlock(inst, null);
 		}
 		/// <summary>

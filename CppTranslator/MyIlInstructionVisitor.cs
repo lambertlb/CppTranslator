@@ -642,10 +642,10 @@ namespace CppTranslator
 			return base.VisitExpressionTreeCast(inst);
 		}
 		/// <inheritdoc/>
-		protected override ILInstruction VisitGetPinnableReference(GetPinnableReference inst)
-		{
-			return base.VisitGetPinnableReference(inst);
-		}
+		//		protected override ILInstruction VisitGetPinnableReference(GetPinnableReference inst)
+		//		{
+		//			return base.VisitGetPinnableReference(inst);
+		//		}
 		/// <inheritdoc/>
 		protected override ILInstruction VisitIfInstruction(IfInstruction inst)
 		{
@@ -747,8 +747,7 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		protected override ILInstruction VisitLdcF4(LdcF4 inst)
 		{
-
-			String value; ;
+			String value;
 			if (inst.Value == float.Epsilon || inst.Value == float.MaxValue || inst.Value == float.MinValue)
 			{
 				value = inst.Value.ToString();

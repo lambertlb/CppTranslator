@@ -89,3 +89,6 @@ dotnet_diagnostic.SA0001.severity = none
 
 # SA1520: Use braces consistently
 dotnet_diagnostic.SA1520.severity = none
+
+# SA1005: Single line comments should begin with single space
+dotnet_diagnostic.SA1005.severity = none
