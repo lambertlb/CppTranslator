@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(GTest REQUIRED)
 
-include_directories(../include)
+include_directories(../DotNetLibrary/include)
 
 # add the executable
 add_executable(DotNetLibraryTests

@@ -42,9 +42,3 @@ target_compile_definitions(DotNetLibrary PRIVATE DOTNETLIBRARY_EXPORTS)
 IF(MSVC)
    SET_TARGET_PROPERTIES(DotNetLibrary PROPERTIES LINK_FLAGS "/MAP")
 ENDIF()
-
-add_subdirectory(./InitgrationTest)
-
-enable_testing()
-add_subdirectory(./DotnetLibraryTests)
-

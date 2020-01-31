@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.10)
 project(IntegrationTest)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
+include_directories(../DotNetLibrary/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Tests/generated)
 
 # add the executable
