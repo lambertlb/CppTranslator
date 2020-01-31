@@ -43,7 +43,9 @@ namespace CppTranslator
 		{
 			Formatter.AppendLine("#pragma once");
 			Formatter.AppendLine("#include \"DotnetTypes.h\"");
+			Formatter.AppendLine("#include <DotnetLibrarySupport.h>");
 			Formatter.AppendLine("using namespace DotnetLibrary;");
+			Formatter.AppendLine("using namespace DotnetLibrarySupport;");
 			Formatter.AppendLine(String.Empty);
 		}
 		/// <inheritdoc/>

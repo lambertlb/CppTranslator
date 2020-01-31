@@ -85,7 +85,7 @@ namespace CppTranslator
 		public virtual void AddHeaders()
 		{
 			Formatter.AppendLine("#pragma once");
-			Formatter.AppendLine("#include \"CaBlockHeader.h\"");
+			Formatter.AppendLine("#include \"TranslatedHeader.h\"");
 		}
 		/// <summary>
 		/// Create headers

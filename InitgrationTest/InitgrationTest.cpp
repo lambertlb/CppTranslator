@@ -1,11 +1,11 @@
-#include "CaBlockHeader.h"
+#include "TranslatedHeader.h"
 
 //#define	DoMiniTest
 
 #ifdef DoMiniTest
 using namespace MiniTest_NS;
 #else
-using namespace CABlock_NS;
+using namespace CppTranslatorFeatureTest_NS;
 #endif // DoMiniTest
 
 int main()
@@ -14,7 +14,7 @@ int main()
 	Program* pr = new Program();
 	pr->Run();
 #else
-	CABlock	ca;
-	ca.Execute();
+	FeatureTest	featureTest;
+	featureTest.Run();
 #endif // DoMiniTest
 }

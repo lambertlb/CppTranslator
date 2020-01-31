@@ -71,8 +71,8 @@ namespace CppTranslator
 				index = args[0].LastIndexOf('\\');
 			}
 			String path = args[0].Substring(0, index + 1);
-			Directory.CreateDirectory(path + "Tests/generated/");
-			pathToAssemble = path + "Tests/generated/CaBlock";
+			Directory.CreateDirectory(path + "generated/");
+			pathToAssemble = path + "generated/Translated";
 		}
 
 		private static void ProcessModules(CppVisitorBase visitorToUse, String filePath)
@@ -86,7 +86,7 @@ namespace CppTranslator
 					{
 						if (typeDefinition.Kind == TypeKind.Class || typeDefinition.Kind == TypeKind.Enum || typeDefinition.Kind == TypeKind.Struct)
 						{
-							if (!typeDefinition.Name.StartsWith("<", StringComparison.InvariantCulture) && !typeDefinition.Namespace.Contains("BlockBase", StringComparison.InvariantCulture) && !typeDefinition.Namespace.Contains("SysCommon", StringComparison.InvariantCulture))
+							if (!typeDefinition.Name.StartsWith("<", StringComparison.InvariantCulture) && !typeDefinition.Namespace.Contains("CppTranslatorSupport", StringComparison.InvariantCulture))
 							{
 								if (!setOutput)
 								{

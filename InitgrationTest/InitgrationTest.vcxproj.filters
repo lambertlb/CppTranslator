@@ -18,19 +18,19 @@
     <ClCompile Include="InitgrationTest.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="Tests\generated\CaBlock.cpp">
+    <ClCompile Include="..\Debug\generated\Translated.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Tests\generated\CaBlockHeader.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="Tests\generated\CaBlockProtos.h">
-      <Filter>include</Filter>
-    </ClInclude>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="CMakeLists.txt" />
+    <ClInclude Include="..\Debug\generated\TranslatedHeader.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Debug\generated\TranslatedProtos.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

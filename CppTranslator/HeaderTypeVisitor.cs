@@ -52,7 +52,7 @@ namespace CppTranslator
 		public override void AddHeaders()
 		{
 			Formatter.AppendLine("#pragma once");
-			Formatter.AppendLine("#include \"CaBlockProtos.h\"");
+			Formatter.AppendLine("#include \"TranslatedProtos.h\"");
 			declarations.Clear();
 		}
 		/// <inheritdoc/>
