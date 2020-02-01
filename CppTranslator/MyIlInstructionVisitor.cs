@@ -1248,9 +1248,7 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		protected override ILInstruction VisitTryCatch(TryCatch inst)
 		{
-			NewLeaveBlock();
-			Formatter.Append("try");
-			inst.TryBlock.AcceptVisitor(this);
+			HandleTryBlock(inst);
 			foreach (TryCatchHandler handler in inst.Handlers)
 			{
 				Formatter.AppendIndented("catch (");
@@ -1275,6 +1273,22 @@ namespace CppTranslator
 			ExitLeaveBLock();
 			return base.VisitTryCatch(inst);
 		}
+
+		private void HandleTryBlock(TryCatch inst)
+		{
+			NewLeaveBlock();
+			Formatter.Append("try");
+			if (inst.TryBlock is BlockContainer)
+			{
+				Block block = ((BlockContainer)inst.TryBlock).Blocks[0];
+				Formatter.AddOpenBrace();
+				WriteBlock(block);
+				Formatter.AddCloseBrace();
+			}
+			else
+				inst.TryBlock.AcceptVisitor(this);
+		}
+
 		/// <inheritdoc/>
 		protected override ILInstruction VisitTryCatchHandler(TryCatchHandler inst)
 		{
