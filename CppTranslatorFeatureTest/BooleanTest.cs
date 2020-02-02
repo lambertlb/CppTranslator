@@ -85,7 +85,7 @@ namespace CppTranslatorFeatureTest
 			try
 			{
 				bool val = Boolean.Parse("Bad");
-			} catch(Exception ex)
+			} catch(Exception)
 			{
 				hadException = true;
 			}

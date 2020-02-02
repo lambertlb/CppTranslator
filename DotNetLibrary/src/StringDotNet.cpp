@@ -259,6 +259,12 @@ namespace DotnetLibrary
 			return(false);
 		return !op_Inequality(object, (String*)object2);
 	}
+	Boolean String::Equals(Object* object, String* object2)
+	{
+		if (object == nullptr || object->GetRawDataType() != StringType)
+			return(false);
+		return !op_Inequality((String*)object, object2);
+	}
 	String* String::Format(String* format, Array* args)
 	{
 //		throw new NotImplementedException();

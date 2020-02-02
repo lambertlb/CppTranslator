@@ -14,6 +14,8 @@ namespace CppTranslatorFeatureTest
 			Send("Starting Feature Tests **");
 			BooleanTest booleanTest = new BooleanTest(this);
 			booleanTest.Run();
+			ArrayTest arrayTest = new ArrayTest(this);
+			arrayTest.Run();
 			Send("Finished Feature Tests**");
 		}
 		public void	AssertTrue(bool value)
@@ -35,6 +37,11 @@ namespace CppTranslatorFeatureTest
 		public void AssertTrue(Double value1, Double value2)
 		{
 			AssertTrue(value1, value2 , 0.000001);
+		}
+		public static void Main(string[] args)
+		{
+			FeatureTest featureTest = new FeatureTest();
+			featureTest.RunCode();
 		}
 	}
 }

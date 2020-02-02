@@ -39,6 +39,7 @@ namespace DotnetLibrary
 		virtual Boolean		Equals(Object* object);
 		virtual Boolean		Equals(String* object);
 		static Boolean		Equals(String* object, Object* object2);
+		static Boolean		Equals(Object* object, String* object2);
 		static	String*		Format(String* format, Array* args);
 		static	String*		Format(String* format, Object* arg1, Object* arg2 = nullptr, Object* arg3 = nullptr);
 		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
