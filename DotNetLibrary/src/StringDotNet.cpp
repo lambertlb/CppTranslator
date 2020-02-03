@@ -265,6 +265,10 @@ namespace DotnetLibrary
 			return(false);
 		return !op_Inequality((String*)object, object2);
 	}
+	Boolean String::Equals(String* object, String* object2)
+	{
+		return !op_Inequality(object, object2);
+	}
 	String* String::Format(String* format, Array* args)
 	{
 //		throw new NotImplementedException();

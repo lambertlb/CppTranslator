@@ -487,6 +487,10 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		protected override ILInstruction VisitCastClass(CastClass inst)
 		{
+			Formatter.Append("(");
+			TypeVisitor.FormatTypeDelaration(inst.Type);
+			Formatter.Append(")");
+			inst.Argument.AcceptVisitor(this);
 			return base.VisitCastClass(inst);
 		}
 		/// <inheritdoc/>
