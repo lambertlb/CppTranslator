@@ -26,33 +26,33 @@ TEST(ByteTests, EqualsTest) {
 TEST(ByteTests, TryParseTest) {
 	Byte	value = 0;
 	String	str(L"11");
-	Boolean goodParse = ByteValue::TryParse(&str, &value);
+	Boolean goodParse = ByteValue::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(ByteTests, TryParse2Test) {
 	Byte	value = 0;
 	String	str(L"11A");
-	Boolean goodParse = ByteValue::TryParse(&str, &value);
+	Boolean goodParse = ByteValue::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(ByteTests, TryParse3Test) {
 	Byte	value = 0;
 	String	str(L" 11 ");
-	Boolean goodParse = ByteValue::TryParse(&str, &value);
+	Boolean goodParse = ByteValue::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(ByteTests, TryParse4Test) {
 	Byte	value = 0;
 	String	str(L"300");
-	Boolean goodParse = ByteValue::TryParse(&str, &value);
+	Boolean goodParse = ByteValue::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(ByteTests, TryParse5Test) {
 	Byte	value = 0;
 	String	str(L"-11");
-	Boolean goodParse = ByteValue::TryParse(&str, &value);
+	Boolean goodParse = ByteValue::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(ByteTests, ParseTest) {

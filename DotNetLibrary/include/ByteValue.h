@@ -26,7 +26,7 @@ namespace DotnetLibrary
 		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
 		virtual DataType	GetRawDataType() { return(ByteType); };
 		static Byte			Parse(String* stringToParse);
-		static bool			TryParse(String* stringToParse, Byte* result);
+		static bool			TryParse(String* stringToParse, Byte& result);
 		static Byte	MaxValue;
 		static Byte	MinValue;
 	};

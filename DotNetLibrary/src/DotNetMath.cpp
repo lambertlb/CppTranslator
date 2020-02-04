@@ -281,14 +281,30 @@ namespace DotnetLibrary
 	{
 		return cosh(v1);
 	}
+	Int64 Math::Divide(Int64 v1, Int64 v2)
+	{
+		if (v2 == 0)
+			throw new DivideByZeroException();
+		return v1 / v2;
+	}
+	Double Math::Divide(Double v1, Double v2)
+	{
+		if (v2 == 0)
+			throw new DivideByZeroException();
+		return v1 / v2;
+	}
 	Int32 Math::DivRem(Int32 a, Int32 b, Int32* result)
 	{
+		if (b == 0)
+			throw new DivideByZeroException();
 		Int32 div = a / b;
 		*result = a - (div * b);
 		return div;
 	}
 	Int64 Math::DivRem(Int64 a, Int64 b, Int64* result)
 	{
+		if (b == 0)
+			throw new DivideByZeroException();
 		Int32 div = a / b;
 		*result = a - (div * b);
 		return div;

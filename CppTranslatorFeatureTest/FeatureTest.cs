@@ -16,6 +16,10 @@ namespace CppTranslatorFeatureTest
 			booleanTest.Run();
 			ArrayTest arrayTest = new ArrayTest(this);
 			arrayTest.Run();
+			BufferTest bufferTest = new BufferTest(this);
+			bufferTest.Run();
+			ByteTest byteTest = new ByteTest(this);
+			byteTest.Run();
 			Send("Finished Feature Tests**");
 		}
 		public void	AssertTrue(bool value)

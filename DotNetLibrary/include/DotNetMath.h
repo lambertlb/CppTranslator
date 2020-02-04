@@ -47,6 +47,8 @@ namespace DotnetLibrary
 		static Double	CopySign(Double x, Double y);
 		static Double	Cos(Double v1);
 		static Double	Cosh(Double v1);
+		static Int64	Divide(Int64 v1, Int64 v2);
+		static Double	Divide(Double v1, Double v2);
 		static Int32	DivRem(Int32 a, Int32 b, Int32* result);
 		static Int64	DivRem(Int64 a, Int64 b, Int64* result);
 		static Double	Exp(Double v1);

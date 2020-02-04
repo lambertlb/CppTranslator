@@ -95,7 +95,7 @@ namespace DotnetLibrary
 			throw new OverflowException();
 		return(value);
 	}
-	bool ByteValue::TryParse(String* stringToParse, Byte* result)
+	bool ByteValue::TryParse(String* stringToParse, Byte& result)
 	{
 		Boolean goodNumber = true;
 		UInt64	value = 0;
@@ -104,7 +104,7 @@ namespace DotnetLibrary
 			goodNumber = false;
 		if (sign < 0 || value > MaxValue)
 			goodNumber = false;
-		*result = (Byte)value;
+		result = (Byte)value;
 		return(goodNumber);
 	}
 }

@@ -79,4 +79,9 @@ namespace DotnetLibrary
 	public:
 		ArithmeticException() : Exception(new String(L"Overflow")) {}
 	};
+	struct DLL_EXPORT DivideByZeroException : public  Exception
+	{
+	public:
+		DivideByZeroException() : Exception(new String(L"Divide by Zero")) {}
+	};
 }

@@ -181,6 +181,8 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		protected override ILInstruction VisitBinaryNumericInstruction(BinaryNumericInstruction inst)
 		{
+			if (HandleDivideByZero(inst))
+				return base.VisitBinaryNumericInstruction(inst);
 			if (HandleSpecialModulusWithFLoatingNumbers(inst))
 				return base.VisitBinaryNumericInstruction(inst);
 			Formatter.Append("(");
@@ -192,6 +194,36 @@ namespace CppTranslator
 			Formatter.Append(")");
 			return base.VisitBinaryNumericInstruction(inst);
 		}
+
+		private bool HandleDivideByZero(BinaryNumericInstruction inst)
+		{
+			if (inst.Operator != BinaryNumericOperator.Div)
+				return (false);
+			String numberType;
+			switch (inst.UnderlyingResultType)
+			{
+				case StackType.F4:
+				case StackType.F8:
+					numberType = "(Double)";
+					break;
+				case StackType.I:
+				case StackType.I4:
+				case StackType.I8:
+					numberType = "(Int64)";
+					break;
+				default:
+					return (false);
+			}
+			Formatter.Append("Math::Divide(");
+			Formatter.Append(numberType);
+			inst.Left.AcceptVisitor(this);
+			Formatter.Append(",");
+			Formatter.Append(numberType);
+			inst.Right.AcceptVisitor(this);
+			Formatter.Append(")");
+			return (true);
+		}
+
 		private bool HandleSpecialModulusWithFLoatingNumbers(BinaryNumericInstruction inst)
 		{
 			if (inst.Operator != BinaryNumericOperator.Rem)
