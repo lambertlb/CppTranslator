@@ -20,6 +20,8 @@ namespace CppTranslatorFeatureTest
 			bufferTest.Run();
 			ByteTest byteTest = new ByteTest(this);
 			byteTest.Run();
+			Int16Test int16Test = new Int16Test(this);
+			int16Test.Run();
 			Send("Finished Feature Tests**");
 		}
 		public void	AssertTrue(bool value)

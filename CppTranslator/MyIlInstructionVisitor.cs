@@ -315,6 +315,7 @@ namespace CppTranslator
 				HandleInitilzedArray(block);
 				return;
 			}
+			DeclareLocalVaraibles(block);
 			foreach (ILInstruction inst in block.Instructions)
 			{
 				Leave leave = inst as Leave;
@@ -329,6 +330,34 @@ namespace CppTranslator
 				}
 			}
 		}
+
+		private void DeclareLocalVaraibles(ILInstruction inst)
+		{
+			if (inst.OpCode == OpCode.LdLoca)
+			{
+				CheckVariableAddition(((LdLoca)inst).Variable);
+				return;
+			}
+			if (inst.OpCode == OpCode.StLoc)
+			{
+				CheckVariableAddition(((StLoc)inst).Variable);
+				return;
+			}
+			foreach (ILInstruction child in inst.Children)
+			{
+				DeclareLocalVaraibles(child);
+			}
+		}
+
+		private void CheckVariableAddition(ILVariable variable)
+		{
+			if (!DeclareVariableIfNeeded(variable))
+				return;
+			Formatter.AppendName(variable.Name);
+			Formatter.AppendLine(";");
+			Formatter.AppendIndented(String.Empty);
+		}
+
 		private void AddLableIfNeeded(Block block)
 		{
 			ICSharpCode.Decompiler.IL.Leave leave = block.Instructions.FirstOrDefault() as ICSharpCode.Decompiler.IL.Leave;
@@ -884,12 +913,12 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		protected override ILInstruction VisitLdLoca(LdLoca inst)
 		{
-			if (DeclareVariableIfNeeded(inst.Variable))
-			{
-				Formatter.AppendName(inst.Variable.Name);
-				Formatter.AppendLine(";");
-				Formatter.AppendIndented(String.Empty);
-			}
+			//if (DeclareVariableIfNeeded(inst.Variable))
+			//{
+			//	Formatter.AppendName(inst.Variable.Name);
+			//	Formatter.AppendLine(";");
+			//	Formatter.AppendIndented(String.Empty);
+			//}
 			Formatter.AppendName(inst.Variable.Name);
 			return base.VisitLdLoca(inst);
 		}
@@ -1095,7 +1124,7 @@ namespace CppTranslator
 			if (HandleIncrementAndDecrement(inst))
 				return base.VisitStLoc(inst);
 
-			DeclareVariableIfNeeded(inst.Variable);
+			//			DeclareVariableIfNeeded(inst.Variable);
 			Formatter.AppendName(inst.Variable.Name);
 			Formatter.Append(" = ");
 			HandleStoreVariable(inst.Variable.Type, inst.Value);
@@ -1135,6 +1164,8 @@ namespace CppTranslator
 			if (CurrentVariables.ContainsKey(variable.Name))
 				return (false);
 			CurrentVariables.Add(variable.Name, variable.Name);
+			if (Formatter.IsOnNewline)
+				Formatter.AppendIndented("");
 			TypeVisitor.FormatTypeDelaration(variable.Type);
 			Formatter.Append(" ");
 			return (true);

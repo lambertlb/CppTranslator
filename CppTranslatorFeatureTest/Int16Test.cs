@@ -2,10 +2,10 @@
 
 namespace CppTranslatorFeatureTest
 {
-	public class ByteTest
+	public class Int16Test
 	{
 		FeatureTest featureTest;
-		public ByteTest(FeatureTest featureTest)
+		public Int16Test(FeatureTest featureTest)
 		{
 			this.featureTest = featureTest;
 		}
@@ -15,14 +15,13 @@ namespace CppTranslatorFeatureTest
 			OperatorTests();
 			BitwiseOperators();
 		}
-
 		private void MethodTests()
 		{
-			featureTest.FailureMessage = "\tFailed Byte Method Test";
-			featureTest.Send("Byte Method Test");
-			Byte value1 = 1;
-			Byte value2 = 2;
-			Byte value3 = 3;
+			featureTest.FailureMessage = "\tFailed Int16 Method Test";
+			featureTest.Send("Int16 Method Test");
+			Int16 value1 = 1;
+			Int16 value2 = 2;
+			Int16 value3 = 3;
 			Object obj1 = value1;
 			Object obj2 = value2;
 			Object obj3 = value3;
@@ -41,18 +40,18 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(!value2.Equals(obj1));
 			featureTest.AssertTrue(!value2.Equals(obj3));
 			featureTest.AssertTrue(value2.Equals(obj2));
-			featureTest.AssertTrue(Byte.Parse("33") == 33);
+			featureTest.AssertTrue(Int16.Parse("33") == 33);
 			String str = 35.ToString();
 			featureTest.AssertTrue(str == "35");
-			Byte parsed;
-			featureTest.AssertTrue(Byte.TryParse(str, out parsed));
+			Int16 parsed;
+			featureTest.AssertTrue(Int16.TryParse(str, out parsed));
 			featureTest.AssertTrue(parsed == 35);
 		}
 		private void OperatorTests()
 		{
-			featureTest.FailureMessage = "\tFailed Byte Operator Test";
-			featureTest.Send("Byte Operator Test");
-			Byte value = 1;
+			featureTest.FailureMessage = "\tFailed Int16 Operator Test";
+			featureTest.Send("Int16 Operator Test");
+			Int16 value = 1;
 			featureTest.AssertTrue(value == 1);
 			featureTest.AssertTrue(value++ == 1);
 			featureTest.AssertTrue(value == 2);
@@ -64,10 +63,10 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(value == 1);
 			value = +1;
 			featureTest.AssertTrue(value == 1);
-			value = Byte.MinValue;
-			featureTest.AssertTrue(value == 0);
-			value = Byte.MinValue;
-			featureTest.AssertTrue((Byte)(value - 1) == Byte.MaxValue);
+			value = Int16.MinValue;
+			featureTest.AssertTrue(value == -32768);
+			value = Int16.MinValue;
+			featureTest.AssertTrue((Int16)(value - 1) == Int16.MaxValue);
 			value = -(-1);
 			featureTest.AssertTrue(value == 1);
 			value = 10;
@@ -85,7 +84,7 @@ namespace CppTranslatorFeatureTest
 			bool gotException = false;
 			try
 			{
-				value = (Byte)(value / 0);
+				value = (Int16)(value / 0);
 				featureTest.AssertTrue(false);
 			}
 			catch (Exception)
@@ -96,9 +95,9 @@ namespace CppTranslatorFeatureTest
 		}
 		private void BitwiseOperators()
 		{
-			featureTest.FailureMessage = "\tFailed Byte Bitwise Operator Test";
-			featureTest.Send("Byte Bitwise Operator Test");
-			Byte value = 0;
+			featureTest.FailureMessage = "\tFailed Int16 Bitwise Operator Test";
+			featureTest.Send("Int16 Bitwise Operator Test");
+			Int16 value = 0;
 			featureTest.AssertTrue(~value == -1);
 			value = 1;
 			featureTest.AssertTrue(value << 1 == 2);

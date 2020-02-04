@@ -516,7 +516,7 @@ namespace DotnetLibrary
 		if (exponent >= 0x0433) {
 			return a;
 		}
-		UInt64 lastBitMask = (UInt64)1 << (Int64)(0x0433 - exponent);
+		UInt64 lastBitMask = (UInt64)1 << (Int64)(0x0433L - (Int64)exponent);
 		UInt64 roundBitsMask = lastBitMask - 1;
 		bits += lastBitMask >> 1;
 		if ((bits & roundBitsMask) == 0) {
