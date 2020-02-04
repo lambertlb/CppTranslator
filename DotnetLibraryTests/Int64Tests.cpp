@@ -26,27 +26,27 @@ TEST(Int64Tests, EqualsTest) {
 TEST(Int64Tests, TryParseTest) {
 	Int64	value = 0;
 	String	str(L"11");
-	Boolean goodParse = Int64Value::TryParse(&str, &value);
+	Boolean goodParse = Int64Value::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(Int64Tests, TryParse2Test) {
 	Int64	value = 0;
 	String	str(L"11A");
-	Boolean goodParse = Int64Value::TryParse(&str, &value);
+	Boolean goodParse = Int64Value::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(Int64Tests, TryParse3Test) {
 	Int64	value = 0;
 	String	str(L" 11 ");
-	Boolean goodParse = Int64Value::TryParse(&str, &value);
+	Boolean goodParse = Int64Value::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(Int64Tests, TryParse5Test) {
 	Int64	value = 0;
 	String	str(L"-11");
-	Boolean goodParse = Int64Value::TryParse(&str, &value);
+	Boolean goodParse = Int64Value::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == -11);
 }

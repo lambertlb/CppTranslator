@@ -99,7 +99,7 @@ namespace DotnetLibrary
 			throw new OverflowException();
 		return((SByte)value * sign);
 	}
-	bool SByteValue::TryParse(String* stringToParse, SByte* result)
+	bool SByteValue::TryParse(String* stringToParse, SByte& result)
 	{
 		Boolean goodNumber = true;
 		UInt64	value = 0;
@@ -110,7 +110,7 @@ namespace DotnetLibrary
 			goodNumber = false;
 		if (sign < 0 && (Int64)value < MinValue)
 			goodNumber = false;
-		*result = (SByte)value * sign;
+		result = (SByte)value * sign;
 		return(goodNumber);
 	}
 }

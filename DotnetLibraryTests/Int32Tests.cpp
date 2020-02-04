@@ -26,33 +26,33 @@ TEST(Int32Tests, EqualsTest) {
 TEST(Int32Tests, TryParseTest) {
 	Int32	value = 0;
 	String	str(L"11");
-	Boolean goodParse = Int32Value::TryParse(&str, &value);
+	Boolean goodParse = Int32Value::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(Int32Tests, TryParse2Test) {
 	Int32	value = 0;
 	String	str(L"11A");
-	Boolean goodParse = Int32Value::TryParse(&str, &value);
+	Boolean goodParse = Int32Value::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(Int32Tests, TryParse3Test) {
 	Int32	value = 0;
 	String	str(L" 11 ");
-	Boolean goodParse = Int32Value::TryParse(&str, &value);
+	Boolean goodParse = Int32Value::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(Int32Tests, TryParse4Test) {
 	Int32	value = 0;
 	String	str(L"30000000000");
-	Boolean goodParse = Int32Value::TryParse(&str, &value);
+	Boolean goodParse = Int32Value::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(Int32Tests, TryParse5Test) {
 	Int32	value = 0;
 	String	str(L"-11");
-	Boolean goodParse = Int32Value::TryParse(&str, &value);
+	Boolean goodParse = Int32Value::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == -11);
 }

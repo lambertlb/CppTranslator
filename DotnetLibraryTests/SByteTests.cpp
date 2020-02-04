@@ -26,33 +26,33 @@ TEST(SByteTests, EqualsTest) {
 TEST(SByteTests, TryParseTest) {
 	SByte	value = 0;
 	String	str(L"11");
-	Boolean goodParse = SByteValue::TryParse(&str, &value);
+	Boolean goodParse = SByteValue::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(SByteTests, TryParse2Test) {
 	SByte	value = 0;
 	String	str(L"11A");
-	Boolean goodParse = SByteValue::TryParse(&str, &value);
+	Boolean goodParse = SByteValue::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(SByteTests, TryParse3Test) {
 	SByte	value = 0;
 	String	str(L" 11 ");
-	Boolean goodParse = SByteValue::TryParse(&str, &value);
+	Boolean goodParse = SByteValue::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(SByteTests, TryParse4Test) {
 	SByte	value = 0;
 	String	str(L"300000");
-	Boolean goodParse = SByteValue::TryParse(&str, &value);
+	Boolean goodParse = SByteValue::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(SByteTests, TryParse5Test) {
 	SByte	value = 0;
 	String	str(L"-11");
-	Boolean goodParse = SByteValue::TryParse(&str, &value);
+	Boolean goodParse = SByteValue::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == -11);
 }

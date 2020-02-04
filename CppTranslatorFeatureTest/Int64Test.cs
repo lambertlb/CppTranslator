@@ -2,10 +2,10 @@
 
 namespace CppTranslatorFeatureTest
 {
-	public class Int16Test
+	public class Int64Test
 	{
 		FeatureTest featureTest;
-		public Int16Test(FeatureTest featureTest)
+		public Int64Test(FeatureTest featureTest)
 		{
 			this.featureTest = featureTest;
 		}
@@ -17,11 +17,11 @@ namespace CppTranslatorFeatureTest
 		}
 		private void MethodTests()
 		{
-			featureTest.FailureMessage = "\tFailed Int16 Method Test";
-			featureTest.Send("Int16 Method Test");
-			Int16 value1 = 1;
-			Int16 value2 = 2;
-			Int16 value3 = 3;
+			featureTest.FailureMessage = "\tFailed Int64 Method Test";
+			featureTest.Send("Int64 Method Test");
+			Int64 value1 = 1;
+			Int64 value2 = 2;
+			Int64 value3 = 3;
 			Object obj1 = value1;
 			Object obj2 = value2;
 			Object obj3 = value3;
@@ -40,18 +40,18 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(!value2.Equals(obj1));
 			featureTest.AssertTrue(!value2.Equals(obj3));
 			featureTest.AssertTrue(value2.Equals(obj2));
-			featureTest.AssertTrue(Int16.Parse("33") == 33);
+			featureTest.AssertTrue(Int64.Parse("33") == 33);
 			String str = 35.ToString();
 			featureTest.AssertTrue(str == "35");
-			Int16 parsed;
-			featureTest.AssertTrue(Int16.TryParse(str, out parsed));
+			Int64 parsed;
+			featureTest.AssertTrue(Int64.TryParse(str, out parsed));
 			featureTest.AssertTrue(parsed == 35);
 		}
 		private void OperatorTests()
 		{
-			featureTest.FailureMessage = "\tFailed Int16 Operator Test";
-			featureTest.Send("Int16 Operator Test");
-			Int16 value = 1;
+			featureTest.FailureMessage = "\tFailed Int64 Operator Test";
+			featureTest.Send("Int64 Operator Test");
+			Int64 value = 1;
 			featureTest.AssertTrue(value == 1);
 			featureTest.AssertTrue(value++ == 1);
 			featureTest.AssertTrue(value == 2);
@@ -63,10 +63,10 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(value == 1);
 			value = +1;
 			featureTest.AssertTrue(value == 1);
-			value = Int16.MinValue;
-			featureTest.AssertTrue(value == Int16.MinValue);
-			value = Int16.MinValue;
-			featureTest.AssertTrue((Int16)(value - 1) == Int16.MaxValue);
+			value = Int64.MinValue;
+			featureTest.AssertTrue(value == Int64.MinValue);
+			value = Int64.MinValue;
+			featureTest.AssertTrue((Int64)(value - 1) == Int64.MaxValue);
 			value = -(-1);
 			featureTest.AssertTrue(value == 1);
 			value = 10;
@@ -84,7 +84,7 @@ namespace CppTranslatorFeatureTest
 			bool gotException = false;
 			try
 			{
-				value = (Int16)(value / 0);
+				value = (Int64)(value / 0);
 				featureTest.AssertTrue(false);
 			}
 			catch (Exception)
@@ -95,9 +95,9 @@ namespace CppTranslatorFeatureTest
 		}
 		private void BitwiseOperators()
 		{
-			featureTest.FailureMessage = "\tFailed Int16 Bitwise Operator Test";
-			featureTest.Send("Int16 Bitwise Operator Test");
-			Int16 value = 0;
+			featureTest.FailureMessage = "\tFailed Int64 Bitwise Operator Test";
+			featureTest.Send("Int64 Bitwise Operator Test");
+			Int64 value = 0;
 			featureTest.AssertTrue(~value == -1);
 			value = 1;
 			featureTest.AssertTrue(value << 1 == 2);

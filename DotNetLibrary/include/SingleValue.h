@@ -37,7 +37,7 @@ namespace DotnetLibrary
 		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
 		static Single		Modulus(Single v1, Single v2);
 		static Single		Parse(String* stringToParse);
-		static Boolean		TryParse(String* s, Single* result);
+		static Boolean		TryParse(String* s, Single& result);
 		static Boolean		TryParseInternal(String* source, Single& result);
 		static Boolean		TryParseInternal(Char* source, Int32 sourceLength, Single& result);
 		static Single		ToSingle(UInt32);

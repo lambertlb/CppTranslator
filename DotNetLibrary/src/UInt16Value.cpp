@@ -97,7 +97,7 @@ namespace DotnetLibrary
 			throw new OverflowException();
 		return((UInt16)value * sign);
 	}
-	bool UInt16Value::TryParse(String* stringToParse, UInt16* result)
+	bool UInt16Value::TryParse(String* stringToParse, UInt16& result)
 	{
 		Boolean goodNumber = true;
 		UInt64	value = 0;
@@ -106,7 +106,7 @@ namespace DotnetLibrary
 			goodNumber = false;
 		if (sign < 0 || value > MaxValue)
 			goodNumber = false;
-		*result = (UInt16)value;
+		result = (UInt16)value;
 		return(goodNumber);
 	}
 }

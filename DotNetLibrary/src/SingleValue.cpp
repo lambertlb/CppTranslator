@@ -150,14 +150,14 @@ namespace DotnetLibrary
 		swscanf(stringToParse->get_Buffer(), L"%G", &rtn);
 		return(rtn);
 	}
-	Boolean SingleValue::TryParse(String* source, Single* result)
+	Boolean SingleValue::TryParse(String* source, Single& result)
 	{
 		Boolean goodNumber = true;
 		Single	value = 0;
 		if (source == nullptr)
 			return(false);
 		goodNumber = TryParseInternal(source->get_Buffer(), source->get_Length(), value);
-		*result = value;
+		result = value;
 		return(goodNumber);
 	}
 	Boolean SingleValue::TryParseInternal(String* source, Single& result)

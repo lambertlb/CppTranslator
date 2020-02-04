@@ -26,27 +26,27 @@ TEST(UInt32Tests, EqualsTest) {
 TEST(UInt32Tests, TryParseTest) {
 	UInt32	value = 0;
 	String	str(L"11");
-	Boolean goodParse = UInt32Value::TryParse(&str, &value);
+	Boolean goodParse = UInt32Value::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(UInt32Tests, TryParse2Test) {
 	UInt32	value = 0;
 	String	str(L"11A");
-	Boolean goodParse = UInt32Value::TryParse(&str, &value);
+	Boolean goodParse = UInt32Value::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(UInt32Tests, TryParse3Test) {
 	UInt32	value = 0;
 	String	str(L" 11 ");
-	Boolean goodParse = UInt32Value::TryParse(&str, &value);
+	Boolean goodParse = UInt32Value::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(UInt32Tests, TryParse4Test) {
 	UInt32	value = 0;
 	String	str(L"30000000000");
-	Boolean goodParse = UInt32Value::TryParse(&str, &value);
+	Boolean goodParse = UInt32Value::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(UInt32Tests, ParseTest) {

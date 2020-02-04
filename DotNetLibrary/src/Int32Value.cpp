@@ -99,7 +99,7 @@ namespace DotnetLibrary
 			throw new OverflowException();
 		return((Int32)value * sign);
 	}
-	bool Int32Value::TryParse(String* stringToParse, Int32* result)
+	bool Int32Value::TryParse(String* stringToParse, Int32& result)
 	{
 		Boolean goodNumber = true;
 		UInt64	value = 0;
@@ -110,7 +110,7 @@ namespace DotnetLibrary
 			goodNumber = false;
 		if (sign < 0 && (Int64)value < MinValue)
 			goodNumber = false;
-		*result = (Int32)value * sign;
+		result = (Int32)value * sign;
 		return(goodNumber);
 	}
 }

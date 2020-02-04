@@ -26,27 +26,27 @@ TEST(UInt16Tests, EqualsTest) {
 TEST(UInt16Tests, TryParseTest) {
 	UInt16	value = 0;
 	String	str(L"11");
-	Boolean goodParse = UInt16Value::TryParse(&str, &value);
+	Boolean goodParse = UInt16Value::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(UInt16Tests, TryParse2Test) {
 	UInt16	value = 0;
 	String	str(L"11A");
-	Boolean goodParse = UInt16Value::TryParse(&str, &value);
+	Boolean goodParse = UInt16Value::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(UInt16Tests, TryParse3Test) {
 	UInt16	value = 0;
 	String	str(L" 11 ");
-	Boolean goodParse = UInt16Value::TryParse(&str, &value);
+	Boolean goodParse = UInt16Value::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(UInt16Tests, TryParse4Test) {
 	UInt16	value = 0;
 	String	str(L"300000");
-	Boolean goodParse = UInt16Value::TryParse(&str, &value);
+	Boolean goodParse = UInt16Value::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(UInt16Tests, ParseTest) {

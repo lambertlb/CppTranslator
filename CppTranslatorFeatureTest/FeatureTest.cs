@@ -22,6 +22,18 @@ namespace CppTranslatorFeatureTest
 			byteTest.Run();
 			Int16Test int16Test = new Int16Test(this);
 			int16Test.Run();
+			Int32Test int32Test = new Int32Test(this);
+			int32Test.Run();
+			Int64Test int64Test = new Int64Test(this);
+			int64Test.Run();
+			SByteTest sbyteTest = new SByteTest(this);
+			sbyteTest.Run();
+			UInt16Test uint16Test = new UInt16Test(this);
+			uint16Test.Run();
+			UInt32Test uint32Test = new UInt32Test(this);
+			uint32Test.Run();
+			UInt64Test uint64Test = new UInt64Test(this);
+			uint64Test.Run();
 			Send("Finished Feature Tests**");
 		}
 		public void	AssertTrue(bool value)

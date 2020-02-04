@@ -95,14 +95,14 @@ namespace DotnetLibrary
 			throw new FormatException();
 		return((Int64)value * sign);
 	}
-	bool Int64Value::TryParse(String* stringToParse, Int64* result)
+	bool Int64Value::TryParse(String* stringToParse, Int64& result)
 	{
 		Boolean goodNumber = true;
 		UInt64	value = 0;
 		Int32	sign = 0;
 		if (!UInt64Value::TryParseInternal(stringToParse, value, sign))
 			goodNumber = false;
-		*result = (Int64)value * sign;
+		result = (Int64)value * sign;
 		return(goodNumber);
 	}
 }

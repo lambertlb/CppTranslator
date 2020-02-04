@@ -239,7 +239,7 @@ namespace DotnetLibrary
 		TimeSpan	results;
 		if (s == nullptr)
 			throw new ArgumentNullException();
-		Boolean good = TryParse(s, &results);
+		Boolean good = TryParse(s, results);
 		if (!good)
 			throw new FormatException();
 		return(results);
@@ -251,9 +251,8 @@ namespace DotnetLibrary
 			throw new OverflowException();
 		return TimeSpan(result);
 	}
-	Boolean TimeSpanValue::TryParse(String* s, TimeSpan* result)
+	Boolean TimeSpanValue::TryParse(String* s, TimeSpan& result)
 	{
-		*result = 0;
 		Int64	numbers[] = { 0,0,0,0 };
 		Int32	amount = 0;
 		Int64	fractional = 0;
@@ -305,7 +304,7 @@ namespace DotnetLibrary
 		Int64 ticks = fractional + days + hours + minutes + seconds;
 		if (negate)
 			ticks = -ticks;
-		*result = ticks;
+		result = ticks;
 		return true;
 	}
 	TimeSpan TimeSpanValue::op_Addition(const TimeSpan& ts1, const TimeSpan& ts2)

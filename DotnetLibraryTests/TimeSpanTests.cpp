@@ -177,7 +177,7 @@ TEST(TimeSpanTests, TryParseTest) {
 	TimeSpan	timeSpan(0, 23, 59, 59, 999);
 	String		string(L"0:23:59:59.9990000");
 	TimeSpan	result;
-	Boolean	parsed = TimeSpanValue::TryParse(&string, &result);
+	Boolean	parsed = TimeSpanValue::TryParse(&string, result);
 	ASSERT_TRUE(parsed);
 	ASSERT_TRUE(TimeSpanValue(result).get_Ticks() == TimeSpanValue(timeSpan).get_Ticks());
 }
@@ -185,7 +185,7 @@ TEST(TimeSpanTests, TryParse2Test) {
 	TimeSpan	timeSpan(-71, 3, 12, 13);
 	String		string(L"-70.20:47:47");
 	TimeSpan	result;
-	Boolean	parsed = TimeSpanValue::TryParse(&string, &result);
+	Boolean	parsed = TimeSpanValue::TryParse(&string, result);
 	ASSERT_TRUE(parsed);
 	ASSERT_TRUE(TimeSpanValue(result).get_Ticks() == TimeSpanValue(timeSpan).get_Ticks());
 }

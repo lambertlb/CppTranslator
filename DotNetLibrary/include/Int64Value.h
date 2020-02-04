@@ -29,6 +29,6 @@ namespace DotnetLibrary
 		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
 		virtual DataType	GetRawDataType() { return(Int64Type); };
 		static Int64		Parse(String* stringToParse);
-		static bool			TryParse(String* stringToParse, Int64* result);
+		static bool			TryParse(String* stringToParse, Int64& result);
 	};
 }

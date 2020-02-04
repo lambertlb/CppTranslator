@@ -26,33 +26,33 @@ TEST(Int16Tests, EqualsTest) {
 TEST(Int16Tests, TryParseTest) {
 	Int16	value = 0;
 	String	str(L"11");
-	Boolean goodParse = Int16Value::TryParse(&str, &value);
+	Boolean goodParse = Int16Value::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(Int16Tests, TryParse2Test) {
 	Int16	value = 0;
 	String	str(L"11A");
-	Boolean goodParse = Int16Value::TryParse(&str, &value);
+	Boolean goodParse = Int16Value::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(Int16Tests, TryParse3Test) {
 	Int16	value = 0;
 	String	str(L" 11 ");
-	Boolean goodParse = Int16Value::TryParse(&str, &value);
+	Boolean goodParse = Int16Value::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(Int16Tests, TryParse4Test) {
 	Int16	value = 0;
 	String	str(L"300000");
-	Boolean goodParse = Int16Value::TryParse(&str, &value);
+	Boolean goodParse = Int16Value::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(Int16Tests, TryParse5Test) {
 	Int16	value = 0;
 	String	str(L"-11");
-	Boolean goodParse = Int16Value::TryParse(&str, &value);
+	Boolean goodParse = Int16Value::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == -11);
 }

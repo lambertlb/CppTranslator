@@ -26,20 +26,20 @@ TEST(UInt64Tests, EqualsTest) {
 TEST(UInt64Tests, TryParseTest) {
 	UInt64	value = 0;
 	String	str(L"11");
-	Boolean goodParse = UInt64Value::TryParse(&str, &value);
+	Boolean goodParse = UInt64Value::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(UInt64Tests, TryParse2Test) {
 	UInt64	value = 0;
 	String	str(L"11A");
-	Boolean goodParse = UInt64Value::TryParse(&str, &value);
+	Boolean goodParse = UInt64Value::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(UInt64Tests, TryParse3Test) {
 	UInt64	value = 0;
 	String	str(L" 11 ");
-	Boolean goodParse = UInt64Value::TryParse(&str, &value);
+	Boolean goodParse = UInt64Value::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }

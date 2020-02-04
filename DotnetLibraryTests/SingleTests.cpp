@@ -72,27 +72,27 @@ TEST(SingleTests, IsSubnormalTest) {
 TEST(SingleTests, TryParseTest) {
 	Single	value = 0;
 	String	str(L"11");
-	Boolean goodParse = SingleValue::TryParse(&str, &value);
+	Boolean goodParse = SingleValue::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(SingleTests, TryParse3Test) {
 	Single	value = 0;
 	String	str(L" 11 ");
-	Boolean goodParse = SingleValue::TryParse(&str, &value);
+	Boolean goodParse = SingleValue::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(SingleTests, TryParse4Test) {
 	Single	value = 0;
 	String	str(L"AAA");
-	Boolean goodParse = SingleValue::TryParse(&str, &value);
+	Boolean goodParse = SingleValue::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(SingleTests, TryParse5Test) {
 	Single	value = 0;
 	String	str(L"-11");
-	Boolean goodParse = SingleValue::TryParse(&str, &value);
+	Boolean goodParse = SingleValue::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == -11);
 }
