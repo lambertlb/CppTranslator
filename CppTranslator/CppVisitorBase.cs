@@ -84,7 +84,6 @@ namespace CppTranslator
 		/// </summary>
 		public virtual void AddHeaders()
 		{
-			Formatter.AppendLine("#pragma once");
 			Formatter.AppendLine("#include \"TranslatedHeader.h\"");
 		}
 		/// <summary>
