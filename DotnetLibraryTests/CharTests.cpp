@@ -26,14 +26,14 @@ TEST(CharTests, EqualsTest) {
 TEST(CharTests, TryParseTest) {
 	Char	value = 0;
 	String	str(L"A");
-	Boolean goodParse = CharValue::TryParse(&str, &value);
+	Boolean goodParse = CharValue::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == L'A');
 }
 TEST(CharTests, TryParse2Test) {
 	Char	value = 0;
 	String	str(L"AB");
-	Boolean goodParse = CharValue::TryParse(&str, &value);
+	Boolean goodParse = CharValue::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(CharTests, ParseTest) {

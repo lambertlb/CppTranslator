@@ -20,6 +20,10 @@ namespace CppTranslatorFeatureTest
 			bufferTest.Run();
 			ByteTest byteTest = new ByteTest(this);
 			byteTest.Run();
+			CharTest charTest = new CharTest(this);
+			charTest.Run();
+			DateTimeTest dateTimeTest = new DateTimeTest(this);
+			dateTimeTest.Run();
 			Int16Test int16Test = new Int16Test(this);
 			int16Test.Run();
 			Int32Test int32Test = new Int32Test(this);

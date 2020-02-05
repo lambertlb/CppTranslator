@@ -229,16 +229,16 @@ namespace DotnetLibrary
 	{
 		return(towupper(v));
 	}
-	Boolean CharValue::TryParse(String* stringToParse, Char* result)
+	Boolean CharValue::TryParse(String* stringToParse, Char& result)
 	{
-		*result = L'\0';
+		result = L'\0';
 		if (stringToParse == nullptr) {
 			return false;
 		}
 		if (stringToParse->get_Length() != 1) {
 			return false;
 		}
-		*result = stringToParse->get_Chars(0);
+		result = stringToParse->get_Chars(0);
 		return true;
 	}
 	String* CharValue::ToString()

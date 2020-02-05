@@ -49,7 +49,7 @@ namespace DotnetLibrary
 		static Char		Parse(String* stringToParse);
 		static Char		ToLower(Char v);
 		static Char		ToUpper(Char v);
-		static Boolean	TryParse(String* s, Char* result);
+		static Boolean	TryParse(String* s, Char& result);
 		String*			ToString();
 		static String*	ToString(Char v);
 		static Char		MaxValue;
