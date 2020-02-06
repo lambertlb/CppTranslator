@@ -336,12 +336,10 @@ namespace CppTranslator
 			if (inst.OpCode == OpCode.LdLoca)
 			{
 				CheckVariableAddition(((LdLoca)inst).Variable);
-				return;
 			}
-			if (inst.OpCode == OpCode.StLoc)
+			else if (inst.OpCode == OpCode.StLoc)
 			{
 				CheckVariableAddition(((StLoc)inst).Variable);
-				return;
 			}
 			foreach (ILInstruction child in inst.Children)
 			{
@@ -832,7 +830,12 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		protected override ILInstruction VisitLdcF8(LdcF8 inst)
 		{
-			ConvertConstants(inst.Value.ToString());
+			String str = inst.Value.ToString();
+			if (Char.IsDigit(str[str.Length - 1]) &&
+				!str.Contains('.', StringComparison.InvariantCulture) &&
+				!str.Contains('E', StringComparison.InvariantCulture))
+				str = str + ".0";
+			ConvertConstants(str);
 			return base.VisitLdcF8(inst);
 		}
 		/// <inheritdoc/>
@@ -1165,7 +1168,7 @@ namespace CppTranslator
 				return (false);
 			CurrentVariables.Add(variable.Name, variable.Name);
 			if (Formatter.IsOnNewline)
-				Formatter.AppendIndented("");
+				Formatter.AppendIndented(String.Empty);
 			TypeVisitor.FormatTypeDelaration(variable.Type);
 			Formatter.Append(" ");
 			return (true);

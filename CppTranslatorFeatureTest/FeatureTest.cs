@@ -30,6 +30,8 @@ namespace CppTranslatorFeatureTest
 			int32Test.Run();
 			Int64Test int64Test = new Int64Test(this);
 			int64Test.Run();
+			MathTest mathTest = new MathTest(this);
+			mathTest.Run();
 			SByteTest sbyteTest = new SByteTest(this);
 			sbyteTest.Run();
 			UInt16Test uint16Test = new UInt16Test(this);
@@ -50,15 +52,9 @@ namespace CppTranslatorFeatureTest
 			if (value1 != value2)
 				Send(FailureMessage);
 		}
-		public void AssertTrue(Double value1, Double value2, Double percision)
-		{
-			Double delta = Math.Abs(value1 - value2);
-			if (delta > percision)
-				Send(FailureMessage);
-		}
 		public void AssertTrue(Double value1, Double value2)
 		{
-			AssertTrue(value1, value2 , 0.000001);
+			AssertTrue(Math.Round(value1, 4) == Math.Round(value2, 4));
 		}
 		public static void Main(string[] args)
 		{
