@@ -21,7 +21,7 @@ namespace DotnetLibrary
 		Char				get_Chars(const Int32 index);
 		Int32				get_Length() { return((Int32)length); };
 		Char*				Address(Int32 index1, Int32 index2 = -1, Int32 index3 = -1);
-		static	Int32		Compare(Char* s1, Int32 s1Index, Char* s2, Int32 s2Index, Int32 length, Boolean ignoreCase);
+		static	Int32		Compare(Char* s1, Int32 s1Index, Char* s2, Int32 s2Index, Int32 length, Boolean ignoreCase, Boolean doOrdinal);
 		static	Int32		Compare(String* s1, String* s2, Boolean ignoreCase = false);
 		static	Int32		Compare(String* s1, const Int32 index1, String* s2, const Int32 index2, const Int32 length, Boolean ignoreCase = false);
 		static	Int32		CompareOrdinal(String* s1, String* s2);

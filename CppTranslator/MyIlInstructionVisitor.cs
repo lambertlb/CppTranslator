@@ -423,8 +423,22 @@ namespace CppTranslator
 		{
 			if (HandleStringConcat(inst))
 				return (true);
+			if (HandleStringImplicit(inst))
+				return (true);
 			return (false);
 		}
+
+		private bool HandleStringImplicit(CallInstruction inst)
+		{
+			if (inst.Method.FullName != "System.String.op_Implicit")
+				return (false);
+			LdStr ldstr = inst.Arguments.FirstOrDefault() as LdStr;
+			if (ldstr == null && inst.Arguments.Count > 1)
+				return (false);
+			Formatter.AppendStringsWithControl(ldstr.Value);
+			return (true);
+		}
+
 		private bool HandleStringConcat(CallInstruction inst)
 		{
 			if (inst.Method.FullName != "System.String.Concat")

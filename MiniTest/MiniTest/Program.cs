@@ -10,14 +10,8 @@ namespace MiniTest
 		}
 		public override void RunCode()
 		{
-			Int32 whole;
-			Int32 remainder;
-			whole = Math.DivRem(2147483647, 1073741, out remainder);
-			AssertTrue(whole == 2000 && remainder == 1647);
-			Int64 whole2;
-			Int64 remainder2;
-			whole2 = Math.DivRem(9223372036854775807L, 4611686018427387L, out remainder2);
-			AssertTrue(whole2 == 2000 && remainder2 == 1807L);
+			String value = new String("Test String");
+			AssertTrue(value.Length == 11);
 		}
 		public void AssertTrue(bool value)
 		{

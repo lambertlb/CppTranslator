@@ -95,7 +95,7 @@ namespace DotnetLibrary
 			throw new IndexOutOfRangeException();
 		return(&characterData[index1]);
 	}
-	Int32 String::Compare(Char* s1, Int32 s1Index, Char* s2, Int32 s2Index, Int32 length, Boolean ignoreCase)
+	Int32 String::Compare(Char* s1, Int32 s1Index, Char* s2, Int32 s2Index, Int32 length, Boolean ignoreCase, Boolean doOrdinal)
 	{
 		Char* str1 = s1 + s1Index;
 		Char* str2 = s2 + s2Index;
@@ -110,6 +110,12 @@ namespace DotnetLibrary
 			else {
 				c1 = *str1++;
 				c2 = *str2++;
+				if (!doOrdinal) {
+					if (CharValue::IsUpper(c1) && CharValue::IsLower(c2))
+						return(1);
+					if (CharValue::IsUpper(c2) && CharValue::IsLower(c1))
+						return(-1);
+				}
 			}
 			if (c1 == L'\0' || c1 != c2)
 				return c1 > c2 ? 1 : (c1 < c2 ? -1 : 0);
@@ -119,19 +125,19 @@ namespace DotnetLibrary
 	}
 	Int32 String::Compare(String* s1, String* s2, Boolean ignoreCase)
 	{
-		return(Compare(s1->get_Buffer(), 0, s2->get_Buffer(), 0, s1->get_Length(), ignoreCase));
+		return(Compare(s1->get_Buffer(), 0, s2->get_Buffer(), 0, s1->get_Length(), ignoreCase, false));
 	}
 	Int32 String::Compare(String* s1, const Int32 index1, String* s2, const Int32 index2, const Int32 length, Boolean ignoreCase)
 	{
-		return(Compare(s1->get_Buffer(), index1, s2->get_Buffer(), index2, length, ignoreCase));
+		return(Compare(s1->get_Buffer(), index1, s2->get_Buffer(), index2, length, ignoreCase, false));
 	}
 	Int32 String::CompareOrdinal(String* s1, String* s2)
 	{
-		return(Compare(s1->get_Buffer(), 0, s2->get_Buffer(), 0, s1->get_Length(), false));
+		return(Compare(s1->get_Buffer(), 0, s2->get_Buffer(), 0, s1->get_Length(), false, true));
 	}
 	Int32 String::CompareOrdinal(String* s1, const Int32 index1, String* s2, const Int32 index2, const Int32 length)
 	{
-		return(Compare(s1->get_Buffer(), index1, s2->get_Buffer(), index2, length, false));
+		return(Compare(s1->get_Buffer(), index1, s2->get_Buffer(), index2, length, false, true));
 	}
 	Int32 String::CompareTo(Object* value)
 	{

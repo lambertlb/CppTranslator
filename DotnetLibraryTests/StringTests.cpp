@@ -60,7 +60,7 @@ TEST(StringTests, CompareTest) {
 TEST(StringTests, Compare2Test) {
 	String	string(L"ABCDEFGHI");
 	String	string2(L"aBCDEFGHI");
-	ASSERT_TRUE(String::Compare(&string, &string2) < 0);
+	ASSERT_TRUE(String::Compare(&string, &string2) > 0);
 }
 TEST(StringTests, Compare3Test) {
 	String	string(L"ABCDEFGHI");
