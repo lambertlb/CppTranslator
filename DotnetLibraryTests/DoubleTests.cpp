@@ -47,7 +47,7 @@ TEST(DoubleTests, IsNaNTest) {
 TEST(DoubleTests, IsNegativeTest) {
 	ASSERT_TRUE(DoubleValue::IsNegative(-3.0));
 	ASSERT_TRUE(!DoubleValue::IsNegative(3.0));
-	ASSERT_TRUE(!DoubleValue::IsNegative(DoubleValue::NaN));
+	ASSERT_TRUE(DoubleValue::IsNegative(DoubleValue::NaN));
 }
 TEST(DoubleTests, IsNegativeInfinityTest) {
 	ASSERT_TRUE(DoubleValue::IsNegativeInfinity(DoubleValue::NegativeInfinity));
@@ -72,27 +72,27 @@ TEST(DoubleTests, IsSubnormalTest) {
 TEST(DoubleTests, TryParseTest) {
 	Double	value = 0;
 	String	str(L"11");
-	Boolean goodParse = DoubleValue::TryParse(&str, &value);
+	Boolean goodParse = DoubleValue::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(DoubleTests, TryParse3Test) {
 	Double	value = 0;
 	String	str(L" 11 ");
-	Boolean goodParse = DoubleValue::TryParse(&str, &value);
+	Boolean goodParse = DoubleValue::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == 11);
 }
 TEST(DoubleTests, TryParse4Test) {
 	Double	value = 0;
 	String	str(L"AAA");
-	Boolean goodParse = DoubleValue::TryParse(&str, &value);
+	Boolean goodParse = DoubleValue::TryParse(&str, value);
 	ASSERT_TRUE(!goodParse);
 }
 TEST(DoubleTests, TryParse5Test) {
 	Double	value = 0;
 	String	str(L"-11");
-	Boolean goodParse = DoubleValue::TryParse(&str, &value);
+	Boolean goodParse = DoubleValue::TryParse(&str, value);
 	ASSERT_TRUE(goodParse);
 	ASSERT_TRUE(value == -11);
 }

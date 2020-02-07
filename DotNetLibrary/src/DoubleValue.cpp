@@ -99,7 +99,7 @@ namespace DotnetLibrary
 	Boolean DoubleValue::IsNegative(Double v)
 	{
 		if (IsNaN(v))
-			return(false);
+			return(true);
 		Int64 bits = (Int64)ToUInt64(v);
 		return(bits < 0);
 	}
@@ -143,14 +143,14 @@ namespace DotnetLibrary
 		swscanf(stringToParse->get_Buffer(), L"%lG", &rtn);
 		return(rtn);
 	}
-	Boolean DoubleValue::TryParse(String* source, Double* result)
+	Boolean DoubleValue::TryParse(String* source, Double& result)
 	{
 		Boolean goodNumber = true;
 		Double	value = 0;
 		if (source == nullptr)
 			return(false);
 		goodNumber = TryParseInternal(source->get_Buffer(), source->get_Length(), value);
-		*result = value;
+		result = value;
 		return(goodNumber);
 	}
 	Boolean DoubleValue::TryParseInternal(String* source, Double& result)

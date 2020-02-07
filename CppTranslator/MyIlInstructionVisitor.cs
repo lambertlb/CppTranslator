@@ -333,6 +333,8 @@ namespace CppTranslator
 
 		private void DeclareLocalVaraibles(ILInstruction inst)
 		{
+			if (inst.OpCode == OpCode.Block && ((Block)inst).Kind == BlockKind.ArrayInitializer)
+				return;
 			if (inst.OpCode == OpCode.LdLoca)
 			{
 				CheckVariableAddition(((LdLoca)inst).Variable);

@@ -37,7 +37,7 @@ namespace DotnetLibrary
 		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
 		static Double		Modulus(Double v1, Double v2);
 		static Double		Parse(String* stringToParse);
-		static Boolean		TryParse(String* s, Double* result);
+		static Boolean		TryParse(String* s, Double& result);
 		static Boolean		TryParseInternal(String* source, Double& result);
 		static Boolean		TryParseInternal(Char* source, Int32 sourceLength, Double& result);
 		static Double		ToDouble(UInt64);

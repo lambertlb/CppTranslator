@@ -128,11 +128,11 @@ TEST(MathTests, CoshTest) {
 TEST(MathTests, DivRemTest) {
 	Int32 whole;
 	Int32 remainder;
-	whole = Math::DivRem(2147483647, 1073741, &remainder);
+	whole = Math::DivRem(2147483647, 1073741, remainder);
 	ASSERT_TRUE(whole == 2000 && remainder == 1647);
 	Int64 whole2;
 	Int64 remainder2;
-	whole2 = Math::DivRem(9223372036854775807L, 4611686018427387L, &remainder2);
+	whole2 = Math::DivRem(9223372036854775807L, 4611686018427387L, remainder2);
 	ASSERT_TRUE(whole2 == 2000 && remainder2 == 1807L);
 }
 TEST(MathTests, ExpTest) {

@@ -289,8 +289,11 @@ namespace DotnetLibrary
 	}
 	Double Math::Divide(Double v1, Double v2)
 	{
-		if (v2 == 0)
-			throw new DivideByZeroException();
+		if (v2 == 0) {
+			if (v1 == 0)
+				return(DoubleValue::NaN);
+			return(DoubleValue::PositiveInfinity);
+		}
 		return v1 / v2;
 	}
 	Int32 Math::DivRem(Int32 a, Int32 b, Int32& result)
