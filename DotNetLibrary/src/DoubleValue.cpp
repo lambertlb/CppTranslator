@@ -7,7 +7,7 @@ namespace DotnetLibrary
 {
 	DLL_EXPORT Double	DoubleValue::MaxValue = 1.797693134862315E+308;
 	DLL_EXPORT Double	DoubleValue::MinValue = -1.797693134862315E+308;
-	DLL_EXPORT Double	DoubleValue::Epsilon = DBL_EPSILON;
+	DLL_EXPORT Double	DoubleValue::Epsilon = 4.94065645841247E-324;
 	DLL_EXPORT Double	DoubleValue::NaN = NAN;
 	DLL_EXPORT Double	DoubleValue::PositiveInfinity = INFINITY;
 	DLL_EXPORT Double	DoubleValue::NegativeInfinity = -INFINITY;

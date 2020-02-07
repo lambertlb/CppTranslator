@@ -106,7 +106,7 @@ namespace DotnetLibrary
 	Boolean SingleValue::IsNegative(Single v)
 	{
 		if (IsNaN(v))
-			return(false);
+			return(true);
 		Int64 bits = (Int32)ToUInt32(v);
 		return(bits < 0);
 	}

@@ -47,7 +47,7 @@ TEST(SingleTests, IsNaNTest) {
 TEST(SingleTests, IsNegativeTest) {
 	ASSERT_TRUE(SingleValue::IsNegative(-3.0));
 	ASSERT_TRUE(!SingleValue::IsNegative(3.0));
-	ASSERT_TRUE(!SingleValue::IsNegative(SingleValue::NaN));
+	ASSERT_TRUE(SingleValue::IsNegative(SingleValue::NaN));
 }
 TEST(SingleTests, IsNegativeInfinityTest) {
 	ASSERT_TRUE(SingleValue::IsNegativeInfinity(SingleValue::NegativeInfinity));
