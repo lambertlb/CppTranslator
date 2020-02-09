@@ -393,6 +393,34 @@ namespace DotnetLibrary
 		}
 		return(true);
 	}
+	String* String::Join(Char separator, Array* values, const Int32 startIndex, Int32 count)
+	{
+		if (values == nullptr) {
+			throw new ArgumentNullException();
+		}
+		if (values->get_Length() == 0) {
+			return String::Empty;
+		}
+		values->EnsureSingleDimension();
+		if (values->GetRawDataType() != ObjectType && values->GetRawDataType() != StringType)
+			throw new ArgumentNullException();
+		if (startIndex < 0)
+			throw new ArgumentNullException();
+		if (count < 0)
+			count = values->get_Length() - startIndex;
+		if (count > values->get_Length() - startIndex)
+			throw new ArgumentNullException();
+		Int32 endIndex = count + startIndex;
+		StringBuilder sb;
+		Boolean isFirst = true;
+		for (int i = startIndex; i < endIndex; ++i) {
+			if (!isFirst)
+				sb.Append(separator);
+			isFirst = false;
+			sb.Append(*(Object**)values->Address(i));
+		}
+		return(sb.ToString());
+	}
 	String* String::Join(String* separator, Array* values, const Int32 startIndex, Int32 count)
 	{
 		if (values == nullptr) {

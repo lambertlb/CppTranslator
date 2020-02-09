@@ -60,6 +60,7 @@ namespace DotnetLibrary
 		static Boolean		IsNullOrEmpty(String* value);
 		static Boolean		IsNullOrWhiteSpace(String* value);
 		static Boolean		IsWhiteSpace(Char value, Char* separators, Int32 separatorSize);
+		static	String*		Join(Char separator, Array* values, const Int32 startIndex = 0, Int32 count = -1);
 		static	String*		Join(String* separator, Array* values, const Int32 startIndex = 0, Int32 count = -1);
 		Int32				LastIndexOf(const Char value, Int32 startIndex = -1, Int32 count = -1);
 		Int32				LastIndexOf(String* value, Int32 startIndex = -1, Int32 count = -1);
