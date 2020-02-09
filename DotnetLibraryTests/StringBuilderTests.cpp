@@ -127,7 +127,6 @@ TEST(StringbuilderTests, EqualsTest) {
 	StringBuilder	stringBuilder(&str);
 	StringBuilder	stringBuilder2(&str);
 	ASSERT_TRUE(stringBuilder.Equals(&stringBuilder2));
-	ASSERT_TRUE(stringBuilder.Equals((Object*)&stringBuilder2));
 }
 TEST(StringbuilderTests, ToStringTest) {
 	String str(L"TESTING1234");

@@ -44,6 +44,8 @@ namespace CppTranslatorFeatureTest
 				singleTest.Run();
 				StringTest stringTest = new StringTest(this);
 				stringTest.Run();
+				StringBuilderTest stringBuilderTest = new StringBuilderTest(this);
+				stringBuilderTest.Run();
 				UInt16Test uint16Test = new UInt16Test(this);
 				uint16Test.Run();
 				UInt32Test uint32Test = new UInt32Test(this);

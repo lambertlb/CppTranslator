@@ -339,6 +339,23 @@ namespace DotnetLibrary
 	{
 		throw new NotImplementedException();
 	}
+	StringBuilder* StringBuilder::AppendLine()
+	{
+#ifdef WIN32
+		Append(L'\r');
+#endif // WIN32
+		return(Append(L'\n'));
+	}
+	StringBuilder* StringBuilder::AppendLine(String* value)
+	{
+		Append(value);
+		return(AppendLine());
+	}
+	StringBuilder* StringBuilder::Clear()
+	{
+		set_Length(0);
+		return(this);
+	}
 	void StringBuilder::EnsureRoomFor(Int32 amount)
 	{
 		EnsureCapacity(currentLength + amount);
@@ -352,11 +369,6 @@ namespace DotnetLibrary
 			set_Capacity(capacity);
 		}
 		return get_Capacity();
-	}
-	Boolean StringBuilder::Equals(Object* object)
-	{
-		StringBuilder* sb = dynamic_cast<StringBuilder*>(object);
-		return(Equals(sb));
 	}
 	Boolean StringBuilder::Equals(StringBuilder* sb)
 	{
