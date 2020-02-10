@@ -165,7 +165,7 @@ TEST(TimeSpanTests, SubtractTest) {
 TEST(TimeSpanTests, ToStringTest) {
 	TimeSpan	timeSpan(0, 23, 59, 59, 999);
 	String* answer = TimeSpanValue(timeSpan).ToString();
-	ASSERT_TRUE(wcscmp(answer->get_Buffer(), L"0.23:59:59.9990000") == 0);
+	ASSERT_TRUE(wcscmp(answer->get_Buffer(), L"23:59:59.9990000") == 0);
 }
 TEST(TimeSpanTests, ToString2Test) {
 	TimeSpan	timeSpan(-71, 3, 12, 13);
