@@ -27,7 +27,7 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(timeSpan.Minutes == 3);
 			featureTest.AssertTrue(timeSpan.Seconds == 4);
 			featureTest.AssertTrue(timeSpan.Ticks == 937840050000);
-			featureTest.AssertTrue(timeSpan.TotalDays == 1.0854630208333333);
+			featureTest.AssertTrue(timeSpan.TotalDays , 1.0854630208333333);
 			featureTest.AssertTrue(timeSpan.TotalHours == 26.0511125);
 			featureTest.AssertTrue(timeSpan.TotalMilliseconds == 93784005);
 			featureTest.AssertTrue(timeSpan.TotalMinutes == 1563.06675);
