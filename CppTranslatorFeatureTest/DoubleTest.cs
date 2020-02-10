@@ -48,27 +48,29 @@ namespace CppTranslatorFeatureTest
 			Double parsed;
 			featureTest.AssertTrue(Double.TryParse(str, out parsed));
 			featureTest.AssertTrue(parsed == 35.3);
-			featureTest.AssertTrue(Double.IsFinite(3.0 / 1));
-			featureTest.AssertTrue(!Double.IsFinite(Double.NaN));
 			featureTest.AssertTrue(!Double.IsInfinity(3.0 / 1));
 			featureTest.AssertTrue(Double.IsInfinity(Double.PositiveInfinity));
 			featureTest.AssertTrue(!Double.IsNaN(3.0 / 1));
 			featureTest.AssertTrue(Double.IsNaN(Double.NaN));
-			featureTest.AssertTrue(Double.IsNegative(-3.0));
-			featureTest.AssertTrue(!Double.IsNegative(3.0));
-			featureTest.AssertTrue(Double.IsNegative(Double.NaN));
 			featureTest.AssertTrue(Double.IsNegativeInfinity(Double.NegativeInfinity));
 			featureTest.AssertTrue(!Double.IsNegativeInfinity(Double.PositiveInfinity));
 			featureTest.AssertTrue(!Double.IsNegativeInfinity(Double.NaN));
-			featureTest.AssertTrue(Double.IsNormal(3.0));
-			featureTest.AssertTrue(!Double.IsNormal(Double.PositiveInfinity));
-			featureTest.AssertTrue(!Double.IsNormal(Double.NaN));
 			featureTest.AssertTrue(!Double.IsPositiveInfinity(Double.NegativeInfinity));
 			featureTest.AssertTrue(Double.IsPositiveInfinity(Double.PositiveInfinity));
 			featureTest.AssertTrue(!Double.IsPositiveInfinity(Double.NaN));
+#if V3
+			featureTest.AssertTrue(Double.IsFinite(3.0 / 1));
+			featureTest.AssertTrue(!Double.IsFinite(Double.NaN));
+			featureTest.AssertTrue(Double.IsNegative(-3.0));
+			featureTest.AssertTrue(!Double.IsNegative(3.0));
+			featureTest.AssertTrue(Double.IsNegative(Double.NaN));
+			featureTest.AssertTrue(Double.IsNormal(3.0));
+			featureTest.AssertTrue(!Double.IsNormal(Double.PositiveInfinity));
+			featureTest.AssertTrue(!Double.IsNormal(Double.NaN));
 			featureTest.AssertTrue(Double.IsSubnormal(Double.Epsilon));
 			featureTest.AssertTrue(Double.IsSubnormal(2.2250738585072009E-308));
 			featureTest.AssertTrue(!Double.IsSubnormal(2.2250738585072014E-308));
+#endif
 		}
 
 		private void OperatorTests()

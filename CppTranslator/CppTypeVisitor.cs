@@ -31,7 +31,7 @@ namespace CppTranslator
 		/// <summary>
 		/// Map C# types to C++ types
 		/// </summary>
-		private Dictionary<String, String> types = new Dictionary<String, String>();
+		private Dictionary<String, String> typeTranslation = new Dictionary<String, String>();
 		/// <summary>
 		/// Formatter for output
 		/// </summary>
@@ -44,20 +44,20 @@ namespace CppTranslator
 		public CppTypeVisitor(CppVisitorBase baseVisitor)
 		{
 			this.Formatter = baseVisitor.Formatter;
-			types.Add("bool", "Boolean");
-			types.Add("byte", "Byte");
-			types.Add("sbyte", "SByte");
-			types.Add("char", "Char");
-			types.Add("double", "Double");
-			types.Add("float", "Float");
-			types.Add("int", "Int32");
-			types.Add("uint", "UInt32");
-			types.Add("long", "Int64");
-			types.Add("ulong", "UInt64");
-			types.Add("object", "Object");
-			types.Add("short", "Int16");
-			types.Add("ushort", "UInt16");
-			types.Add("string", "String");
+			typeTranslation.Add("bool", "Boolean");
+			typeTranslation.Add("byte", "Byte");
+			typeTranslation.Add("sbyte", "SByte");
+			typeTranslation.Add("char", "Char");
+			typeTranslation.Add("double", "Double");
+			typeTranslation.Add("float", "Float");
+			typeTranslation.Add("int", "Int32");
+			typeTranslation.Add("uint", "UInt32");
+			typeTranslation.Add("long", "Int64");
+			typeTranslation.Add("ulong", "UInt64");
+			typeTranslation.Add("object", "Object");
+			typeTranslation.Add("short", "Int16");
+			typeTranslation.Add("ushort", "UInt16");
+			typeTranslation.Add("string", "String");
 		}
 		/// <summary>
 		/// Format a type declaration
@@ -154,9 +154,9 @@ namespace CppTranslator
 		/// <param name="type">to add</param>
 		public void AppendType(String type)
 		{
-			if (types.ContainsKey(type))
+			if (typeTranslation.ContainsKey(type))
 			{
-				Formatter.Append(types[type]);
+				Formatter.Append(typeTranslation[type]);
 				return;
 			}
 			Formatter.Append(type);

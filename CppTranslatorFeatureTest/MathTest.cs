@@ -33,14 +33,6 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(Math.Atan(57.74), 1.55348);
 			featureTest.AssertTrue(Math.Atanh(0.32), 0.331647);
 			featureTest.AssertTrue(Math.BigMul(10000, 10000) == 10000 * 10000);
-			featureTest.AssertTrue(Math.BitDecrement(0.63661977236758134), 0.63661977236758127);
-			featureTest.AssertTrue(Double.IsNaN(Math.BitDecrement(Double.NaN)));
-			featureTest.AssertTrue(Math.BitDecrement(0), Double.Epsilon);
-			featureTest.AssertTrue(Double.IsNegativeInfinity(Math.BitDecrement(Double.NegativeInfinity)));
-			featureTest.AssertTrue(Math.BitIncrement(0.63661977236758134), 0.63661977236758149);
-			featureTest.AssertTrue(Double.IsNaN(Math.BitIncrement(Double.NaN)));
-			featureTest.AssertTrue(Math.BitIncrement(0), Double.Epsilon);
-			featureTest.AssertTrue(Math.BitIncrement(Double.NegativeInfinity), Double.MinValue);
 			featureTest.AssertTrue(Math.Cbrt(0.70710678118654752), 0.89089871814033930);
 			featureTest.AssertTrue(Double.IsNaN(Math.Cbrt(Double.NaN)));
 			featureTest.AssertTrue(Math.Ceiling(0.31830988618379067), 1.0);
@@ -74,10 +66,6 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(Math.Clamp((UInt64)3, (UInt64)2, (UInt64)4) == 3);
 			featureTest.AssertTrue(Math.Clamp((UInt64)1, (UInt64)2, (UInt64)4) == 2);
 			featureTest.AssertTrue(Math.Clamp((UInt64)5, (UInt64)2, (UInt64)4) == 4);
-			featureTest.AssertTrue(Math.CopySign(-3.1415926535897932, -3.1415926535897932), -3.1415926535897932);
-			featureTest.AssertTrue(Math.CopySign(-3.1415926535897932, 0.0), 3.1415926535897932);
-			featureTest.AssertTrue(Math.CopySign(-3.1415926535897932, -0.0), -3.1415926535897932);
-			featureTest.AssertTrue(Math.CopySign(-3.1415926535897932, Double.NaN), -3.1415926535897932);
 			featureTest.AssertTrue(Math.Cos(-3.1415926535897932), -1.0);
 			featureTest.AssertTrue(Math.Cosh(-3.1415926535897932), 11.591953275521521);
 			Int32 whole;
@@ -90,14 +78,10 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(whole2 == 2000 && remainder2 == 1807L);
 			featureTest.AssertTrue(Math.Exp(-3.1415926535897932), 0.043213918263772250);
 			featureTest.AssertTrue(Math.Floor(-3.1415926535897932), -4.0);
-			featureTest.AssertTrue(Math.FusedMultiplyAdd(5, 4, 3), 23);
 			featureTest.AssertTrue(Math.IEEERemainder(3, 2), -1);
-			featureTest.AssertTrue(Math.ILogB(0.11331473229676087), -4.0);
-			featureTest.AssertTrue(Math.ILogB(0.5), -1.0);
 			featureTest.AssertTrue(Math.Log(0.043213918263772250), -3.1415926535897932);
 			featureTest.AssertTrue(Math.Log(14, 3.0), 2.40217350273);
 			featureTest.AssertTrue(Math.Log10(6.1009598002416937), 0.78539816339744831);
-			featureTest.AssertTrue(Math.Log2(0.58019181037172444), -0.78539816339744831);
 			featureTest.AssertTrue(Math.Max((Byte)5, (Byte)3) == 5);
 			featureTest.AssertTrue(Math.Max((Double)5, (Double)3) == 5);
 			featureTest.AssertTrue(Math.Max((Int16)5, (Int16)3) == 5);
@@ -119,13 +103,10 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(Math.Min((UInt16)5, (UInt16)3) == 3);
 			featureTest.AssertTrue(Math.Min((UInt32)5, (UInt32)3) == 3);
 			featureTest.AssertTrue(Math.Min((UInt64)5, (UInt64)3) == 3);
-			featureTest.AssertTrue(Math.MaxMagnitude(2.0, -3.0) , -3);
-			featureTest.AssertTrue(Math.MinMagnitude(2.0, -3.0), 2.0);
 			featureTest.AssertTrue(Math.Pow(7.0, 3.0), 343.0);
 			featureTest.AssertTrue(Math.Round(1.4), 1.0);
 			featureTest.AssertTrue(Math.Round(1.5), 2.0);
 			featureTest.AssertTrue(Math.Round(3.42156, 3, MidpointRounding.AwayFromZero), 3.422);
-			featureTest.AssertTrue(Math.ScaleB(4.9334096679145963, 2), 19.733638671658387);
 			featureTest.AssertTrue(Math.Sign(1.4) == 1);
 			featureTest.AssertTrue(Math.Sign(-1.4) == -1);
 			featureTest.AssertTrue(Math.Sign((short)2) == 1);
@@ -141,6 +122,27 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(Math.Sqrt(0.31830988618379067), 0.56418958354775629);
 			featureTest.AssertTrue(Math.Tan(-2.3025850929940457), 1.1134071468135374);
 			featureTest.AssertTrue(Math.Truncate(3.14159), 3.0);
+#if V3
+			featureTest.AssertTrue(Math.BitDecrement(0.63661977236758134), 0.63661977236758127);
+			featureTest.AssertTrue(Double.IsNaN(Math.BitDecrement(Double.NaN)));
+			featureTest.AssertTrue(Math.BitDecrement(0), Double.Epsilon);
+			featureTest.AssertTrue(Double.IsNegativeInfinity(Math.BitDecrement(Double.NegativeInfinity)));
+			featureTest.AssertTrue(Math.BitIncrement(0.63661977236758134), 0.63661977236758149);
+			featureTest.AssertTrue(Double.IsNaN(Math.BitIncrement(Double.NaN)));
+			featureTest.AssertTrue(Math.BitIncrement(0), Double.Epsilon);
+			featureTest.AssertTrue(Math.BitIncrement(Double.NegativeInfinity), Double.MinValue);
+			featureTest.AssertTrue(Math.CopySign(-3.1415926535897932, -3.1415926535897932), -3.1415926535897932);
+			featureTest.AssertTrue(Math.CopySign(-3.1415926535897932, 0.0), 3.1415926535897932);
+			featureTest.AssertTrue(Math.CopySign(-3.1415926535897932, -0.0), -3.1415926535897932);
+			featureTest.AssertTrue(Math.CopySign(-3.1415926535897932, Double.NaN), -3.1415926535897932);
+			featureTest.AssertTrue(Math.FusedMultiplyAdd(5, 4, 3), 23);
+			featureTest.AssertTrue(Math.ILogB(0.11331473229676087), -4.0);
+			featureTest.AssertTrue(Math.ILogB(0.5), -1.0);
+			featureTest.AssertTrue(Math.Log2(0.58019181037172444), -0.78539816339744831);
+			featureTest.AssertTrue(Math.MaxMagnitude(2.0, -3.0) , -3);
+			featureTest.AssertTrue(Math.MinMagnitude(2.0, -3.0), 2.0);
+			featureTest.AssertTrue(Math.ScaleB(4.9334096679145963, 2), 19.733638671658387);
+#endif
 		}
 	}
 }

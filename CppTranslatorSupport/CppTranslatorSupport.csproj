@@ -1,9 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
+<PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+ 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ApplicationIcon />
+    <StartupObject />
+</PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>$(SolutionDir)$(Configuration)</OutputPath>

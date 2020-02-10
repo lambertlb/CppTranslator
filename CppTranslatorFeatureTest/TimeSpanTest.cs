@@ -31,7 +31,7 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(timeSpan.TotalHours == 26.0511125);
 			featureTest.AssertTrue(timeSpan.TotalMilliseconds == 93784005);
 			featureTest.AssertTrue(timeSpan.TotalMinutes == 1563.06675);
-			featureTest.AssertTrue(timeSpan.TotalSeconds == 93784.005);
+			featureTest.AssertTrue(timeSpan.TotalSeconds , 93784.005);
 		}
 		private void OperatorTests()
 		{
@@ -75,9 +75,9 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(new TimeSpan(-12345).Duration() == new TimeSpan(12345));
 			featureTest.AssertTrue(TimeSpan.FromDays(100.5) == new TimeSpan(100, 12, 0, 0));
 			featureTest.AssertTrue(TimeSpan.FromHours(100.5) == new TimeSpan(4, 4, 30, 0));
-			featureTest.AssertTrue(TimeSpan.FromMilliseconds(1500.5) == new TimeSpan(15005000));
-			featureTest.AssertTrue(TimeSpan.FromMinutes(1.23456) == new TimeSpan((Int64)(1.23456 * 60 * 10000000)));
-			featureTest.AssertTrue(TimeSpan.FromSeconds(1.23456) == new TimeSpan(12345600));
+			featureTest.AssertTrue(TimeSpan.FromMilliseconds(1500.0) == new TimeSpan(15000000));
+			featureTest.AssertTrue(TimeSpan.FromMinutes(12.0) == new TimeSpan((Int64)(12L * 60 * 10000000)));
+			featureTest.AssertTrue(TimeSpan.FromSeconds(1.0) == new TimeSpan(10000000));
 			featureTest.AssertTrue(TimeSpan.FromTicks(12345600) == new TimeSpan(12345600));
 			featureTest.AssertTrue(new TimeSpan(2, 30, 0).Multiply(2.0) == new TimeSpan(5, 0, 0));
 			featureTest.AssertTrue(new TimeSpan(1, 2, 3).Negate() == new TimeSpan(-1, -2, -3));

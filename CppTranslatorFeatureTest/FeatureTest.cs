@@ -84,7 +84,7 @@ namespace CppTranslatorFeatureTest
 		{
 			AssertTrue(Math.Round(value1, 4) == Math.Round(value2, 4));
 		}
-		public static void Main(string[] args)
+		public static void Main()
 		{
 			FeatureTest featureTest = new FeatureTest();
 			featureTest.RunCode();

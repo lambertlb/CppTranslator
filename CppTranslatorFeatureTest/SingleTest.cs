@@ -48,27 +48,29 @@ namespace CppTranslatorFeatureTest
 			Single parsed;
 			featureTest.AssertTrue(Single.TryParse(str, out parsed));
 			featureTest.AssertTrue(parsed == 35.3F);
-			featureTest.AssertTrue(Single.IsFinite(3.0F / 1F));
-			featureTest.AssertTrue(!Single.IsFinite(Single.NaN));
 			featureTest.AssertTrue(!Single.IsInfinity(3.0F / 1F));
 			featureTest.AssertTrue(Single.IsInfinity(Single.PositiveInfinity));
 			featureTest.AssertTrue(!Single.IsNaN(3.0F / 1F));
 			featureTest.AssertTrue(Single.IsNaN(Single.NaN));
-			featureTest.AssertTrue(Single.IsNegative(-3.0F));
-			featureTest.AssertTrue(!Single.IsNegative(3.0F));
-			featureTest.AssertTrue(Single.IsNegative(Single.NaN));
 			featureTest.AssertTrue(Single.IsNegativeInfinity(Single.NegativeInfinity));
 			featureTest.AssertTrue(!Single.IsNegativeInfinity(Single.PositiveInfinity));
 			featureTest.AssertTrue(!Single.IsNegativeInfinity(Single.NaN));
-			featureTest.AssertTrue(Single.IsNormal(3.0F));
-			featureTest.AssertTrue(!Single.IsNormal(Single.PositiveInfinity));
-			featureTest.AssertTrue(!Single.IsNormal(Single.NaN));
 			featureTest.AssertTrue(!Single.IsPositiveInfinity(Single.NegativeInfinity));
 			featureTest.AssertTrue(Single.IsPositiveInfinity(Single.PositiveInfinity));
 			featureTest.AssertTrue(!Single.IsPositiveInfinity(Single.NaN));
+#if V3
+			featureTest.AssertTrue(Single.IsFinite(3.0F / 1F));
+			featureTest.AssertTrue(!Single.IsFinite(Single.NaN));
+			featureTest.AssertTrue(Single.IsNegative(-3.0F));
+			featureTest.AssertTrue(!Single.IsNegative(3.0F));
+			featureTest.AssertTrue(Single.IsNegative(Single.NaN));
+			featureTest.AssertTrue(Single.IsNormal(3.0F));
+			featureTest.AssertTrue(!Single.IsNormal(Single.PositiveInfinity));
+			featureTest.AssertTrue(!Single.IsNormal(Single.NaN));
 			featureTest.AssertTrue(Single.IsSubnormal(-1.401298E-45f));
 			featureTest.AssertTrue(Single.IsSubnormal(1.17549421E-38f));
 			featureTest.AssertTrue(!Single.IsSubnormal(1.17549435E-38f));
+#endif
 		}
 
 		private void OperatorTests()
