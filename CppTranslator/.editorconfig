@@ -92,3 +92,9 @@ dotnet_diagnostic.SA1520.severity = none
 
 # SA1005: Single line comments should begin with single space
 dotnet_diagnostic.SA1005.severity = none
+
+# CA1031: Do not catch general exception types
+dotnet_diagnostic.CA1031.severity = none
+
+# CA5366: Use XmlReader For DataSet Read Xml
+dotnet_diagnostic.CA5366.severity = none

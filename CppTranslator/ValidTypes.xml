@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ValidClasses>
+	<ValidClass>
+		<Name>System.Array</Name>
+		<ValidMethod>
+			<Signature>Clear(System.Array,Int32,Int32)</Signature>
+		</ValidMethod>
+		<ValidMethod>
+			<Signature>Clear1(System.Array,Int32,Int32)</Signature>
+		</ValidMethod>
+		<ValidMethod>
+			<Signature>Clear2(System.Array,Int32,Int32)</Signature>
+		</ValidMethod>
+		<ValidMethod>
+			<Signature>Clear3(System.Array,Int32,Int32)</Signature>
+		</ValidMethod>
+	</ValidClass>
+	<ValidClass>
+		<Name>System.Byte</Name>
+		<ValidMethod>
+			<Signature>Clear(System.Array,Int32,Int32)</Signature>
+		</ValidMethod>
+		<ValidMethod>
+			<Signature>Clear1(System.Array,Int32,Int32)</Signature>
+		</ValidMethod>
+		<ValidMethod>
+			<Signature>Clear2(System.Array,Int32,Int32)</Signature>
+		</ValidMethod>
+		<ValidMethod>
+			<Signature>Clear3(System.Array,Int32,Int32)</Signature>
+		</ValidMethod>
+	</ValidClass>
+</ValidClasses>

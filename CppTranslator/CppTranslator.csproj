@@ -13,7 +13,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ICSharpCode.Decompiler" Version="5.0.2.5153" />
 		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,5 +22,13 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\ILSpy\ICSharpCode.Decompiler\ICSharpCode.Decompiler.csproj" />
+	</ItemGroup>
+
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+	  <Exec Command="$(ProjectDir)PreBuild.bat &quot;$(DevEnvDir)\..\Tools&quot;" />
+	</Target>
 
 </Project>

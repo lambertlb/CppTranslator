@@ -17,6 +17,7 @@
 // DEALINGS IN THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using System.Data;
 using ICSharpCode.Decompiler.IL;
 using ICSharpCode.Decompiler.TypeSystem;
 using ICSharpCode.Decompiler.TypeSystem.Implementation;
@@ -58,6 +59,46 @@ namespace CppTranslator
 			typeTranslation.Add("short", "Int16");
 			typeTranslation.Add("ushort", "UInt16");
 			typeTranslation.Add("string", "String");
+			ValidClasses validClasses = new ValidClasses();
+#if DEBUG
+			String typeFilePath = AppDomain.CurrentDomain.BaseDirectory + @"..\..\ValidTypes.xml";
+#else
+			String typeFilePath = AppDomain.CurrentDomain.BaseDirectory + @"ValidTypes.xml";
+#endif
+			try
+			{
+				validClasses.ReadXml(typeFilePath, XmlReadMode.ReadSchema);
+				LoadValidationData(validClasses);
+			}
+			catch (Exception)
+			{
+			}
+			validClasses.Dispose();
+		}
+
+		private void LoadValidationData(ValidClasses validClasses)
+		{
+			ValidClasses.ValidClassDataTable table = validClasses.ValidClass;
+			foreach (ValidClasses.ValidClassRow validRow in table)
+			{
+				foreach (ValidClasses.ValidMethodRow methodRow in validRow.GetValidMethodRows())
+				{
+
+				}
+			}
+		}
+
+		/// <summary>
+		/// Make sure this is supported type
+		/// </summary>
+		/// <param name="type">to check</param>
+		private void ValidateType(IType type)
+		{
+			if (!type.FullName.StartsWith("System.", StringComparison.InvariantCulture))
+				return;
+			if (type.FullName != "System.Array")
+			{
+			}
 		}
 		/// <summary>
 		/// Format a type declaration
@@ -65,12 +106,14 @@ namespace CppTranslator
 		/// <param name="type">to format</param>
 		public void FormatTypeDelaration(IType type)
 		{
+			ValidateType(type);
 			FormatType(type);
 			if (IsPointerType(type))
 			{
 				Formatter.Append("*");
 			}
 		}
+
 		/// <summary>
 		/// Format a type
 		/// </summary>
@@ -146,6 +189,8 @@ namespace CppTranslator
 				return (((LdElema)inst).Type);
 			else if (inst is AddressOf)
 				return (((AddressOf)inst).Type);
+			else if (inst is StLoc)
+				return (((StLoc)inst).Variable.Type);
 			return (defaultType);
 		}
 		/// <summary>
