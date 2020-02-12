@@ -398,6 +398,7 @@ namespace CppTranslator
 		}
 		private void FormatCall(CallInstruction inst)
 		{
+			TypeVisitor.ValidateCall(inst);
 			if (HandleSpecialCalls(inst))
 				return;
 			String methodName = GetMethodName(inst.Method.Name);

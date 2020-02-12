@@ -33,6 +33,9 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(date1.Ticks == 631972314301000000);
 			featureTest.AssertTrue(date1.TimeOfDay == new TimeSpan(0,10,30,30,100));
 			featureTest.AssertTrue(date1.Year == 2003);
+			DateTime localTime = DateTime.Now;
+			DateTime localTimeSansTime = new DateTime(localTime.Year, localTime.Month, localTime.Day);
+			featureTest.AssertTrue(DateTime.Today == localTimeSansTime);
 		}
 
 		private void OperatorTests()
@@ -58,6 +61,7 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(date2 <= date2a);
 			featureTest.AssertTrue(!(date2 <= date1));
 			featureTest.AssertTrue((date3 - date1) == span1);
+			featureTest.AssertTrue((date3 - span1) == date1);
 		}
 		private void MethodTests()
 		{

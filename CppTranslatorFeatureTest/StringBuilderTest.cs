@@ -27,6 +27,8 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(sb[0] == '1');
 			featureTest.AssertTrue(sb[1] == '2');
 			featureTest.AssertTrue(sb[2] == '3');
+			sb[1] = '5';
+			featureTest.AssertTrue(sb[1] == '5');
 			featureTest.AssertTrue(sb.Length == 3);
 			sb.Length = 0;
 			featureTest.AssertTrue(sb.Length == 0);
@@ -45,8 +47,11 @@ namespace CppTranslatorFeatureTest
 			sb.Clear();
 			featureTest.AssertTrue(sb.Length == 0);
 			sb.Append(str1);
+			featureTest.AssertTrue(sb.ToString() == "ABC");
+			featureTest.AssertTrue(sb.ToString(1,2) == "BC");
 			StringBuilder sb2 = new StringBuilder(str1);
 			featureTest.AssertTrue(sb.Equals(sb2));
+			featureTest.AssertTrue(sb.EnsureCapacity(128) == 128);
 		}
 
 		private void AppendTest()
@@ -54,6 +59,9 @@ namespace CppTranslatorFeatureTest
 			StringBuilder sb = new StringBuilder();
 			Char[] chars = new char[] { 'A', 'B', 'C' };
 			sb.Append(chars);
+			featureTest.AssertTrue(sb.Length == 3 && sb[0] == 'A' && sb[1] == 'B' && sb[2] == 'C');
+			sb.Length = 0;
+			sb.Append(chars,0,chars.Length);
 			featureTest.AssertTrue(sb.Length == 3 && sb[0] == 'A' && sb[1] == 'B' && sb[2] == 'C');
 			featureTest.AssertTrue(sb.ToString() == "ABC");
 			sb.Length = 0;

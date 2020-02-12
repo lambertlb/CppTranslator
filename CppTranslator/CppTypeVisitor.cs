@@ -18,6 +18,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
+using System.Text;
 using ICSharpCode.Decompiler.IL;
 using ICSharpCode.Decompiler.TypeSystem;
 using ICSharpCode.Decompiler.TypeSystem.Implementation;
@@ -29,6 +31,10 @@ namespace CppTranslator
 	/// </summary>
 	public class CppTypeVisitor : TypeVisitor
 	{
+		/// <summary>
+		/// Collection of legal types and method signatures
+		/// </summary>
+		private Dictionary<String, String> legalTypes = new Dictionary<String, String>();
 		/// <summary>
 		/// Map C# types to C++ types
 		/// </summary>
@@ -81,9 +87,10 @@ namespace CppTranslator
 			ValidClasses.ValidClassDataTable table = validClasses.ValidClass;
 			foreach (ValidClasses.ValidClassRow validRow in table)
 			{
+				legalTypes.Add(validRow.Name, validRow.Name);
 				foreach (ValidClasses.ValidMethodRow methodRow in validRow.GetValidMethodRows())
 				{
-
+					legalTypes.Add(methodRow.Signature, methodRow.Signature);
 				}
 			}
 		}
@@ -94,12 +101,54 @@ namespace CppTranslator
 		/// <param name="type">to check</param>
 		private void ValidateType(IType type)
 		{
-			if (!type.FullName.StartsWith("System.", StringComparison.InvariantCulture))
+			ValidateType(type.FullName);
+		}
+		private void ValidateType(String typeToValidate)
+		{
+			typeToValidate = typeToValidate.Replace("&", String.Empty, StringComparison.InvariantCulture);
+			if (!typeToValidate.StartsWith("System.", StringComparison.InvariantCulture))
 				return;
-			if (type.FullName != "System.Array")
+			if (!legalTypes.ContainsKey(typeToValidate))
 			{
+				IllegalType(typeToValidate);
 			}
 		}
+		/// <summary>
+		/// Make sure this call uses valid types
+		/// </summary>
+		/// <param name="inst">Call Instruction</param>
+		public void ValidateCall(CallInstruction inst)
+		{
+			String signature = BuildCallSignature(inst);
+			ValidateType(signature);
+		}
+
+		private string BuildCallSignature(CallInstruction inst)
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append(inst.Method.FullName);
+			sb.Append('(');
+			bool needComma = false;
+			foreach (IParameter parameter in inst.Method.Parameters)
+			{
+				ValidateType(parameter.Type);
+				if (needComma)
+					sb.Append(',');
+				sb.Append(parameter.Type.FullName);
+				needComma = true;
+			}
+			sb.Append(')');
+			return (sb.ToString());
+		}
+
+		private void IllegalType(String typeToValidate)
+		{
+			using (StreamWriter file = new StreamWriter("IllegalTypes.txt", true))
+			{
+				file.WriteLine(typeToValidate);
+			}
+		}
+
 		/// <summary>
 		/// Format a type declaration
 		/// </summary>

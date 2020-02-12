@@ -62,6 +62,7 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(String.Compare(value2, value3, true) < 0);
 
 			featureTest.AssertTrue(String.Compare(value2, 1, value3, 1, 4) == 0);
+			featureTest.AssertTrue(String.Compare(value2, 1, value3, 1, 4, true) == 0);
 			featureTest.AssertTrue(String.CompareOrdinal(value2, value2a) == 0);
 			featureTest.AssertTrue(String.CompareOrdinal(value2, value2b) < 0);
 			featureTest.AssertTrue(String.CompareOrdinal(value2, 1, value3, 1, 4) == 0);
@@ -118,11 +119,15 @@ namespace CppTranslatorFeatureTest
 			}
 			featureTest.AssertTrue(value1.IndexOf('1') == 0);
 			featureTest.AssertTrue(value1.IndexOf('A') == 1);
+			featureTest.AssertTrue(value1.IndexOf('A',0) == 1);
+			featureTest.AssertTrue(value1.IndexOf('A', 0, 5) == 1);
 			featureTest.AssertTrue(value1.IndexOf('L') == 12);
 			featureTest.AssertTrue(value1.IndexOf("1") == 0);
 			featureTest.AssertTrue(value1.IndexOf("A") == 1);
 			featureTest.AssertTrue(value1.IndexOf("L") == 12);
 			featureTest.AssertTrue(value1.IndexOf("JKL") == 10);
+			featureTest.AssertTrue(value1.IndexOf("JKL", 2) == 10);
+			featureTest.AssertTrue(value1.IndexOf("JKL", 2, value1.Length - 2) == 10);
 			Char[] chars = new Char[] { 'I', 'C' };
 			featureTest.AssertTrue(value1.IndexOfAny(chars) == 3);
 			featureTest.AssertTrue(value1.IndexOfAny(chars,5) == 9);
@@ -159,6 +164,7 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(str11.PadLeft(13, '-') == "-----11223311");
 			featureTest.AssertTrue(str11.PadRight(13) == "11223311     ");
 			featureTest.AssertTrue(str11.PadRight(13, '-') == "11223311-----");
+			featureTest.AssertTrue(str11.Remove(2) == "11");
 			featureTest.AssertTrue(str11.Remove(2, 2) == "113311");
 			featureTest.AssertTrue(str11.Remove(6, 2) == "112233");
 			featureTest.AssertTrue(str11.Remove(0, 2) == "223311");

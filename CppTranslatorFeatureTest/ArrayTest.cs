@@ -125,6 +125,11 @@ namespace CppTranslatorFeatureTest
 			{
 				featureTest.AssertTrue(array[i] == array3[i]);
 			}
+			for (Int32 i = 0; i < array.Length; ++i)
+			{
+				featureTest.AssertTrue(array[i] == array3[i]);
+			}
+			Array.Copy(array, 0, array3, 0, array.Length);
 			featureTest.AssertTrue(int323DArray.GetLength(0) == 2);
 			featureTest.AssertTrue(int323DArray.GetLength(1) == 2);
 			featureTest.AssertTrue(int323DArray.GetLength(2) == 4);
@@ -138,7 +143,8 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue((Byte)byte1DArray.GetValue(0) == 1);
 			featureTest.AssertTrue((Char)char1DArray.GetValue(1) == 'B');
 			featureTest.AssertTrue((Double)double1DArray.GetValue(2) == 3.0);
-			featureTest.AssertTrue((Int16)int161DArray.GetValue(3) == 4);
+			int161DArray.SetValue((short)6,3);
+			featureTest.AssertTrue((Int16)int161DArray.GetValue(3) == 6);
 			featureTest.AssertTrue((Int32)int321DArray.GetValue(4) == 5);
 			featureTest.AssertTrue((Int64)int641DArray.GetValue(5) == 6);
 			featureTest.AssertTrue((SByte)sbyte1DArray.GetValue(6) == 7);
@@ -149,12 +155,19 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue((UInt64)uint641DArray.GetValue(1) == 2);
 			featureTest.AssertTrue((DateTime)dateTime1DArray.GetValue(1) == new DateTime(2020, 2, 3, 8, 30, 40));
 			featureTest.AssertTrue((TimeSpan)timeSpan1DArray.GetValue(2) == new TimeSpan(7, 8, 9));
+			int322DArray.SetValue(9, 1, 1);
+			featureTest.AssertTrue((Int32)int322DArray.GetValue(1, 1) == 9);
+			featureTest.AssertTrue((Int32)int323DArray.GetValue(1, 1, 1) == 14);
 			featureTest.AssertTrue(Array.IndexOf(string1DArray, "Eight") == 7);
-			Int32[,,] array3d = new Int32[2,2,4];
-			Int32[] indexes = new Int32[] { 1,1,2};
+			featureTest.AssertTrue(Array.IndexOf(string1DArray, "Eight", 0) == 7);
+			featureTest.AssertTrue(Array.IndexOf(string1DArray, "Eight", 0, string1DArray.Length) == 7);
+
+			Int32[,,] array3d = new Int32[2, 2, 4];
+			Int32[] indexes = new Int32[] { 1, 1, 2 };
 			array3d.SetValue(22, indexes);
-			featureTest.AssertTrue(array3d[1,1,2] == 22);
-			array3d.SetValue(25, 0,0,1);
+			featureTest.AssertTrue(array3d[1, 1, 2] == 22);
+			featureTest.AssertTrue((Int32)array3d.GetValue(indexes) == 22);
+			array3d.SetValue(25, 0, 0, 1);
 			featureTest.AssertTrue(array3d[0, 0, 1] == 25);
 		}
 		private void PropertyTests()

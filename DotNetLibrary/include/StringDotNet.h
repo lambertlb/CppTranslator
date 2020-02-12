@@ -35,14 +35,11 @@ namespace DotnetLibrary
 		void				CopyTo(Int32 sourceIndex, Array* destination, Int32 destinationIndex, Int32 count);
 		virtual Boolean		EndsWith(String* what);
 		virtual Boolean		EndsWith(Char what);
-		static Boolean		op_Inequality(String* str, String* str2);
 		virtual Boolean		Equals(Object* object);
 		virtual Boolean		Equals(String* object);
 		static Boolean		Equals(String* object, Object* object2);
 		static Boolean		Equals(Object* object, String* object2);
 		static Boolean		Equals(String* object, String* object2);
-		static	String*		Format(String* format, Array* args);
-		static	String*		Format(String* format, Object* arg1, Object* arg2 = nullptr, Object* arg3 = nullptr);
 		virtual	Int32		FormatString(Char* where, const Int32 whereSize);
 		CharEnumerator*		GetEnumerator();
 		virtual DataType	GetRawDataType() { return(StringType); };
@@ -70,7 +67,6 @@ namespace DotnetLibrary
 		String*				Remove(const Int32 startIndex, Int32 count = -1);
 		String*				Replace(const Char oldChar, const Char newChar);
 		String*				Replace(String* oldValue, String* newValue);
-		Array*				Split(Array* separator, const Int32 count = -1);
 		virtual Boolean		StartsWith(String* what);
 		String*				Substring(const Int32 startIndex, Int32 length = -1);
 		Array*				ToCharArray(Int32 startIndex = 0, Int32 length = -1);
@@ -85,6 +81,7 @@ namespace DotnetLibrary
 		String*				TrimHelper(Char* separator, Int32 separaterSize, Boolean trimStart, Boolean trimEnd);
 		String*				TrimEnd(Array* separator);
 		String*				TrimStart(Array* separator);
+		static Boolean		op_Inequality(String* str, String* str2);
 		static String*		Empty;
 	};
 	void CopyChars(Char* where, Int32 whereSize, Char* source, Int32 sourceSize);

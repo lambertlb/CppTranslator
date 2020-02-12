@@ -323,22 +323,6 @@ namespace DotnetLibrary
 		UInt64Value data(value);
 		return(Append(data));
 	}
-	StringBuilder* StringBuilder::AppendFormat(String* format, Object* arg0)
-	{
-		throw new NotImplementedException();
-	}
-	StringBuilder* StringBuilder::AppendFormat(String* format, Array* args)
-	{
-		throw new NotImplementedException();
-	}
-	StringBuilder* StringBuilder::AppendFormat(String* format, Object* arg0, Object* arg1)
-	{
-		throw new NotImplementedException();
-	}
-	StringBuilder* StringBuilder::AppendFormat(String* format, Object* arg0, Object* arg1, Object* arg2)
-	{
-		throw new NotImplementedException();
-	}
 	StringBuilder* StringBuilder::AppendLine()
 	{
 #ifdef WIN32

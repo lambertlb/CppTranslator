@@ -32,6 +32,7 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(Math.Asinh(-6.82), -2.61834);
 			featureTest.AssertTrue(Math.Atan(57.74), 1.55348);
 			featureTest.AssertTrue(Math.Atanh(0.32), 0.331647);
+			featureTest.AssertTrue(Math.Atan2(-10, 10), -0.785398);
 			featureTest.AssertTrue(Math.BigMul(10000, 10000) == 10000 * 10000);
 			featureTest.AssertTrue(Math.Cbrt(0.70710678118654752), 0.89089871814033930);
 			featureTest.AssertTrue(Double.IsNaN(Math.Cbrt(Double.NaN)));
@@ -121,6 +122,7 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(Math.Sinh(-1.5707963267948966), -2.3012989023072949);
 			featureTest.AssertTrue(Math.Sqrt(0.31830988618379067), 0.56418958354775629);
 			featureTest.AssertTrue(Math.Tan(-2.3025850929940457), 1.1134071468135374);
+			featureTest.AssertTrue(Math.Tanh(-3.1415926535897932), -0.99627207622074994);
 			featureTest.AssertTrue(Math.Truncate(3.14159), 3.0);
 #if V3
 			featureTest.AssertTrue(Math.BitDecrement(0.63661977236758134), 0.63661977236758127);

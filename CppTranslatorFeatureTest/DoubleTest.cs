@@ -48,6 +48,7 @@ namespace CppTranslatorFeatureTest
 			Double parsed;
 			featureTest.AssertTrue(Double.TryParse(str, out parsed));
 			featureTest.AssertTrue(parsed == 35.3);
+			featureTest.AssertTrue(Double.IsFinite(3.0 / 1));
 			featureTest.AssertTrue(!Double.IsInfinity(3.0 / 1));
 			featureTest.AssertTrue(Double.IsInfinity(Double.PositiveInfinity));
 			featureTest.AssertTrue(!Double.IsNaN(3.0 / 1));

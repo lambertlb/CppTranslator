@@ -275,16 +275,6 @@ namespace DotnetLibrary
 	{
 		return !op_Inequality(object, object2);
 	}
-	String* String::Format(String* format, Array* args)
-	{
-//		throw new NotImplementedException();
-		return String::Empty;
-	}
-	String* String::Format(String* format, Object* arg1, Object* arg2, Object* arg3)
-	{
-//		throw new NotImplementedException();
-		return String::Empty;
-	}
 	CharEnumerator* String::GetEnumerator()
 	{
 		return(new CharEnumerator(this));
@@ -548,11 +538,6 @@ namespace DotnetLibrary
 		StringBuilder	sb(this);
 		sb.Replace(oldValue, newValue);
 		return(sb.ToString());
-	}
-	Array* String::Split(Array* separator, const Int32 count)
-	{
-//		throw new NotImplementedException();
-		return(new Array(StringType, 0));
 	}
 	Boolean String::StartsWith(String* what)
 	{

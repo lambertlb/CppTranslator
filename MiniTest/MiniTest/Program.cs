@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using CppTranslatorSupport;
 
 namespace MiniTest
@@ -10,8 +11,9 @@ namespace MiniTest
 		}
 		public override void RunCode()
 		{
-			String value = new String("Test String");
-			AssertTrue(value.Length == 11);
+			StringBuilder sb = new StringBuilder();
+			sb.Append("ABC");
+			String value = sb.ToString();
 		}
 		public void AssertTrue(bool value)
 		{
