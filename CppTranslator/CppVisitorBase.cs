@@ -38,7 +38,7 @@ namespace CppTranslator
 		/// <summary>
 		/// visitor used for type definition
 		/// </summary>
-		public CppTypeVisitor TypeVisitor { get; set; }
+		public static CppTypeVisitor TypeVisitor { get; set; }
 		/// <summary>
 		/// Visitor for handline IlInstructions within methods
 		/// </summary>
@@ -63,13 +63,15 @@ namespace CppTranslator
 		public CppVisitorBase(Formatter formatter)
 		{
 			Formatter = formatter;
-			TypeVisitor = new CppTypeVisitor(this);
+			if (TypeVisitor == null)
+				TypeVisitor = new CppTypeVisitor(formatter);
 			MyIlVisitor = new MyIlInstructionVisitor(Formatter);
 			MyIlVisitor.TypeVisitor = TypeVisitor;
 			operators.Add(OperatorType.Addition, "op_Addition");
 			operators.Add(OperatorType.Subtraction, "op_Subtraction");
 			operators.Add(OperatorType.BitwiseAnd, "op_BitwiseAnd");
 		}
+
 		/// <summary>
 		/// Visit accessor
 		/// </summary>

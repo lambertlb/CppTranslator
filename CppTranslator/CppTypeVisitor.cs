@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using ICSharpCode.Decompiler.IL;
@@ -47,10 +48,10 @@ namespace CppTranslator
 		/// Initializes a new instance of the <see cref="CppTypeVisitor"/> class.
 		/// Constructor
 		/// </summary>
-		/// <param name="baseVisitor">base visitor</param>
-		public CppTypeVisitor(CppVisitorBase baseVisitor)
+		/// <param name="formatter">formatter</param>
+		public CppTypeVisitor(Formatter formatter)
 		{
-			this.Formatter = baseVisitor.Formatter;
+			this.Formatter = formatter;
 			typeTranslation.Add("bool", "Boolean");
 			typeTranslation.Add("byte", "Byte");
 			typeTranslation.Add("sbyte", "SByte");
@@ -65,6 +66,10 @@ namespace CppTranslator
 			typeTranslation.Add("short", "Int16");
 			typeTranslation.Add("ushort", "UInt16");
 			typeTranslation.Add("string", "String");
+		}
+
+		public void LoadValidTypes()
+		{
 #if DEBUG
 			String typeFilePath = AppDomain.CurrentDomain.BaseDirectory + @"..\..\ValidTypes.xml";
 #else
@@ -80,6 +85,7 @@ namespace CppTranslator
 			}
 			catch (Exception)
 			{
+				Trace.TraceError("Missing file " + typeFilePath);
 			}
 		}
 
@@ -88,7 +94,7 @@ namespace CppTranslator
 			ValidItems.ValidDataTable table = validItems.Valid;
 			foreach (ValidItems.ValidRow validRow in table)
 			{
-				legalTypes.Add(validRow.Valid_Column, validRow.Valid_Column);
+				legalTypes.Add(validRow.Valid_Column, String.Empty);
 			}
 		}
 
@@ -140,10 +146,13 @@ namespace CppTranslator
 
 		private void IllegalType(String typeToValidate)
 		{
-			using (StreamWriter file = new StreamWriter("IllegalTypes.txt", true))
-			{
-				file.WriteLine(typeToValidate);
-			}
+			Trace.TraceError("Illegal Use of \"" + typeToValidate + "\"");
+			// Just log it once
+			legalTypes.Add(typeToValidate, String.Empty);
+			//using (StreamWriter file = new StreamWriter("IllegalTypes.txt", true))
+			//{
+			//	file.WriteLine(typeToValidate);
+			//}
 		}
 
 		/// <summary>

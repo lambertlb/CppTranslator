@@ -52,6 +52,8 @@ namespace CppTranslator
 			settings.UsingStatement = false;
 			settings.ObjectOrCollectionInitializers = false;
 			GetPathToAssembly(args);
+			CppTraceListener.AddListener(pathToAssemble);
+			CppVisitorBase.TypeVisitor.LoadValidTypes();
 			compiler = new CSharpDecompiler(args[0], settings);
 			formatter.EmitToConsole = true;
 			ProcessModules(prototypeVisitor, pathToAssemble + "Protos.h");
