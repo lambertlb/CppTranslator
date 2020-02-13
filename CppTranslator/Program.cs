@@ -17,6 +17,7 @@
 // DEALINGS IN THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection.Metadata;
 using ICSharpCode.Decompiler.CSharp;
@@ -48,17 +49,26 @@ namespace CppTranslator
 				Usage();
 				return;
 			}
-			var settings = new ICSharpCode.Decompiler.DecompilerSettings();
-			settings.UsingStatement = false;
-			settings.ObjectOrCollectionInitializers = false;
-			GetPathToAssembly(args);
-			CppTraceListener.AddListener(pathToAssemble);
-			CppVisitorBase.TypeVisitor.LoadValidTypes();
-			compiler = new CSharpDecompiler(args[0], settings);
-			formatter.EmitToConsole = true;
-			ProcessModules(prototypeVisitor, pathToAssemble + "Protos.h");
-			ProcessModules(headerVisitor, pathToAssemble + "Header.h");
-			ProcessModules(visitor, pathToAssemble + ".cpp");
+			try
+			{
+				var settings = new ICSharpCode.Decompiler.DecompilerSettings();
+				settings.UsingStatement = false;
+				settings.ObjectOrCollectionInitializers = false;
+				GetPathToAssembly(args);
+				CppTraceListener.AddListener(pathToAssemble);
+				CppVisitorBase.TypeVisitor.LoadValidTypes();
+				compiler = new CSharpDecompiler(args[0], settings);
+				formatter.EmitToConsole = true;
+				ProcessModules(prototypeVisitor, pathToAssemble + "Protos.h");
+				ProcessModules(headerVisitor, pathToAssemble + "Header.h");
+				ProcessModules(visitor, pathToAssemble + ".cpp");
+				CppTraceListener.RemoveListener();
+			}
+			catch (Exception ex)
+			{
+				Trace.TraceError("Exception: " + ex.ToString());
+				Trace.TraceError("StackTrace: " + ex.StackTrace);
+			}
 		}
 
 		private static void GetPathToAssembly(string[] args)
