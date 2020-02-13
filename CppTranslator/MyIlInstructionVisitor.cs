@@ -107,7 +107,6 @@ namespace CppTranslator
 			constantConversions.Add(Double.NegativeInfinity.ToString(), "DoubleValue::NegativeInfinity");
 			constantConversions.Add(Double.Epsilon.ToString(), "DoubleValue::Epsilon");
 			constantConversions.Add(float.Epsilon.ToString(), "SingleValue::Epsilon");
-
 		}
 		/// <summary>
 		/// Is this type a primative
@@ -722,11 +721,6 @@ namespace CppTranslator
 			return base.VisitExpressionTreeCast(inst);
 		}
 		/// <inheritdoc/>
-		//		protected override ILInstruction VisitGetPinnableReference(GetPinnableReference inst)
-		//		{
-		//			return base.VisitGetPinnableReference(inst);
-		//		}
-		/// <inheritdoc/>
 		protected override ILInstruction VisitIfInstruction(IfInstruction inst)
 		{
 			bool justCondition = Formatter.CharactersAddedToLine;
@@ -772,7 +766,6 @@ namespace CppTranslator
 					logicalOpertor = " && ";
 				Formatter.Append(logicalOpertor);
 				inst.TrueInst.AcceptVisitor(this);
-
 			}
 			else if (leftIsConstant)
 			{
@@ -851,7 +844,7 @@ namespace CppTranslator
 			if (Char.IsDigit(str[str.Length - 1]) &&
 				!str.Contains('.', StringComparison.InvariantCulture) &&
 				!str.Contains('E', StringComparison.InvariantCulture))
-				str = str + ".0";
+				str += ".0";
 			ConvertConstants(str);
 			return base.VisitLdcF8(inst);
 		}

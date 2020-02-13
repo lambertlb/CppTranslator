@@ -67,7 +67,9 @@ namespace CppTranslator
 			typeTranslation.Add("ushort", "UInt16");
 			typeTranslation.Add("string", "String");
 		}
-
+		/// <summary>
+		/// Load validation information from xml file
+		/// </summary>
 		public void LoadValidTypes()
 		{
 #if DEBUG
@@ -79,6 +81,7 @@ namespace CppTranslator
 			{
 				using (ValidItems validItems = new ValidItems())
 				{
+#pragma warning disable CA5366 // Use XmlReader For DataSet Read Xml
 					validItems.ReadXml(typeFilePath, XmlReadMode.ReadSchema);
 					LoadValidationData(validItems);
 				}
@@ -122,8 +125,11 @@ namespace CppTranslator
 		/// <param name="inst">Call Instruction</param>
 		public void ValidateCall(CallInstruction inst)
 		{
-			String signature = BuildCallSignature(inst);
-			ValidateType(signature);
+			if (inst != null)
+			{
+				String signature = BuildCallSignature(inst);
+				ValidateType(signature);
+			}
 		}
 
 		private string BuildCallSignature(CallInstruction inst)
@@ -149,10 +155,10 @@ namespace CppTranslator
 			Trace.TraceError("Illegal Use of \"" + typeToValidate + "\"");
 			// Just log it once
 			legalTypes.Add(typeToValidate, String.Empty);
-			//using (StreamWriter file = new StreamWriter("IllegalTypes.txt", true))
-			//{
+			// using (StreamWriter file = new StreamWriter("IllegalTypes.txt", true))
+			// {
 			//	file.WriteLine(typeToValidate);
-			//}
+			// }
 		}
 
 		/// <summary>
