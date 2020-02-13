@@ -21,21 +21,17 @@ namespace CppTranslator {
     [global::System.ComponentModel.DesignerCategoryAttribute("code")]
     [global::System.ComponentModel.ToolboxItem(true)]
     [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedDataSetSchema")]
-    [global::System.Xml.Serialization.XmlRootAttribute("ValidClasses")]
+    [global::System.Xml.Serialization.XmlRootAttribute("ValidItems")]
     [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.DataSet")]
-    public partial class ValidClasses : global::System.Data.DataSet {
+    public partial class ValidItems : global::System.Data.DataSet {
         
-        private ValidClassDataTable tableValidClass;
-        
-        private ValidMethodDataTable tableValidMethod;
-        
-        private global::System.Data.DataRelation relationValidClass_ValidMethod;
+        private ValidDataTable tableValid;
         
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public ValidClasses() {
+        public ValidItems() {
             this.BeginInit();
             this.InitClass();
             global::System.ComponentModel.CollectionChangeEventHandler schemaChangedHandler = new global::System.ComponentModel.CollectionChangeEventHandler(this.SchemaChanged);
@@ -46,7 +42,7 @@ namespace CppTranslator {
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        protected ValidClasses(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+        protected ValidItems(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                 base(info, context, false) {
             if ((this.IsBinarySerialized(info, context) == true)) {
                 this.InitVars(false);
@@ -59,11 +55,8 @@ namespace CppTranslator {
             if ((this.DetermineSchemaSerializationMode(info, context) == global::System.Data.SchemaSerializationMode.IncludeSchema)) {
                 global::System.Data.DataSet ds = new global::System.Data.DataSet();
                 ds.ReadXmlSchema(new global::System.Xml.XmlTextReader(new global::System.IO.StringReader(strSchema)));
-                if ((ds.Tables["ValidClass"] != null)) {
-                    base.Tables.Add(new ValidClassDataTable(ds.Tables["ValidClass"]));
-                }
-                if ((ds.Tables["ValidMethod"] != null)) {
-                    base.Tables.Add(new ValidMethodDataTable(ds.Tables["ValidMethod"]));
+                if ((ds.Tables["Valid"] != null)) {
+                    base.Tables.Add(new ValidDataTable(ds.Tables["Valid"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -87,19 +80,9 @@ namespace CppTranslator {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Browsable(false)]
         [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public ValidClassDataTable ValidClass {
+        public ValidDataTable Valid {
             get {
-                return this.tableValidClass;
-            }
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        [global::System.ComponentModel.Browsable(false)]
-        [global::System.ComponentModel.DesignerSerializationVisibility(global::System.ComponentModel.DesignerSerializationVisibility.Content)]
-        public ValidMethodDataTable ValidMethod {
-            get {
-                return this.tableValidMethod;
+                return this.tableValid;
             }
         }
         
@@ -145,7 +128,7 @@ namespace CppTranslator {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public override global::System.Data.DataSet Clone() {
-            ValidClasses cln = ((ValidClasses)(base.Clone()));
+            ValidItems cln = ((ValidItems)(base.Clone()));
             cln.InitVars();
             cln.SchemaSerializationMode = this.SchemaSerializationMode;
             return cln;
@@ -170,11 +153,8 @@ namespace CppTranslator {
                 this.Reset();
                 global::System.Data.DataSet ds = new global::System.Data.DataSet();
                 ds.ReadXml(reader);
-                if ((ds.Tables["ValidClass"] != null)) {
-                    base.Tables.Add(new ValidClassDataTable(ds.Tables["ValidClass"]));
-                }
-                if ((ds.Tables["ValidMethod"] != null)) {
-                    base.Tables.Add(new ValidMethodDataTable(ds.Tables["ValidMethod"]));
+                if ((ds.Tables["Valid"] != null)) {
+                    base.Tables.Add(new ValidDataTable(ds.Tables["Valid"]));
                 }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
@@ -209,56 +189,28 @@ namespace CppTranslator {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         internal void InitVars(bool initTable) {
-            this.tableValidClass = ((ValidClassDataTable)(base.Tables["ValidClass"]));
+            this.tableValid = ((ValidDataTable)(base.Tables["Valid"]));
             if ((initTable == true)) {
-                if ((this.tableValidClass != null)) {
-                    this.tableValidClass.InitVars();
+                if ((this.tableValid != null)) {
+                    this.tableValid.InitVars();
                 }
             }
-            this.tableValidMethod = ((ValidMethodDataTable)(base.Tables["ValidMethod"]));
-            if ((initTable == true)) {
-                if ((this.tableValidMethod != null)) {
-                    this.tableValidMethod.InitVars();
-                }
-            }
-            this.relationValidClass_ValidMethod = this.Relations["ValidClass_ValidMethod"];
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         private void InitClass() {
-            this.DataSetName = "ValidClasses";
+            this.DataSetName = "ValidItems";
             this.Prefix = "";
             this.EnforceConstraints = true;
             this.SchemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
-            this.tableValidClass = new ValidClassDataTable();
-            base.Tables.Add(this.tableValidClass);
-            this.tableValidMethod = new ValidMethodDataTable();
-            base.Tables.Add(this.tableValidMethod);
-            global::System.Data.ForeignKeyConstraint fkc;
-            fkc = new global::System.Data.ForeignKeyConstraint("ValidClass_ValidMethod", new global::System.Data.DataColumn[] {
-                        this.tableValidClass.ValidClass_IdColumn}, new global::System.Data.DataColumn[] {
-                        this.tableValidMethod.ValidClass_IdColumn});
-            this.tableValidMethod.Constraints.Add(fkc);
-            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.Cascade;
-            fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            this.relationValidClass_ValidMethod = new global::System.Data.DataRelation("ValidClass_ValidMethod", new global::System.Data.DataColumn[] {
-                        this.tableValidClass.ValidClass_IdColumn}, new global::System.Data.DataColumn[] {
-                        this.tableValidMethod.ValidClass_IdColumn}, false);
-            this.relationValidClass_ValidMethod.Nested = true;
-            this.Relations.Add(this.relationValidClass_ValidMethod);
+            this.tableValid = new ValidDataTable();
+            base.Tables.Add(this.tableValid);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private bool ShouldSerializeValidClass() {
-            return false;
-        }
-        
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        private bool ShouldSerializeValidMethod() {
+        private bool ShouldSerializeValid() {
             return false;
         }
         
@@ -273,7 +225,7 @@ namespace CppTranslator {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedDataSetSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-            ValidClasses ds = new ValidClasses();
+            ValidItems ds = new ValidItems();
             global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
             global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
             global::System.Xml.Schema.XmlSchemaAny any = new global::System.Xml.Schema.XmlSchemaAny();
@@ -318,26 +270,21 @@ namespace CppTranslator {
         }
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public delegate void ValidClassRowChangeEventHandler(object sender, ValidClassRowChangeEvent e);
-        
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public delegate void ValidMethodRowChangeEventHandler(object sender, ValidMethodRowChangeEvent e);
+        public delegate void ValidRowChangeEventHandler(object sender, ValidRowChangeEvent e);
         
         /// <summary>
         ///Represents the strongly named DataTable class.
         ///</summary>
         [global::System.Serializable()]
         [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class ValidClassDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
+        public partial class ValidDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
             
-            private global::System.Data.DataColumn columnName;
-            
-            private global::System.Data.DataColumn columnValidClass_Id;
+            private global::System.Data.DataColumn columnValid_Column;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ValidClassDataTable() {
-                this.TableName = "ValidClass";
+            public ValidDataTable() {
+                this.TableName = "Valid";
                 this.BeginInit();
                 this.InitClass();
                 this.EndInit();
@@ -345,7 +292,7 @@ namespace CppTranslator {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            internal ValidClassDataTable(global::System.Data.DataTable table) {
+            internal ValidDataTable(global::System.Data.DataTable table) {
                 this.TableName = table.TableName;
                 if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
                     this.CaseSensitive = table.CaseSensitive;
@@ -362,24 +309,16 @@ namespace CppTranslator {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected ValidClassDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
+            protected ValidDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
                     base(info, context) {
                 this.InitVars();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn NameColumn {
+            public global::System.Data.DataColumn Valid_ColumnColumn {
                 get {
-                    return this.columnName;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn ValidClass_IdColumn {
-                get {
-                    return this.columnValidClass_Id;
+                    return this.columnValid_Column;
                 }
             }
             
@@ -394,40 +333,39 @@ namespace CppTranslator {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ValidClassRow this[int index] {
+            public ValidRow this[int index] {
                 get {
-                    return ((ValidClassRow)(this.Rows[index]));
+                    return ((ValidRow)(this.Rows[index]));
                 }
             }
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event ValidClassRowChangeEventHandler ValidClassRowChanging;
+            public event ValidRowChangeEventHandler ValidRowChanging;
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event ValidClassRowChangeEventHandler ValidClassRowChanged;
+            public event ValidRowChangeEventHandler ValidRowChanged;
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event ValidClassRowChangeEventHandler ValidClassRowDeleting;
+            public event ValidRowChangeEventHandler ValidRowDeleting;
             
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event ValidClassRowChangeEventHandler ValidClassRowDeleted;
+            public event ValidRowChangeEventHandler ValidRowDeleted;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void AddValidClassRow(ValidClassRow row) {
+            public void AddValidRow(ValidRow row) {
                 this.Rows.Add(row);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ValidClassRow AddValidClassRow(string Name) {
-                ValidClassRow rowValidClassRow = ((ValidClassRow)(this.NewRow()));
+            public ValidRow AddValidRow(string Valid_Column) {
+                ValidRow rowValidRow = ((ValidRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        Name,
-                        null};
-                rowValidClassRow.ItemArray = columnValuesArray;
-                this.Rows.Add(rowValidClassRow);
-                return rowValidClassRow;
+                        Valid_Column};
+                rowValidRow.ItemArray = columnValuesArray;
+                this.Rows.Add(rowValidRow);
+                return rowValidRow;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -439,7 +377,7 @@ namespace CppTranslator {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public override global::System.Data.DataTable Clone() {
-                ValidClassDataTable cln = ((ValidClassDataTable)(base.Clone()));
+                ValidDataTable cln = ((ValidDataTable)(base.Clone()));
                 cln.InitVars();
                 return cln;
             }
@@ -447,55 +385,47 @@ namespace CppTranslator {
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             protected override global::System.Data.DataTable CreateInstance() {
-                return new ValidClassDataTable();
+                return new ValidDataTable();
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
-                this.columnName = base.Columns["Name"];
-                this.columnValidClass_Id = base.Columns["ValidClass_Id"];
+                this.columnValid_Column = base.Columns["Valid_Column"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             private void InitClass() {
-                this.columnName = new global::System.Data.DataColumn("Name", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnName);
-                this.columnValidClass_Id = new global::System.Data.DataColumn("ValidClass_Id", typeof(int), null, global::System.Data.MappingType.Hidden);
-                base.Columns.Add(this.columnValidClass_Id);
-                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnValidClass_Id}, true));
-                this.columnName.AllowDBNull = false;
-                this.columnValidClass_Id.AutoIncrement = true;
-                this.columnValidClass_Id.AllowDBNull = false;
-                this.columnValidClass_Id.Unique = true;
+                this.columnValid_Column = new global::System.Data.DataColumn("Valid_Column", typeof(string), null, global::System.Data.MappingType.SimpleContent);
+                base.Columns.Add(this.columnValid_Column);
+                this.columnValid_Column.AllowDBNull = false;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ValidClassRow NewValidClassRow() {
-                return ((ValidClassRow)(this.NewRow()));
+            public ValidRow NewValidRow() {
+                return ((ValidRow)(this.NewRow()));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
-                return new ValidClassRow(builder);
+                return new ValidRow(builder);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             protected override global::System.Type GetRowType() {
-                return typeof(ValidClassRow);
+                return typeof(ValidRow);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowChanged(e);
-                if ((this.ValidClassRowChanged != null)) {
-                    this.ValidClassRowChanged(this, new ValidClassRowChangeEvent(((ValidClassRow)(e.Row)), e.Action));
+                if ((this.ValidRowChanged != null)) {
+                    this.ValidRowChanged(this, new ValidRowChangeEvent(((ValidRow)(e.Row)), e.Action));
                 }
             }
             
@@ -503,8 +433,8 @@ namespace CppTranslator {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowChanging(e);
-                if ((this.ValidClassRowChanging != null)) {
-                    this.ValidClassRowChanging(this, new ValidClassRowChangeEvent(((ValidClassRow)(e.Row)), e.Action));
+                if ((this.ValidRowChanging != null)) {
+                    this.ValidRowChanging(this, new ValidRowChangeEvent(((ValidRow)(e.Row)), e.Action));
                 }
             }
             
@@ -512,8 +442,8 @@ namespace CppTranslator {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowDeleted(e);
-                if ((this.ValidClassRowDeleted != null)) {
-                    this.ValidClassRowDeleted(this, new ValidClassRowChangeEvent(((ValidClassRow)(e.Row)), e.Action));
+                if ((this.ValidRowDeleted != null)) {
+                    this.ValidRowDeleted(this, new ValidRowChangeEvent(((ValidRow)(e.Row)), e.Action));
                 }
             }
             
@@ -521,14 +451,14 @@ namespace CppTranslator {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
                 base.OnRowDeleting(e);
-                if ((this.ValidClassRowDeleting != null)) {
-                    this.ValidClassRowDeleting(this, new ValidClassRowChangeEvent(((ValidClassRow)(e.Row)), e.Action));
+                if ((this.ValidRowDeleting != null)) {
+                    this.ValidRowDeleting(this, new ValidRowChangeEvent(((ValidRow)(e.Row)), e.Action));
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void RemoveValidClassRow(ValidClassRow row) {
+            public void RemoveValidRow(ValidRow row) {
                 this.Rows.Remove(row);
             }
             
@@ -537,7 +467,7 @@ namespace CppTranslator {
             public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
                 global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
                 global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                ValidClasses ds = new ValidClasses();
+                ValidItems ds = new ValidItems();
                 global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
                 any1.Namespace = "http://www.w3.org/2001/XMLSchema";
                 any1.MinOccurs = new decimal(0);
@@ -555,278 +485,7 @@ namespace CppTranslator {
                 type.Attributes.Add(attribute1);
                 global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
                 attribute2.Name = "tableTypeName";
-                attribute2.FixedValue = "ValidClassDataTable";
-                type.Attributes.Add(attribute2);
-                type.Particle = sequence;
-                global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
-                if (xs.Contains(dsSchema.TargetNamespace)) {
-                    global::System.IO.MemoryStream s1 = new global::System.IO.MemoryStream();
-                    global::System.IO.MemoryStream s2 = new global::System.IO.MemoryStream();
-                    try {
-                        global::System.Xml.Schema.XmlSchema schema = null;
-                        dsSchema.Write(s1);
-                        for (global::System.Collections.IEnumerator schemas = xs.Schemas(dsSchema.TargetNamespace).GetEnumerator(); schemas.MoveNext(); ) {
-                            schema = ((global::System.Xml.Schema.XmlSchema)(schemas.Current));
-                            s2.SetLength(0);
-                            schema.Write(s2);
-                            if ((s1.Length == s2.Length)) {
-                                s1.Position = 0;
-                                s2.Position = 0;
-                                for (; ((s1.Position != s1.Length) 
-                                            && (s1.ReadByte() == s2.ReadByte())); ) {
-                                    ;
-                                }
-                                if ((s1.Position == s1.Length)) {
-                                    return type;
-                                }
-                            }
-                        }
-                    }
-                    finally {
-                        if ((s1 != null)) {
-                            s1.Close();
-                        }
-                        if ((s2 != null)) {
-                            s2.Close();
-                        }
-                    }
-                }
-                xs.Add(dsSchema);
-                return type;
-            }
-        }
-        
-        /// <summary>
-        ///Represents the strongly named DataTable class.
-        ///</summary>
-        [global::System.Serializable()]
-        [global::System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
-        public partial class ValidMethodDataTable : global::System.Data.DataTable, global::System.Collections.IEnumerable {
-            
-            private global::System.Data.DataColumn columnSignature;
-            
-            private global::System.Data.DataColumn columnValidClass_Id;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ValidMethodDataTable() {
-                this.TableName = "ValidMethod";
-                this.BeginInit();
-                this.InitClass();
-                this.EndInit();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            internal ValidMethodDataTable(global::System.Data.DataTable table) {
-                this.TableName = table.TableName;
-                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
-                    this.CaseSensitive = table.CaseSensitive;
-                }
-                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
-                    this.Locale = table.Locale;
-                }
-                if ((table.Namespace != table.DataSet.Namespace)) {
-                    this.Namespace = table.Namespace;
-                }
-                this.Prefix = table.Prefix;
-                this.MinimumCapacity = table.MinimumCapacity;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected ValidMethodDataTable(global::System.Runtime.Serialization.SerializationInfo info, global::System.Runtime.Serialization.StreamingContext context) : 
-                    base(info, context) {
-                this.InitVars();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn SignatureColumn {
-                get {
-                    return this.columnSignature;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn ValidClass_IdColumn {
-                get {
-                    return this.columnValidClass_Id;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            [global::System.ComponentModel.Browsable(false)]
-            public int Count {
-                get {
-                    return this.Rows.Count;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ValidMethodRow this[int index] {
-                get {
-                    return ((ValidMethodRow)(this.Rows[index]));
-                }
-            }
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event ValidMethodRowChangeEventHandler ValidMethodRowChanging;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event ValidMethodRowChangeEventHandler ValidMethodRowChanged;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event ValidMethodRowChangeEventHandler ValidMethodRowDeleting;
-            
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public event ValidMethodRowChangeEventHandler ValidMethodRowDeleted;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void AddValidMethodRow(ValidMethodRow row) {
-                this.Rows.Add(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ValidMethodRow AddValidMethodRow(string Signature, ValidClassRow parentValidClassRowByValidClass_ValidMethod) {
-                ValidMethodRow rowValidMethodRow = ((ValidMethodRow)(this.NewRow()));
-                object[] columnValuesArray = new object[] {
-                        Signature,
-                        null};
-                if ((parentValidClassRowByValidClass_ValidMethod != null)) {
-                    columnValuesArray[1] = parentValidClassRowByValidClass_ValidMethod[1];
-                }
-                rowValidMethodRow.ItemArray = columnValuesArray;
-                this.Rows.Add(rowValidMethodRow);
-                return rowValidMethodRow;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public virtual global::System.Collections.IEnumerator GetEnumerator() {
-                return this.Rows.GetEnumerator();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public override global::System.Data.DataTable Clone() {
-                ValidMethodDataTable cln = ((ValidMethodDataTable)(base.Clone()));
-                cln.InitVars();
-                return cln;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override global::System.Data.DataTable CreateInstance() {
-                return new ValidMethodDataTable();
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            internal void InitVars() {
-                this.columnSignature = base.Columns["Signature"];
-                this.columnValidClass_Id = base.Columns["ValidClass_Id"];
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            private void InitClass() {
-                this.columnSignature = new global::System.Data.DataColumn("Signature", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnSignature);
-                this.columnValidClass_Id = new global::System.Data.DataColumn("ValidClass_Id", typeof(int), null, global::System.Data.MappingType.Hidden);
-                base.Columns.Add(this.columnValidClass_Id);
-                this.columnSignature.AllowDBNull = false;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ValidMethodRow NewValidMethodRow() {
-                return ((ValidMethodRow)(this.NewRow()));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override global::System.Data.DataRow NewRowFromBuilder(global::System.Data.DataRowBuilder builder) {
-                return new ValidMethodRow(builder);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override global::System.Type GetRowType() {
-                return typeof(ValidMethodRow);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override void OnRowChanged(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanged(e);
-                if ((this.ValidMethodRowChanged != null)) {
-                    this.ValidMethodRowChanged(this, new ValidMethodRowChangeEvent(((ValidMethodRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override void OnRowChanging(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowChanging(e);
-                if ((this.ValidMethodRowChanging != null)) {
-                    this.ValidMethodRowChanging(this, new ValidMethodRowChangeEvent(((ValidMethodRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override void OnRowDeleted(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleted(e);
-                if ((this.ValidMethodRowDeleted != null)) {
-                    this.ValidMethodRowDeleted(this, new ValidMethodRowChangeEvent(((ValidMethodRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            protected override void OnRowDeleting(global::System.Data.DataRowChangeEventArgs e) {
-                base.OnRowDeleting(e);
-                if ((this.ValidMethodRowDeleting != null)) {
-                    this.ValidMethodRowDeleting(this, new ValidMethodRowChangeEvent(((ValidMethodRow)(e.Row)), e.Action));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void RemoveValidMethodRow(ValidMethodRow row) {
-                this.Rows.Remove(row);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public static global::System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(global::System.Xml.Schema.XmlSchemaSet xs) {
-                global::System.Xml.Schema.XmlSchemaComplexType type = new global::System.Xml.Schema.XmlSchemaComplexType();
-                global::System.Xml.Schema.XmlSchemaSequence sequence = new global::System.Xml.Schema.XmlSchemaSequence();
-                ValidClasses ds = new ValidClasses();
-                global::System.Xml.Schema.XmlSchemaAny any1 = new global::System.Xml.Schema.XmlSchemaAny();
-                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
-                any1.MinOccurs = new decimal(0);
-                any1.MaxOccurs = decimal.MaxValue;
-                any1.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any1);
-                global::System.Xml.Schema.XmlSchemaAny any2 = new global::System.Xml.Schema.XmlSchemaAny();
-                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
-                any2.MinOccurs = new decimal(1);
-                any2.ProcessContents = global::System.Xml.Schema.XmlSchemaContentProcessing.Lax;
-                sequence.Items.Add(any2);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute1 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute1.Name = "namespace";
-                attribute1.FixedValue = ds.Namespace;
-                type.Attributes.Add(attribute1);
-                global::System.Xml.Schema.XmlSchemaAttribute attribute2 = new global::System.Xml.Schema.XmlSchemaAttribute();
-                attribute2.Name = "tableTypeName";
-                attribute2.FixedValue = "ValidMethodDataTable";
+                attribute2.FixedValue = "ValidDataTable";
                 type.Attributes.Add(attribute2);
                 type.Particle = sequence;
                 global::System.Xml.Schema.XmlSchema dsSchema = ds.GetSchemaSerializable();
@@ -870,146 +529,25 @@ namespace CppTranslator {
         /// <summary>
         ///Represents strongly named DataRow class.
         ///</summary>
-        public partial class ValidClassRow : global::System.Data.DataRow {
+        public partial class ValidRow : global::System.Data.DataRow {
             
-            private ValidClassDataTable tableValidClass;
+            private ValidDataTable tableValid;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            internal ValidClassRow(global::System.Data.DataRowBuilder rb) : 
+            internal ValidRow(global::System.Data.DataRowBuilder rb) : 
                     base(rb) {
-                this.tableValidClass = ((ValidClassDataTable)(this.Table));
+                this.tableValid = ((ValidDataTable)(this.Table));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Name {
+            public string Valid_Column {
                 get {
-                    return ((string)(this[this.tableValidClass.NameColumn]));
+                    return ((string)(this[this.tableValid.Valid_ColumnColumn]));
                 }
                 set {
-                    this[this.tableValidClass.NameColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public int ValidClass_Id {
-                get {
-                    return ((int)(this[this.tableValidClass.ValidClass_IdColumn]));
-                }
-                set {
-                    this[this.tableValidClass.ValidClass_IdColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ValidMethodRow[] GetValidMethodRows() {
-                if ((this.Table.ChildRelations["ValidClass_ValidMethod"] == null)) {
-                    return new ValidMethodRow[0];
-                }
-                else {
-                    return ((ValidMethodRow[])(base.GetChildRows(this.Table.ChildRelations["ValidClass_ValidMethod"])));
-                }
-            }
-        }
-        
-        /// <summary>
-        ///Represents strongly named DataRow class.
-        ///</summary>
-        public partial class ValidMethodRow : global::System.Data.DataRow {
-            
-            private ValidMethodDataTable tableValidMethod;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            internal ValidMethodRow(global::System.Data.DataRowBuilder rb) : 
-                    base(rb) {
-                this.tableValidMethod = ((ValidMethodDataTable)(this.Table));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Signature {
-                get {
-                    return ((string)(this[this.tableValidMethod.SignatureColumn]));
-                }
-                set {
-                    this[this.tableValidMethod.SignatureColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public int ValidClass_Id {
-                get {
-                    try {
-                        return ((int)(this[this.tableValidMethod.ValidClass_IdColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'ValidClass_Id\' in table \'ValidMethod\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableValidMethod.ValidClass_IdColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ValidClassRow ValidClassRow {
-                get {
-                    return ((ValidClassRow)(this.GetParentRow(this.Table.ParentRelations["ValidClass_ValidMethod"])));
-                }
-                set {
-                    this.SetParentRow(value, this.Table.ParentRelations["ValidClass_ValidMethod"]);
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsValidClass_IdNull() {
-                return this.IsNull(this.tableValidMethod.ValidClass_IdColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetValidClass_IdNull() {
-                this[this.tableValidMethod.ValidClass_IdColumn] = global::System.Convert.DBNull;
-            }
-        }
-        
-        /// <summary>
-        ///Row event argument class
-        ///</summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public class ValidClassRowChangeEvent : global::System.EventArgs {
-            
-            private ValidClassRow eventRow;
-            
-            private global::System.Data.DataRowAction eventAction;
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ValidClassRowChangeEvent(ValidClassRow row, global::System.Data.DataRowAction action) {
-                this.eventRow = row;
-                this.eventAction = action;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ValidClassRow Row {
-                get {
-                    return this.eventRow;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataRowAction Action {
-                get {
-                    return this.eventAction;
+                    this[this.tableValid.Valid_ColumnColumn] = value;
                 }
             }
         }
@@ -1018,22 +556,22 @@ namespace CppTranslator {
         ///Row event argument class
         ///</summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public class ValidMethodRowChangeEvent : global::System.EventArgs {
+        public class ValidRowChangeEvent : global::System.EventArgs {
             
-            private ValidMethodRow eventRow;
+            private ValidRow eventRow;
             
             private global::System.Data.DataRowAction eventAction;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ValidMethodRowChangeEvent(ValidMethodRow row, global::System.Data.DataRowAction action) {
+            public ValidRowChangeEvent(ValidRow row, global::System.Data.DataRowAction action) {
                 this.eventRow = row;
                 this.eventAction = action;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ValidMethodRow Row {
+            public ValidRow Row {
                 get {
                     return this.eventRow;
                 }

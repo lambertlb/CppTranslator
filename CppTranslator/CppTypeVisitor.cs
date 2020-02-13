@@ -65,7 +65,6 @@ namespace CppTranslator
 			typeTranslation.Add("short", "Int16");
 			typeTranslation.Add("ushort", "UInt16");
 			typeTranslation.Add("string", "String");
-			ValidClasses validClasses = new ValidClasses();
 #if DEBUG
 			String typeFilePath = AppDomain.CurrentDomain.BaseDirectory + @"..\..\ValidTypes.xml";
 #else
@@ -73,25 +72,23 @@ namespace CppTranslator
 #endif
 			try
 			{
-				validClasses.ReadXml(typeFilePath, XmlReadMode.ReadSchema);
-				LoadValidationData(validClasses);
+				using (ValidItems validItems = new ValidItems())
+				{
+					validItems.ReadXml(typeFilePath, XmlReadMode.ReadSchema);
+					LoadValidationData(validItems);
+				}
 			}
 			catch (Exception)
 			{
 			}
-			validClasses.Dispose();
 		}
 
-		private void LoadValidationData(ValidClasses validClasses)
+		private void LoadValidationData(ValidItems validItems)
 		{
-			ValidClasses.ValidClassDataTable table = validClasses.ValidClass;
-			foreach (ValidClasses.ValidClassRow validRow in table)
+			ValidItems.ValidDataTable table = validItems.Valid;
+			foreach (ValidItems.ValidRow validRow in table)
 			{
-				legalTypes.Add(validRow.Name, validRow.Name);
-				foreach (ValidClasses.ValidMethodRow methodRow in validRow.GetValidMethodRows())
-				{
-					legalTypes.Add(methodRow.Signature, methodRow.Signature);
-				}
+				legalTypes.Add(validRow.Valid_Column, validRow.Valid_Column);
 			}
 		}
 
