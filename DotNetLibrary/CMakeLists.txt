@@ -17,6 +17,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_library(DotNetLibrary SHARED
 src/Array.cpp
 src/BooleanValue.cpp
+src/BitConverter.cpp
 src/Buffer.cpp
 src/ByteValue.cpp
 src/CharEnumerator.cpp

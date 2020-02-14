@@ -162,6 +162,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\BitConverter.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="src\Array.cpp" />
     <ClCompile Include="src\BooleanValue.cpp" />
@@ -186,6 +187,7 @@
     <ClCompile Include="src\UInt64Value.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\BitConverter.h" />
     <ClInclude Include="include\BooleanValue.h" />
     <ClInclude Include="include\Buffer.h" />
     <ClInclude Include="include\ByteValue.h" />

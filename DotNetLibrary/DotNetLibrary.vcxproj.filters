@@ -77,6 +77,9 @@
     <ClCompile Include="src\UInt64Value.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\BitConverter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DotnetTypes.h" />
@@ -103,6 +106,7 @@
     <ClInclude Include="include\TimeSpanValue.h" />
     <ClInclude Include="include\Exception.h" />
     <ClInclude Include="include\DotNetMath.h" />
+    <ClInclude Include="BitConverter.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

@@ -22,7 +22,29 @@
 	<Valid>System.Array.SetValue(System.Object,System.Int32[])</Valid>
 	<Valid>System.Array.get_Length()</Valid>
 	<Valid>System.Array.get_Rank()</Valid>
-	<Valid>System.Boolean</Valid>
+	<Valid>System.BitConverter.GetBytes(System.Boolean)</Valid>
+	<Valid>System.BitConverter.GetBytes(System.Char)</Valid>
+	<Valid>System.BitConverter.GetBytes(System.Double)</Valid>
+	<Valid>System.BitConverter.GetBytes(System.Int16)</Valid>
+	<Valid>System.BitConverter.GetBytes(System.Int32)</Valid>
+	<Valid>System.BitConverter.GetBytes(System.Int64)</Valid>
+	<Valid>System.BitConverter.GetBytes(System.Single)</Valid>
+	<Valid>System.BitConverter.GetBytes(System.UInt16)</Valid>
+	<Valid>System.BitConverter.GetBytes(System.UInt32)</Valid>
+	<Valid>System.BitConverter.GetBytes(System.UInt64)</Valid>
+	<Valid>System.BitConverter.ToBoolean(System.Byte[],System.Int32)</Valid>
+	<Valid>System.BitConverter.ToChar(System.Byte[],System.Int32)</Valid>
+	<Valid>System.BitConverter.ToDouble(System.Byte[],System.Int32)</Valid>
+	<Valid>System.BitConverter.ToInt16(System.Byte[],System.Int32)</Valid>
+	<Valid>System.BitConverter.ToInt32(System.Byte[],System.Int32)</Valid>
+	<Valid>System.BitConverter.ToInt64(System.Byte[],System.Int32)</Valid>
+	<Valid>System.BitConverter.ToSingle(System.Byte[],System.Int32)</Valid>
+	<Valid>System.BitConverter.ToString(System.Byte[])</Valid>
+	<Valid>System.BitConverter.ToString(System.Byte[],System.Int32)</Valid>
+	<Valid>System.BitConverter.ToString(System.Byte[],System.Int32,System.Int32)</Valid>
+	<Valid>System.BitConverter.ToUInt16(System.Byte[],System.Int32)</Valid>
+	<Valid>System.BitConverter.ToUInt32(System.Byte[],System.Int32)</Valid>
+	<Valid>System.BitConverter.ToUInt64(System.Byte[],System.Int32)</Valid>	<Valid>System.Boolean</Valid>
 	<Valid>System.Boolean[,,]</Valid>
 	<Valid>System.Boolean[,]</Valid>
 	<Valid>System.Boolean[]</Valid>

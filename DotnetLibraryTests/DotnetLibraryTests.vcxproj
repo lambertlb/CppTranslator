@@ -34,6 +34,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClCompile Include="ArrayTests.cpp" />
+    <ClCompile Include="BitConverterTests.cpp" />
     <ClCompile Include="BooleanTests.cpp" />
     <ClCompile Include="BufferTests.cpp" />
     <ClCompile Include="ByteTests.cpp" />

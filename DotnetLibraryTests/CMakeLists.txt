@@ -17,6 +17,7 @@ include_directories(../DotNetLibrary/include)
 # add the executable
 add_executable(DotNetLibraryTests
 	ArrayTests.cpp
+	BitConverterTests.cpp
 	BooleanTests.cpp
 	BufferTests.cpp
 	ByteTests.cpp

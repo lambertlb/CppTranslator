@@ -22,6 +22,8 @@ namespace CppTranslatorFeatureTest
 				arrayTest.Run();
 				BufferTest bufferTest = new BufferTest(this);
 				bufferTest.Run();
+				BitConverterTest bitConverterTest = new BitConverterTest(this);
+				bitConverterTest.Run();
 				ByteTest byteTest = new ByteTest(this);
 				byteTest.Run();
 				CharTest charTest = new CharTest(this);

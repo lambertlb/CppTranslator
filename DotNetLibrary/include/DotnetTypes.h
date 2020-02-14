@@ -100,3 +100,4 @@ namespace DotnetLibrary
 #include "TimeSpanValue.h"
 #include "CharEnumerator.h"
 #include "Exception.h"
+#include "BitConverter.h"
