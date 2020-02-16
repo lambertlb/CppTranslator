@@ -40,7 +40,8 @@ namespace DotnetLibrary
 	}
 	Array* BitConverter::GetBytes(Char value)
 	{
-		return GetBytes((Byte*)&value, sizeof(Char));
+		Int16 val = (Int16)value;
+		return GetBytes((Byte*)&val, sizeof(Int16));
 	}
 	Array* BitConverter::GetBytes(Double value)
 	{
@@ -86,9 +87,9 @@ namespace DotnetLibrary
 	}
 	Char BitConverter::ToChar(Array* value, Int32 startIndex)
 	{
-		Char ret;
-		PutBytes((Byte*)&ret, value, startIndex, sizeof(Char));
-		return ret;
+		Int16 ret;
+		PutBytes((Byte*)&ret, value, startIndex, sizeof(Int16));
+		return (Char)ret;
 	}
 	Double BitConverter::ToDouble(Array* value, Int32 startIndex)
 	{
