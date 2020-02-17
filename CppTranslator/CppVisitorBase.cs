@@ -888,7 +888,7 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		public virtual void VisitVariableInitializer(VariableInitializer variableInitializer)
 		{
-			throw new NotImplementedException();
+			Formatter.AppendName(variableInitializer.Name);
 		}
 		/// <inheritdoc/>
 		public void VisitTypeOfExpression(TypeOfExpression typeOfExpression)

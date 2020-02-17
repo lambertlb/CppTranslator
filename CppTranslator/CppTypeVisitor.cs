@@ -201,7 +201,9 @@ namespace CppTranslator
 		{
 			if (type.Kind == TypeKind.ByReference)
 			{
-				return (true);
+				ByReferenceType br = (ByReferenceType)type;
+				if (br.ElementType.Kind != TypeKind.Struct)
+					return (true);
 			}
 			return (type.Kind == TypeKind.Class || type.Kind == TypeKind.Array);
 		}

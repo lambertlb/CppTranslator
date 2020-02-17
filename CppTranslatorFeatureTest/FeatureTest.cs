@@ -40,6 +40,8 @@ namespace CppTranslatorFeatureTest
 				int64Test.Run();
 				MathTest mathTest = new MathTest(this);
 				mathTest.Run();
+				MiscTest miscTest = new MiscTest(this);
+				miscTest.Run();
 				SByteTest sbyteTest = new SByteTest(this);
 				sbyteTest.Run();
 				SingleTest singleTest = new SingleTest(this);

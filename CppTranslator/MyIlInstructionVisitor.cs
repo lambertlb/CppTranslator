@@ -138,6 +138,14 @@ namespace CppTranslator
 		private void HandleFieldAccess(ILInstruction target)
 		{
 			target.AcceptVisitor(this);
+			if (target is LdLoc)
+			{
+				if (((LdLoc)target).Variable.Name == "this")
+				{
+					Formatter.Append("->");
+					return;
+				}
+			}
 			IType type = TypeVisitor.GetTypeForInstruction(target, null);
 			TypeVisitor.FormatTypeAccess(type);
 		}
@@ -362,6 +370,13 @@ namespace CppTranslator
 			ICSharpCode.Decompiler.IL.Leave leave = block.Instructions.FirstOrDefault() as ICSharpCode.Decompiler.IL.Leave;
 			if (block.Instructions.Count == 1 && leave != null)
 				return;
+			ICSharpCode.Decompiler.IL.BlockContainer container = block.Instructions.FirstOrDefault() as ICSharpCode.Decompiler.IL.BlockContainer;
+			if (container != null)
+			{
+				ICSharpCode.Decompiler.IL.Block block2 = container.Blocks.FirstOrDefault() as ICSharpCode.Decompiler.IL.Block;
+				if (block2 != null && block2.Label == block.Label)
+					return;
+			}
 			if (Formatter.IsOnNewline)
 			{
 				Formatter.Append(block.Label);
@@ -727,7 +742,7 @@ namespace CppTranslator
 			if (!justCondition)
 				Formatter.Append("if ");
 			Formatter.Append("(");
-			BuildCondition(inst);
+			BuildCondition(inst, justCondition);
 			Formatter.Append(")");
 			if (!justCondition)
 			{
@@ -741,41 +756,25 @@ namespace CppTranslator
 			}
 			return base.VisitIfInstruction(inst);
 		}
-		private void BuildCondition(IfInstruction inst)
+		private void BuildCondition(IfInstruction inst, bool justCondition)
 		{
 			bool wasIf = false;
 			if (inst.Condition is IfInstruction)
 			{
 				wasIf = true;
-				BuildCondition(inst.Condition as IfInstruction);
+				BuildCondition(inst.Condition as IfInstruction, justCondition);
 			}
 			if (!wasIf)
 			{
 				inst.Condition.AcceptVisitor(this);
 			}
-			bool leftIsConstant = IsConstant(inst.TrueInst);
-			int leftConstant = GetAsIntConstant(inst.TrueInst);
-			bool rightIsConstant = IsConstant(inst.FalseInst);
-			int rightConstant = GetAsIntConstant(inst.FalseInst);
-			String logicalOpertor;
-			if (rightIsConstant)
-			{
-				if (rightConstant == 1)
-					logicalOpertor = " || ";
-				else
-					logicalOpertor = " && ";
-				Formatter.Append(logicalOpertor);
-				inst.TrueInst.AcceptVisitor(this);
-			}
-			else if (leftIsConstant)
-			{
-				if (leftConstant == 1)
-					logicalOpertor = " || ";
-				else
-					logicalOpertor = " && ";
-				Formatter.Append(logicalOpertor);
-				inst.FalseInst.AcceptVisitor(this);
-			}
+			if (!justCondition)
+				return;
+			Formatter.Append(" ? (");
+			inst.TrueInst.AcceptVisitor(this);
+			Formatter.Append(") : (");
+			inst.FalseInst.AcceptVisitor(this);
+			Formatter.Append(")");
 		}
 		private void WriteBlockWithBraces(ILInstruction trueInst)
 		{

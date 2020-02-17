@@ -11,9 +11,11 @@ namespace MiniTest
 		}
 		public override void RunCode()
 		{
-			StringBuilder sb = new StringBuilder();
-			sb.Append("ABC");
-			String value = sb.ToString();
+			Int32 value = 2;
+			value = value == 2 ? 3 : 1;
+			AssertTrue(value == 3);
+			value = value <= 3 ? 1 : 0;
+			AssertTrue(value == 1);
 		}
 		public void AssertTrue(bool value)
 		{

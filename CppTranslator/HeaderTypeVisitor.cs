@@ -31,6 +31,14 @@ namespace CppTranslator
 	public class HeaderTypeVisitor : CppVisitorBase
 	{
 		/// <summary>
+		/// Did this have a constructor
+		/// </summary>
+		public bool HadConstructor { get; set; }
+		/// <summary>
+		/// Did this have a default constructor
+		/// </summary>
+		public bool HadDefaultConstructor { get; set; }
+		/// <summary>
 		/// Keep track of declarations useful for parentage and ordering
 		/// </summary>
 		private List<TypeDeclaration> declarations = new List<TypeDeclaration>();
@@ -143,6 +151,8 @@ namespace CppTranslator
 		/// <param name="typeDeclaration">type declaration</param>
 		protected override void HeaderTypeDeclaration(TypeDeclaration typeDeclaration)
 		{
+			HadDefaultConstructor = false;
+			HadConstructor = false;
 			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
 			Formatter.NameSpace = type.Namespace;
 			if (!namespaces.ContainsKey(type.Namespace))
@@ -157,7 +167,18 @@ namespace CppTranslator
 			{
 				member.AcceptVisitor(this);
 			}
+			if (typeDeclaration.ClassType == ClassType.Struct && HadConstructor && !HadDefaultConstructor)
+			{
+				CreateDefaultConstructor(typeDeclaration);
+			}
 			Formatter.AddCloseBrace(true);
+		}
+		private void CreateDefaultConstructor(TypeDeclaration typeDeclaration)
+		{
+			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
+			Formatter.AppendIndented("");
+			TypeVisitor.FormatTypeDelaration(type);
+			Formatter.Append("(){};");
 		}
 		private void OutputParentage(TypeDeclaration typeDeclaration, IType type)
 		{
@@ -231,6 +252,9 @@ namespace CppTranslator
 				Formatter.AppendName(name);
 				Formatter.AppendLine("_Initilized;");
 			}
+			HadConstructor = true;
+			if (constructorDeclaration.Parameters.Count == 0)
+				HadDefaultConstructor = true;
 		}
 		/// <inheritdoc/>
 		public override void VisitMethodDeclaration(MethodDeclaration methodDeclaration)
