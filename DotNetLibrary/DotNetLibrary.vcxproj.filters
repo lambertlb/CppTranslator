@@ -106,7 +106,7 @@
     <ClInclude Include="include\TimeSpanValue.h" />
     <ClInclude Include="include\Exception.h" />
     <ClInclude Include="include\DotNetMath.h" />
-    <ClInclude Include="BitConverter.h" />
+    <ClInclude Include="include\BitConverter.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

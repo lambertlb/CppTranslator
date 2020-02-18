@@ -13,6 +13,7 @@ ENDIF()
 find_package(GTest REQUIRED)
 
 include_directories(../DotNetLibrary/include)
+include_directories(../PlatformSupport)
 
 # add the executable
 add_executable(DotNetLibraryTests
@@ -41,6 +42,7 @@ add_executable(DotNetLibraryTests
 target_link_libraries(
 	DotNetLibraryTests
 	DotNetLibrary
+	PlatformSupport
 	GTest::GTest
 	GTest::Main
 )

@@ -14,6 +14,7 @@
 #else
 #define	DLL_EXPORT	
 #endif
+#include <PlatformSupport.h>
 #include <stdint.h>
 #include <cstdio>
 

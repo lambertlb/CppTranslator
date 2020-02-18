@@ -12,6 +12,7 @@ IF(MSVC)
     add_definitions(-D_USRDLL -DUNICODE -D_UNICODE)
 ENDIF()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(../PlatformSupport)
 
 # add the executable
 add_library(DotNetLibrary SHARED
@@ -38,6 +39,11 @@ src/UInt16Value.cpp
 src/UInt32Value.cpp
 src/UInt64Value.cpp
 dllmain.cpp
+)
+
+target_link_libraries(
+	DotNetLibrary
+	PlatformSupport
 )
 target_compile_definitions(DotNetLibrary PRIVATE DOTNETLIBRARY_EXPORTS)
 IF(MSVC)

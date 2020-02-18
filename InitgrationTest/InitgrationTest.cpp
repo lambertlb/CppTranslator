@@ -1,4 +1,5 @@
 #include "TranslatedHeader.h"
+#include <cstdlib>
 
 //#define	DoMiniTest
 

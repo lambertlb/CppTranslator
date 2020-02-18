@@ -13,6 +13,7 @@ IF(MSVC)
 ENDIF()
 include_directories(../DotNetLibrary/include)
 include_directories(../DotNetLibrarySupport)
+include_directories(../PlatformSupport)
 
 # add the executable
 add_library(DotNetLibrarySupport SHARED
@@ -26,4 +27,5 @@ ENDIF()
 target_link_libraries(
 	DotNetLibrarySupport
 	DotNetLibrary
+    PlatformSupport
 )
