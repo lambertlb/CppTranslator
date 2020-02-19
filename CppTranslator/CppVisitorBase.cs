@@ -28,6 +28,7 @@ namespace CppTranslator
 	/// <summary>
 	/// Visitor for everything non-code related in in .Cpp file
 	/// The main function is to is to create the .h file to support the .cpp file.
+	/// This will use the MyIlInstructionVisitor class to actually format any code in methods.
 	/// </summary>
 	public class CppVisitorBase : IAstVisitor
 	{
@@ -90,6 +91,7 @@ namespace CppTranslator
 		}
 		/// <summary>
 		/// Create headers
+		/// This is overridden by subclasses to add header files.
 		/// </summary>
 		public virtual void CreateHeaders()
 		{
@@ -122,7 +124,7 @@ namespace CppTranslator
 			}
 		}
 		/// <summary>
-		/// Outout method header
+		/// Output method header
 		/// </summary>
 		/// <param name="methodName">method name</param>
 		/// <param name="parameters">parameter collection</param>
@@ -143,10 +145,6 @@ namespace CppTranslator
 		{
 			WriteMethodHeader(methodName, parameters);
 			ICSharpCode.Decompiler.IL.BlockContainer inst = body.Annotation<ICSharpCode.Decompiler.IL.BlockContainer>();
-			if (methodName == "MethodTests")
-			{
-				methodName = "MethodTests";
-			}
 			MyIlVisitor.StartMainBlock(inst, null);
 		}
 		/// <summary>

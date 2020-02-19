@@ -1,4 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Following is a list of valid items that can be used from the .Net framework-->
+<!-- This includes types such as classes and structs -->
+<!-- This also includes method signatures because not all methods are supported within a given class-->
+<!-- All reference "&" have been removed from signatures that have them-->
+<!-- Only arrays of up to three dimensions are currently supported-->
+<!-- If you change the format of this file you will need to adjust the xsd file-->
+<!-- You will then need to run the xsd tool to generate new code and adjust the code in CppTypeVisitor.cs to handle the change-->
+<!-- There is a prebuild.bat file that can be run from a prebuild event to generate the file just remove the "rem" to enable -->
 <ValidItems>
 	<Valid>System.Array</Valid>
 	<Valid>System.Array.Clear(System.Array,System.Int32,System.Int32)</Valid>

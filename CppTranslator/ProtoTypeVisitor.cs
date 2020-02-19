@@ -24,6 +24,8 @@ namespace CppTranslator
 {
 	/// <summary>
 	/// Worker for handling functional prototypes
+	/// This will define all forward references for classes and all enumerations.
+	/// To make sure they are unique all enum will have there enum name appended to the end of each value
 	/// </summary>
 	public class ProtoTypeVisitor : CppVisitorBase
 	{
@@ -80,6 +82,11 @@ namespace CppTranslator
 			}
 			Formatter.AppendLine(String.Empty);
 		}
+		/// <summary>
+		/// Output all values in an enum.
+		/// Append the enum name to end to ensure they are unique.
+		/// </summary>
+		/// <param name="typeDeclaration">enum declaration</param>
 		private void OutputEnumValues(TypeDeclaration typeDeclaration)
 		{
 			EnumName = typeDeclaration.Name;

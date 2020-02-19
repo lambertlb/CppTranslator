@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
 using ICSharpCode.Decompiler.IL;
 using ICSharpCode.Decompiler.TypeSystem;
@@ -28,7 +27,11 @@ using ICSharpCode.Decompiler.TypeSystem.Implementation;
 namespace CppTranslator
 {
 	/// <summary>
-	/// Visitor used for type formatting
+	/// Visitor used for type formatting.
+	/// This is also the central point to all things based on type.
+	/// This will also ensure that all platform types conform to the legal subset.
+	/// The subset is defined in ValidTypes.xml
+	/// If the schema for the xml changes you will need to rerun the xsd tool by removing the rem in the pre-build events
 	/// </summary>
 	public class CppTypeVisitor : TypeVisitor
 	{
@@ -100,17 +103,13 @@ namespace CppTranslator
 				legalTypes.Add(validRow.Valid_Column, String.Empty);
 			}
 		}
-
 		/// <summary>
-		/// Make sure this is supported type
+		/// Make sure this is valid to use
 		/// </summary>
-		/// <param name="type">to check</param>
-		private void ValidateType(IType type)
-		{
-			ValidateType(type.FullName);
-		}
+		/// <param name="typeToValidate">type to validate</param>
 		private void ValidateType(String typeToValidate)
 		{
+			// remove reference character
 			typeToValidate = typeToValidate.Replace("&", String.Empty, StringComparison.InvariantCulture);
 			if (!typeToValidate.StartsWith("System.", StringComparison.InvariantCulture))
 				return;
@@ -118,6 +117,14 @@ namespace CppTranslator
 			{
 				IllegalType(typeToValidate);
 			}
+		}
+		/// <summary>
+		/// Make sure this is supported type
+		/// </summary>
+		/// <param name="type">to check</param>
+		private void ValidateType(IType type)
+		{
+			ValidateType(type.FullName);
 		}
 		/// <summary>
 		/// Make sure this call uses valid types
@@ -131,7 +138,11 @@ namespace CppTranslator
 				ValidateType(signature);
 			}
 		}
-
+		/// <summary>
+		/// Build the signature for this method call
+		/// </summary>
+		/// <param name="inst">call to build signature for</param>
+		/// <returns>signature of call</returns>
 		private string BuildCallSignature(CallInstruction inst)
 		{
 			StringBuilder sb = new StringBuilder();
@@ -149,18 +160,16 @@ namespace CppTranslator
 			sb.Append(')');
 			return (sb.ToString());
 		}
-
+		/// <summary>
+		/// Handle illegal type
+		/// </summary>
+		/// <param name="typeToValidate">type that was illegal</param>
 		private void IllegalType(String typeToValidate)
 		{
 			Trace.TraceError("Illegal Use of \"" + typeToValidate + "\"");
 			// Just log it once
 			legalTypes.Add(typeToValidate, String.Empty);
-			// using (StreamWriter file = new StreamWriter("IllegalTypes.txt", true))
-			// {
-			//	file.WriteLine(typeToValidate);
-			// }
 		}
-
 		/// <summary>
 		/// Format a type declaration
 		/// </summary>
@@ -174,7 +183,6 @@ namespace CppTranslator
 				Formatter.Append("*");
 			}
 		}
-
 		/// <summary>
 		/// Format a type
 		/// </summary>
@@ -184,10 +192,12 @@ namespace CppTranslator
 			String name = type.Name;
 			if (type.Kind == TypeKind.ByReference)
 			{
+				// remove &
 				name = name.Substring(0, name.Length - 1);
 			}
 			if (type.Kind == TypeKind.Array)
 			{
+				// all arrays in C++ are just Array
 				name = "Array";
 			}
 			Formatter.AppendName(name);
@@ -201,6 +211,7 @@ namespace CppTranslator
 		{
 			if (type.Kind == TypeKind.ByReference)
 			{
+				// Structs are by reference and not pointer
 				ByReferenceType br = (ByReferenceType)type;
 				if (br.ElementType.Kind != TypeKind.Struct)
 					return (true);
@@ -258,6 +269,7 @@ namespace CppTranslator
 		}
 		/// <summary>
 		/// Add type to output
+		/// This will use the C++ type if it matches one in the typeTranslation collection
 		/// </summary>
 		/// <param name="type">to add</param>
 		public void AppendType(String type)

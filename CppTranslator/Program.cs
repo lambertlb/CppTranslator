@@ -28,6 +28,9 @@ namespace CppTranslator
 {
 	/// <summary>
 	/// Entry point for convertine il code to C++
+	/// All headers and method declarations are formatted using C# vistors.
+	/// All the actual code formatting is done using and ILInstruction vistor.
+	/// This was because the C# syntax tree lost a lot of the type information needed for translation.
 	/// </summary>
 	public static class Program
 	{
@@ -70,7 +73,11 @@ namespace CppTranslator
 				Trace.TraceError("StackTrace: " + ex.StackTrace);
 			}
 		}
-
+		/// <summary>
+		/// Compute path to assemble and all output files
+		/// All output will be put into a generated folder in a subdirectory of the file to be tranlated.
+		/// </summary>
+		/// <param name="args">path to file to be translated</param>
 		private static void GetPathToAssembly(string[] args)
 		{
 			int index;
@@ -86,7 +93,11 @@ namespace CppTranslator
 			Directory.CreateDirectory(path + "generated/");
 			pathToAssemble = path + "generated/Translated";
 		}
-
+		/// <summary>
+		/// Process the input file using the supplied visitor
+		/// </summary>
+		/// <param name="visitorToUse">visitor to use</param>
+		/// <param name="filePath">path to file</param>
 		private static void ProcessModules(CppVisitorBase visitorToUse, String filePath)
 		{
 			setOutput = false;
@@ -98,6 +109,8 @@ namespace CppTranslator
 					{
 						if (typeDefinition.Kind == TypeKind.Class || typeDefinition.Kind == TypeKind.Enum || typeDefinition.Kind == TypeKind.Struct)
 						{
+							// Skip modules starting with < or any from CppTranslatorSupport namespace because
+							// those are hand crafted for specific platforms
 							if (!typeDefinition.Name.StartsWith("<", StringComparison.InvariantCulture) && !typeDefinition.Namespace.Contains("CppTranslatorSupport", StringComparison.InvariantCulture))
 							{
 								if (!setOutput)
