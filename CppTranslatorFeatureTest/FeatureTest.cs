@@ -58,6 +58,8 @@ namespace CppTranslatorFeatureTest
 				uint32Test.Run();
 				UInt64Test uint64Test = new UInt64Test(this);
 				uint64Test.Run();
+				PlatformSupportTest platformSupportTest = new PlatformSupportTest(this);
+				platformSupportTest.Run();
 			}
 			catch (Exception)
 			{

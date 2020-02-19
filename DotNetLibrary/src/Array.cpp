@@ -23,6 +23,24 @@ namespace DotnetLibrary
 		sizeof(UInt64),	//TimeSpanType
 		sizeof(void*)	//StringType
 	};
+	Array::Array(void* dataMemory, DataType dataType, Int32 dimension1Size, Int32 dimension2Size, Int32 dimension3Size)
+	{
+		this->dataType = dataType;
+		this->dimension1Size = dimension1Size;
+		this->dimension2Size = dimension2Size;
+		this->dimension3Size = dimension3Size;
+		dimensionCount = 1;
+		totalElementCount = dimension1Size;
+		if (dimension2Size != -1) {
+			++dimensionCount;
+			totalElementCount *= dimension2Size;
+		}
+		if (dimension3Size != -1) {
+			++dimensionCount;
+			totalElementCount *= dimension3Size;
+		}
+		data = (char*)dataMemory;
+	}
 	Array::Array(DataType dataType, Int32 dimension1Size, Int32 dimension2Size, Int32 dimension3Size) {
 		this->dataType = dataType;
 		this->dimension1Size = dimension1Size;

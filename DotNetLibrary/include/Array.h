@@ -16,7 +16,8 @@ namespace DotnetLibrary
 		Int32			ComputeIndex(Int32 index1, Int32 index2 = -1, Int32 index3 = -1);
 		static void		VerifyIndexWithinRangeOfArray(Array* array, Int32 startingIndex, Int32 amountOfElements);
 	public:
-						Array(DataType dataType, Int32 dimension1Size, Int32 dimension2Size = -1, Int32 dimension3Size = -1);
+		Array(void *dataMemory,DataType dataType, Int32 dimension1Size, Int32 dimension2Size = -1, Int32 dimension3Size = -1);
+		Array(DataType dataType, Int32 dimension1Size, Int32 dimension2Size = -1, Int32 dimension3Size = -1);
 		virtual			~Array();
 		Int32			get_Length();
 		Int32			get_Rank();
