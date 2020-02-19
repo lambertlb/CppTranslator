@@ -28,7 +28,7 @@ TEST(BitConverterTests, CharGetBytesTest) {
 	Char input = 'A';
 	Byte expected[]{ 0x41, 0 };
 	Array* bytes = BitConverter::GetBytes(input);
-	ASSERT_TRUE(memcmp(expected, bytes->Address(0), sizeof(Char)) == 0);
+	ASSERT_TRUE(memcmp(expected, bytes->Address(0), 2) == 0);
 	ASSERT_TRUE(BitConverter::ToChar(bytes, 0) == input);
 }
 TEST(BitConverterTests, DoubleGetBytesTest) {
@@ -89,7 +89,7 @@ TEST(BitConverterTests, UInt64GetBytesTest) {
 }
 TEST(BitConverterTests,ToStringTest) {
 	UInt64 input = 0x0123456789abcdef;
-	Char* expected = L"EF-CD-AB-89-67-45-23-01";
+	Char* expected = (Char*)L"EF-CD-AB-89-67-45-23-01";
 	Array* bytes = BitConverter::GetBytes(input);
 	String* answer = BitConverter::ToString(bytes);
 	Char* x = (Char*)answer->Address(0);
@@ -97,7 +97,7 @@ TEST(BitConverterTests,ToStringTest) {
 }
 TEST(BitConverterTests, ToString2Test) {
 	UInt64 input = 0x0123456789abcdef;
-	Char* expected = L"AB-89-67-45-23-01";
+	Char* expected = (Char*)L"AB-89-67-45-23-01";
 	Array* bytes = BitConverter::GetBytes(input);
 	String* answer = BitConverter::ToString(bytes,2);
 	Char* x = (Char*)answer->Address(0);
@@ -105,7 +105,7 @@ TEST(BitConverterTests, ToString2Test) {
 }
 TEST(BitConverterTests, ToString3Test) {
 	UInt64 input = 0x0123456789abcdef;
-	Char* expected = L"AB-89";
+	Char* expected = (Char*)L"AB-89";
 	Array* bytes = BitConverter::GetBytes(input);
 	String* answer = BitConverter::ToString(bytes,2, 2);
 	Char* x = (Char*)answer->Address(0);

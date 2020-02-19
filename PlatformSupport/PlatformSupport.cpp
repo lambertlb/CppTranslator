@@ -1,6 +1,8 @@
 #include "PlatformSupport.h"
-#include <cstdio>
-#include <cstring>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 DLL_PLATFORMSUPPORT_EXPORTS void* CDECL my_operator_new_replacement(size_t size)
 {
 	void* memory = malloc(size);

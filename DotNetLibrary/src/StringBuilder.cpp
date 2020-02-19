@@ -325,9 +325,9 @@ namespace DotnetLibrary
 	}
 	StringBuilder* StringBuilder::AppendLine()
 	{
-#ifdef WIN32
+//#ifdef WIN32
 		Append(L'\r');
-#endif // WIN32
+//#endif // WIN32
 		return(Append(L'\n'));
 	}
 	StringBuilder* StringBuilder::AppendLine(String* value)
