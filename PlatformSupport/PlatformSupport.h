@@ -47,8 +47,8 @@
  * Platform Replacement for new operator
  * The current implementation is not thread safe.
  * It is meant to recycle the memory between executions.
- * This means there can be no persisten items between executions.
- * All presistent items must be handled in the library suppory data access area.
+ * This means there can be no persistent items between executions.
+ * All persistent items must be handled in the library support data access area.
  * 
  * \param size required
  * \return pointer to memory or nullptr

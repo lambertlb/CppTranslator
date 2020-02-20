@@ -32,6 +32,12 @@ char* memory = nullptr;
 
 DLL_PLATFORMSUPPORT_EXPORTS void* CDECL my_operator_new_replacement(size_t size)
 {
+	// Use malloc if not setup such as when unit tests run.
+	if (memory == nullptr) {
+		void* mem = malloc(size);
+		memset(mem, 0, size);
+		return(mem);
+	}
 	uint32_t required = (uint32_t)size;
 	required = Align(required, sizeof(double));
 	if (memoryUsed + required > memorySize)
@@ -41,15 +47,11 @@ DLL_PLATFORMSUPPORT_EXPORTS void* CDECL my_operator_new_replacement(size_t size)
 	currentMemory += required;
 	memset(ret, 0, size);
 	return(ret);
-	//void* memory = malloc(size);
-	//if (memory != nullptr)
-	//	memset(memory, 0, size);
-	//return(memory);
 }
-DLL_PLATFORMSUPPORT_EXPORTS void CDECL my_operator_delete_replacement(void* memory)
+DLL_PLATFORMSUPPORT_EXPORTS void CDECL my_operator_delete_replacement(void* mem)
 {
-	//if (memory != nullptr)
-	//	free(memory);
+	if (memory = nullptr)
+		free(mem);
 }
 
 DLL_PLATFORMSUPPORT_EXPORTS void PlatformSetup()
