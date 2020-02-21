@@ -21,15 +21,33 @@
 namespace DotnetLibrary
 {
 
-	class DLL_EXPORT CharEnumerator : public Object
+	/**
+	 * Emulate .Net CharEnumerator
+	 */
+	class DLL_EXPORT CharEnumerator: public Object
 	{
 		Int32	index;
 		String* string;
 		Char	currentElement;
 	public:
+		/**
+		 * Construct enumerator
+		 * @param str string to enumerate
+		 */
 		CharEnumerator(String* str);
-		Char		get_Current();
-		Boolean		MoveNext();
-		void		Reset();
+		/**
+		 * Gets the currently referenced character
+		 * @return current character
+		 */
+		Char get_Current();
+		/**
+		 * Increments the internal index to the next character of the enumerated string.
+		 * @return true if the index is successfully incremented and within the enumerated string; otherwise, false
+		 */
+		Boolean MoveNext();
+		/**
+		 * Initializes the index to a position logically before the first character of the enumerated string.
+		 */
+		void Reset();
 	};
 }

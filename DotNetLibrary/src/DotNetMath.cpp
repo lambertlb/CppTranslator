@@ -90,7 +90,7 @@ namespace DotnetLibrary
 	}
 	Double Math::BitDecrement(Double x)
 	{
-		Int64 bits = DoubleValue::ToUInt64(x);
+		Int64 bits = BitConverter::DoubleToInt64Bits(x);
 
 		if (((bits >> 32) & 0x7FF00000) >= 0x7FF00000) {
 			// NaN returns NaN
@@ -108,11 +108,11 @@ namespace DotnetLibrary
 		// Positive values need to be decremented
 
 		bits += ((bits < 0) ? +1 : -1);
-		return DoubleValue::ToDouble(bits);
+		return BitConverter::Int64BitsToDouble(bits);
 	}
 	Double Math::BitIncrement(Double x)
 	{
-		Int64 bits = DoubleValue::ToUInt64(x);
+		Int64 bits = BitConverter::DoubleToInt64Bits(x);
 
 		if (((bits >> 32) & 0x7FF00000) >= 0x7FF00000) {
 			// NaN returns NaN
@@ -130,7 +130,7 @@ namespace DotnetLibrary
 		// Positive values need to be incremented
 
 		bits += ((bits < 0) ? -1 : +1);
-		return DoubleValue::ToDouble(bits);
+		return BitConverter::Int64BitsToDouble(bits);
 	}
 	Double Math::Cbrt(Double x)
 	{
@@ -197,17 +197,17 @@ namespace DotnetLibrary
 		// This method is required to work for all inputs,
 		 // including NaN, so we operate on the raw bits.
 
-		Int64 xbits = DoubleValue::ToUInt64(x);
+		Int64 xbits = BitConverter::DoubleToInt64Bits(x);
 		if (DoubleValue::IsNaN(y))
 			y = -0.0;
-		Int64 ybits = DoubleValue::ToUInt64(y);
+		Int64 ybits = BitConverter::DoubleToInt64Bits(y);
 
 		// If the sign bits of x and y are not the same,
 		// flip the sign bit of x and return the new value;
 		// otherwise, just return x
 
 		if ((xbits ^ ybits) < 0) {
-			return DoubleValue::ToDouble(xbits ^ Int64Value::MinValue);
+			return BitConverter::Int64BitsToDouble(xbits ^ Int64Value::MinValue);
 		}
 
 		return x;
@@ -523,7 +523,7 @@ namespace DotnetLibrary
 
 	Double Math::Round(Double a)
 	{
-		UInt64 bits = DoubleValue::ToUInt64(a);
+		UInt64 bits = BitConverter::DoubleToInt64Bits(a);
 		int exponent = ExtractExponentFromBits(bits);
 
 		if (exponent <= 0x03FE) {
@@ -545,7 +545,7 @@ namespace DotnetLibrary
 		else {
 			bits &= ~roundBitsMask;
 		}
-		return DoubleValue::ToDouble((Int64)bits);
+		return BitConverter::Int64BitsToDouble((Int64)bits);
 	}
 
 	Double Math::Round(Double value, Int32 digits)

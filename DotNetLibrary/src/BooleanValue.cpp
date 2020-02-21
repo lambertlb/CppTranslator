@@ -19,94 +19,78 @@
 
 namespace DotnetLibrary
 {
-	String	trueString(L"True");
-	DLL_EXPORT String* BooleanValue::TrueString =&trueString;
-	String	falseString(L"False");
+	String trueString(L"True");
+	DLL_EXPORT String* BooleanValue::TrueString = &trueString;
+	String falseString(L"False");
 	DLL_EXPORT String* BooleanValue::FalseString = &falseString;
 
-	Boolean BooleanValue::get_AsBoolean()
-	{
-		return(value);
+	Boolean BooleanValue::get_AsBoolean() {
+		return (value);
 	}
 
-	Byte BooleanValue::get_AsByte()
-	{
-		return(value ? 1 : 0);
+	Byte BooleanValue::get_AsByte() {
+		return (value ? 1 : 0);
 	}
 
-	SByte BooleanValue::get_AsSByte()
-	{
-		return(value ? 1 : 0);
+	SByte BooleanValue::get_AsSByte() {
+		return (value ? 1 : 0);
 	}
 
-	Int16 BooleanValue::get_AsInt16()
-	{
-		return(value ? 1 : 0);
+	Int16 BooleanValue::get_AsInt16() {
+		return (value ? 1 : 0);
 	}
 
-	UInt16 BooleanValue::get_AsUInt16()
-	{
-		return(value ? 1 : 0);
+	UInt16 BooleanValue::get_AsUInt16() {
+		return (value ? 1 : 0);
 	}
 
-	Int32 BooleanValue::get_AsInt32()
-	{
-		return(value ? 1 : 0);
+	Int32 BooleanValue::get_AsInt32() {
+		return (value ? 1 : 0);
 	}
 
-	UInt32 BooleanValue::get_AsUInt32()
-	{
-		return(value ? 1 : 0);
+	UInt32 BooleanValue::get_AsUInt32() {
+		return (value ? 1 : 0);
 	}
 
-	Int64 BooleanValue::get_AsInt64()
-	{
-		return(value ? 1 : 0);
+	Int64 BooleanValue::get_AsInt64() {
+		return (value ? 1 : 0);
 	}
 
-	UInt64 BooleanValue::get_AsUInt64()
-	{
-		return(value ? 1 : 0);
+	UInt64 BooleanValue::get_AsUInt64() {
+		return (value ? 1 : 0);
 	}
 
-	Int32 BooleanValue::CompareTo(Boolean valueToCompare)
-	{
-		if (value == valueToCompare)
-		{
+	Int32 BooleanValue::CompareTo(Boolean valueToCompare) {
+		if (value == valueToCompare) {
 			return 0;
 		}
-		else if (value == false)
-		{
+		else if (value == false) {
 			return -1;
 		}
 		return 1;
 	}
 
-	Int32 BooleanValue::CompareTo(Object* valueToCompare)
-	{
+	Int32 BooleanValue::CompareTo(Object* valueToCompare) {
 		if (valueToCompare == nullptr)
-			return(1);
+			return (1);
 		if (valueToCompare->GetRawDataType() != BooleanType)
 			throw new ArgumentException();
-		return(CompareTo(((BooleanValue*)valueToCompare)->value));
+		return (CompareTo(((BooleanValue*) valueToCompare)->value));
 	}
 
-	bool BooleanValue::Equals(Object* valueToCompare)
-	{
+	bool BooleanValue::Equals(Object* valueToCompare) {
 		if (valueToCompare == nullptr)
-			return(false);
+			return (false);
 		if (valueToCompare->GetRawDataType() != BooleanType)
-			return(false);
-		return(valueToCompare->get_AsBoolean() == value);
+			return (false);
+		return (valueToCompare->get_AsBoolean() == value);
 	}
 
-	bool BooleanValue::Equals(Boolean valueToCompare)
-	{
+	bool BooleanValue::Equals(Boolean valueToCompare) {
 		return valueToCompare == value;
 	}
 
-	Int32 BooleanValue::FormatString(Char* where, const Int32 whereSize)
-	{
+	Int32 BooleanValue::FormatString(Char* where, const Int32 whereSize) {
 		Int32 rtn;
 		if (value) {
 			CopyChars(where, whereSize, TrueString->get_Buffer(), TrueString->get_Length());
@@ -118,8 +102,7 @@ namespace DotnetLibrary
 		}
 		return rtn;
 	}
-	Boolean BooleanValue::Parse(String* stringToParse)
-	{
+	Boolean BooleanValue::Parse(String* stringToParse) {
 		if (stringToParse == nullptr)
 			throw new ArgumentException();
 		if (String::Compare(stringToParse, TrueString, true) == 0) {

@@ -101,12 +101,12 @@ namespace DotnetLibrary
 	}
 	Boolean DoubleValue::IsFinite(Double d)
 	{
-		UInt64 bits = ToUInt64(d);
+		UInt64 bits = BitConverter::DoubleToInt64Bits(d);
 		return (bits & 0x7FFFFFFFFFFFFFFF) < 0x7FF0000000000000;
 	}
 	Boolean DoubleValue::IsInfinity(Double v)
 	{
-		UInt64 bits = ToUInt64(v);
+		UInt64 bits = BitConverter::DoubleToInt64Bits(v);
 		return (bits & 0x7FFFFFFFFFFFFFFF) == 0x7FF0000000000000;
 	}
 	Boolean DoubleValue::IsNaN(Double v)
@@ -117,7 +117,7 @@ namespace DotnetLibrary
 	{
 		if (IsNaN(v))
 			return(true);
-		Int64 bits = (Int64)ToUInt64(v);
+		Int64 bits = (Int64)BitConverter::DoubleToInt64Bits(v);
 		return(bits < 0);
 	}
 	Boolean DoubleValue::IsNegativeInfinity(Double v)
@@ -128,7 +128,7 @@ namespace DotnetLibrary
 	{
 		if (IsNaN(v))
 			return(false);
-		UInt64 bits = ToUInt64(v);
+		UInt64 bits = BitConverter::DoubleToInt64Bits(v);
 		bits &= 0x7FFFFFFFFFFFFFFF;
 		return (bits < 0x7FF0000000000000) && (bits != 0) && ((bits & 0x7FF0000000000000) != 0);
 	}
@@ -138,7 +138,7 @@ namespace DotnetLibrary
 	}
 	Boolean DoubleValue::IsSubnormal(Double v)
 	{
-		UInt64 bits = ToUInt64(v);
+		UInt64 bits = BitConverter::DoubleToInt64Bits(v);
 		bits &= 0x7FFFFFFFFFFFFFFF;
 		return (bits < 0x7FF0000000000000) && (bits != 0) && ((bits & 0x7FF0000000000000) == 0);
 	}
@@ -190,25 +190,5 @@ namespace DotnetLibrary
 		gotNumber = swscanf(source, L"%lG", &rtn) == 1;
 		result = rtn;
 		return(gotNumber);
-	}
-	Double DoubleValue::ToDouble(UInt64 v)
-	{
-		union
-		{
-			UInt64	uintData;
-			Double	doubleData;
-		}u;
-		u.uintData = v;
-		return(u.doubleData);
-	}
-	UInt64 DoubleValue::ToUInt64(Double v)
-	{
-		union
-		{
-			UInt64	uintData;
-			Double	doubleData;
-		}u;
-		u.doubleData = v;
-		return(u.uintData);
 	}
 }

@@ -3,7 +3,7 @@
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
 // without restriction, including without limitation the rights to use, copy, modify, merge,
-// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
+// publish, distribute, sub-license, and/or sell copies of the Software, and to permit persons
 // to whom the Software is furnished to do so, subject to the following conditions:
 //
 // The above copyright notice and this permission notice shall be included in all copies or
@@ -19,23 +19,20 @@
 
 namespace DotnetLibrary
 {
-	CharEnumerator::CharEnumerator(String* str)
-	{
+	CharEnumerator::CharEnumerator(String* str) {
 		index = -1;
 		string = str;
+		currentElement = 0;
 	}
-	Char CharEnumerator::get_Current()
-	{
+	Char CharEnumerator::get_Current() {
 		if (index == -1)
 			throw new InvalidOperationException();
 		if (index >= string->get_Length())
 			throw new InvalidOperationException();
 		return currentElement;
 	}
-	Boolean CharEnumerator::MoveNext()
-	{
-		if (index < (string->get_Length() - 1))
-		{
+	Boolean CharEnumerator::MoveNext() {
+		if (index < (string->get_Length() - 1)) {
 			index++;
 			currentElement = string->get_Chars(index);
 			return true;
@@ -44,9 +41,8 @@ namespace DotnetLibrary
 			index = string->get_Length();
 		return false;
 	}
-	void CharEnumerator::Reset()
-	{
-		currentElement = (char)0;
+	void CharEnumerator::Reset() {
+		currentElement = (char) 0;
 		index = -1;
 	}
 }

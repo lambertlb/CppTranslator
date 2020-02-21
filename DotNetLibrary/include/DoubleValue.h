@@ -57,7 +57,5 @@ namespace DotnetLibrary
 		static Boolean		TryParse(String* s, Double& result);
 		static Boolean		TryParseInternal(String* source, Double& result);
 		static Boolean		TryParseInternal(Char* source, Int32 sourceLength, Double& result);
-		static Double		ToDouble(UInt64);
-		static UInt64		ToUInt64(Double);
 	};
 }

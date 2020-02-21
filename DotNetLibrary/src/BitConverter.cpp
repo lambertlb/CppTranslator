@@ -19,21 +19,18 @@
 
 namespace DotnetLibrary
 {
-	Boolean	BitConverter::IsLittleEndian = AmILittleEndian();
-	Boolean BitConverter::AmILittleEndian()
-	{
+	Boolean BitConverter::IsLittleEndian = AmILittleEndian();
+	Boolean BitConverter::AmILittleEndian() {
 		Double d = 1.0;
-		Byte* b = (Byte*)&d;
+		Byte* b = (Byte*) &d;
 		return (b[0] == 0);
 	}
-	Array* BitConverter::GetBytes(Byte* ptr, Int32 count)
-	{
+	Array* BitConverter::GetBytes(Byte* ptr, Int32 count) {
 		Array* ret = new Array(ByteType, count);
 		memcpy(ret->Address(0), ptr, count);
 		return ret;
 	}
-	void BitConverter::PutBytes(Byte* dst, Array* src, Int32 start_index, Int32 count)
-	{
+	void BitConverter::PutBytes(Byte* dst, Array* src, Int32 start_index, Int32 count) {
 		if (src == nullptr)
 			throw new ArgumentNullException();
 		if (start_index < 0 || (start_index > src->get_Length() - 1))
@@ -43,121 +40,100 @@ namespace DotnetLibrary
 			throw new ArgumentException();
 		memcpy(dst, src->Address(start_index), count);
 	}
-	Int64 BitConverter::DoubleToInt64Bits(Double value)
-	{
-		return *(Int64*)&value;
+	Int64 BitConverter::DoubleToInt64Bits(Double value) {
+		return *(Int64*) &value;
 	}
-	Double BitConverter::Int64BitsToDouble(Int64 value)
-	{
-		return *(Double*)&value;
+	Double BitConverter::Int64BitsToDouble(Int64 value) {
+		return *(Double*) &value;
 	}
-	Array* BitConverter::GetBytes(Boolean value)
-	{
-		return GetBytes((Byte*)&value, 1);
+	Array* BitConverter::GetBytes(Boolean value) {
+		return GetBytes((Byte*) &value, 1);
 	}
-	Array* BitConverter::GetBytes(Char value)
-	{
-		Int16 val = (Int16)value;
-		return GetBytes((Byte*)&val, sizeof(Int16));
+	Array* BitConverter::GetBytes(Char value) {
+		// treat Char as Int16 because on some systems Char is 4 bytes but .Net isn't
+		Int16 val = (Int16) value;
+		return GetBytes((Byte*) &val, sizeof(Int16));
 	}
-	Array* BitConverter::GetBytes(Double value)
-	{
-		return GetBytes((Byte*)&value, sizeof(Double));
+	Array* BitConverter::GetBytes(Double value) {
+		return GetBytes((Byte*) &value, sizeof(Double));
 	}
-	Array* BitConverter::GetBytes(Int16 value)
-	{
-		return GetBytes((Byte*)&value, sizeof(Int16));
+	Array* BitConverter::GetBytes(Int16 value) {
+		return GetBytes((Byte*) &value, sizeof(Int16));
 	}
-	Array* BitConverter::GetBytes(Int32 value)
-	{
-		return GetBytes((Byte*)&value, sizeof(Int32));
+	Array* BitConverter::GetBytes(Int32 value) {
+		return GetBytes((Byte*) &value, sizeof(Int32));
 	}
-	Array* BitConverter::GetBytes(Int64 value)
-	{
-		return GetBytes((Byte*)&value, sizeof(Int64));
+	Array* BitConverter::GetBytes(Int64 value) {
+		return GetBytes((Byte*) &value, sizeof(Int64));
 	}
-	Array* BitConverter::GetBytes(Single value)
-	{
-		return GetBytes((Byte*)&value, sizeof(Single));
+	Array* BitConverter::GetBytes(Single value) {
+		return GetBytes((Byte*) &value, sizeof(Single));
 	}
-	Array* BitConverter::GetBytes(UInt16 value)
-	{
-		return GetBytes((Byte*)&value, sizeof(UInt16));
+	Array* BitConverter::GetBytes(UInt16 value) {
+		return GetBytes((Byte*) &value, sizeof(UInt16));
 	}
-	Array* BitConverter::GetBytes(UInt32 value)
-	{
-		return GetBytes((Byte*)&value, sizeof(UInt32));
+	Array* BitConverter::GetBytes(UInt32 value) {
+		return GetBytes((Byte*) &value, sizeof(UInt32));
 	}
-	Array* BitConverter::GetBytes(UInt64 value)
-	{
-		return GetBytes((Byte*)&value, sizeof(UInt64));
+	Array* BitConverter::GetBytes(UInt64 value) {
+		return GetBytes((Byte*) &value, sizeof(UInt64));
 	}
-	Boolean BitConverter::ToBoolean(Array* value, Int32 startIndex)
-	{
+	Boolean BitConverter::ToBoolean(Array* value, Int32 startIndex) {
 		if (value == nullptr)
 			throw new ArgumentNullException();
 		if (startIndex < 0 || (startIndex > value->get_Length() - 1))
 			throw new ArgumentOutOfRangeException();
-		if (*(Byte*)value->Address(startIndex) != 0)
+		if (*(Byte*) value->Address(startIndex) != 0)
 			return true;
 		return false;
 	}
-	Char BitConverter::ToChar(Array* value, Int32 startIndex)
-	{
+	Char BitConverter::ToChar(Array* value, Int32 startIndex) {
 		Int16 ret;
-		PutBytes((Byte*)&ret, value, startIndex, sizeof(Int16));
-		return (Char)ret;
+		// treat Char as Int16 because on some systems Char is 4 bytes but .Net isn't
+		PutBytes((Byte*) &ret, value, startIndex, sizeof(Int16));
+		return (Char) ret;
 	}
-	Double BitConverter::ToDouble(Array* value, Int32 startIndex)
-	{
+	Double BitConverter::ToDouble(Array* value, Int32 startIndex) {
 		Double ret;
-		PutBytes((Byte*)&ret, value, startIndex, sizeof(Double));
+		PutBytes((Byte*) &ret, value, startIndex, sizeof(Double));
 		return ret;
 	}
-	Int16 BitConverter::ToInt16(Array* value, Int32 startIndex)
-	{
+	Int16 BitConverter::ToInt16(Array* value, Int32 startIndex) {
 		Int16 ret;
-		PutBytes((Byte*)&ret, value, startIndex, sizeof(Int16));
+		PutBytes((Byte*) &ret, value, startIndex, sizeof(Int16));
 		return ret;
 	}
-	Int32 BitConverter::ToInt32(Array* value, Int32 startIndex)
-	{
+	Int32 BitConverter::ToInt32(Array* value, Int32 startIndex) {
 		Int32 ret;
-		PutBytes((Byte*)&ret, value, startIndex, sizeof(Int32));
+		PutBytes((Byte*) &ret, value, startIndex, sizeof(Int32));
 		return ret;
 	}
-	Int64 BitConverter::ToInt64(Array* value, Int32 startIndex)
-	{
+	Int64 BitConverter::ToInt64(Array* value, Int32 startIndex) {
 		Int64 ret;
-		PutBytes((Byte*)&ret, value, startIndex, sizeof(Int64));
+		PutBytes((Byte*) &ret, value, startIndex, sizeof(Int64));
 		return ret;
 	}
-	Single BitConverter::ToSingle(Array* value, Int32 startIndex)
-	{
+	Single BitConverter::ToSingle(Array* value, Int32 startIndex) {
 		Single ret;
-		PutBytes((Byte*)&ret, value, startIndex, sizeof(Single));
+		PutBytes((Byte*) &ret, value, startIndex, sizeof(Single));
 		return ret;
 	}
-	UInt16 BitConverter::ToUInt16(Array* value, Int32 startIndex)
-	{
+	UInt16 BitConverter::ToUInt16(Array* value, Int32 startIndex) {
 		UInt16 ret;
-		PutBytes((Byte*)&ret, value, startIndex, sizeof(UInt16));
+		PutBytes((Byte*) &ret, value, startIndex, sizeof(UInt16));
 		return ret;
 	}
-	UInt32 BitConverter::ToUInt32(Array* value, Int32 startIndex)
-	{
+	UInt32 BitConverter::ToUInt32(Array* value, Int32 startIndex) {
 		UInt32 ret;
-		PutBytes((Byte*)&ret, value, startIndex, sizeof(UInt32));
+		PutBytes((Byte*) &ret, value, startIndex, sizeof(UInt32));
 		return ret;
 	}
-	UInt64 BitConverter::ToUInt64(Array* value, Int32 startIndex)
-	{
+	UInt64 BitConverter::ToUInt64(Array* value, Int32 startIndex) {
 		UInt64 ret;
-		PutBytes((Byte*)&ret, value, startIndex, sizeof(UInt64));
+		PutBytes((Byte*) &ret, value, startIndex, sizeof(UInt64));
 		return ret;
 	}
-	String* BitConverter::ToString(Array* value, Int32 startIndex, Int32 length)
-	{
+	String* BitConverter::ToString(Array* value, Int32 startIndex, Int32 length) {
 		if (value == nullptr)
 			throw new ArgumentNullException();
 		if (length == -1)
@@ -181,27 +157,26 @@ namespace DotnetLibrary
 		for (Int32 i = startIndex; i < end; i++) {
 			if (i > startIndex)
 				builder.Append(L'-');
-			Byte byte = *(Byte*)value->Address(i);
-			Char high = (Char)((byte >> 4) & 0x0f);
-			Char low = (Char)(byte & 0x0f);
+			Byte byte = *(Byte*) value->Address(i);
+			Char high = (Char) ((byte >> 4) & 0x0f);
+			Char low = (Char) (byte & 0x0f);
 
 			if (high < 10)
 				high += L'0';
 			else {
-				high -= (Char)10;
+				high -= (Char) 10;
 				high += L'A';
 			}
 
 			if (low < 10)
 				low += L'0';
 			else {
-				low -= (Char)10;
+				low -= (Char) 10;
 				low += L'A';
 			}
 			builder.Append(high);
 			builder.Append(low);
 		}
-
 		return builder.ToString();
 	}
 }
