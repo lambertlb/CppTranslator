@@ -3,7 +3,7 @@
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
 // without restriction, including without limitation the rights to use, copy, modify, merge,
-// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
+// publish, distribute, sub-license, and/or sell copies of the Software, and to permit persons
 // to whom the Software is furnished to do so, subject to the following conditions:
 //
 // The above copyright notice and this permission notice shall be included in all copies or
@@ -20,15 +20,48 @@
 
 namespace DotnetLibrary
 {
-	class DLL_EXPORT BitConverter : public Object
+	/**
+	 * Emulator for the ,Net BitConverter class
+	 */
+	class DLL_EXPORT BitConverter: public Object
 	{
 	private:
+		/**
+		 * Figure out of this machine uses little Endian
+		 * @return true if does
+		 */
 		static Boolean AmILittleEndian();
-		static Array* GetBytes(Byte* ptr, int count);
+		/**
+		 * Get bytes from pointer into an Byte Array
+		 * @param ptr to bytes
+		 * @param count how many bytes to get
+		 * @return Byte array
+		 */
+		static Array* GetBytes(Byte* ptr, Int32 count);
+		/**
+		 * Put bytes in source array into destination array
+		 * @param dst destination array
+		 * @param src source array
+		 * @param start_index starting index in source array
+		 * @param count how many bytes to copy
+		 */
 		static void PutBytes(Byte* dst, Array* src, Int32 start_index, Int32 count);
 	public:
-		static Boolean	IsLittleEndian;
+		/**
+		 * This is a little Endian machine
+		 */
+		static Boolean IsLittleEndian;
+		/**
+		 * Convert double to Int64
+		 * @param value to convert
+		 * @return Int64 with bits of double
+		 */
 		static Int64 DoubleToInt64Bits(Double value);
+		/**
+		 * Convert Int64 bits to double
+		 * @param value to convert
+		 * @return double value
+		 */
 		static Double Int64BitsToDouble(Int64 value);
 		static Array* GetBytes(Boolean value);
 		static Array* GetBytes(Char value);
