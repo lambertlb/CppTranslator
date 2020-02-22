@@ -3,7 +3,7 @@
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
 // without restriction, including without limitation the rights to use, copy, modify, merge,
-// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
+// publish, distribute, sub-license, and/or sell copies of the Software, and to permit persons
 // to whom the Software is furnished to do so, subject to the following conditions:
 //
 // The above copyright notice and this permission notice shall be included in all copies or
@@ -36,63 +36,56 @@
 #include <cstdio>
 
 // alias .Net types
-typedef	bool		Boolean;
-typedef	wchar_t		Char;
-typedef	uint8_t		Byte;
-typedef	int8_t		SByte;
-typedef	int16_t		Int16;
-typedef	uint16_t	UInt16;
-typedef	int32_t		Int32;
-typedef	uint32_t	UInt32;
-typedef	int64_t		Int64;
-typedef	uint64_t	UInt64;
-typedef	float		Single;
-typedef Single		Float;
-typedef	double		Double;
+typedef bool Boolean;
+typedef wchar_t Char;
+typedef uint8_t Byte;
+typedef int8_t SByte;
+typedef int16_t Int16;
+typedef uint16_t UInt16;
+typedef int32_t Int32;
+typedef uint32_t UInt32;
+typedef int64_t Int64;
+typedef uint64_t UInt64;
+typedef float Single;
+typedef Single Float;
+typedef double Double;
 
 // forward references
 namespace DotnetLibrary
 {
-	struct DLL_EXPORT DateTime {
-		UInt64	value;
+	struct DLL_EXPORT DateTime
+	{
+		UInt64 value;
 		DateTime(UInt64 ticks);
 		DateTime();
 		DateTime(const DateTime& val);
 		DateTime(Int32 year, Int32 month, Int32 day, Int32 hour = 0, Int32 minute = 0, Int32 second = 0, Int32 millisecond = 0);
 	};
-	struct DLL_EXPORT TimeSpan {
-		Int64	value;
-		TimeSpan() { value = 0; }
-		TimeSpan(const Int64 value2) { value = value2; };
-		TimeSpan(const TimeSpan& value2) { value = value2.value; };
+	struct DLL_EXPORT TimeSpan
+	{
+		Int64 value;
+		TimeSpan() {
+			value = 0;
+		}
+		TimeSpan(const Int64 value2) {
+			value = value2;
+		}
+		;
+		TimeSpan(const TimeSpan& value2) {
+			value = value2.value;
+		}
+		;
 		TimeSpan(Int32 hours, Int32 minutes, Int32 seconds);
 		TimeSpan(Int32 days, Int32 hours, Int32 minutes, Int32 seconds, Int32 milliseconds = 0);
 	};
 	class String;
 
-	typedef	enum DataType
+	typedef enum DataType
 	{
-		NullType,
-		ObjectType,
-		BooleanType,
-		CharType,
-		SByteType,
-		ByteType,
-		Int16Type,
-		UInt16Type,
-		Int32Type,
-		UInt32Type,
-		Int64Type,
-		UInt64Type,
-		SingleType,
-		DoubleType,
-		DecimalType,
-		DateTimeType,
-		TimeSpanType,
-		StringType
+		NullType, ObjectType, BooleanType, CharType, SByteType, ByteType, Int16Type, UInt16Type, Int32Type, UInt32Type, Int64Type, UInt64Type, SingleType, DoubleType, DecimalType, DateTimeType, TimeSpanType, StringType
 	} DataType;
 #define FloatType SingleType
-	DLL_EXPORT extern Int32	DataTypeSize[];
+	DLL_EXPORT extern Int32 DataTypeSize[];
 }
 
 #include "Object.h"
