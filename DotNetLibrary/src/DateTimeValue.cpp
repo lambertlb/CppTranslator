@@ -79,16 +79,6 @@ namespace DotnetLibrary
 	}
 
 	DateTime DateTimeValue::get_UtcNow() {
-#ifdef WIN32
-		/* Windows */
-		FILETIME ft;
-		LARGE_INTEGER li;
-		GetSystemTimeAsFileTime(&ft);
-		li.LowPart = ft.dwLowDateTime;
-		li.HighPart = ft.dwHighDateTime;
-		UInt64 ret = li.QuadPart + FileTimeOffset;
-		return ret;
-#else
 		tzset();
 		struct tm timeinfo;
 		struct timespec current;
@@ -96,7 +86,6 @@ namespace DotnetLibrary
 		gmtime_r(&current.tv_sec, &timeinfo);
 		DateTime rtn(timeinfo.tm_year + 1900, timeinfo.tm_mon + 1, timeinfo.tm_mday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec, current.tv_nsec / 1000000);
 		return (rtn.value);
-#endif
 	}
 	Int32 DateTimeValue::get_Year() {
 		return GetDatePart(DatePartYear);
@@ -302,33 +291,8 @@ namespace DotnetLibrary
 	DateTime DateTimeValue::ToLocalTime() {
 		return ToLocalTime(false);
 	}
-	DateTime DateTimeValue::ToLocalTime(Boolean throwOnOverflow) {
-#ifdef	WIN32
-		FILETIME ft;
-		FILETIME st;
-		LARGE_INTEGER li;
-		li.QuadPart = value.value - FileTimeOffset;
-		ft.dwLowDateTime = li.LowPart;
-		ft.dwHighDateTime = li.HighPart;
-		FileTimeToLocalFileTime(&ft, &st);
-		li.LowPart = st.dwLowDateTime;
-		li.HighPart = st.dwHighDateTime;
-		UInt64 tick = li.QuadPart + FileTimeOffset;
 
-		if (tick > MaxTicks) {
-			if (throwOnOverflow)
-				throw new ArgumentOutOfRangeException();
-			else
-				return DateTime(MaxTicks);
-		}
-		if (tick < MinTicks) {
-			if (throwOnOverflow)
-				throw new ArgumentOutOfRangeException();
-			else
-				return DateTime(MinTicks);
-		}
-		return DateTime(tick);
-#else
+	TimeSpan DateTimeValue::GetTimeZone() {
 		tzset();
 		time_t rawTime = time(nullptr);
 		struct tm utcInfo;
@@ -336,53 +300,20 @@ namespace DotnetLibrary
 		localtime_r(&rawTime, &localInfo);
 		gmtime_r(&rawTime, &utcInfo);
 		TimeSpan ts = TimeSpan(localInfo.tm_hour - utcInfo.tm_hour, 0, 0);
+		return ts;
+	}
+
+	DateTime DateTimeValue::ToLocalTime(Boolean throwOnOverflow) {
+		TimeSpan ts = GetTimeZone();
 		DateTime rtn = Add(ts);
 		return (rtn.value);
-#endif
 	}
 	DateTime DateTimeValue::ToUniversalTime() {
-#ifdef	WIN32
-		FILETIME ft;
-		FILETIME st;
-		LARGE_INTEGER li;
-		li.QuadPart = value.value - FileTimeOffset;
-		ft.dwLowDateTime = li.LowPart;
-		ft.dwHighDateTime = li.HighPart;
-		LocalFileTimeToFileTime(&ft, &st);
-		li.LowPart = st.dwLowDateTime;
-		li.HighPart = st.dwHighDateTime;
-		UInt64 tick = li.QuadPart + FileTimeOffset;
-		return DateTime(tick);
-#else
-		tzset();
-		time_t rawTime = time(nullptr);
-		struct tm utcInfo;
-		struct tm localInfo;
-		localtime_r(&rawTime, &localInfo);
-		gmtime_r(&rawTime, &utcInfo);
-		TimeSpan ts = TimeSpan(localInfo.tm_hour - utcInfo.tm_hour, 0, 0);
+		TimeSpan ts = GetTimeZone();
 		DateTime rtn = Subtract(ts);
 		return (rtn.value);
-#endif
 	}
 	DateTime DateTimeValue::get_Now() {
-#ifdef	WIN32
-		FILETIME ft;
-		FILETIME st;
-		LARGE_INTEGER li;
-		GetSystemTimeAsFileTime(&ft);
-		FileTimeToLocalFileTime(&ft, &st);
-		li.LowPart = st.dwLowDateTime;
-		li.HighPart = st.dwHighDateTime;
-		UInt64 tick = li.QuadPart + FileTimeOffset;
-		if (tick > MaxTicks) {
-			return DateTime(MaxTicks);
-		}
-		if (tick < MinTicks) {
-			return DateTime(MinTicks);
-		}
-		return DateTime(tick);
-#else
 		tzset();
 		struct tm timeinfo;
 		struct timespec current;
@@ -391,7 +322,6 @@ namespace DotnetLibrary
 		localtime_r(&current.tv_sec, &timeinfo);
 		DateTime rtn(timeinfo.tm_year + 1900, timeinfo.tm_mon + 1, timeinfo.tm_mday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec, current.tv_nsec / 1000000);
 		return (rtn.value);
-#endif
 	}
 	Int32 DateTimeValue::get_Second() {
 		return (Int32) ((value.value / TicksPerSecond) % 60);

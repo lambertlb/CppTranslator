@@ -53,16 +53,28 @@ typedef double Double;
 // forward references
 namespace DotnetLibrary
 {
+	/**
+	 * DateTime structure
+	 */
 	struct DLL_EXPORT DateTime
 	{
+		/**
+		 * Value in ticks
+		 */
 		UInt64 value;
 		DateTime(UInt64 ticks);
 		DateTime();
 		DateTime(const DateTime& val);
 		DateTime(Int32 year, Int32 month, Int32 day, Int32 hour = 0, Int32 minute = 0, Int32 second = 0, Int32 millisecond = 0);
 	};
+	/**
+	 * TimeSpan Structure
+	 */
 	struct DLL_EXPORT TimeSpan
 	{
+		/**
+		 * Value in ticks
+		 */
 		Int64 value;
 		TimeSpan() {
 			value = 0;
@@ -78,13 +90,20 @@ namespace DotnetLibrary
 		TimeSpan(Int32 hours, Int32 minutes, Int32 seconds);
 		TimeSpan(Int32 days, Int32 hours, Int32 minutes, Int32 seconds, Int32 milliseconds = 0);
 	};
+	// Forward reference
 	class String;
 
+	/**
+	 * Data types supported in this implementation
+	 */
 	typedef enum DataType
 	{
 		NullType, ObjectType, BooleanType, CharType, SByteType, ByteType, Int16Type, UInt16Type, Int32Type, UInt32Type, Int64Type, UInt64Type, SingleType, DoubleType, DecimalType, DateTimeType, TimeSpanType, StringType
 	} DataType;
 #define FloatType SingleType
+	/**
+	 * Array of sizes for values in DataType
+	 */
 	DLL_EXPORT extern Int32 DataTypeSize[];
 }
 

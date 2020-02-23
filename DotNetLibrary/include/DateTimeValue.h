@@ -75,7 +75,14 @@ namespace DotnetLibrary
 	 */
 	class DLL_EXPORT DateTimeValue: public ValueType
 	{
+	private:
 		DateTime value;
+
+		/**
+		 * Get Time zone as TimeSpan
+		 * @return Time zone delta as TimeSpan
+		 */
+		TimeSpan GetTimeZone();
 	public:
 		DateTimeValue() {
 			value = 0;
