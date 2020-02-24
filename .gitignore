@@ -1,4 +1,6 @@
+.vscode/
 build/
+ILSpy/
 .settings/
 # User-specific files
 *.suo
