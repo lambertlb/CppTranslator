@@ -20,14 +20,14 @@
 
 namespace DotnetLibrary
 {
-	/**
+	/*!
 	 * Emulate .Net Buffer Class to
 	 * Manipulates arrays of primitive types.
 	 */
 	class DLL_EXPORT Buffer
 	{
 	public:
-		/**
+		/*!
 		 * Copies a specified number of bytes from a source array starting at a particular offset to a destination array starting at a particular offset.
 		 * @param src source array
 		 * @param srcOffset offset into source
@@ -36,20 +36,20 @@ namespace DotnetLibrary
 		 * @param count how many bytes
 		 */
 		static void BlockCopy(Array* src, Int32 srcOffset, Array* dst, Int32 dstOffset, Int32 count);
-		/**
+		/*!
 		 * Returns the number of bytes in the specified array.
 		 * @param array with bytes
 		 * @return amount of bytes
 		 */
 		static Int32 ByteLength(Array* array);
-		/**
+		/*!
 		 * Retrieves the byte at the specified location in the specified array.
 		 * @param array with bytes
 		 * @param index to byte
 		 * @return byte at index
 		 */
 		static Byte GetByte(Array* array, Int32 index);
-		/**
+		/*!
 		 * Assigns a specified value to a byte at a particular location in a specified array.
 		 * @param array with bytes
 		 * @param index to byte

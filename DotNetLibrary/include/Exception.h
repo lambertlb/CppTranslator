@@ -20,7 +20,7 @@
 
 namespace DotnetLibrary
 {
-	/**
+	/*!
 	 * Base Exception class
 	 */
 	struct DLL_EXPORT Exception: public Object
@@ -30,14 +30,14 @@ namespace DotnetLibrary
 		Exception* innerException;
 
 	public:
-		/**
+		/*!
 		 * Null Constructor
 		 */
 		Exception() {
 			message = nullptr;
 			innerException = nullptr;
 		}
-		/**
+		/*!
 		 * Exception with this message
 		 * @param msg message
 		 */
@@ -45,7 +45,7 @@ namespace DotnetLibrary
 			message = msg;
 			innerException = nullptr;
 		}
-		/**
+		/*!
 		 * Exception with message and inner exception
 		 * @param msg message
 		 * @param innerException inner exception
@@ -54,28 +54,28 @@ namespace DotnetLibrary
 			message = msg;
 			this->innerException = innerException;
 		}
-		/**
+		/*!
 		 * Get message
 		 * @return message
 		 */
 		String* get_Message() {
 			return (message);
 		}
-		/**
+		/*!
 		 * get inner exception
 		 * @return inner exception
 		 */
 		Exception* get_InnerException() {
 			return (innerException);
 		}
-		/**
+		/*!
 		 * get base exception
 		 * @return base exception
 		 */
 		Exception* GetBaseException() {
 			return (innerException);
 		}
-		/**
+		/*!
 		 * Get raw type of this boxed object
 		 * @return raw type
 		 */
@@ -83,7 +83,7 @@ namespace DotnetLibrary
 			return (ObjectType);
 		}
 	};
-	/**
+	/*!
 	 * Index out of range exception
 	 */
 	struct DLL_EXPORT IndexOutOfRangeException: public Exception
@@ -92,7 +92,7 @@ namespace DotnetLibrary
 		IndexOutOfRangeException() : Exception(new String(L"Index out of range")) {
 		}
 	};
-	/**
+	/*!
 	 * Null argument exception
 	 */
 	struct DLL_EXPORT ArgumentNullException: public Exception
@@ -101,7 +101,7 @@ namespace DotnetLibrary
 		ArgumentNullException() : Exception(new String(L"Arguement is null")) {
 		}
 	};
-	/**
+	/*!
 	 * rank exception
 	 */
 	struct DLL_EXPORT RankException: public Exception
@@ -110,7 +110,7 @@ namespace DotnetLibrary
 		RankException() : Exception(new String(L"Rank exception")) {
 		}
 	};
-	/**
+	/*!
 	 * Argument out of range
 	 */
 	struct DLL_EXPORT ArgumentOutOfRangeException: public Exception
@@ -119,7 +119,7 @@ namespace DotnetLibrary
 		ArgumentOutOfRangeException() : Exception(new String(L"Arguement out of range")) {
 		}
 	};
-	/**
+	/*!
 	 * Bad Argument
 	 */
 	struct DLL_EXPORT ArgumentException: public Exception
@@ -128,7 +128,7 @@ namespace DotnetLibrary
 		ArgumentException() : Exception(new String(L"Bad Arguement")) {
 		}
 	};
-	/**
+	/*!
 	 * Not implemented
 	 */
 	struct DLL_EXPORT NotImplementedException: public Exception
@@ -137,7 +137,7 @@ namespace DotnetLibrary
 		NotImplementedException() : Exception(new String(L"Functionality not implemented")) {
 		}
 	};
-	/**
+	/*!
 	 * Invalid cast
 	 */
 	struct DLL_EXPORT InvalidCastException: public Exception
@@ -146,7 +146,7 @@ namespace DotnetLibrary
 		InvalidCastException() : Exception(new String(L"Invalid Cast")) {
 		}
 	};
-	/**
+	/*!
 	 * Invalid operation
 	 */
 	struct DLL_EXPORT InvalidOperationException: public Exception
@@ -155,7 +155,7 @@ namespace DotnetLibrary
 		InvalidOperationException() : Exception(new String(L"Invalid Operation")) {
 		}
 	};
-	/**
+	/*!
 	 * Bad format
 	 */
 	struct DLL_EXPORT FormatException: public Exception
@@ -164,7 +164,7 @@ namespace DotnetLibrary
 		FormatException() : Exception(new String(L"Bad Format")) {
 		}
 	};
-	/**
+	/*!
 	 * Overflow
 	 */
 	struct DLL_EXPORT OverflowException: public Exception
@@ -173,7 +173,7 @@ namespace DotnetLibrary
 		OverflowException() : Exception(new String(L"Overflow")) {
 		}
 	};
-	/**
+	/*!
 	 * Max min exception
 	 */
 	struct DLL_EXPORT ThrowMinMaxException: public Exception
@@ -182,7 +182,7 @@ namespace DotnetLibrary
 		ThrowMinMaxException() : Exception(new String(L"Overflow")) {
 		}
 	};
-	/**
+	/*!
 	 * Arithmetic exception
 	 */
 	struct DLL_EXPORT ArithmeticException: public Exception
@@ -191,7 +191,7 @@ namespace DotnetLibrary
 		ArithmeticException() : Exception(new String(L"Overflow")) {
 		}
 	};
-	/**
+	/*!
 	 * Divide by Zero
 	 */
 	struct DLL_EXPORT DivideByZeroException: public Exception

@@ -21,8 +21,8 @@
 #include <time.h>
 #else
 #include <sys/time.h>
-#include <ctime>
 #endif
+#include <ctime>
 #include <cwchar>
 namespace DotnetLibrary
 {
@@ -79,13 +79,25 @@ namespace DotnetLibrary
 	}
 
 	DateTime DateTimeValue::get_UtcNow() {
+#ifdef WIN32
+		/* Windows */
+		FILETIME ft;
+		LARGE_INTEGER li;
+		GetSystemTimeAsFileTime(&ft);
+		li.LowPart = ft.dwLowDateTime;
+		li.HighPart = ft.dwHighDateTime;
+		UInt64 ret = li.QuadPart + FileTimeOffset;
+		return ret;
+#else
 		tzset();
 		struct tm timeinfo;
 		struct timespec current;
 		clock_gettime(CLOCK_REALTIME, &current);
+
 		gmtime_r(&current.tv_sec, &timeinfo);
 		DateTime rtn(timeinfo.tm_year + 1900, timeinfo.tm_mon + 1, timeinfo.tm_mday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec, current.tv_nsec / 1000000);
-		return (rtn.value);
+		return(rtn.value);
+#endif
 	}
 	Int32 DateTimeValue::get_Year() {
 		return GetDatePart(DatePartYear);
@@ -293,13 +305,17 @@ namespace DotnetLibrary
 	}
 
 	TimeSpan DateTimeValue::GetTimeZone() {
+#ifdef WIN32
+		_tzset();
+#else
 		tzset();
+#endif
 		time_t rawTime = time(nullptr);
-		struct tm utcInfo;
-		struct tm localInfo;
-		localtime_r(&rawTime, &localInfo);
-		gmtime_r(&rawTime, &utcInfo);
-		TimeSpan ts = TimeSpan(localInfo.tm_hour - utcInfo.tm_hour, 0, 0);
+		struct tm* utcInfo = gmtime(&rawTime);
+		int gmHour = utcInfo->tm_hour;
+		struct tm* localInfo = localtime(&rawTime);
+		int lcHour = localInfo->tm_hour;
+		TimeSpan ts = TimeSpan(lcHour - gmHour, 0, 0);
 		return ts;
 	}
 
@@ -314,6 +330,23 @@ namespace DotnetLibrary
 		return (rtn.value);
 	}
 	DateTime DateTimeValue::get_Now() {
+#ifdef	WIN32
+		FILETIME ft;
+		FILETIME st;
+		LARGE_INTEGER li;
+		GetSystemTimeAsFileTime(&ft);
+		FileTimeToLocalFileTime(&ft, &st);
+		li.LowPart = st.dwLowDateTime;
+		li.HighPart = st.dwHighDateTime;
+		UInt64 tick = li.QuadPart + FileTimeOffset;
+		if (tick > MaxTicks) {
+			return DateTime(MaxTicks);
+		}
+		if (tick < MinTicks) {
+			return DateTime(MinTicks);
+		}
+		return DateTime(tick);
+#else
 		tzset();
 		struct tm timeinfo;
 		struct timespec current;
@@ -321,7 +354,8 @@ namespace DotnetLibrary
 
 		localtime_r(&current.tv_sec, &timeinfo);
 		DateTime rtn(timeinfo.tm_year + 1900, timeinfo.tm_mon + 1, timeinfo.tm_mday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec, current.tv_nsec / 1000000);
-		return (rtn.value);
+		return(rtn.value);
+#endif
 	}
 	Int32 DateTimeValue::get_Second() {
 		return (Int32) ((value.value / TicksPerSecond) % 60);

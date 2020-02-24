@@ -69,7 +69,7 @@ namespace DotnetLibrary
 	{
 		Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 	};
-	/**
+	/*!
 	 * Boxing class for DateTime value
 	 * Derived from Object so it can be treated as Object*
 	 */
@@ -78,7 +78,7 @@ namespace DotnetLibrary
 	private:
 		DateTime value;
 
-		/**
+		/*!
 		 * Get Time zone as TimeSpan
 		 * @return Time zone delta as TimeSpan
 		 */
@@ -90,331 +90,331 @@ namespace DotnetLibrary
 		DateTimeValue(DateTime val) {
 			value.value = val.value;
 		}
-		/**
+		/*!
 		 * Convert as DateTime
 		 * @return value as DateTime
 		 */
 		virtual DateTime get_AsDateTime();
-		/**
+		/*!
 		 * Get as Date
 		 * @return value as Date
 		 */
 		DateTime get_Date();
-		/**
+		/*!
 		 * Get as Day
 		 * @return value as Day
 		 */
 		Int32 get_Day();
-		/**
+		/*!
 		 * Get as Day of Week
 		 * @return value as Day of week
 		 */
 		DayOfWeek get_DayOfWeek();
-		/**
+		/*!
 		 * Get as Day of Year
 		 * @return value as Day of Year
 		 */
 		Int32 get_DayOfYear();
-		/**
+		/*!
 		 * Get as Hour
 		 * @return value as Hour
 		 */
 		Int32 get_Hour();
-		/**
+		/*!
 		 * Get as MilliSecond
 		 * @return value as Mi8lliSecond
 		 */
 		Int32 get_Millisecond();
-		/**
+		/*!
 		 * Get as Minute
 		 * @return value as Minute
 		 */
 		Int32 get_Minute();
-		/**
+		/*!
 		 * Get as Month
 		 * @return value as Month
 		 */
 		Int32 get_Month();
-		/**
+		/*!
 		 * Get as Local Time
 		 * @return value as Local Time
 		 */
 		static DateTime get_Now();
-		/**
+		/*!
 		 * Get as Seconds
 		 * @return value as Seconds
 		 */
 		Int32 get_Second();
-		/**
+		/*!
 		 * Get as Ticks
 		 * @return value as Ticks
 		 */
 		Int64 get_Ticks() {
 			return (value.value);
 		}
-		/**
+		/*!
 		 * Get as Time of Day
 		 * @return value as Time of Day
 		 */
 		TimeSpan get_TimeOfDay();
-		/**
+		/*!
 		 * Get todays date
 		 * @return todays date
 		 */
 		static DateTime get_Today();
-		/**
+		/*!
 		 * Get as UTC Time
 		 * @return value as UTC Time
 		 */
 		static DateTime get_UtcNow();
-		/**
+		/*!
 		 * Get as Year
 		 * @return value as Year
 		 */
 		Int32 get_Year();
-		/**
+		/*!
 		 * Add value to date scaled up to prober units
 		 * @param value to add
 		 * @param scale scale factor
 		 * @return DateTime with value added
 		 */
 		DateTime Add(Double value, Int32 scale);
-		/**
+		/*!
 		 * Add TimeSpan
 		 * @param ts TimeSpan to add
 		 * @return DateTime with added TimeSpan
 		 */
 		DateTime Add(const TimeSpan ts);
-		/**
+		/*!
 		 * Add days
 		 * @param delta amount of days to add
 		 * @return DateTime with added value
 		 */
 		DateTime AddDays(const Double delta);
-		/**
+		/*!
 		 * Add hours
 		 * @param delta amount of hours to add
 		 * @return DateTime with added value
 		 */
 		DateTime AddHours(const Double delta);
-		/**
+		/*!
 		 * Add Milliseconds
 		 * @param delta amount of Milliseconds to add
 		 * @return DateTime with added value
 		 */
 		DateTime AddMilliseconds(const Double delta);
-		/**
+		/*!
 		 * Add Minutes
 		 * @param delta amount of Minutes to add
 		 * @return DateTime with added value
 		 */
 		DateTime AddMinutes(const Double delta);
-		/**
+		/*!
 		 * Add Months
 		 * @param delta amount of Months to add
 		 * @return DateTime with added value
 		 */
 		DateTime AddMonths(const Int32 delta);
-		/**
+		/*!
 		 * Add Seconds
 		 * @param delta amount of Seconds to add
 		 * @return DateTime with added value
 		 */
 		DateTime AddSeconds(const Double delta);
-		/**
+		/*!
 		 * Add Ticks
 		 * @param delta amount of Ticks to add
 		 * @return DateTime with added value
 		 */
 		DateTime AddTicks(const Int64 delta);
-		/**
+		/*!
 		 * Add Years
 		 * @param delta amount of Years to add
 		 * @return DateTime with added value
 		 */
 		DateTime AddYears(const Int32 delta);
-		/**
+		/*!
 		 * Compare to value -1 < 0 > 1
 		 * @param valueToCompare value to compare
 		 * @return -1, 0 ,1
 		 */
 		static Int32 Compare(const DateTime& date1, const DateTime& date2);
-		/**
+		/*!
 		 * Compare to value -1 < 0 > 1
 		 * @param valueToCompare value to compare
 		 * @return -1, 0 ,1
 		 */
 		Int32 CompareTo(const DateTime& ts1);
-		/**
+		/*!
 		 * Compare to Object value -1 < 0 > 1
 		 * @param valueToCompare value to compare
 		 * @return -1, 0 ,1
 		 */
 		Int32 CompareTo(Object* obj);
-		/**
+		/*!
 		 * Amount of days in month
 		 * @param year with months
 		 * @param month with days
 		 * @return amount of days in this month of year
 		 */
 		static Int32 DaysInMonth(Int32 year, Int32 month);
-		/**
+		/*!
 		 * Are values equal
 		 * @param valueToCompare value to compare
 		 * @return true if equal
 		 */
 		bool Equals(const DateTime& valueToCompare);
-		/**
+		/*!
 		 * Are values equal
 		 * @param valueToCompare value to compare
 		 * @return true if equal
 		 */
 		static bool Equals(const DateTime& valueToCompare, const DateTime& valueToCompare2);
-		/**
+		/*!
 		 * Are values equal
 		 * @param valueToCompare value to compare
 		 * @return true if equal
 		 */
 		virtual bool Equals(Object* valueToCompare);
-		/**
+		/*!
 		 * Is this daylight savings time
 		 * @return true if is daylight savings time
 		 */
 		Boolean IsDaylightSavingTime();
-		/**
+		/*!
 		 * Is this year a leap year
 		 * @param year to check
 		 * @return true if leap year
 		 */
 		static Boolean IsLeapYear(Int32 year);
-		/**
+		/*!
 		 * Format this string
 		 * @param where to place characters
 		 * @param whereSize size of where
 		 * @return amount of characters placed in where
 		 */
 		virtual Int32 FormatString(Char* where, const Int32 whereSize);
-		/**
+		/*!
 		 * Get date part
 		 * @param part to get
 		 * @return part of date
 		 */
 		Int32 GetDatePart(Int32 part);
-		/**
+		/*!
 		 * Get date parts
 		 * @param year part
 		 * @param month part
 		 * @param day part
 		 */
 		void GetDatePart(Int32& year, Int32& month, Int32& day);
-		/**
+		/*!
 		 * Get raw type of this boxed object
 		 * @return raw type
 		 */
 		virtual DataType GetRawDataType() {
 			return (DateTimeType);
 		}
-		/**
+		/*!
 		 * Subtract from date
 		 * @param date1 to subtract
 		 * @return delta TimeSpan
 		 */
 		TimeSpan Subtract(const DateTime& date1);
-		/**
+		/*!
 		 * Subtract from date
 		 * @param ts TimeSpan to subtract
 		 * @return delta Date
 		 */
 		DateTime Subtract(const TimeSpan ts);
-		/**
+		/*!
 		 * Convert to Local time
 		 * @return local time
 		 */
 		DateTime ToLocalTime();
-		/**
+		/*!
 		 * Convert to local time
 		 * @param throwOnOverflow throw exception if overflow
 		 * @return local time
 		 */
 		DateTime ToLocalTime(Boolean throwOnOverflow);
-		/**
+		/*!
 		 * Convert to UTC
 		 * @return UTC
 		 */
 		DateTime ToUniversalTime();
-		/**
+		/*!
 		 * Add DateTime to TimeSpan
 		 * @param ts1 DateTime
 		 * @param ts2 TimeSpan
 		 * @return new DateTime
 		 */
 		static DateTime op_Addition(const DateTime& ts1, const TimeSpan ts2);
-		/**
+		/*!
 		 * Are two dataTimes Equal
 		 * @param ts1 DateTime 1
 		 * @param ts2 DateTIme 2
 		 * @return true if equal
 		 */
 		static Boolean op_Equality(const DateTime& ts1, const DateTime& ts2);
-		/**
+		/*!
 		 * Is one DateTime greater than another
 		 * @param ts1 DateTime 1
 		 * @param ts2 DateTIme 2
 		 * @return true if greater
 		 */
 		static Boolean op_GreaterThan(const DateTime& ts1, const DateTime& ts2);
-		/**
+		/*!
 		 * Is one DateTime greater than another or equal to
 		 * @param ts1 DateTime 1
 		 * @param ts2 DateTIme 2
 		 * @return true if greater then or equal to
 		 */
 		static Boolean op_GreaterThanOrEqual(const DateTime& ts1, const DateTime& ts2);
-		/**
+		/*!
 		 * Are two dataTimes not Equal
 		 * @param ts1 DateTime 1
 		 * @param ts2 DateTIme 2
 		 * @return true if equal
 		 */
 		static Boolean op_Inequality(const DateTime& ts1, const DateTime& ts2);
-		/**
+		/*!
 		 * Is one DateTime less than another
 		 * @param ts1 DateTime 1
 		 * @param ts2 DateTIme 2
 		 * @return true if less
 		 */
 		static Boolean op_LessThan(const DateTime& ts1, const DateTime& ts2);
-		/**
+		/*!
 		 * Is one DateTime less than another or equal to
 		 * @param ts1 DateTime 1
 		 * @param ts2 DateTIme 2
 		 * @return true if less then or equal to
 		 */
 		static Boolean op_LessThanOrEqual(const DateTime& ts1, const DateTime& ts2);
-		/**
+		/*!
 		 * Subtract from date
 		 * @param ts1 DateTime 1
 		 * @param ts2 Date to subtract
 		 * @return delta TimeSpan
 		 */
 		static TimeSpan op_Subtraction(const DateTime& ts1, const DateTime& ts2);
-		/**
+		/*!
 		 * Subtract from date
 		 * @param ts1 DateTime 1
 		 * @param ts2 TimeSpan to subtract
 		 * @return delta DateTime
 		 */
 		static DateTime op_Subtraction(const DateTime& ts1, const TimeSpan ts2);
-		/**
+		/*!
 		 * Max value
 		 */
 		static DateTime MaxValue;
-		/**
+		/*!
 		 * Min value
 		 */
 		static DateTime MinValue;
 	};
-	/**
+	/*!
 	 * Convert time parts to ticks
 	 * @param days part
 	 * @param hour part
