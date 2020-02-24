@@ -26,9 +26,9 @@ namespace DotnetLibrary
 			throw new ArgumentNullException();
 		src->EnsureSingleDimension();
 		dst->EnsureSingleDimension();
-		if (!Object::IsPrimativeType(src->GetElementType()))
+		if (!Object::IsPrimitiveType(src->GetElementType()))
 			throw new ArgumentException();
-		if (!Object::IsPrimativeType(dst->GetElementType()))
+		if (!Object::IsPrimitiveType(dst->GetElementType()))
 			throw new ArgumentException();
 		if (srcOffset < 0)
 			throw new ArgumentOutOfRangeException();
@@ -48,7 +48,7 @@ namespace DotnetLibrary
 			throw new ArgumentNullException();
 
 		// Is it of primitive types?
-		if (!Object::IsPrimativeType(array->GetElementType()))
+		if (!Object::IsPrimitiveType(array->GetElementType()))
 			throw new ArgumentException();
 		array->EnsureSingleDimension();
 

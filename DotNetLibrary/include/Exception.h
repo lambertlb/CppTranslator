@@ -3,7 +3,7 @@
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
 // without restriction, including without limitation the rights to use, copy, modify, merge,
-// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
+// publish, distribute, sub-license, and/or sell copies of the Software, and to permit persons
 // to whom the Software is furnished to do so, subject to the following conditions:
 //
 // The above copyright notice and this permission notice shall be included in all copies or
@@ -20,85 +20,184 @@
 
 namespace DotnetLibrary
 {
-
-	struct DLL_EXPORT Exception : public  Object
+	/**
+	 * Base Exception class
+	 */
+	struct DLL_EXPORT Exception: public Object
 	{
 	private:
 		String* message;
 		Exception* innerException;
 
 	public:
-		Exception() { message = nullptr;  innerException = nullptr; }
-		Exception(String* msg) { message = msg; innerException = nullptr; }
-		Exception(String* msg, Exception* innerException) { message = msg; this->innerException = innerException; }
-		String* get_Message() { return(message); }
-		Exception* get_InnerException() { return(innerException); }
-		Exception* GetBaseException() { return(innerException); }
-		virtual DataType GetRawDataType() { return(ObjectType); };
+		/**
+		 * Null Constructor
+		 */
+		Exception() {
+			message = nullptr;
+			innerException = nullptr;
+		}
+		/**
+		 * Exception with this message
+		 * @param msg message
+		 */
+		Exception(String* msg) {
+			message = msg;
+			innerException = nullptr;
+		}
+		/**
+		 * Exception with message and inner exception
+		 * @param msg message
+		 * @param innerException inner exception
+		 */
+		Exception(String* msg, Exception* innerException) {
+			message = msg;
+			this->innerException = innerException;
+		}
+		/**
+		 * Get message
+		 * @return message
+		 */
+		String* get_Message() {
+			return (message);
+		}
+		/**
+		 * get inner exception
+		 * @return inner exception
+		 */
+		Exception* get_InnerException() {
+			return (innerException);
+		}
+		/**
+		 * get base exception
+		 * @return base exception
+		 */
+		Exception* GetBaseException() {
+			return (innerException);
+		}
+		/**
+		 * Get raw type of this boxed object
+		 * @return raw type
+		 */
+		virtual DataType GetRawDataType() {
+			return (ObjectType);
+		}
 	};
-	struct DLL_EXPORT IndexOutOfRangeException : public  Exception
+	/**
+	 * Index out of range exception
+	 */
+	struct DLL_EXPORT IndexOutOfRangeException: public Exception
 	{
 	public:
-		IndexOutOfRangeException() : Exception(new String(L"Index out of range")) {}
+		IndexOutOfRangeException() : Exception(new String(L"Index out of range")) {
+		}
 	};
-	struct DLL_EXPORT ArgumentNullException : public  Exception
+	/**
+	 * Null argument exception
+	 */
+	struct DLL_EXPORT ArgumentNullException: public Exception
 	{
 	public:
-		ArgumentNullException() : Exception(new String(L"Arguement is null")) {}
+		ArgumentNullException() : Exception(new String(L"Arguement is null")) {
+		}
 	};
-	struct DLL_EXPORT RankException : public  Exception
+	/**
+	 * rank exception
+	 */
+	struct DLL_EXPORT RankException: public Exception
 	{
 	public:
-		RankException() : Exception(new String(L"Rank exception")) {}
+		RankException() : Exception(new String(L"Rank exception")) {
+		}
 	};
-	struct DLL_EXPORT ArgumentOutOfRangeException : public  Exception
+	/**
+	 * Argument out of range
+	 */
+	struct DLL_EXPORT ArgumentOutOfRangeException: public Exception
 	{
 	public:
-		ArgumentOutOfRangeException() : Exception(new String(L"Arguement out of range")) {}
+		ArgumentOutOfRangeException() : Exception(new String(L"Arguement out of range")) {
+		}
 	};
-	struct DLL_EXPORT ArgumentException : public  Exception
+	/**
+	 * Bad Argument
+	 */
+	struct DLL_EXPORT ArgumentException: public Exception
 	{
 	public:
-		ArgumentException() : Exception(new String(L"Bad Arguement")) {}
+		ArgumentException() : Exception(new String(L"Bad Arguement")) {
+		}
 	};
-	struct DLL_EXPORT NotImplementedException : public  Exception
+	/**
+	 * Not implemented
+	 */
+	struct DLL_EXPORT NotImplementedException: public Exception
 	{
 	public:
-		NotImplementedException() : Exception(new String(L"Functionality not implemented")) {}
+		NotImplementedException() : Exception(new String(L"Functionality not implemented")) {
+		}
 	};
-	struct DLL_EXPORT InvalidCastException : public  Exception
+	/**
+	 * Invalid cast
+	 */
+	struct DLL_EXPORT InvalidCastException: public Exception
 	{
 	public:
-		InvalidCastException() : Exception(new String(L"Invalid Cast")) {}
+		InvalidCastException() : Exception(new String(L"Invalid Cast")) {
+		}
 	};
-	struct DLL_EXPORT InvalidOperationException : public  Exception
+	/**
+	 * Invalid operation
+	 */
+	struct DLL_EXPORT InvalidOperationException: public Exception
 	{
 	public:
-		InvalidOperationException() : Exception(new String(L"Invalid Operation")) {}
+		InvalidOperationException() : Exception(new String(L"Invalid Operation")) {
+		}
 	};
-	struct DLL_EXPORT FormatException : public  Exception
+	/**
+	 * Bad format
+	 */
+	struct DLL_EXPORT FormatException: public Exception
 	{
 	public:
-		FormatException() : Exception(new String(L"Bad Format")) {}
+		FormatException() : Exception(new String(L"Bad Format")) {
+		}
 	};
-	struct DLL_EXPORT OverflowException : public  Exception
+	/**
+	 * Overflow
+	 */
+	struct DLL_EXPORT OverflowException: public Exception
 	{
 	public:
-		OverflowException() : Exception(new String(L"Overflow")) {}
+		OverflowException() : Exception(new String(L"Overflow")) {
+		}
 	};
-	struct DLL_EXPORT ThrowMinMaxException : public  Exception
+	/**
+	 * Max min exception
+	 */
+	struct DLL_EXPORT ThrowMinMaxException: public Exception
 	{
 	public:
-		ThrowMinMaxException() : Exception(new String(L"Overflow")) {}
+		ThrowMinMaxException() : Exception(new String(L"Overflow")) {
+		}
 	};
-	struct DLL_EXPORT ArithmeticException : public  Exception
+	/**
+	 * Arithmetic exception
+	 */
+	struct DLL_EXPORT ArithmeticException: public Exception
 	{
 	public:
-		ArithmeticException() : Exception(new String(L"Overflow")) {}
+		ArithmeticException() : Exception(new String(L"Overflow")) {
+		}
 	};
-	struct DLL_EXPORT DivideByZeroException : public  Exception
+	/**
+	 * Divide by Zero
+	 */
+	struct DLL_EXPORT DivideByZeroException: public Exception
 	{
 	public:
-		DivideByZeroException() : Exception(new String(L"Divide by Zero")) {}
+		DivideByZeroException() : Exception(new String(L"Divide by Zero")) {
+		}
 	};
 }
