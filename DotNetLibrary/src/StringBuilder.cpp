@@ -3,7 +3,7 @@
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this
 // software and associated documentation files (the "Software"), to deal in the Software
 // without restriction, including without limitation the rights to use, copy, modify, merge,
-// publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
+// publish, distribute, sub-license, and/or sell copies of the Software, and to permit persons
 // to whom the Software is furnished to do so, subject to the following conditions:
 //
 // The above copyright notice and this permission notice shall be included in all copies or
@@ -20,14 +20,11 @@
 
 namespace DotnetLibrary
 {
-	StringBuilder::StringBuilder() : StringBuilder(DefaultCapacity, MaximumCapacity)
-	{
+	StringBuilder::StringBuilder() : StringBuilder(DefaultCapacity, MaximumCapacity) {
 	}
-	StringBuilder::StringBuilder(Int32 capacity) : StringBuilder(capacity, MaximumCapacity)
-	{
+	StringBuilder::StringBuilder(Int32 capacity) : StringBuilder(capacity, MaximumCapacity) {
 	}
-	StringBuilder::StringBuilder(Int32 capacity, Int32 maxCapacity)
-	{
+	StringBuilder::StringBuilder(Int32 capacity, Int32 maxCapacity) {
 		Initialize();
 
 		if (capacity > maxCapacity) {
@@ -49,11 +46,9 @@ namespace DotnetLibrary
 		this->maxCapacity = maxCapacity;
 		set_Capacity(capacity);
 	}
-	StringBuilder::StringBuilder(String* value, Int32 capacity) : StringBuilder(value, 0, value->get_Length(), capacity)
-	{
+	StringBuilder::StringBuilder(String* value, Int32 capacity) : StringBuilder(value, 0, value->get_Length(), capacity) {
 	}
-	StringBuilder::StringBuilder(String* value, Int32 startIndex, Int32 length, Int32 capacity)
-	{
+	StringBuilder::StringBuilder(String* value, Int32 startIndex, Int32 length, Int32 capacity) {
 		Initialize();
 		if (value == nullptr) {
 			value = String::Empty;
@@ -78,26 +73,22 @@ namespace DotnetLibrary
 		memcpy(chunkChars, sourcePtr, length * sizeof(Char));
 		currentLength = length;
 	}
-	StringBuilder::~StringBuilder()
-	{
+	StringBuilder::~StringBuilder() {
 		if (chunkChars != nullptr && chunkChars != internalMemory)
 			delete chunkChars;
 		chunkChars = internalMemory;
 	}
-	void StringBuilder::Initialize()
-	{
+	void StringBuilder::Initialize() {
 		maxCapacity = MaximumCapacity;
 		chunkChars = internalMemory;
 		currentLength = 0;
 		currentCapacity = DefaultCapacity;
 		memset(internalMemory, 0, sizeof(internalMemory));
 	}
-	Int32 StringBuilder::get_Length()
-	{
+	Int32 StringBuilder::get_Length() {
 		return currentLength;
 	}
-	void StringBuilder::set_Length(Int32 newLength)
-	{
+	void StringBuilder::set_Length(Int32 newLength) {
 		if (newLength < 0) {
 			throw new ArgumentOutOfRangeException();
 		}
@@ -119,12 +110,10 @@ namespace DotnetLibrary
 		}
 		currentLength = newLength;
 	}
-	Int32 StringBuilder::get_Capacity()
-	{
+	Int32 StringBuilder::get_Capacity() {
 		return currentCapacity;
 	}
-	void StringBuilder::set_Capacity(Int32 capacity)
-	{
+	void StringBuilder::set_Capacity(Int32 capacity) {
 		if (capacity < 0) {
 			throw new ArgumentOutOfRangeException();
 		}
@@ -140,7 +129,7 @@ namespace DotnetLibrary
 		}
 		Char* newArray = internalMemory;
 		if (capacity > DefaultCapacity) {
-			Int32	partial = capacity % DefaultCapacity;
+			Int32 partial = capacity % DefaultCapacity;
 			capacity = (capacity / DefaultCapacity) * DefaultCapacity;
 			if (partial > 0)
 				capacity += DefaultCapacity;
@@ -152,62 +141,51 @@ namespace DotnetLibrary
 		currentCapacity = capacity;
 		chunkChars = newArray;
 	}
-	Int32 StringBuilder::get_MaxCapacity()
-	{
+	Int32 StringBuilder::get_MaxCapacity() {
 		return maxCapacity;
 	}
-	Char* StringBuilder::Address(Int32 index1, Int32 index2, Int32 index3)
-	{
+	Char* StringBuilder::Address(Int32 index1, Int32 index2, Int32 index3) {
 		if (index1 < 0 || index1 >= currentLength)
 			throw new IndexOutOfRangeException();
-		return(&chunkChars[index1]);
+		return (&chunkChars[index1]);
 	}
-	Int32 StringBuilder::CountSubStrings(String* subString, Int32 startIndex, Int32 length)
-	{
-		Int32	amount = 0;
-		Int32	endIndex = startIndex + 1 + length - subString->get_Length();
-		Int32	bytesToCompare = subString->get_Length() * sizeof(Char);
-		for (int i = startIndex; i < endIndex;)
-		{
-			if (0 == memcmp(chunkChars + i, subString->get_Buffer(), bytesToCompare))
-			{
+	Int32 StringBuilder::CountSubStrings(String* subString, Int32 startIndex, Int32 length) {
+		Int32 amount = 0;
+		Int32 endIndex = startIndex + 1 + length - subString->get_Length();
+		Int32 bytesToCompare = subString->get_Length() * sizeof(Char);
+		for (int i = startIndex; i < endIndex;) {
+			if (0 == memcmp(chunkChars + i, subString->get_Buffer(), bytesToCompare)) {
 				++amount;
 				i += subString->get_Length();
 			}
 			else
 				++i;
 		}
-		return(amount);
+		return (amount);
 	}
-	Char StringBuilder::get_Chars(Int32 index)
-	{
-		return(*Address(index));
+	Char StringBuilder::get_Chars(Int32 index) {
+		return (*Address(index));
 	}
-	void StringBuilder::set_Chars(Int32 index, Char newChar)
-	{
+	void StringBuilder::set_Chars(Int32 index, Char newChar) {
 		*Address(index) = newChar;
 	}
-	String* StringBuilder::ToString()
-	{
-		return(new String(chunkChars, 0, currentLength));
+	String* StringBuilder::ToString() {
+		return (new String(chunkChars, 0, currentLength));
 	}
-	String* StringBuilder::ToString(Int32 startIndex, Int32 length)
-	{
+	String* StringBuilder::ToString(Int32 startIndex, Int32 length) {
 		if (startIndex < 0 || startIndex >= currentLength)
 			throw new IndexOutOfRangeException();
 		if (startIndex + length > currentLength)
 			throw new IndexOutOfRangeException();
-		return(new String(&chunkChars[startIndex], 0, length));
+		return (new String(&chunkChars[startIndex], 0, length));
 	}
-	Int32 StringBuilder::FormatString(Char* where, const Int32 whereSize)
-	{
+	Int32 StringBuilder::FormatString(Char* where, const Int32 whereSize) {
 		if (whereSize < currentLength)
 			throw new IndexOutOfRangeException();
 		CopyChars(where, whereSize, chunkChars, this->currentLength);
 		return currentLength;
 	}
-	StringBuilder* StringBuilder::Append(const Char* values, Int32 charCount, Int32 where)
-	{
+	StringBuilder* StringBuilder::Append(const Char* values, Int32 charCount, Int32 where) {
 		if (where == -1) {
 			where = currentLength;
 		}
@@ -221,12 +199,11 @@ namespace DotnetLibrary
 		memcpy(&chunkChars[where], values, charCount * sizeof(Char));
 		currentLength += charCount;
 		chunkChars[currentLength] = 0;
-		return(this);
+		return (this);
 	}
-	StringBuilder* StringBuilder::Append(Array* values, Int32 startIndex, Int32 charCount)
-	{
+	StringBuilder* StringBuilder::Append(Array* values, Int32 startIndex, Int32 charCount) {
 		if (values == nullptr) {
-			return(this);
+			return (this);
 		}
 		if (startIndex < 0) {
 			startIndex = 0;
@@ -235,64 +212,53 @@ namespace DotnetLibrary
 			charCount = values->get_Length();
 		}
 		if (charCount == 0) {
-			return(this);
+			return (this);
 		}
-		if (charCount > values->get_Length() - startIndex)
-		{
+		if (charCount > values->get_Length() - startIndex) {
 			throw new ArgumentOutOfRangeException();
 		}
 		if (values->GetElementType() != CharType) {
 			throw new ArgumentOutOfRangeException();
 		}
 		values->EnsureSingleDimension();
-		return(Append((Char*)values->Address(startIndex), charCount, currentLength));
+		return (Append((Char*) values->Address(startIndex), charCount, currentLength));
 	}
-	StringBuilder* StringBuilder::Append(ValueType& value, Int32 index)
-	{
-		Char	str[128];
+	StringBuilder* StringBuilder::Append(ValueType& value, Int32 index) {
+		Char str[128];
 		Int32 size = value.FormatString(str, 128);
-		return(Append(str, size, index));
+		return (Append(str, size, index));
 	}
-	StringBuilder* StringBuilder::Append(Boolean value)
-	{
+	StringBuilder* StringBuilder::Append(Boolean value) {
 		BooleanValue data(value);
-		return(Append(data));
+		return (Append(data));
 	}
-	StringBuilder* StringBuilder::Append(Byte value)
-	{
+	StringBuilder* StringBuilder::Append(Byte value) {
 		ByteValue data(value);
-		return(Append(data));
+		return (Append(data));
 	}
-	StringBuilder* StringBuilder::Append(Double value)
-	{
+	StringBuilder* StringBuilder::Append(Double value) {
 		DoubleValue data(value);
-		return(Append(data));
+		return (Append(data));
 	}
-	StringBuilder* StringBuilder::Append(Int16 value)
-	{
+	StringBuilder* StringBuilder::Append(Int16 value) {
 		Int16Value data(value);
-		return(Append(data));
+		return (Append(data));
 	}
-	StringBuilder* StringBuilder::Append(Int32 value)
-	{
+	StringBuilder* StringBuilder::Append(Int32 value) {
 		Int32Value data(value);
-		return(Append(data));
+		return (Append(data));
 	}
-	StringBuilder* StringBuilder::Append(Int64 value)
-	{
+	StringBuilder* StringBuilder::Append(Int64 value) {
 		Int64Value data(value);
-		return(Append(data));
+		return (Append(data));
 	}
-	StringBuilder* StringBuilder::Append(Object* value)
-	{
-		return(Append(value->ToString()));
+	StringBuilder* StringBuilder::Append(Object* value) {
+		return (Append(value->ToString()));
 	}
-	StringBuilder* StringBuilder::Append(Char value)
-	{
-		return(Append(value, 1));
+	StringBuilder* StringBuilder::Append(Char value) {
+		return (Append(value, 1));
 	}
-	StringBuilder* StringBuilder::Append(Char value, Int32 repeatCount)
-	{
+	StringBuilder* StringBuilder::Append(Char value, Int32 repeatCount) {
 		if (repeatCount < 0) {
 			throw new ArgumentOutOfRangeException();
 		}
@@ -301,10 +267,9 @@ namespace DotnetLibrary
 			chunkChars[currentLength++] = value;
 		}
 		chunkChars[currentLength] = 0;
-		return(this);
+		return (this);
 	}
-	StringBuilder* StringBuilder::Append(String* value, Int32 startIndex, Int32 charCount)
-	{
+	StringBuilder* StringBuilder::Append(String* value, Int32 startIndex, Int32 charCount) {
 		if (charCount < 0)
 			charCount = value->get_Length();
 		if (startIndex < 0) {
@@ -313,54 +278,44 @@ namespace DotnetLibrary
 		if (startIndex > value->get_Length() - charCount) {
 			throw new ArgumentOutOfRangeException();
 		}
-		return(Append(&(value->get_Buffer()[startIndex]), charCount));
+		return (Append(&(value->get_Buffer()[startIndex]), charCount));
 	}
-	StringBuilder* StringBuilder::Append(SByte value)
-	{
+	StringBuilder* StringBuilder::Append(SByte value) {
 		SByteValue data(value);
-		return(Append(data));
+		return (Append(data));
 	}
-	StringBuilder* StringBuilder::Append(Single value)
-	{
+	StringBuilder* StringBuilder::Append(Single value) {
 		SingleValue data(value);
-		return(Append(data));
+		return (Append(data));
 	}
-	StringBuilder* StringBuilder::Append(UInt16 value)
-	{
+	StringBuilder* StringBuilder::Append(UInt16 value) {
 		UInt16Value data(value);
-		return(Append(data));
+		return (Append(data));
 	}
-	StringBuilder* StringBuilder::Append(UInt32 value)
-	{
+	StringBuilder* StringBuilder::Append(UInt32 value) {
 		UInt32Value data(value);
-		return(Append(data));
+		return (Append(data));
 	}
-	StringBuilder* StringBuilder::Append(UInt64 value)
-	{
+	StringBuilder* StringBuilder::Append(UInt64 value) {
 		UInt64Value data(value);
-		return(Append(data));
+		return (Append(data));
 	}
-	StringBuilder* StringBuilder::AppendLine()
-	{
+	StringBuilder* StringBuilder::AppendLine() {
 		Append(L'\r');
-		return(Append(L'\n'));
+		return (Append(L'\n'));
 	}
-	StringBuilder* StringBuilder::AppendLine(String* value)
-	{
+	StringBuilder* StringBuilder::AppendLine(String* value) {
 		Append(value);
-		return(AppendLine());
+		return (AppendLine());
 	}
-	StringBuilder* StringBuilder::Clear()
-	{
+	StringBuilder* StringBuilder::Clear() {
 		set_Length(0);
-		return(this);
+		return (this);
 	}
-	void StringBuilder::EnsureRoomFor(Int32 amount)
-	{
+	void StringBuilder::EnsureRoomFor(Int32 amount) {
 		EnsureCapacity(currentLength + amount);
 	}
-	Int32 StringBuilder::EnsureCapacity(Int32 capacity)
-	{
+	Int32 StringBuilder::EnsureCapacity(Int32 capacity) {
 		if (capacity < 0) {
 			throw new ArgumentOutOfRangeException();
 		}
@@ -369,14 +324,12 @@ namespace DotnetLibrary
 		}
 		return get_Capacity();
 	}
-	Boolean StringBuilder::Equals(StringBuilder* sb)
-	{
+	Boolean StringBuilder::Equals(StringBuilder* sb) {
 		if (sb == nullptr || sb->currentCapacity != currentCapacity || sb->maxCapacity != maxCapacity)
-			return(false);
+			return (false);
 		return wcscmp(sb->chunkChars, chunkChars) == 0;
 	}
-	StringBuilder* StringBuilder::Remove(Int32 startIndex, Int32 length)
-	{
+	StringBuilder* StringBuilder::Remove(Int32 startIndex, Int32 length) {
 		if (length < 0) {
 			throw new ArgumentOutOfRangeException();
 		}
@@ -392,25 +345,21 @@ namespace DotnetLibrary
 		chunkChars[currentLength] = 0;
 		return this;
 	}
-	StringBuilder* StringBuilder::Insert(const Int32 index, const Boolean value)
-	{
+	StringBuilder* StringBuilder::Insert(const Int32 index, const Boolean value) {
 		BooleanValue data(value);
-		return(Append(data, index));
+		return (Append(data, index));
 	}
-	StringBuilder* StringBuilder::Insert(const Int32 index, const Byte value)
-	{
+	StringBuilder* StringBuilder::Insert(const Int32 index, const Byte value) {
 		ByteValue data(value);
-		return(Append(data, index));
+		return (Append(data, index));
 	}
-	StringBuilder* StringBuilder::Insert(const Int32 index, const Char value)
-	{
+	StringBuilder* StringBuilder::Insert(const Int32 index, const Char value) {
 		CharValue data(value);
-		return(Append(data, index));
+		return (Append(data, index));
 	}
-	StringBuilder* StringBuilder::Insert(const Int32 index, Array* values, Int32 startIndex, Int32 charCount)
-	{
+	StringBuilder* StringBuilder::Insert(const Int32 index, Array* values, Int32 startIndex, Int32 charCount) {
 		if (values == nullptr) {
-			return(this);
+			return (this);
 		}
 		if (startIndex < 0) {
 			startIndex = 0;
@@ -419,86 +368,71 @@ namespace DotnetLibrary
 			charCount = values->get_Length();
 		}
 		if (charCount == 0) {
-			return(this);
+			return (this);
 		}
-		if (charCount > values->get_Length() - startIndex)
-		{
+		if (charCount > values->get_Length() - startIndex) {
 			throw new ArgumentOutOfRangeException();
 		}
 		if (values->GetElementType() != CharType) {
 			throw new ArgumentOutOfRangeException();
 		}
 		values->EnsureSingleDimension();
-		return(Append((Char*)values->Address(startIndex), charCount, index));
+		return (Append((Char*) values->Address(startIndex), charCount, index));
 	}
-	StringBuilder* StringBuilder::Insert(const Int32 index, Double value)
-	{
+	StringBuilder* StringBuilder::Insert(const Int32 index, Double value) {
 		DoubleValue data(value);
-		return(Append(data, index));
+		return (Append(data, index));
 	}
-	StringBuilder* StringBuilder::Insert(const Int32 index, const Int16 value)
-	{
+	StringBuilder* StringBuilder::Insert(const Int32 index, const Int16 value) {
 		Int16Value data(value);
-		return(Append(data, index));
+		return (Append(data, index));
 	}
-	StringBuilder* StringBuilder::Insert(const Int32 index, Int32 value)
-	{
+	StringBuilder* StringBuilder::Insert(const Int32 index, Int32 value) {
 		Int32Value data(value);
-		return(Append(data, index));
+		return (Append(data, index));
 	}
-	StringBuilder* StringBuilder::Insert(const Int32 index, Int64 value)
-	{
+	StringBuilder* StringBuilder::Insert(const Int32 index, Int64 value) {
 		Int64Value data(value);
-		return(Append(data, index));
+		return (Append(data, index));
 	}
-	StringBuilder* StringBuilder::Insert(const Int32 index, Object* value)
-	{
-		return(Insert(index, value->ToString()));
+	StringBuilder* StringBuilder::Insert(const Int32 index, Object* value) {
+		return (Insert(index, value->ToString()));
 	}
-	StringBuilder* StringBuilder::Insert(const Int32 index, String* value, Int32 count)
-	{
+	StringBuilder* StringBuilder::Insert(const Int32 index, String* value, Int32 count) {
 		for (int i = 0; i < count; ++i) {
-			Append((Char*)value->Address(0), value->get_Length(), index);
+			Append((Char*) value->Address(0), value->get_Length(), index);
 		}
-		return(this);
+		return (this);
 	}
-	StringBuilder* StringBuilder::Insert(const Int32 index, const SByte value)
-	{
+	StringBuilder* StringBuilder::Insert(const Int32 index, const SByte value) {
 		SByteValue data(value);
-		return(Append(data, index));
+		return (Append(data, index));
 	}
-	StringBuilder* StringBuilder::Insert(const Int32 index, const Single value)
-	{
+	StringBuilder* StringBuilder::Insert(const Int32 index, const Single value) {
 		SingleValue data(value);
-		return(Append(data, index));
+		return (Append(data, index));
 	}
-	StringBuilder* StringBuilder::Insert(const Int32 index, const UInt16 value)
-	{
+	StringBuilder* StringBuilder::Insert(const Int32 index, const UInt16 value) {
 		UInt16Value data(value);
-		return(Append(data, index));
+		return (Append(data, index));
 	}
-	StringBuilder* StringBuilder::Insert(const Int32 index, UInt32 value)
-	{
+	StringBuilder* StringBuilder::Insert(const Int32 index, UInt32 value) {
 		UInt32Value data(value);
-		return(Append(data, index));
+		return (Append(data, index));
 	}
-	StringBuilder* StringBuilder::Insert(const Int32 index, const UInt64 value)
-	{
+	StringBuilder* StringBuilder::Insert(const Int32 index, const UInt64 value) {
 		UInt64Value data(value);
-		return(Append(data, index));
+		return (Append(data, index));
 	}
-	StringBuilder* StringBuilder::Replace(const Char oldChar, const Char newChar)
-	{
+	StringBuilder* StringBuilder::Replace(const Char oldChar, const Char newChar) {
 		return Replace(oldChar, newChar, 0, currentLength);
 	}
-	StringBuilder* StringBuilder::Replace(String* search, String* replace)
-	{
+	StringBuilder* StringBuilder::Replace(String* search, String* replace) {
 		return Replace(search, replace, 0, currentLength);
 	}
-	StringBuilder* StringBuilder::Replace(const Char oldChar, const Char newChar, const Int32 startIndex, const Int32 count)
-	{
+	StringBuilder* StringBuilder::Replace(const Char oldChar, const Char newChar, const Int32 startIndex, const Int32 count) {
 		int length = currentLength;
-		if ((UInt32)startIndex > (UInt32)length) {
+		if ((UInt32) startIndex > (UInt32) length) {
 			throw new ArgumentOutOfRangeException();
 		}
 		if (count < 0 || startIndex > length - count) {
@@ -512,10 +446,9 @@ namespace DotnetLibrary
 		}
 		return this;
 	}
-	StringBuilder* StringBuilder::Replace(String* search, String* replace, const Int32 startIndex, const Int32 count)
-	{
+	StringBuilder* StringBuilder::Replace(String* search, String* replace, const Int32 startIndex, const Int32 count) {
 		int length = currentLength;
-		if ((UInt32)startIndex > (UInt32)currentLength) {
+		if ((UInt32) startIndex > (UInt32) currentLength) {
 			throw new ArgumentOutOfRangeException();
 		}
 		if (count < 0 || startIndex > length - count) {
@@ -534,23 +467,20 @@ namespace DotnetLibrary
 		if (howMany == 0) {
 			return this;
 		}
-		Int32	delta = replace->get_Length() - search->get_Length();
+		Int32 delta = replace->get_Length() - search->get_Length();
 		if (delta > 0) {
 			EnsureRoomFor(delta * howMany);
 		}
 		ReplaceSubString(search, replace, startIndex, count);
 		return this;
 	}
-	void StringBuilder::ReplaceSubString(String* search, String* replace, const Int32 startIndex, const Int32 count)
-	{
-		Int32	endIndex = startIndex + 1 + count - search->get_Length();
-		Int32	delta = replace->get_Length() - search->get_Length();
-		Int32	bytesToCompare = search->get_Length() * sizeof(Char);
-		for (int i = startIndex; i < endIndex;)
-		{
-			if (0 == memcmp(chunkChars + i, search->get_Buffer(), bytesToCompare))
-			{
-				Int32 howMuchToMove = currentLength - i - search->get_Length() ;
+	void StringBuilder::ReplaceSubString(String* search, String* replace, const Int32 startIndex, const Int32 count) {
+		Int32 endIndex = startIndex + 1 + count - search->get_Length();
+		Int32 delta = replace->get_Length() - search->get_Length();
+		Int32 bytesToCompare = search->get_Length() * sizeof(Char);
+		for (int i = startIndex; i < endIndex;) {
+			if (0 == memcmp(chunkChars + i, search->get_Buffer(), bytesToCompare)) {
+				Int32 howMuchToMove = currentLength - i - search->get_Length();
 				memmove(&chunkChars[i + replace->get_Length()], &chunkChars[i + search->get_Length()], howMuchToMove * sizeof(Char));
 				currentLength += delta;
 				chunkChars[currentLength] = 0;
