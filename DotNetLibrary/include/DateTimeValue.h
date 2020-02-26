@@ -267,6 +267,7 @@ namespace DotnetLibrary
 		/*!
 		 * Are values equal
 		 * @param valueToCompare value to compare
+		 * @param valueToCompare2 value to compare
 		 * @return true if equal
 		 */
 		static bool Equals(const DateTime& valueToCompare, const DateTime& valueToCompare2);

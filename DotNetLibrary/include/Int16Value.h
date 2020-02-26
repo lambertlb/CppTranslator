@@ -20,6 +20,10 @@
 
 namespace DotnetLibrary
 {
+	/*!
+	 * Boxing class for Int16 value
+	 * Derived from Object so it can be treated as Object*
+	 */
 	class DLL_EXPORT Int16Value: public ValueType
 	{
 		Int16 value;
