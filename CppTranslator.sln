@@ -36,8 +36,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CppTranslatorFeatureTest", "CppTranslatorFeatureTest\CppTranslatorFeatureTest.csproj", "{F8D47263-30C7-4EF7-A953-CA54B3ED42F7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiniTest", "MiniTest\MiniTest\MiniTest.csproj", "{5098CF3D-450C-4F0C-B794-8EC823F14D9A}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlatformSupport", "PlatformSupport\PlatformSupport.vcxproj", "{EEF3D1E1-D6C8-4878-902F-94A1902A49BC}"
 EndProject
 Global
@@ -130,18 +128,6 @@ Global
 		{F8D47263-30C7-4EF7-A953-CA54B3ED42F7}.Release|x64.Build.0 = Release|Any CPU
 		{F8D47263-30C7-4EF7-A953-CA54B3ED42F7}.Release|x86.ActiveCfg = Release|Any CPU
 		{F8D47263-30C7-4EF7-A953-CA54B3ED42F7}.Release|x86.Build.0 = Release|Any CPU
-		{5098CF3D-450C-4F0C-B794-8EC823F14D9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5098CF3D-450C-4F0C-B794-8EC823F14D9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5098CF3D-450C-4F0C-B794-8EC823F14D9A}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{5098CF3D-450C-4F0C-B794-8EC823F14D9A}.Debug|x64.Build.0 = Debug|Any CPU
-		{5098CF3D-450C-4F0C-B794-8EC823F14D9A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{5098CF3D-450C-4F0C-B794-8EC823F14D9A}.Debug|x86.Build.0 = Debug|Any CPU
-		{5098CF3D-450C-4F0C-B794-8EC823F14D9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5098CF3D-450C-4F0C-B794-8EC823F14D9A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5098CF3D-450C-4F0C-B794-8EC823F14D9A}.Release|x64.ActiveCfg = Release|Any CPU
-		{5098CF3D-450C-4F0C-B794-8EC823F14D9A}.Release|x64.Build.0 = Release|Any CPU
-		{5098CF3D-450C-4F0C-B794-8EC823F14D9A}.Release|x86.ActiveCfg = Release|Any CPU
-		{5098CF3D-450C-4F0C-B794-8EC823F14D9A}.Release|x86.Build.0 = Release|Any CPU
 		{EEF3D1E1-D6C8-4878-902F-94A1902A49BC}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{EEF3D1E1-D6C8-4878-902F-94A1902A49BC}.Debug|Any CPU.Build.0 = Debug|Win32
 		{EEF3D1E1-D6C8-4878-902F-94A1902A49BC}.Debug|x64.ActiveCfg = Debug|x64
