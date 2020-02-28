@@ -30,7 +30,7 @@
 	</ItemGroup>
 
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-		<Exec Command="rem $(ProjectDir)PreBuild.bat &quot;$(DevEnvDir)\..\Tools&quot;" />
+		<Exec Command="# $(ProjectDir)PreBuild.bat &quot;$(DevEnvDir)\..\Tools&quot;" />
 	</Target>
 
 </Project>
