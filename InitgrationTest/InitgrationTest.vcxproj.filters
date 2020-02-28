@@ -33,4 +33,9 @@
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="prebuild.bat">
+      <Filter>src</Filter>
+    </None>
+  </ItemGroup>
 </Project>

@@ -61,7 +61,7 @@ namespace CppTranslator
 				CppTraceListener.AddListener(pathToAssemble);
 				CppVisitorBase.TypeVisitor.LoadValidTypes();
 				compiler = new CSharpDecompiler(args[0], settings);
-				formatter.EmitToConsole = true;
+				formatter.EmitToConsole = false;
 				ProcessModules(prototypeVisitor, pathToAssemble + "Protos.h");
 				ProcessModules(headerVisitor, pathToAssemble + "Header.h");
 				ProcessModules(visitor, pathToAssemble + ".cpp");
