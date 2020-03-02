@@ -27,9 +27,9 @@ using ICSharpCode.Decompiler.TypeSystem;
 namespace CppTranslator
 {
 	/// <summary>
-	/// Entry point for convertine il code to C++
+	/// Entry point for converting IL code to C++
 	/// All headers and method declarations are formatted using C# vistors.
-	/// All the actual code formatting is done using and ILInstruction vistor.
+	/// All the actual code formatting is done using and ILInstruction visitor.
 	/// This was because the C# syntax tree lost a lot of the type information needed for translation.
 	/// </summary>
 	public static class Program

@@ -97,7 +97,7 @@ namespace CppTranslator
 		{
 		}
 		/// <summary>
-		/// Ouput a comma separated list surrounded by parens
+		/// Output a comma separated list surrounded by parens
 		/// </summary>
 		/// <param name="nodes">list to output</param>
 		protected void WriteCommaSeparatedListInParenthesis(IEnumerable<AstNode> nodes)
@@ -136,7 +136,7 @@ namespace CppTranslator
 			WriteCommaSeparatedListInParenthesis(parameters);
 		}
 		/// <summary>
-		/// Ouput this method
+		/// Output this method
 		/// </summary>
 		/// <param name="methodName">method name</param>
 		/// <param name="parameters">parameter collection</param>

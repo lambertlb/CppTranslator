@@ -55,7 +55,6 @@ namespace CppTranslator
 		{
 			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
 			Formatter.NameSpace = type.Namespace;
-			bool isClass = type.Kind == TypeKind.Class;
 			switch (typeDeclaration.ClassType)
 			{
 				case ClassType.Enum:

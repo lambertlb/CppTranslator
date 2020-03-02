@@ -316,13 +316,13 @@ namespace CppTranslator
 		}
 		private void WriteBlock(Block block)
 		{
-			AddLableIfNeeded(block);
+			AddLabelIfNeeded(block);
 			if (block.Kind == BlockKind.ArrayInitializer)
 			{
-				HandleInitilzedArray(block);
+				HandleInitializedArray(block);
 				return;
 			}
-			DeclareLocalVaraibles(block);
+			DeclareLocalVariables(block);
 			foreach (ILInstruction inst in block.Instructions)
 			{
 				Leave leave = inst as Leave;
@@ -338,7 +338,7 @@ namespace CppTranslator
 			}
 		}
 
-		private void DeclareLocalVaraibles(ILInstruction inst)
+		private void DeclareLocalVariables(ILInstruction inst)
 		{
 			if (inst.OpCode == OpCode.Block && ((Block)inst).Kind == BlockKind.ArrayInitializer)
 				return;
@@ -352,7 +352,7 @@ namespace CppTranslator
 			}
 			foreach (ILInstruction child in inst.Children)
 			{
-				DeclareLocalVaraibles(child);
+				DeclareLocalVariables(child);
 			}
 		}
 
@@ -365,7 +365,7 @@ namespace CppTranslator
 			Formatter.AppendIndented(String.Empty);
 		}
 
-		private void AddLableIfNeeded(Block block)
+		private void AddLabelIfNeeded(Block block)
 		{
 			ICSharpCode.Decompiler.IL.Leave leave = block.Instructions.FirstOrDefault() as ICSharpCode.Decompiler.IL.Leave;
 			if (block.Instructions.Count == 1 && leave != null)
@@ -925,12 +925,6 @@ namespace CppTranslator
 		/// <inheritdoc/>
 		protected override ILInstruction VisitLdLoca(LdLoca inst)
 		{
-			//if (DeclareVariableIfNeeded(inst.Variable))
-			//{
-			//	Formatter.AppendName(inst.Variable.Name);
-			//	Formatter.AppendLine(";");
-			//	Formatter.AppendIndented(String.Empty);
-			//}
 			Formatter.AppendName(inst.Variable.Name);
 			return base.VisitLdLoca(inst);
 		}
@@ -1135,8 +1129,6 @@ namespace CppTranslator
 		{
 			if (HandleIncrementAndDecrement(inst))
 				return base.VisitStLoc(inst);
-
-			//			DeclareVariableIfNeeded(inst.Variable);
 			Formatter.AppendName(inst.Variable.Name);
 			Formatter.Append(" = ");
 			HandleStoreVariable(inst.Variable.Type, inst.Value);
@@ -1210,7 +1202,7 @@ namespace CppTranslator
 			}
 			return (false);
 		}
-		private void HandleInitilzedArray(Block block)
+		private void HandleInitializedArray(Block block)
 		{
 			var parent = block.Parent as StLoc;
 			var stloc = block.Instructions.FirstOrDefault() as StLoc;

@@ -24,8 +24,8 @@ namespace CppTranslator
 {
 	/// <summary>
 	/// Handle trace log
-	/// It is meant to take all trace events and write them to an err file in th e output directory
-	/// This can be changed to hook into any native logger the use might have instead of writting to file.
+	/// It is meant to take all trace events and write them to an err file in the output directory
+	/// This can be changed to hook into any native logger the user might have instead of writting to file.
 	/// </summary>
 	public class CppTraceListener : TraceListener
 	{
