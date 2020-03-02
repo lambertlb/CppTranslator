@@ -75,11 +75,7 @@ namespace CppTranslator
 		/// </summary>
 		public void LoadValidTypes()
 		{
-#if DEBUG
-			String typeFilePath = AppDomain.CurrentDomain.BaseDirectory + @"../CppTranslator/ValidTypes.xml";
-#else
 			String typeFilePath = AppDomain.CurrentDomain.BaseDirectory + @"ValidTypes.xml";
-#endif
 			try
 			{
 				using (ValidItems validItems = new ValidItems())
