@@ -14,7 +14,7 @@ ENDIF()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(../PlatformSupport)
 
-# add the executable
+# add the library
 add_library(DotNetLibrary SHARED
 src/Array.cpp
 src/BooleanValue.cpp

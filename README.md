@@ -19,15 +19,20 @@ Following is a list of supplied sub-projects and what they provide. See their RE
 * **DotNetLibrarySupport** Matches **CppTranslatorSupport** written in C++ to run in embedded space.
 * **PlatformSupport** Project to interface between the embedded platform and .Net translated world.
 * **DotnetLibraryTests** C++ Google tests for the **DotNetLibrary**
-* **IntegrationTest** This project compiles the translated **CppTranslatorFeatureTest** so they can be run to ensure compatibility in embedded space.
+* **IntegrationTest** This project compiles the translated **CppTranslatorFeatureTest** so they can be run to
+ensure compatibility in embedded space.
 
 ## How to build
 ### Windows
-You can use Visual Studio 2017 or 2019 on the **CppTranslator.sln** solution to build everything. After doing a build you can run the CppTranslator to translate the
-**CppTranslatorFeatureTest**. You can then build the **IntegrationTest** project to compile and link the tests.
+You can use Visual Studio 2017 or 2019 on the **CppTranslator.sln** solution to build everything.
+ After doing a build you can run the **IntegrationTest** project to run that test. You can also use
+Test Explorer to run the unit tests on the **DotNetLibrary** project.
 ### Linux
 If you want to build the C# portions of the project you will need .Net and Visual Studio Code installed.
-Add the CppTranslator folder as workspace then open terminal and do **dotnet build**. The C++ files will error out but thats OK.
+Add the CppTranslator folder as workspace then open terminal and do **dotnet build**.
+You will have to remove the pre-build event first because it is a windows batch command that Linux will
+not understand.
+The C++ files will error out but thats OK.
 To build the C++ portions you will need [Google Test](https://github.com/google/googletest) installed. Then do the following
 ```
 mkdir build

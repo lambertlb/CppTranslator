@@ -76,17 +76,9 @@ namespace DotnetLibrary
 		 * Value in ticks
 		 */
 		Int64 value;
-		TimeSpan() {
-			value = 0;
-		}
-		TimeSpan(const Int64 value2) {
-			value = value2;
-		}
-		;
-		TimeSpan(const TimeSpan& value2) {
-			value = value2.value;
-		}
-		;
+		TimeSpan() { value = 0; }
+		TimeSpan(const Int64 value2) { value = value2; }
+		TimeSpan(const TimeSpan& value2) { value = value2.value; }
 		TimeSpan(Int32 hours, Int32 minutes, Int32 seconds);
 		TimeSpan(Int32 days, Int32 hours, Int32 minutes, Int32 seconds, Int32 milliseconds = 0);
 	};

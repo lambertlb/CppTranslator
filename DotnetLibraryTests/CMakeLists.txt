@@ -47,5 +47,4 @@ target_link_libraries(
 	GTest::Main
 )
 
-# add_test(NAME DotNetLibraryTests COMMAND $<TARGET_FILE:DotNetLibraryTests>)
 add_test(NAME DotNetLibraryTests COMMAND DotNetLibraryTests)

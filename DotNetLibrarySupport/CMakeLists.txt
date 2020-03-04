@@ -15,7 +15,7 @@ include_directories(../DotNetLibrary/include)
 include_directories(../DotNetLibrarySupport)
 include_directories(../PlatformSupport)
 
-# add the executable
+# add the library
 add_library(DotNetLibrarySupport SHARED
 DotNetLibrarySupport.cpp
 dllmain.cpp

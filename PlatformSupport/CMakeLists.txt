@@ -11,9 +11,8 @@ IF(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
     add_definitions(-D_USRDLL -DUNICODE -D_UNICODE)
 ENDIF()
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-# add the executable
+# add the library
 add_library(PlatformSupport SHARED
 PlatformSupport.cpp
 dllmain.cpp
