@@ -101,7 +101,8 @@
       <AdditionalDependencies>DotNetLibrary.lib;DotNetLibrarySupport.lib;PlatformSupport.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>$(ProjectDir)PreBuild.bat  "$(DevEnvDir)\..\Tools" "$(SolutionDir)$(Configuration)"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -141,7 +142,8 @@
       <AdditionalDependencies>DotNetLibrary.lib;DotNetLibrarySupport.lib;PlatformSupport.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>$(ProjectDir)PreBuild.bat  "$(DevEnvDir)\..\Tools" "$(SolutionDir)$(Configuration)"</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
