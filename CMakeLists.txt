@@ -11,7 +11,7 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 add_subdirectory(./PlatformSupport)
 add_subdirectory(./DotNetLibrary)
 add_subdirectory(./DotNetLibrarySupport)
-add_subdirectory(./InitgrationTest)
+add_subdirectory(./IntegrationTest)
 
 enable_testing()
 add_subdirectory(./DotnetLibraryTests)
