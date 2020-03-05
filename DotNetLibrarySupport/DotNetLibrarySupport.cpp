@@ -31,7 +31,7 @@ void DotnetLibrarySupport::TranslatorSupport::Send(String* message)
 
 /*!
  * Run the translated code.
- * Do any setup that needs happen before hand.
+ * Do any setup that needs to happen before hand.
  */
 void DotnetLibrarySupport::TranslatorSupport::Run()
 {
@@ -49,7 +49,7 @@ void DotnetLibrarySupport::TranslatorSupport::Run()
  */
 Int32	arrayData[]{ 1,2,3,4 };
 /*!
- * Expose array to .Net works by wrapping it in a .Net array.
+ * Exposing an array to .Net works by wrapping it in a .Net array.
  * \return .Net array
  */
 Array* DotnetLibrarySupport::DataAccess::get_ArrayData()

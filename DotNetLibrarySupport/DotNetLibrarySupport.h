@@ -37,7 +37,7 @@ using namespace DotnetLibrary;
 namespace DotnetLibrarySupport
 {
 	/*!
-	 * This class exposes target platform funtionality to the translated code.
+	 * This class exposes target platform functionality to the translated code.
 	 * It should mirror the .Net based class in CppTranslatorSupport project.
 	 * Every method defined there should be hand crafted here.
 	 * For example the "Send" method can be used to send a string to a target platform
