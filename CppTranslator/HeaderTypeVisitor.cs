@@ -176,7 +176,7 @@ namespace CppTranslator
 		private void CreateDefaultConstructor(TypeDeclaration typeDeclaration)
 		{
 			IType type = typeDeclaration.Annotation<TypeResolveResult>().Type;
-			Formatter.AppendIndented("");
+			Formatter.AppendIndented(String.Empty);
 			TypeVisitor.FormatTypeDelaration(type);
 			Formatter.Append("(){};");
 		}
