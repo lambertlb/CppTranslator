@@ -11,7 +11,7 @@ include_directories(../Debug/generated)
 
 # add the executable
 add_executable(IntegrationTest
-InitgrationTest.cpp
+IntegrationTest.cpp
 ../Debug/generated/Translated.cpp
 )
 

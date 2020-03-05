@@ -31,12 +31,8 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-		<Exec Command="rem $(ProjectDir)PreBuild.bat &quot;$(DevEnvDir)\..\Tools&quot;" />
-	</Target>
-
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	  <Exec Command="copy $(ProjectDir)ValidTypes.x* $(OutDir)" />
+	  <Exec Command="cp $(ProjectDir)ValidTypes.x* $(OutDir)" />
 	</Target>
 
 </Project>
