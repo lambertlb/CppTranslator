@@ -5,7 +5,7 @@ does it. This is so value types like int and double can also be used as Object t
 passed by value.
 
 ## Primitive Types
-In the _DotnetTypes.h_ file there are definitions to make C++ type to .Net types.
+In the _DotnetTypes.h_ file there are definitions to translate from C++ types to .Net types.
 ```
 typedef bool Boolean;
 typedef wchar_t Char;
@@ -55,7 +55,7 @@ String* integerAsString2 = integerBox->ToString();
 ```
 
 ## UnBoxing
-.Net support a large infrastructure for doing type conversions. This subset of the .Net frameworks does not
+.Net supports a large infrastructure for doing type conversions. This subset of the .Net frameworks does not
 support that. Instead is has a very simple conversion strategy. The Object class supports a series of
 virtual methods for handling primitive conversions as follows.
 ```

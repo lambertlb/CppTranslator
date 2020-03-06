@@ -65,7 +65,7 @@ namespace CppTranslatorFeatureTest_NS
     };
 }
 ```
-3. Pass2  
+3. Pass3  
     In the third pass a code file is created that has all the static variables and method code in it called **Translated.cpp**.
     Following is a small example
 ```
