@@ -37,5 +37,6 @@
     <None Include="prebuild.bat">
       <Filter>src</Filter>
     </None>
+    <None Include="README.md" />
   </ItemGroup>
 </Project>
