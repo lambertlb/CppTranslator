@@ -1,6 +1,6 @@
 ﻿# CppTranslator
 
-This project uses [IlDecompiler](https://github.com/icsharpcode/ILSpy) to translate a subset of .Net IL Code to unmanaged C++.
+This project uses [CSharp Decompiler](https://github.com/icsharpcode/ILSpy) to translate a subset of .Net IL Code to unmanaged C++.
 I did this as an experiment to see if it could be done. I envision that this could be used to generate algorithms
 that can be run in embedded spaces like Embedded controllers or Edge Controllers.
 This would allow people unfamiliar with that space to program and debug using a language like C# then translate, compile,
