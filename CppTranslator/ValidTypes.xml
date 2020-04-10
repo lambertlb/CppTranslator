@@ -53,6 +53,7 @@
 	<Valid>System.BitConverter.ToUInt16(System.Byte[],System.Int32)</Valid>
 	<Valid>System.BitConverter.ToUInt32(System.Byte[],System.Int32)</Valid>
 	<Valid>System.BitConverter.ToUInt64(System.Byte[],System.Int32)</Valid>	<Valid>System.Boolean</Valid>
+	<Valid>System.Boolean</Valid>
 	<Valid>System.Boolean[,,]</Valid>
 	<Valid>System.Boolean[,]</Valid>
 	<Valid>System.Boolean[]</Valid>
