@@ -103,7 +103,7 @@ namespace CppTranslator
 			}
 			nameSpace = newNamespace;
 			Append("namespace ");
-			AppendLine(nameSpace);
+			Append(nameSpace);
 			AddOpenBrace();
 		}
 		/// <summary>
@@ -320,7 +320,7 @@ namespace CppTranslator
 			}
 			else
 			{
-				AppendIndentedLine("{");
+				AppendLine(" {");
 			}
 			UpIndent();
 		}
