@@ -76,7 +76,7 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(!Double.IsPositiveInfinity(Double.NegativeInfinity));
 			featureTest.AssertTrue(Double.IsPositiveInfinity(Double.PositiveInfinity));
 			featureTest.AssertTrue(!Double.IsPositiveInfinity(Double.NaN));
-#if V3
+//#if V3
 			featureTest.AssertTrue(Double.IsFinite(3.0 / 1));
 			featureTest.AssertTrue(!Double.IsFinite(Double.NaN));
 			featureTest.AssertTrue(Double.IsNegative(-3.0));
@@ -88,7 +88,7 @@ namespace CppTranslatorFeatureTest
 			featureTest.AssertTrue(Double.IsSubnormal(Double.Epsilon));
 			featureTest.AssertTrue(Double.IsSubnormal(2.2250738585072009E-308));
 			featureTest.AssertTrue(!Double.IsSubnormal(2.2250738585072014E-308));
-#endif
+//#endif
 		}
 
 		private void OperatorTests()
