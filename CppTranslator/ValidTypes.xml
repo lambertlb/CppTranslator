@@ -263,6 +263,7 @@
 	<Valid>System.Math.ILogB(System.Double)</Valid>
 	<Valid>System.Math.Log(System.Double)</Valid>
 	<Valid>System.Math.Log(System.Double,System.Double)</Valid>
+	<Valid>System.Math.Log2(System.Double)</Valid>
 	<Valid>System.Math.Log10(System.Double)</Valid>
 	<Valid>System.Math.Max(System.Byte,System.Byte)</Valid>
 	<Valid>System.Math.Max(System.Double,System.Double)</Valid>
