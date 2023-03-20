@@ -746,11 +746,10 @@ namespace CppTranslator
 			Formatter.Append(")");
 			if (!justCondition)
 			{
-				Formatter.AppendLine(String.Empty);
 				WriteBlockWithBraces(inst.TrueInst);
 				if (!inst.FalseInst.MatchNop())
 				{
-					Formatter.AppendIndentedLine("else");
+					Formatter.AppendIndented("else ");
 					WriteBlockWithBraces(inst.FalseInst);
 				}
 			}

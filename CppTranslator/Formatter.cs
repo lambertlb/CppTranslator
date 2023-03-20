@@ -316,6 +316,9 @@ namespace CppTranslator
 			if (openBraceOnNewline && !onNewline)
 			{
 				Newline();
+			}
+			if (openBraceOnNewline)
+			{
 				AppendIndentedLine("{");
 			}
 			else
