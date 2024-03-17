@@ -1,7 +1,6 @@
 ﻿# CppTranslator
 This project uses [CSharp Decompiler](https://github.com/icsharpcode/ILSpy) to translate IL Assemblies into C++ source files.
-It works on a limited subset of the .Net Framework. ValidTypes.xml has a list of the Classes and Methods supported by
-the **DotNetLibray** that contains a C++ implementation for them.
+It works on a limited subset of the .Net Framework. ValidTypes.xml has a list of the Classes and Methods supported by the **DotNetLibray** that contains a C++ implementation for them.
 
 This tool takes a single command line argument which is the path to the .Net assembly to translate. For example
 ```
@@ -15,13 +14,8 @@ The output will be placed in a subdirectory in the same location called **genera
 This tool uses  [CSharp Decompiler](https://github.com/icsharpcode/ILSpy) to build a syntax tree from the assembly.
 It then does three passes over the tree using different visitors.
 1. Pass 1  
-    In the first pass the visitor extracts all the forward reference and enumerations. This is to help solve any
-    circular reference issues in the other header files. The output is placed in a file called **TranslatedProtos.h**
-    and will contain stuff like the following.
-    **Notice** that name spaces in .Net have underscore NS appended to them to avoid collisions between
-    name space names and class names. **Notice** all names starting with lowercase letters have x_ pre-pended to them
-    to avoid collisions with C++ keywords like _typedef_. **Notice** enumeration values have underscore _Enumeration Name_
-    appended to them to make them unique.
+    In the first pass the visitor extracts all the forward reference and enumerations. This is to help solve any circular reference issues in the other header files. The output is placed in a file called **TranslatedProtos.h** and will contain stuff like the following.
+    **Notice** that name spaces in .Net have underscore NS appended to them to avoid collisions between name space names and class names. **Notice** all names starting with lowercase letters have x_ pre-pended to them to avoid collisions with C++ keywords like _typedef_. **Notice** enumeration values have underscore _Enumeration Name_ appended to them to make them unique.
     
 ```
 namespace CppTranslatorFeatureTest_NS
@@ -41,8 +35,7 @@ namespace CppTranslatorFeatureTest_NS
 ```
 2. Pass2  
     In the second pass a header file is created that has all the class definitions in it.
-    This will contain name spaces, classes and their fields and methods. The name of the file will be
-    **TranslatedHeader.h**. Following is a small example of what it could contain.
+    This will contain name spaces, classes and their fields and methods. The name of the file will be **TranslatedHeader.h**. Following is a small example of what it could contain.
 ```
 #pragma once
 #include "TranslatedProtos.h"
@@ -86,5 +79,4 @@ IL_0000:
 ```
 
 ## Error Handling
-If any errors occur like exceptions or violations of the .Net subset defined in ValidTypes.xml then a **Translated.err**
-file will be created and all errors will get appended to it.
+If any errors occur like exceptions or violations of the .Net subset defined in ValidTypes.xml then a **Translated.err** file will be created and all errors will get appended to it.

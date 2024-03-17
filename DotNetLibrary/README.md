@@ -1,8 +1,5 @@
 # DotNet Library
-This project contains a subset of the .Net framework written in C++. What types and methods it contains are enumerated
-in the ValidType.xml file in the **CppTranslator** project. All types inherit from Object. This deviates from the way .Net
-does it. This is so value types like int and double can also be used as Object types if they are Newed. If not Newed they can be
-passed by value.
+This project contains a subset of the .Net framework written in C++. What types and methods it contains are enumerated in the ValidType.xml file in the **CppTranslator** project. All types inherit from Object. This deviates from the way .Net does it. This is so value types like int and double can also be used as Object types if they are Newed. If not Newed they can be passed by value.
 
 ## Primitive Types
 In the _DotnetTypes.h_ file there are definitions to translate from C++ types to .Net types.
@@ -55,9 +52,7 @@ String* integerAsString2 = integerBox->ToString();
 ```
 
 ## UnBoxing
-.Net supports a large infrastructure for doing type conversions. This subset of the .Net frameworks does not
-support that. Instead is has a very simple conversion strategy. The Object class supports a series of
-virtual methods for handling primitive conversions as follows.
+.Net supports a large infrastructure for doing type conversions. This subset of the .Net frameworks does not support that. Instead is has a very simple conversion strategy. The Object class supports a series of virtual methods for handling primitive conversions as follows.
 ```
 virtual Boolean   get_AsBoolean();
 virtual Char      get_AsChar();
@@ -82,26 +77,18 @@ Object* integerBox = new Int32Value(primitiveInteger);
 Int32   unBoxedInteger = integerBox->get_AsInt32();
 ```
  
-This scheme supports some primitive conversion such as Int32 to Double but in cases that can't be converted
- an InvalidCastException is thrown. This isn't too big a worry because the C# compiler would have
-give an error or warning so that would probably been fixed before the IL was transformed to C++.
+This scheme supports some primitive conversion such as Int32 to Double but in cases that can't be converted an InvalidCastException is thrown. This isn't too big a worry because the C# compiler would have give an error or warning so that would probably been fixed before the IL was transformed to C++.
 
 ## Arrays
-This project supports up to three dimensional arrays. All arrays no matter the type are wrapped by the **Array** class.
-This array class can also wrap native arrays in the target platform as long as the numbers in the array
-are ordered the same way .Net orders them. Following is an example of a wrapped Native array so that
-translated .Net code can use it.
+This project supports up to three dimensional arrays. All arrays no matter the type are wrapped by the **Array** class. This array class can also wrap native arrays in the target platform as long as the numbers in the array are ordered the same way .Net orders them. Following is an example of a wrapped Native array so that translated .Net code can use it.
 ```
 Int32   arrayData[]{ 1,2,3,4 }; // native array
 Array* wrappedArray = new Array(arrayData, Int32Type, 4); // wrapped array
 ```
-This technique is useful in the **DotNetLibrarySupport** project for interfacing the .Net world to data in
-the target environment. Read the README files in **DotNetLibrarySupport** and **CppTranslatorSupport** for
-more details.
+This technique is useful in the **DotNetLibrarySupport** project for interfacing the .Net world to data in the target environment. Read the README files in **DotNetLibrarySupport** and **CppTranslatorSupport** for more details.
 
 ## Supported Classes
-Following is a list of classes that this project supports. See the ValidType.xml file in the **CppTranslator** project for
-information about exactly which methods within the classes as supported.
+Following is a list of classes that this project supports. See the ValidType.xml file in the **CppTranslator** project for information about exactly which methods within the classes as supported.
 ```
 System.Array
 System.BitConverter
@@ -112,8 +99,4 @@ System.Object
 System.Text.StringBuilder
 ```
 ## String Formatting
-This project supports some very primitive text formatting like ToString. It also supports some very primitive
-parsing. It does not support all the culture and formatting that .Net does. This is because the intent of
-these projects is not to make word processors in embedded space. A limited amount of support is provided
-for handling devices that talk in simple text strings that need to be built and parsed. This project can be enhanced
-if more features are needed.
+This project supports some very primitive text formatting like ToString. It also supports some very primitive parsing. It does not support all the culture and formatting that .Net does. This is because the intent of these projects is not to make word processors in embedded space. A limited amount of support is provided for handling devices that talk in simple text strings that need to be built and parsed. This project can be enhanced if more features are needed.

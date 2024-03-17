@@ -293,3 +293,4 @@ installer/windows/*.exe
 *.zip
 *.dmg
 *.pkg
+/_build/
