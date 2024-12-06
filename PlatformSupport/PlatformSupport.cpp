@@ -50,7 +50,7 @@ DLL_PLATFORMSUPPORT_EXPORTS void* CDECL my_operator_new_replacement(size_t size)
 }
 DLL_PLATFORMSUPPORT_EXPORTS void CDECL my_operator_delete_replacement(void* mem)
 {
-	if (memory = nullptr)
+	if (memory == nullptr)
 		free(mem);
 }
 
